@@ -30,8 +30,8 @@ The backend and machine learning concepts are defined in [docs/backend-and-ml-co
 
 Build stage 1 to stage 3, backend first, with no frontend.
 
-1. Create the Python project with pytest, type hints, and ruff.
-2. Fetch Sources for one Topic from the Semantic Scholar Academic Graph API. Cache every response on disk from the first run.
+1. Done. The Python project runs with pytest, type hints, and ruff.
+2. Done. `python -m fynd.cli` searches the Semantic Scholar Academic Graph API for one Topic, and every response is cached on disk. The run needs `SEMANTIC_SCHOLAR_API_KEY` in a `.env` file, because the endpoint without a key answers 429.
 3. Fetch and extract text from the arXiv PDF for each open Paper.
 4. Extract Claims with Claude Haiku 4.5, one call per chunk, and reject a Claim whose text does not appear in the Source.
 5. Produce 3 candidate Problems with their early evidence, as a command line run.
