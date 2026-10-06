@@ -69,7 +69,7 @@ Each choice maps to a line that the job postings ask for. Engineering owns the l
 | Frontend | Next.js, TypeScript, shadcn/ui on a custom token layer | Frontend practice, semantic markup |
 | Accessibility | WCAG 2.2 AA target, axe-core in continuous integration | A claim with a check behind it |
 | Discovery | Semantic Scholar Academic Graph API with a key | Retrieval over a real corpus |
-| Full text | arXiv PDF fetch and text extraction | Data engineering on messy input |
+| Full text | Open copy fetch and text extraction, host still to decide | Data engineering on messy input |
 | Real world evidence | One web search step for Statistics and Products | Context engineering |
 | Storage | Supabase Postgres with pgvector | Vector databases, database design |
 | Extraction | Claude Haiku 4.5, one call per chunk | Prompt engineering at volume |
@@ -89,7 +89,7 @@ Structure comes from research tools, with Elicit as the reference for showing Cl
 
 ## Three week plan
 
-- Days 1 to 3: Semantic Scholar fetch, arXiv full text, chunking, retrieval. A command line run returns cited Claims for one Topic.
+- Days 1 to 3: Semantic Scholar fetch, full text, chunking, retrieval. A command line run returns cited Claims for one Topic. The first live search for the Seeded Topic returned no Paper with an arXiv identifier, so the full text source is an open decision in `NEXT-STEPS.md`.
 - Days 4 to 6: Claim extraction, Existing approaches, Gap clustering against the evidence bar.
 - Days 7 to 8: candidate Problems for stage 3, and Proposal drafting with the Technical core.
 - Days 9 to 11: the labelled set, the rubric, the citation guard, regression tests, tracing.
