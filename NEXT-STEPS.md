@@ -69,6 +69,25 @@ Stage 2 and the search:
 - The open Paper threshold moved from 5 to 3. A Topic under it costs the student nothing and does not spend the Re-roll. See [ADR 0002](./docs/adr/0002-topics-are-generated-then-verified.md).
 - Stage 4 carries a guard for the lower threshold. When fewer than 2 Papers of a kept Topic give usable text, Fynd says so and offers the Topic list again.
 
+## The scope change of 2026-10-07
+
+A friend asked whether a chat assistant does all of this in an afternoon. The answer is that a chat assistant produces the output and never produces a guarantee, and the guarantee is the project. Research on what AI engineering interviews ask agreed with that and named the parts that carry weight: an evaluation harness with a golden set, retrieval scored on your own labelled data, faithfulness scoring, prompt versioning, and tracing with cost.
+
+Fynd had one component with a number. It now has six. See the measured components table in `PRD.md`, and the revised three week plan for the days and the cuts.
+
+Six items enter the plan, in this order.
+
+1. Prompts as files with a version, and the cache keyed by every value that changes the answer.
+2. The tiered verifier, from exact match to entailment, with precision and recall at each threshold.
+3. The retrieval labelled set, hybrid search, and two embedding models compared. This closes the embedding decision by measurement.
+4. Independence as a coauthor graph rule, with identifier deduplication.
+5. Character offsets for a Claim, carried through extraction, normalization, and chunking.
+6. Tracing with tokens, cost, and 95th percentile latency for each Stage.
+
+Three cuts pay for them. Two Domains instead of three. Three standard cards at stage 3 instead of the bespoke picker. One buffer day instead of two. The Re-roll stays, because cutting it frees nothing.
+
+The source for this change is `docs/architecture-review.md`, which is on disk and out of the repository.
+
 ## Still open in the code design
 
 1. How a Stage receives its search and its model, so a test runs stage 2 with no network and no token spend.
@@ -83,12 +102,14 @@ The four files from day 2 get deleted and derived again from the design above. D
 ## Open items that need a decision from Deshan
 
 1. The full text source, now that arXiv returns nothing for the Seeded Topic.
-2. The embedding model and the vector size for the `chunk` table. Stage 5 needs this by day 7.
+2. Which two Domains ship, now that the third is cut. Energy holds the Seeded Topic and stays.
 3. Who grades the 5 Projects for metric 2, and when. One evening is enough.
 4. Which typeface pair and which colour scale.
 5. Whether the Render free web service or a different free container host serves the backend on the day. Confirm the free tier before day 12.
 6. Whether a Source stays shared across Projects once two Domains are live.
 7. Whether the `invite` table is needed at all, because a signed code needs no storage to be checked.
+
+The embedding model left this list on 2026-10-07. It is no longer a question to answer by preference. Days 8 and 9 answer it with recall at 20 and nDCG on the hand labelled set, and the vector size follows the model that wins.
 
 ## The build sequence for stage 1 to stage 3
 
@@ -97,7 +118,7 @@ Backend first, with no frontend.
 1. Done. The Python project runs with pytest, type hints, and ruff.
 2. Done. The Semantic Scholar search with the disk cache.
 3. Fetch and extract the full text for each Paper with an open copy. Blocked on open item 1.
-4. Extract Claims with Claude Haiku 4.5, one call per chunk, and reject a Claim whose text does not appear in the Source.
+4. Extract Claims with Claude Haiku 4.5, one call per chunk, and pass each Claim through the tiered verifier. A Claim that no tier can place in the Source text is dropped.
 5. Produce 3 candidate Problems with their early evidence, as a command line run.
 
 Make sure that step 5 runs end to end from the command line before any FastAPI endpoint or any React component exists.

@@ -24,6 +24,22 @@ Fynd succeeds if all four hold at ship date.
 
 Metric 1 and metric 2 are the filter for every later feature request. A feature that lowers either one does not ship.
 
+## Measured components
+
+The four metrics above gate the ship date. This section is different. It names the parts of Fynd that carry a number of their own, and where that number is published. A part with no number is a prompt, and a reviewer cannot tell a good prompt from a lucky one.
+
+| Component | Number it publishes | Where it lives |
+|---|---|---|
+| Claim extraction | Recall and invention rate on the labelled set of 10 Sources | Continuous integration, metric 1 |
+| The citation guard | Precision and recall at each tier threshold, and the chosen operating point | A table in the repository |
+| Retrieval | Recall at 20 and nDCG for four configurations, on a hand labelled set of 40 to 60 Papers | A table in the repository |
+| The embedding choice | The same two numbers for two embedding models on the same set | The same table |
+| Full text extraction | The share of Papers that give usable text, for each host | A table in the repository |
+| Source independence | The share of pairs the identifier resolver gets right, on 50 hand labelled pairs | A table in the repository |
+| Every Stage | Tokens, cost, and 95th percentile latency | Langfuse, and the README |
+
+Every number above is produced by a command anyone runs from the repository, against data in the repository. That is the difference between a number and a claim.
+
 ## Scope for version 1
 
 Seven stages, each one saved, each one resumable by a secret link.
@@ -69,14 +85,18 @@ Each choice maps to a line that the job postings ask for. Engineering owns the l
 | Frontend | Next.js, TypeScript, shadcn/ui on a custom token layer | Frontend practice, semantic markup |
 | Accessibility | WCAG 2.2 AA target, axe-core in continuous integration | A claim with a check behind it |
 | Discovery | Semantic Scholar Academic Graph API with a key | Retrieval over a real corpus |
-| Full text | Open copy fetch and text extraction, host still to decide | Data engineering on messy input |
+| Retrieval | Hybrid search over Postgres `tsvector` and pgvector, scored against a hand labelled set | Retrieval evaluation, recall at k, nDCG |
+| Full text | Open copy fetch, text extraction, and a quality detector with a per host success rate | Data engineering on messy input |
 | Real world evidence | One web search step for Statistics and Products | Context engineering |
-| Storage | Supabase Postgres with pgvector | Vector databases, database design |
+| Storage | Supabase Postgres with pgvector and `tsvector` | Vector databases, database design |
 | Extraction | Claude Haiku 4.5, one call per chunk | Prompt engineering at volume |
 | Drafting | Claude Opus 5, one call per Proposal | Quality where it is the product |
-| Guard | A citation check that rejects a Claim with no source text | Guardrails |
+| Guard | A tiered verifier, from exact match to entailment, with thresholds tuned on the labelled set | Guardrails, faithfulness scoring |
+| Provenance | Character offsets carried through extraction, normalization, and chunking | Verifiable citations |
+| Independence | A coauthor graph rule, and identifier deduplication across three identifier kinds | Graph work, entity resolution |
+| Replay | Prompts as versioned files, and a cache keyed by every value that changes the answer | Prompt versioning, repeatable evaluation |
 | Evaluation | A frozen labelled set, a rubric, regression tests | Evaluation, the hardest line to fake |
-| Tracing | Langfuse free tier, cost per Project | Observability |
+| Tracing | Langfuse free tier, with tokens, cost, and 95th percentile latency for each Stage | Observability |
 | Serving | Docker, Render free web service, Vercel for the frontend | Prototype to production |
 
 The Stage runs inside the FastAPI process as a background task, and the page polls for Stage progress with a plain `GET` every 3 seconds. No free tier runs a separate worker process. Fynd uses neither WebSockets nor long polling. A Stage sends one event, which is done or failed, and the page needs the new data in a request anyway, so a socket buys lower latency on a Stage that takes up to 3 minutes. A socket and a held request also keep a worker busy for that whole time on a free tier that runs few workers, and a sleeping container drops the connection, which then needs reconnect code beside the code that already reads the saved state. See [ADR 0003](./docs/adr/0003-four-routes-with-short-polling.md). Stage state is written to the database after every stage, because the free container sleeps after 15 minutes of no requests and can restart mid-run. A scheduled ping keeps the Supabase project awake, because a free project pauses after one week of no activity.
@@ -85,20 +105,31 @@ Model cost is roughly 240,000 input tokens of extraction plus one drafting call.
 
 ## Design direction
 
-Structure comes from research tools, with Elicit as the reference for showing Claims with citations without drowning the reader. Colour and voice come from warm writing tools, and the empty states and the stage 3 copy carry that warmth, because the student is most uncertain there. Components are standard, so an input box feels like an input box. The theme is not the default: a chosen typeface pair, a chosen colour scale, a 5 step type scale, and one density. Stage 3 gets the one bespoke component, a problem picker that shows 3 Problems with their evidence side by side.
+Structure comes from research tools, with Elicit as the reference for showing Claims with citations without drowning the reader. Colour and voice come from warm writing tools, and the empty states and the stage 3 copy carry that warmth, because the student is most uncertain there. Components are standard, so an input box feels like an input box. The theme is not the default: a chosen typeface pair, a chosen colour scale, a 5 step type scale, and one density. Stage 3 shows the 3 candidate Problems as three standard cards side by side, each with its 2 Claims and their citations. The bespoke problem picker was cut on 2026-10-07 to pay for the measured components, and the cards carry the same information in the same order.
 
 ## Three week plan
 
-- Days 1 to 3: Semantic Scholar fetch, full text, chunking, retrieval. A command line run returns cited Claims for one Topic. The first live search for the Seeded Topic returned no Paper with an arXiv identifier, so the full text source is an open decision in `NEXT-STEPS.md`.
-- Days 4 to 6: Claim extraction, Existing approaches, Gap clustering against the evidence bar.
-- Days 7 to 8: candidate Problems for stage 3, and Proposal drafting with the Technical core.
-- Days 9 to 11: the labelled set, the rubric, the citation guard, regression tests, tracing.
-- Days 12 to 14: FastAPI endpoints, background job, stage state, Docker, deployment.
-- Days 15 to 18: frontend, token layer, the problem picker, accessibility passes.
-- Days 19 to 20: buffer.
-- Day 21: README, demo recording, metric numbers written down.
+Revised on 2026-10-07. The first version of this plan put one number on one component. This version puts a number on six, and pays for it with the cuts below.
 
-If a day slips, the evaluation harness still ships, and the third Domain is the first thing to cut.
+- Days 1 to 2: done. The Semantic Scholar search with the disk cache. The design closed for the HTTP interface, the stage 2 rules, and the fields a Paper keeps.
+- Days 3 to 4: the replayable core. Prompts as files with a version. The cache keyed by the model, the prompt version, the input hash, the decoding parameters, and the schema version. Full text fetch with the quality detector and the per host success rate. Chunking that carries an offset map, so a Claim offset leads back to the raw file.
+- Days 5 to 6: the labelled set of 10 Sources, Claim extraction with Haiku 4.5, and the tiered verifier. Day 6 ends with the precision and recall table at each threshold and the chosen operating point.
+- Day 7: the retrieval labelled set. 40 to 60 Papers on the Seeded Topic, labelled by hand as relevant or not relevant.
+- Days 8 to 9: hybrid retrieval over `tsvector` and pgvector, two embedding models compared on that set, and the configuration table with recall at 20 and nDCG. This closes the embedding decision with a measurement instead of a preference.
+- Day 10: independence as a coauthor graph rule, with identifier deduplication across the digital object identifier, arXiv, and Semantic Scholar identifiers.
+- Days 11 to 12: Existing approaches, Gap clustering against the evidence bar, candidate Problems for stage 3, and Proposal drafting with the Technical core.
+- Days 13 to 14: FastAPI with the four routes, the background Stage, `stage_run`, Docker, deployment, and tracing with tokens, cost, and latency for each Stage.
+- Days 15 to 18: frontend, the token layer, three standard cards at stage 3, and the accessibility passes.
+- Day 19: buffer.
+- Days 20 to 21: metric 2 grading of 5 Projects, the README with every number in it, the architecture diagram, and the demo recording.
+
+The new work costs about 7 days. Four and a half of those come from work it replaces rather than adds. The tiered verifier replaces the plain citation check in the old days 9 to 11. The retrieval table replaces the unmeasured retrieval step in the old days 1 to 3. Tracing was already in the plan. The rest comes from three cuts.
+
+- Two Domains ship instead of three. Which two is an open decision in `NEXT-STEPS.md`.
+- Stage 3 shows three standard cards instead of one bespoke problem picker.
+- The buffer drops from two days to one.
+
+If a day slips, cut in this order. The retrieval table shrinks from four configurations to two, which keeps the embedding comparison and drops the fusion row. The independence rule keeps the venue and year check and drops the coauthor graph. The handover export loses its questions list. The evaluation harness and the verifier table ship whatever happens, because without them Fynd is a wrapper around a model.
 
 ## Risks
 
