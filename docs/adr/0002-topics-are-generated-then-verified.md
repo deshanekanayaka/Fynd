@@ -23,6 +23,8 @@ A Topic under the threshold does not spend the student's Re-roll. The count show
 
 The tried Topics and their counts live in the `stage_run` row while stage 2 is still running, because the student sees them again after a reload and the free container restarts. See the database design.
 
+The round 2 prompt names the ten Topics to avoid, so a Re-roll asks the model a different question and the cache serves no stale list. See [ADR 0004](./0004-replayable-runs-and-versioned-prompts.md).
+
 A Topic is a value on one Project and not a row in a shared table. Two model runs word the same Topic two different ways, so a shared table would need matching logic that buys nothing. The disk cache covers the repeated fetch cost instead.
 
 ## Considered options

@@ -63,7 +63,7 @@ Stage 2 and the search:
 
 - The search hands the rest of Fynd a list of Papers with the fields Fynd uses, and not the raw reply.
 - A Paper keeps the Semantic Scholar identifier, the title, the abstract, the year, and the open copy link. The arXiv identifier is dropped, because the first live run returned none.
-- Every search reply and every model reply is cached in a file on disk. The cache key holds every value that changes the answer, including the round, so a Re-roll is not served the old list.
+- Every search reply and every model reply is cached in a file on disk. The cache key holds every value that changes the answer. See [ADR 0004](./docs/adr/0004-replayable-runs-and-versioned-prompts.md).
 - A `429` or a timeout gets one retry after a short wait, then stops with a sentence that names the fix. A failed reply is never cached.
 - Haiku 4.5 proposes the Topics, and Fynd asks for 10. A reply that does not match the shape gets one retry.
 - The open Paper threshold moved from 5 to 3. A Topic under it costs the student nothing and does not spend the Re-roll. See [ADR 0002](./docs/adr/0002-topics-are-generated-then-verified.md).
@@ -77,7 +77,7 @@ Fynd had one component with a number. It now has six. See the measured component
 
 Six items enter the plan, in this order.
 
-1. Prompts as files with a version, and the cache keyed by every value that changes the answer.
+1. Done as a decision. Prompts as versioned files, and a replayable cache. See [ADR 0004](./docs/adr/0004-replayable-runs-and-versioned-prompts.md).
 2. The tiered verifier, from exact match to entailment, with precision and recall at each threshold.
 3. The retrieval labelled set, hybrid search, and two embedding models compared. This closes the embedding decision by measurement.
 4. Independence as a coauthor graph rule, with identifier deduplication.
