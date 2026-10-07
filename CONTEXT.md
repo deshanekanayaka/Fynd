@@ -7,7 +7,7 @@ The student is a bachelor's student. The project they must deliver is a full sta
 ## Language
 
 **Project**:
-One student's run of Fynd, from topic to proposal. Reachable by a secret link, with no login.
+One student's pass through Fynd, from topic to proposal. Reachable by a secret link, with no login.
 _Avoid_: session, workspace, report
 
 **Stage**:
@@ -17,6 +17,14 @@ _Avoid_: step, phase, screen, page
 **Stage state**:
 What one Stage saved. It holds enough to resume the Project without running the Stage again.
 _Avoid_: progress, checkpoint, snapshot, session data
+
+**Pick**:
+The one item a student chooses from what a Stage offered, kept with the Stage it answers.
+_Avoid_: choice, selection, option, answer
+
+**Re-roll**:
+A student's request for a new set of items from a Stage, instead of choosing one of the items it offered. Stage 2 and stage 3 allow one each.
+_Avoid_: retry, refresh, regenerate, shuffle
 
 **Domain**:
 A broad field the student picks first, for example Technology, Healthcare, or Energy.

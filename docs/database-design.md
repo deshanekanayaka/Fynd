@@ -3,7 +3,7 @@
 Updated: 2026-10-06. Postgres on Supabase, with pgvector for stage 5.
 Read [CONTEXT.md](../CONTEXT.md) for the words and [PRD.md](../PRD.md) for the scope.
 
-This document covers stage 1 to stage 3, which is the immediate next task in [NEXT-STEPS.md](../NEXT-STEPS.md). Stage 4 to stage 7 add tables later, and this document names them at the end without defining them.
+This document covers stage 1 to stage 3, which is the immediate next task in [NEXT-STEPS.md](../NEXT-STEPS.md). It holds seven tables. Stage 4 to stage 7 add tables later, and this document names them at the end without defining them.
 
 ## The rule for a table against a JSON value
 
@@ -71,6 +71,38 @@ The `stage_number` column is the number of the Stage, 1 to 7, in the order the P
 | 12 | 3 | `{"candidate_problem_id": 41, "round": 1}` | 2026-10-06 09:21 |
 
 A number is enough because the Stages are a fixed sequence of seven. A name column adds a second thing to keep correct, and the number already sorts in the order the student walks.
+
+### stage_run
+
+One row for one Stage of one Project, while that Stage is working and after it stopped.
+
+```sql
+create table stage_run (
+  project_id bigint not null references project (id) on delete cascade,
+  stage_number smallint not null,
+  state text not null,
+  started_at timestamptz not null default now(),
+  error text not null default '',
+  detail jsonb not null default '{}',
+  primary key (project_id, stage_number),
+  constraint stage_run_state_valid
+    check (state in ('running', 'failed', 'done')),
+  constraint stage_run_stage_number_valid
+    check (stage_number between 1 and 7)
+);
+```
+
+This table exists so that a `stage_state` row keeps one meaning, which is "this Stage finished". A `stage_run` row carries the other three facts: the Stage is working now, the Stage broke, or the Stage is done.
+
+The primary key is the pair, so one Stage of one Project holds one row. A Re-roll overwrites that row. Fynd keeps no history of attempts, because nothing in the product reads it.
+
+The `detail` column holds what the Stage has in hand before it finishes. Stage 2 puts the 10 proposed Topics there, and a count against each Topic the student already tried. Two reasons put that data in the database and not in a Python variable. The free container sleeps after 15 minutes and restarts, and the student sees the same list and the same counts after a reload. A `stage_state` row cannot hold it, because stage 2 has not finished.
+
+A separate table for the work in progress buys nothing, because every Stage needs one such value at a time and the pair of Project and Stage number already names it.
+
+A Topic under the threshold is not a `failed` run. The state stays `running`, the count goes in `detail`, and the student picks again. The word `failed` keeps its one meaning, which is that the Stage broke, so metric 3 counts real failures only.
+
+A restart leaves a `running` row that no process owns, and no process will ever finish it. A read treats a `running` row older than 5 minutes as failed. The PRD caps a Stage at 3 minutes, so 5 minutes is past any real run, and a dead row clears itself with no background sweeper.
 
 ### source
 
@@ -199,6 +231,7 @@ Skipping it is the real risk. A table in the `public` schema with Row Level Secu
 ```sql
 alter table project enable row level security;
 alter table stage_state enable row level security;
+alter table stage_run enable row level security;
 alter table source enable row level security;
 alter table candidate_problem enable row level security;
 alter table claim enable row level security;

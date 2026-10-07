@@ -20,3 +20,6 @@ __pycache__/
 
 # A personal study document, kept out of the repository
 docs/backend-and-ml-concepts.md
+
+# A review kept out of the repository
+docs/architecture-review.md

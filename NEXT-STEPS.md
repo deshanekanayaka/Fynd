@@ -1,6 +1,6 @@
 # Next steps
 
-Updated: 2026-10-06. Target ship date: 2026-10-26.
+Updated: 2026-10-07. Target ship date: 2026-10-26.
 Read [PRD.md](./PRD.md) for the product and [CONTEXT.md](./CONTEXT.md) for the vocabulary.
 
 ## Where the work stands
@@ -21,7 +21,7 @@ Settled and written down:
 Written today:
 
 - [docs/stages-and-prerequisites.md](./docs/stages-and-prerequisites.md) lists the Stages and the subjects behind each one.
-- [docs/database-design.md](./docs/database-design.md) holds the six tables for stage 1 to stage 3.
+- [docs/database-design.md](./docs/database-design.md) holds the seven tables for stage 1 to stage 3.
 
 Code that runs today:
 
@@ -38,17 +38,47 @@ The first live search for the Seeded Topic returned 20 Papers, 12 with an open c
 
 Step 3 below says "arXiv PDF", and for this Topic that step returns nothing. The full text source needs a decision before anyone writes that code.
 
-## Tomorrow: the backend design
+## Settled on day 2: the backend design and stage 2
 
-Finish round 6 of the backend design. Five questions are open, and each one has a recommendation on the table.
+The backend design round is closed. See [ADR 0003](./docs/adr/0003-four-routes-with-short-polling.md) for the HTTP decisions and the options that lost.
 
-1. The shape of the HTTP interface. The recommendation is three routes: create a Project, record one pick, and read the whole Project.
-2. What a pick returns. The recommendation is `202 Accepted` at once, with the next Stage run as a background task and the page polling.
-3. Where the Seam between HTTP and the Stage logic sits. The recommendation is one Module for each Stage, behind one two method Interface, with FastAPI and the command line as two Adapters.
-4. The Seam for the outside world. The recommendation is two Interfaces, one for source search and one for the model, with the disk cache inside each Adapter.
-5. Where a running or failed Stage is recorded. The recommendation is a new `job` table, so a `stage_state` row keeps its meaning of "this Stage finished".
+The HTTP interface:
 
-After those five, the next decision is the full text source from the finding above.
+- Four routes for all seven Stages. Create a Project, record one Pick, ask for one Re-roll, read the Project.
+- `201 Created` on create, and `202 Accepted` on a Pick and on a Re-roll.
+- All four routes return the same Project document, so a caller learns one shape.
+- One Pick route for every Stage, with `stage_number` as the discriminator and a body variant per Stage.
+- Short polling on the one `GET` route every 3 seconds. No WebSockets and no long polling.
+- One error shape on every route.
+
+The database:
+
+- A new `stage_run` table holds the state of a Stage that is working, broken, or done.
+- Its `detail` column holds what a Stage has in hand before it finishes, for example the 10 proposed Topics and the counts the student already tried.
+- A `running` row older than 5 minutes reads as failed, so a restart needs no sweeper.
+
+Two new words are in `CONTEXT.md`. A Pick is the one item a student chooses from what a Stage offered. A Re-roll is a request for a new set instead. The Project entry no longer uses the word "run", so `stage_run` means what it says.
+
+Stage 2 and the search:
+
+- The search hands the rest of Fynd a list of Papers with the fields Fynd uses, and not the raw reply.
+- A Paper keeps the Semantic Scholar identifier, the title, the abstract, the year, and the open copy link. The arXiv identifier is dropped, because the first live run returned none.
+- Every search reply and every model reply is cached in a file on disk. The cache key holds every value that changes the answer, including the round, so a Re-roll is not served the old list.
+- A `429` or a timeout gets one retry after a short wait, then stops with a sentence that names the fix. A failed reply is never cached.
+- Haiku 4.5 proposes the Topics, and Fynd asks for 10. A reply that does not match the shape gets one retry.
+- The open Paper threshold moved from 5 to 3. A Topic under it costs the student nothing and does not spend the Re-roll. See [ADR 0002](./docs/adr/0002-topics-are-generated-then-verified.md).
+- Stage 4 carries a guard for the lower threshold. When fewer than 2 Papers of a kept Topic give usable text, Fynd says so and offers the Topic list again.
+
+## Still open in the code design
+
+1. How a Stage receives its search and its model, so a test runs stage 2 with no network and no token spend.
+2. Whether the rules of a Stage live in a file that knows nothing about HTTP and nothing about the command line, with both callers calling it.
+3. Which two named jobs a Stage file carries, where the second one is the gate that refuses a Pick the Stage never offered.
+4. The stage 3 logic, which is the centre of the product.
+
+## How the code gets written
+
+The four files from day 2 get deleted and derived again from the design above. Deshan asked for this. Reading inherited code produces memorization and not a mental model, and the design phase gets as much time as it needs. The files stay in git history, and nobody reads them to write the replacement. An agent writes the code once a design round closes.
 
 ## Open items that need a decision from Deshan
 
