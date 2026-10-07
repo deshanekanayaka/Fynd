@@ -2,7 +2,7 @@
 
 Updated: 2026-10-06. For Deshan.
 Read [CONTEXT.md](../CONTEXT.md) for the words and [PRD.md](../PRD.md) for the scope.
-[docs/backend-and-ml-concepts.md](./backend-and-ml-concepts.md) defines each concept named here.
+A personal study document outside the repository defines each concept named here.
 
 This document has two jobs. It states what each Stage does and what each Stage saves. It also lists the subject you must know before you build that Stage.
 

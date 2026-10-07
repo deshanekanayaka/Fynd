@@ -17,3 +17,6 @@ __pycache__/
 # Editors and operating system
 .DS_Store
 .aider-desk/
+
+# A personal study document, kept out of the repository
+docs/backend-and-ml-concepts.md

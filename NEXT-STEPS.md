@@ -22,7 +22,6 @@ Written today:
 
 - [docs/stages-and-prerequisites.md](./docs/stages-and-prerequisites.md) lists the Stages and the subjects behind each one.
 - [docs/database-design.md](./docs/database-design.md) holds the six tables for stage 1 to stage 3.
-- [docs/backend-and-ml-concepts.md](./docs/backend-and-ml-concepts.md) defines each concept.
 
 Code that runs today:
 
