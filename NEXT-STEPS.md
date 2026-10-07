@@ -1,6 +1,7 @@
 # Next steps
 
-Updated: 2026-10-07. Target ship date: 2026-10-26.
+Updated: 2026-10-07, end of day 2. Target ship date: 2026-10-26.
+The ship date is a target and not a constraint. The design phase takes the time it needs, because Deshan must be able to explain every part of this project.
 Read [PRD.md](./PRD.md) for the product and [CONTEXT.md](./CONTEXT.md) for the vocabulary.
 
 ## Where the work stands
@@ -78,10 +79,10 @@ Fynd had one component with a number. It now has six. See the measured component
 Six items enter the plan, in this order.
 
 1. Done as a decision. Prompts as versioned files, and a replayable cache. See [ADR 0004](./docs/adr/0004-replayable-runs-and-versioned-prompts.md).
-2. The tiered verifier, from exact match to entailment, with precision and recall at each threshold.
+2. Done as a decision. The tiered verifier, and a Claim stored as a located span. See [ADR 0005](./docs/adr/0005-a-claim-is-a-located-span.md).
 3. The retrieval labelled set, hybrid search, and two embedding models compared. This closes the embedding decision by measurement.
 4. Independence as a coauthor graph rule, with identifier deduplication.
-5. Character offsets for a Claim, carried through extraction, normalization, and chunking.
+5. Done as a decision, with item 2. Character offsets travel through extraction, normalization, and chunking, and the pipeline composes the offset maps.
 6. Tracing with tokens, cost, and 95th percentile latency for each Stage.
 
 Three cuts pay for them. Two Domains instead of three. Three standard cards at stage 3 instead of the bespoke picker. One buffer day instead of two. The Re-roll stays, because cutting it frees nothing.

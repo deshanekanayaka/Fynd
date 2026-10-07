@@ -116,6 +116,9 @@ create table source (
   url text not null,
   external_id text not null default '',
   open_copy_url text not null default '',
+  full_text text not null default '',
+  full_text_sha256 text not null default '',
+  structure jsonb not null default '[]',
   retrieved_at timestamptz not null default now(),
   constraint source_type_valid
     check (source_type in ('paper', 'statistic', 'product'))
@@ -128,6 +131,12 @@ create unique index source_external_id_key
 A Source is shared across Projects, because the same Paper serves many students and the disk cache already treats it as shared. The `external_id` holds the Semantic Scholar identifier for a Paper. The partial unique index stops the same Paper from arriving twice, and it lets a Statistic or a Product carry no identifier.
 
 An empty string, not a null, marks "this Source has no open copy". That keeps the checks simple and matches the rule above.
+
+The `full_text` column holds one flat string, exactly as extraction produced it. A Claim and a `chunk` row both point into that string with character offsets, so neither one holds a copy of the text. A list of paragraph strings was rejected for this job, because every split and join moves the characters and an offset then needs a paragraph number beside it to mean anything.
+
+The `full_text_sha256` column is what makes an offset honest. An offset is only true against one exact version of the text. If the same paper is extracted again and the text shifts by 40 characters, the hash changes, and every Claim that carries the old hash is known to be stale instead of quietly pointing at the wrong sentence.
+
+The `structure` column holds the section and paragraph boundaries as spans, for example a section called "3 Results" that runs from character 8210 to 11480. It exists for display only. The handover shows "section 3, paragraph 3" beside a Claim, and that label is computed from the offset rather than stored with the Claim.
 
 ### candidate_problem
 
@@ -167,16 +176,28 @@ create table claim (
   id bigint generated always as identity primary key,
   source_id bigint not null references source (id) on delete restrict,
   quote text not null,
-  located_at integer not null,
+  start_char integer not null,
+  end_char integer not null,
+  source_text_sha256 text not null,
+  verified_by text not null,
+  match_score numeric not null,
   created_at timestamptz not null default now(),
   constraint claim_quote_present check (length(quote) > 0),
-  constraint claim_located check (located_at >= 0)
+  constraint claim_span_valid check (start_char >= 0 and end_char > start_char),
+  constraint claim_verified_by_valid
+    check (verified_by in ('exact', 'normalized', 'fuzzy'))
 );
 
 create index claim_source_id_idx on claim (source_id);
 ```
 
-The `located_at` column holds the character position where the citation guard found the quote in the Source text. A row exists only after the guard passes, so a stored Claim is a verified Claim. This is why the guard cannot be softened later: the table has no place to put an unverified quote.
+The `quote` column holds the slice of `source.full_text` between `start_char` and `end_char`, and never the sentence the model wrote. The model locates a Claim and the Source supplies its words, so "invents none" is a property of the data and not a promise. A reviewer takes the two offsets, opens the raw text, and reads the same characters.
+
+The `source_text_sha256` column repeats the hash of the text the offsets were measured against. A re-extraction that changes the text leaves these rows pointing at a version that is named, so nothing silently drifts.
+
+The `verified_by` column holds the tier that located the span, and `match_score` holds its score. The three values are the three locators. There is no fourth value, because the entailment tier only rejects and never accepts. See [ADR 0005](./adr/0005-a-claim-is-a-located-span.md).
+
+A row exists only after the verifier passes, so a stored Claim is a verified Claim. This is why the guard cannot be softened later: the table has no place to put an unverified quote, and no place to put a quote that is not in the text.
 
 ### candidate_problem_claim
 
