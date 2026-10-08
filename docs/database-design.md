@@ -36,7 +36,7 @@ create table project (
   domain text not null,
   created_at timestamptz not null default now(),
   constraint project_domain_valid
-    check (domain in ('technology', 'healthcare', 'energy'))
+    check (domain in ('technology', 'energy'))
 );
 ```
 
@@ -139,7 +139,7 @@ create unique index source_doi_key
   on source (doi) where doi <> '';
 ```
 
-A Source is shared across Projects, because the same Paper serves many students and the disk cache already treats it as shared. The `external_id` holds the Semantic Scholar identifier for a Paper. The partial unique index stops the same Paper from arriving twice, and it lets a Statistic or a Product carry no identifier.
+A Source is shared across Projects, because the same Paper serves many students and the disk cache already treats it as shared. One row for one real Source is also what makes the independence rule honest. See [ADR 0010](./adr/0010-a-source-and-a-claim-are-shared.md). The `external_id` holds the Semantic Scholar identifier for a Paper. The partial unique index stops the same Paper from arriving twice, and it lets a Statistic or a Product carry no identifier.
 
 An empty string, not a null, marks "this Source has no open copy". That keeps the checks simple and matches the rule above.
 
@@ -201,6 +201,7 @@ create table claim (
   text_kind text not null,
   verified_by text not null,
   match_score numeric not null,
+  prompt_sha256 text not null,
   created_at timestamptz not null default now(),
   constraint claim_text_kind_valid
     check (text_kind in ('abstract', 'source_text')),
@@ -211,6 +212,9 @@ create table claim (
 );
 
 create index claim_source_id_idx on claim (source_id);
+
+create unique index claim_one_extraction
+  on claim (source_id, text_kind, start_char, end_char, prompt_sha256);
 ```
 
 The `quote` column holds the slice of the Source text named by `text_kind`, between `start_char` and `end_char`, and never the sentence the model wrote. The model locates a Claim and the Source supplies its words, so "invents none" is a property of the data and not a promise. A reviewer takes the two offsets, opens the raw text, and reads the same characters.
@@ -220,6 +224,8 @@ The `text_kind` column names which text of the Source the offsets belong to. A s
 The `source_text_sha256` column repeats the hash of the text the offsets were measured against. A re-extraction that changes the text leaves these rows pointing at a version that is named, so nothing silently drifts.
 
 The `verified_by` column holds the tier that located the span, and `match_score` holds its score. The three values are the three locators. There is no fourth value, because the entailment tier only rejects and never accepts. See [ADR 0005](./adr/0005-a-claim-is-a-located-span.md).
+
+The `prompt_sha256` column holds the hash of the prompt that produced the Claim. A `source` row and a `claim` row are shared across Projects, so a Claim outlives the prompt that wrote it. Fynd reuses only the Claims that the current prompt produced, and the unique index stops one extraction from landing twice. See [ADR 0010](./adr/0010-a-source-and-a-claim-are-shared.md).
 
 A row exists only after the verifier passes, so a stored Claim is a verified Claim. This is why the guard cannot be softened later: the table has no place to put an unverified quote, and no place to put a quote that is not in the text.
 
@@ -292,10 +298,8 @@ FastAPI checks the secret link itself, by a lookup on `project.secret_link_id`. 
 - `gap`, with the Claims that support it.
 - `proposal`, with the Technical core, the Point of difference, and the Source it cites.
 - `export`, with the handover and its created time.
-- `invite`, if a signed code needs a record of use.
+- No `invite` table. A signed code with an expiry needs no storage. See ADR 0009.
 
 ## Open decisions
 
-1. Whether a Source stays shared across Projects once two Domains are live.
-2. The embedding model and the vector size for `chunk`. Stage 5 needs this before day 7.
-3. Whether `invite` needs a table at all, because a signed code needs no storage to be checked.
+1. The vector size for `chunk`, which follows the embedding model that wins the measurement on days 8 and 9.

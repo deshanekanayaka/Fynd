@@ -142,14 +142,19 @@ See [ADR 0007](./docs/adr/0007-the-open-copy-is-resolved-then-measured.md). The 
 
 Open item 1 below is closed by this entry.
 
+## Settled on day 3: the open items
+
+- Technology and Energy ship. Healthcare is cut. See [ADR 0009](./docs/adr/0009-two-domains-and-an-invite-with-no-table.md).
+- No `invite` table. One signed code with an expiry, and the secret in the environment. See the same record.
+- Deshan grades the 5 Projects for metric 2 alone, because Fynd is a solo project. The README states the grader as a limit, and the 5 handovers ship in the repository so a reader regrades them.
+- The typeface pair and the colour scale are deferred until the command line run works end to end. Nothing before the frontend reads them.
+- Render stays, and the free tier was confirmed on 2026-10-08. 750 instance hours for each workspace in a calendar month, a spin down after 15 minutes with no traffic, and a spin up of about one minute. Google Cloud Run is the named fallback, and it needs a billing account.
+
+- A Source and a Claim stay shared across Projects, and a `claim` row carries the hash of the prompt that produced it. See [ADR 0010](./docs/adr/0010-a-source-and-a-claim-are-shared.md).
+
 ## Open items that need a decision from Deshan
 
-1. Which two Domains ship, now that the third is cut. Energy holds the Seeded Topic and stays.
-2. Who grades the 5 Projects for metric 2, and when. One evening is enough.
-3. Which typeface pair and which colour scale.
-4. Whether the Render free web service or a different free container host serves the backend on the day. Confirm the free tier before day 12.
-5. Whether a Source stays shared across Projects once two Domains are live.
-6. Whether the `invite` table is needed at all, because a signed code needs no storage to be checked.
+None. Every item on this list is now a written decision.
 
 The embedding model left this list on 2026-10-07. It is no longer a question to answer by preference. Days 8 and 9 answer it with recall at 20 and nDCG on the hand labelled set, and the vector size follows the model that wins.
 

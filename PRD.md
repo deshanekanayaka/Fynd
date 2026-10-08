@@ -18,7 +18,7 @@ A bachelor's student in week 1 to week 4 of project selection, with no research 
 Fynd succeeds if all four hold at ship date.
 
 1. Grounding: on a hand-labelled set of 10 Sources, Fynd extracts 90 percent or more of the true Claims and invents none. This gate runs in continuous integration.
-2. Quality: 4 of 5 complete Projects pass a human rubric with 3 questions. Is the Problem real. Is the Gap supported. Can a bachelor's student build the Technical core in one year.
+2. Quality: 4 of 5 complete Projects pass a human rubric with 3 questions. Is the Problem real. Is the Gap supported. Can a bachelor's student build the Technical core in one year. The author grades, which the README states as a limit, and the 5 handovers ship in the repository so a reader regrades them.
 3. Reliability: every stage returns in under 3 minutes, and a Project resumes correctly after the container restarts.
 4. Accessibility: WCAG 2.2 AA is the target, axe-core passes in continuous integration, and one keyboard-only pass and one screen reader pass are written up.
 
@@ -45,7 +45,7 @@ Every number above is produced by a command anyone runs from the repository, aga
 
 Seven stages, each one saved, each one resumable by a secret link.
 
-1. The student picks a Domain from Technology, Healthcare, or Energy.
+1. The student picks a Domain from Technology or Energy.
 2. Fynd proposes 5 to 8 Topics. The student picks one.
 3. Fynd states 3 candidate Problems with early evidence. The student picks one.
 4. Fynd fetches Sources. The student builds the Shortlist.
@@ -68,7 +68,7 @@ The export is a conversation starter for the first supervisor meeting, not a spe
 ## Non-goals for version 1
 
 - No accounts, no passwords, no supervisor accounts. A signed Invite code grants access, and a secret link reaches a Project.
-- No free text Topic entry. Fynd proposes Topics inside the 3 seeded Domains.
+- No free text Topic entry. Fynd proposes Topics inside the 2 seeded Domains.
 - No paywalled papers. Open abstracts and open full text only.
 - No requirements documents and no ERD drafting. That is release 2.
 - No revising a Project after export.
@@ -100,8 +100,11 @@ Each choice maps to a line that the job postings ask for. Engineering owns the l
 | Evaluation | A frozen labelled set, a rubric, regression tests | Evaluation, the hardest line to fake |
 | Tracing | Langfuse free tier, with tokens, cost, and 95th percentile latency for each Stage | Observability |
 | Serving | Docker, Render free web service, Vercel for the frontend | Prototype to production |
+| Access | One signed Invite code with an expiry, and no `invite` table | Signed values, and storage you do not need |
 
 The Stage runs inside the FastAPI process as a background task, and the page polls for Stage progress with a plain `GET` every 3 seconds. No free tier runs a separate worker process. Fynd uses neither WebSockets nor long polling. A Stage sends one event, which is done or failed, and the page needs the new data in a request anyway, so a socket buys lower latency on a Stage that takes up to 3 minutes. A socket and a held request also keep a worker busy for that whole time on a free tier that runs few workers, and a sleeping container drops the connection, which then needs reconnect code beside the code that already reads the saved state. See [ADR 0003](./docs/adr/0003-four-routes-with-short-polling.md). Stage state is written to the database after every stage, because the free container sleeps after 15 minutes of no requests and can restart mid-run. A scheduled ping keeps the Supabase project awake, because a free project pauses after one week of no activity.
+
+The Render free tier was confirmed on 2026-10-08. It grants 750 instance hours for each workspace in a calendar month, it spins a web service down after 15 minutes with no inbound traffic, and the spin up takes about one minute. That one minute lands on the student before a Stage starts, so the first request of a visit is slow by design. Free Render Postgres expires 30 days after creation, which costs Fynd nothing, because the database is Supabase. Google Cloud Run is the named fallback, with 2 million requests, 180,000 vCPU seconds, and 360,000 GiB seconds free each month, and it scales to zero. Cloud Run needs a billing account, and Render does not, so Render stays for the demo.
 
 Model cost is roughly 240,000 input tokens of extraction plus one drafting call. That is under one dollar per Project.
 
@@ -127,7 +130,7 @@ Revised on 2026-10-07. The first version of this plan put one number on one comp
 
 The new work costs about 7 days. Four and a half of those come from work it replaces rather than adds. The tiered verifier replaces the plain citation check in the old days 9 to 11. The retrieval table replaces the unmeasured retrieval step in the old days 1 to 3. Tracing was already in the plan. The rest comes from three cuts.
 
-- Two Domains ship instead of three. Which two is an open decision in `NEXT-STEPS.md`.
+- Two Domains ship instead of three. Technology and Energy ship, and Healthcare is cut. See ADR 0009.
 - Stage 3 shows three standard cards instead of one bespoke problem picker.
 - The buffer drops from two days to one.
 

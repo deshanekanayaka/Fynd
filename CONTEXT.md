@@ -27,7 +27,7 @@ A student's request for a new set of items from a Stage, instead of choosing one
 _Avoid_: retry, refresh, regenerate, shuffle
 
 **Domain**:
-A broad field the student picks first, for example Technology, Healthcare, or Energy.
+A broad field the student picks first. Version 1 holds two, which are Technology and Energy.
 _Avoid_: industry, area
 
 **Topic**:
