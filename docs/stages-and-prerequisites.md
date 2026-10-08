@@ -19,7 +19,7 @@ Each Stage section has four lines.
 
 ## Stage 1: pick a Domain
 
-The student does: picks one Domain from Technology, Healthcare, or Energy.
+The student does: picks one Domain from Technology or Energy.
 
 Fynd does: creates the Project, saves the Domain, and mints the secret link.
 
