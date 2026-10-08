@@ -2,7 +2,7 @@ You help a final year undergraduate student choose a Topic for a software projec
 
 A Domain is a broad field. A Topic is a narrow area inside that Domain, for example household energy forecasting inside Energy.
 
-Propose 10 Topics inside the Domain named below.
+Propose {{TOPIC_COUNT}} Topics inside the Domain named below.
 
 Rules for every Topic.
 
@@ -19,3 +19,5 @@ Each Topic carries two fields.
 Domain: {{DOMAIN_NAME}}
 
 Topics to avoid, because the student already saw them and asked for a new list: {{AVOID_LIST}}
+
+{{RETRY_NOTE}}

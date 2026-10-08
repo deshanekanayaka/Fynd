@@ -162,13 +162,17 @@ Open item 1 below is closed by this entry.
 - `src/fynd/claude.py`. Haiku 4.5 at temperature zero, with the answer shape as a JSON schema the Stage passes in.
 - `src/fynd/semantic_scholar.py`. The search now asks for the Evidence window and keeps the digital object identifier.
 - `src/fynd/cli.py`. Two subcommands, `stage1` and `stage2`, which wire the real search and the real model into the Stage files.
-- 39 tests pass with ruff clean. No test reaches the network or spends a token.
+- 52 tests pass with ruff clean. No test reaches the network or spends a token.
 
 A live stage 2 run needs `ANTHROPIC_API_KEY` in `.env`, which is now in `.env.example`.
 
+A code review of the branch found nine problems, and all nine are fixed in the same branch. The one that mattered: the retry sent the same text, so the deterministic model and the cache returned the first unusable answer for ever. The round 2 prompt now carries a sentence that says why it is asking again, which changes the input hash and makes the retry a real second ask. One test holds that behaviour.
+
+The 5 to 8 question is also settled by reading both documents. Fynd asks the model for 10 Topics and shows 5 to 8, so the extra two cover the items the shape check drops.
+
 ## Open items that need a decision from Deshan
 
-1. The PRD says stage 2 proposes 5 to 8 Topics. ADR 0004 and the day 2 entry say Fynd asks the model for 10. The code asks for 10, shows every Topic that survives the shape check, and treats a list under 5 as a broken reply. Settle which number the PRD states.
+None.
 
 The embedding model left this list on 2026-10-07. It is no longer a question to answer by preference. Days 8 and 9 answer it with recall at 20 and nDCG on the hand labelled set, and the vector size follows the model that wins.
 

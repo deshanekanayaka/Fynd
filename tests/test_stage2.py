@@ -6,8 +6,10 @@ import pytest
 
 from fynd.models import Paper, SearchResult, Topic
 from fynd.stages.stage2 import (
+    MAXIMUM_TOPICS_TO_SHOW,
     MINIMUM_TOPICS_TO_SHOW,
     OPEN_PAPER_THRESHOLD,
+    TOPICS_TO_ASK_FOR,
     TopicBelowThreshold,
     TopicKept,
     TopicListUnusable,
@@ -139,6 +141,47 @@ def test_a_short_list_gets_one_retry() -> None:
 
     assert len(calls) == 2
     assert len(topics) == MINIMUM_TOPICS_TO_SHOW
+
+
+def test_the_retry_asks_a_different_question() -> None:
+    # This is the regression test for a real bug. The model is deterministic and
+    # every reply is cached, so a retry that sends the same text reads the first
+    # unusable answer straight back from disk and fails for ever. The round 2
+    # prompt must differ, which is what makes the second ask a real ask.
+    calls: list = []
+    good = answer_with([f"Topic {number}" for number in range(MINIMUM_TOPICS_TO_SHOW)])
+
+    offer_topics("energy", model_that_returns(answer_with(["Only one"]), good, calls=calls))
+
+    assert calls[0] != calls[1]
+    assert "earlier answer" in calls[1]
+
+
+def test_the_prompt_names_the_number_of_topics_to_ask_for() -> None:
+    # The constant and the prompt file must not drift apart.
+    calls: list = []
+    labels = [f"Topic {number}" for number in range(MINIMUM_TOPICS_TO_SHOW)]
+
+    offer_topics("energy", model_that_returns(answer_with(labels), calls=calls))
+
+    assert f"Propose {TOPICS_TO_ASK_FOR} Topics" in calls[0]
+
+
+def test_the_offered_list_never_passes_the_prd_maximum() -> None:
+    # The PRD promises the student 5 to 8 Topics, and the model is asked for 10
+    # so the shape check has items to drop.
+    calls: list = []
+    labels = [f"Topic {number}" for number in range(TOPICS_TO_ASK_FOR)]
+
+    topics = offer_topics("energy", model_that_returns(answer_with(labels), calls=calls))
+
+    assert len(topics) == MAXIMUM_TOPICS_TO_SHOW
+
+
+def test_a_slug_drops_a_character_that_is_not_ascii() -> None:
+    # A slug travels in a link, so an accented letter does not belong in one.
+    assert slugify("Modelisation energetique") == "modelisation-energetique"
+    assert slugify("Modélisation énergétique") == "mod-lisation-nerg-tique"
 
 
 def test_a_short_list_twice_breaks_the_stage() -> None:

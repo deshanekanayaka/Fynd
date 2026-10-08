@@ -18,11 +18,20 @@ from typing import Any, Protocol
 from fynd import prompts
 from fynd.models import SearchResult, Topic
 
-# Fynd asks the model for 10 Topics, and shows the ones that survive the shape
-# check. The PRD promises the student 5 to 8, so a list that falls under 5 is a
-# broken reply and not a short list.
+# Fynd asks the model for 10 Topics and shows 5 to 8 of them. The extra two
+# cover the items the shape check drops. The PRD promises the student 5 to 8,
+# so a list that falls under 5 is a broken reply and not a short list.
 TOPICS_TO_ASK_FOR = 10
 MINIMUM_TOPICS_TO_SHOW = 5
+MAXIMUM_TOPICS_TO_SHOW = 8
+
+# What the retry says to the model. The text differs from round 1, so the input
+# hash differs, so the retry misses the cache and reaches the model. Without it
+# the second ask would read the first unusable answer straight back from disk.
+RETRY_NOTE = (
+    "Your earlier answer held too few usable Topics. "
+    "Every Topic needs a label and a query, and neither field is empty."
+)
 
 # A Topic is kept only when the real search returns this many Papers with an
 # Open copy. The threshold moved from 5 to 3 on 2026-10-07. See ADR 0002.
@@ -138,7 +147,9 @@ def slugify(label: str) -> str:
     """
     kept_characters = []
     for character in label.lower():
-        if character.isalnum():
+        # isalnum alone is true for an accented letter and for CJK, and a slug
+        # travels in a link, so the test also asks for plain ASCII.
+        if character.isascii() and character.isalnum():
             kept_characters.append(character)
         else:
             # Any run of other characters becomes one hyphen.
@@ -186,12 +197,19 @@ def offer_topics(domain: str, ask_model: AskModel, avoid: list[str] | None = Non
     """
     prompt = prompts.load(TOPIC_PROMPT_NAME)
     avoid_list = "none" if not avoid else ", ".join(avoid)
-    filled = prompts.fill(
-        prompt,
-        {"DOMAIN_NAME": domain, "AVOID_LIST": avoid_list},
-    )
 
     for attempt in (1, 2):
+        filled = prompts.fill(
+            prompt,
+            {
+                "TOPIC_COUNT": str(TOPICS_TO_ASK_FOR),
+                "DOMAIN_NAME": domain,
+                "AVOID_LIST": avoid_list,
+                # Round 1 says nothing. Round 2 says why it is asking again, and
+                # that difference is what makes the retry a real second ask.
+                "RETRY_NOTE": "" if attempt == 1 else RETRY_NOTE,
+            },
+        )
         answer = ask_model(
             filled_prompt=filled,
             prompt_sha256=prompt.sha256,
@@ -200,7 +218,9 @@ def offer_topics(domain: str, ask_model: AskModel, avoid: list[str] | None = Non
         )
         topics = topics_from_answer(answer)
         if len(topics) >= MINIMUM_TOPICS_TO_SHOW:
-            return topics
+            # The cap is the PRD promise of 5 to 8. Asking for more than the cap
+            # leaves room for the items the shape check drops.
+            return topics[:MAXIMUM_TOPICS_TO_SHOW]
         if attempt == 2:
             raise TopicListUnusable(
                 f"The model returned {len(topics)} usable Topics for the Domain "

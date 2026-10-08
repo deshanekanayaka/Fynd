@@ -62,4 +62,9 @@ def fill(prompt: Prompt, values: dict[str, str]) -> str:
         if placeholder not in filled:
             raise KeyError(f"The prompt {prompt.name} holds no placeholder {placeholder}.")
         filled = filled.replace(placeholder, value)
+
+    # A placeholder left in the text would travel to the model as braces, and
+    # the prompt hash would not show the mistake. Stop instead.
+    if "{{" in filled:
+        raise KeyError(f"The prompt {prompt.name} still holds a placeholder after filling.")
     return filled

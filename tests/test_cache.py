@@ -47,3 +47,11 @@ def test_the_file_holds_the_parts_beside_the_answer(tmp_path, monkeypatch) -> No
     stored = json.loads((tmp_path / key).read_text(encoding="utf-8"))
     assert stored["parts"] == parts
     assert stored["value"] == "an answer"
+
+
+def test_a_file_in_an_older_shape_reads_as_a_miss(tmp_path, monkeypatch) -> None:
+    # One such file is on disk from day 2. A miss costs one fetch, and a raised
+    # error costs the whole Stage.
+    monkeypatch.setenv("FYND_CACHE_DIR", str(tmp_path))
+    (tmp_path / "old.json").write_text(json.dumps({"total": 20}), encoding="utf-8")
+    assert cache.read("old.json") is None

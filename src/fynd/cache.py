@@ -43,6 +43,10 @@ def read(key: str) -> Any | None:
     if not path.exists():
         return None
     stored = json.loads(path.read_text(encoding="utf-8"))
+    if not isinstance(stored, dict) or "value" not in stored:
+        # A file from an older shape, or a run that died inside the write. A
+        # miss costs one fetch, and a raised error costs the whole Stage.
+        return None
     return stored["value"]
 
 

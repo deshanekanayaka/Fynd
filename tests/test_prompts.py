@@ -48,8 +48,18 @@ def test_fill_refuses_a_placeholder_the_file_does_not_hold(tmp_path, monkeypatch
         prompts.fill(prompt, {"DOMAIN": "energy"})
 
 
-def test_the_real_topic_prompt_holds_both_placeholders() -> None:
+def test_fill_refuses_to_leave_a_placeholder_behind(tmp_path, monkeypatch) -> None:
+    # An unfilled placeholder would travel to the model as braces, and the
+    # prompt hash would not show the mistake.
+    monkeypatch.setenv("FYND_PROMPTS_DIR", str(tmp_path))
+    write_prompt(tmp_path, "test-v1", "Domain: {{DOMAIN_NAME}}. Avoid: {{AVOID_LIST}}.")
+    prompt = prompts.load("test-v1")
+    with pytest.raises(KeyError):
+        prompts.fill(prompt, {"DOMAIN_NAME": "energy"})
+
+
+def test_the_real_topic_prompt_holds_every_placeholder() -> None:
     # The shipped prompt and the Stage that fills it must agree.
     prompt = prompts.load("propose-topics-v1")
-    assert "{{DOMAIN_NAME}}" in prompt.text
-    assert "{{AVOID_LIST}}" in prompt.text
+    for placeholder in ("{{TOPIC_COUNT}}", "{{DOMAIN_NAME}}", "{{AVOID_LIST}}", "{{RETRY_NOTE}}"):
+        assert placeholder in prompt.text

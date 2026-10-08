@@ -13,11 +13,13 @@ from __future__ import annotations
 
 import argparse
 import datetime as dt
+import os
 import sys
 
+import anthropic
 from dotenv import load_dotenv
 
-from fynd.claude import ask_for_json
+from fynd.claude import ModelRefused, ask_for_json
 from fynd.semantic_scholar import RateLimited, SemanticScholar
 from fynd.stages import stage1, stage2
 
@@ -36,9 +38,20 @@ def run_stage_1(domain: str) -> None:
     print("Stage 1 offers:", ", ".join(offered))
     answer = stage1.accept_domain(domain, offered)
     print("Stage 1 decided:", answer)
+    # A refused Domain leaves a non-zero exit code, so a script and a reader
+    # both see the difference between a typo and an accepted Pick.
+    if isinstance(answer, stage1.DomainNotOffered):
+        raise SystemExit(1)
 
 
 def run_stage_2(domain: str, pick: str, avoid: list[str]) -> None:
+    # The most likely first run failure, so it gets a sentence and not a
+    # traceback from inside the client.
+    if not os.environ.get("ANTHROPIC_API_KEY"):
+        raise SystemExit(
+            "Set ANTHROPIC_API_KEY in your .env file. Stage 2 asks a model for Topics."
+        )
+
     offered = stage2.offer_topics(domain, ask_for_json, avoid=avoid or None)
     print(f"Stage 2 offers {len(offered)} Topics for the Domain {domain}.")
     for topic in offered:
@@ -57,6 +70,8 @@ def run_stage_2(domain: str, pick: str, avoid: list[str]) -> None:
         today=dt.date.today(),
     )
     print("Stage 2 decided:", answer)
+    if isinstance(answer, stage2.TopicNotOffered):
+        raise SystemExit(1)
 
 
 def main() -> None:
@@ -87,7 +102,12 @@ def main() -> None:
         else:
             avoid = [label.strip() for label in args.avoid.split(",") if label.strip()]
             run_stage_2(args.domain, args.pick, avoid)
-    except (RateLimited, stage2.TopicListUnusable) as error:
+    except (
+        RateLimited,
+        ModelRefused,
+        stage2.TopicListUnusable,
+        anthropic.AnthropicError,
+    ) as error:
         # A traceback teaches the reader nothing here. The message is the fix.
         print(error, file=sys.stderr)
         raise SystemExit(1) from None

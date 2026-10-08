@@ -28,7 +28,13 @@ MAX_TOKENS = 4000
 
 
 class ModelRefused(Exception):
-    """Raised when the model returns no text block to read."""
+    """Raised when the model returns nothing Fynd can read.
+
+    Three cases reach it. The reply holds no text block, the reply stopped
+    because it hit the token ceiling or a safety rule, or the text is not the
+    JSON the schema asked for. None of the three is cached, so the next run
+    asks again.
+    """
 
 
 def ask_for_json(
@@ -65,17 +71,29 @@ def ask_for_json(
         output_config={"format": {"type": "json_schema", "schema": schema}},
     )
 
+    # A reply that stopped early is not an answer. A truncated reply still
+    # carries a text block, so the stop reason is the only honest check, and
+    # without it the broken JSON would raise far from the cause.
+    if response.stop_reason in ("max_tokens", "refusal"):
+        raise ModelRefused(
+            f"The model {model} stopped with the reason {response.stop_reason}. "
+            f"Raise MAX_TOKENS, now {MAX_TOKENS}, if the answer was simply too long."
+        )
+
     text = ""
     for block in response.content:
         if block.type == "text":
             text = block.text
             break
     if not text:
-        # A refused or empty reply is never cached, so the next run asks again.
         raise ModelRefused(
             f"The model {model} returned no text to read. Stop reason: {response.stop_reason}."
         )
 
-    value = json.loads(text)
+    try:
+        value = json.loads(text)
+    except json.JSONDecodeError as error:
+        raise ModelRefused(f"The model {model} returned text that is not JSON: {error}.") from None
+
     cache.write(key, parts, value)
     return value
