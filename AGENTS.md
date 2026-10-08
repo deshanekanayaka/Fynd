@@ -27,6 +27,8 @@ Write the smallest thing that works, and leave one runnable check behind it. The
 
 The user does not write CSS by hand and has no design training. Use shadcn/ui components with the project token layer. Do not hand write components, and do not ship shadcn defaults.
 
+A pull request opens with a one or two line statement of what it is. Write that line first, in plain words, before any section. A reader who stops after the first line still knows what the pull request does.
+
 ## Decisions you must not reverse without asking
 
 - The Problem comes from the real world. Papers are evidence, not the source of the idea.
