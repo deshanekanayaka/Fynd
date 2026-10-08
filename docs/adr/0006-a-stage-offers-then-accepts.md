@@ -13,14 +13,16 @@ A Stage receives its search and its model as plain function arguments, typed as 
 
 ```
 offer_topics(domain, ask_model) -> list of offered Topics
-accept_topic(pick, offered, search) -> a verdict
+accept_topic(pick, offered, search) -> what it decided
 ```
 
-One other file, the runner, writes `stage_run` and `stage_state`, and knows the order of the seven Stages. The runner calls `offer`, saves the offered list in the `stage_run` `detail` column, and waits. When the Pick arrives, the runner reads that saved list and calls `accept` with it. If the verdict keeps the Pick, the runner writes `stage_state`.
+One other file, the runner, writes `stage_run` and `stage_state`, and knows the order of the seven Stages. The runner calls `offer`, saves the offered list in the `stage_run` `detail` column, and waits. When the Pick arrives, the runner reads that saved list and calls `accept` with it. If the answer keeps the Pick, the runner writes `stage_state`.
 
 `accept` checks the Pick against the stored offered list, and never against a list the caller sent. The secret link is the only access control, so a caller can send any value it likes.
 
-`accept` returns a verdict and does not raise for a normal outcome. Stage 2 has three verdicts. The Topic is kept. The Topic is below the open Paper threshold, with the count. The Topic was never offered.
+`accept` returns what it decided, and does not raise for a normal outcome. Stage 2 decides one of three things. The Topic is kept. The Topic is below the open Paper threshold, with the count. The Topic was never offered.
+
+Each answer is its own small class, and `accept` returns the union of them. Stage 1 returns `DomainKept` or `DomainNotOffered`. One class with a field that means nothing half the time was rejected, because a refusal carries no Domain.
 
 `accept` runs the search itself. The threshold of 3 Papers with an open copy is a rule of the Stage.
 
@@ -34,7 +36,7 @@ A second kind of test replays a real run from the committed disk cache of [ADR 0
 
 The file a reviewer opens to understand stage 2 holds only stage 2. The Stage sequence stays in the runner. That matches [ADR 0003](./0003-four-routes-with-short-polling.md). The Pick names the Stage it answers, and never names the Stage to run.
 
-A below-threshold verdict is not a failed run. The `stage_run` state stays `running`, the count goes in `detail`, and the student picks again. The route turns a never-offered verdict into a 4xx answer.
+A Topic below the threshold is not a failed run. The `stage_run` state stays `running`, the count goes in `detail`, and the student picks again. The route turns a never-offered answer into a 4xx reply.
 
 The cost is one more file than a single `run_stage_2` function, and one more hop for a reader to follow.
 

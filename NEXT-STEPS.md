@@ -98,7 +98,7 @@ The first code design round is closed. See [ADR 0006](./docs/adr/0006-a-stage-of
 - A Stage receives its search and its model as plain function arguments, with no default values. The edge wires the real ones.
 - The runner is the one file that writes `stage_run` and `stage_state`, and the one file that knows the order of the seven Stages.
 - `accept` checks the Pick against the offered list stored in `stage_run` `detail`, and never against a list the caller sent.
-- `accept` returns a verdict and does not raise for a normal outcome. Stage 2 has three verdicts: kept, below the threshold with the count, and never offered.
+- `accept` returns what it decided, and does not raise for a normal outcome. Each answer is its own small class, so stage 1 returns `DomainKept` or `DomainNotOffered`, and stage 2 adds a third class for a Topic below the threshold.
 - Tests pass fake search and model functions. The replay test over the committed cache arrives with the labelled set.
 
 ## Settled on day 3: the stage 3 logic

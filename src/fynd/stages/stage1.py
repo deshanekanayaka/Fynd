@@ -8,7 +8,6 @@ runner does every save, so nothing here touches the database.
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Literal
 
 # The two Domains of version 1. ADR 0009 cut Healthcare, and the check
 # constraint on the `project` table holds these same two values.
@@ -16,16 +15,27 @@ SEEDED_DOMAINS = ("technology", "energy")
 
 
 @dataclass(frozen=True)
-class DomainVerdict:
-    """What `accept_domain` decided about one Pick.
+class DomainKept:
+    """The Pick was one of the offered Domains, so stage 1 keeps it."""
 
-    A verdict is a value and not an exception, because "the Stage never offered
-    this" is an answer the caller has to turn into a 4xx reply. A frozen
-    dataclass means nobody edits the decision after the Stage returned it.
+    domain: str
+
+
+@dataclass(frozen=True)
+class DomainNotOffered:
+    """The Pick was not in the offered list, so stage 1 refuses it.
+
+    The refused value travels with the answer, because the route needs it for
+    the 4xx message it sends back.
     """
 
-    kind: Literal["kept", "not_offered"]
-    domain: str = ""
+    pick: str
+
+
+# What `accept_domain` returns. Two small classes instead of one class with a
+# field that means nothing half the time: a refusal has no Domain to carry.
+# Stage 2 grows a third class for a Topic below the open Paper threshold.
+DomainDecision = DomainKept | DomainNotOffered
 
 
 def offer_domains() -> list[str]:
@@ -38,17 +48,20 @@ def offer_domains() -> list[str]:
     return list(SEEDED_DOMAINS)
 
 
-def accept_domain(pick: str, offered: list[str]) -> DomainVerdict:
+def accept_domain(pick: str, offered: list[str]) -> DomainDecision:
     """Decide whether the Pick is one of the Domains this Stage offered.
 
     The `offered` list is the one the runner saved for this Project, and never
     a list the caller sent with the Pick. The secret link is the only access
     control, so a caller can send any value it likes.
 
+    A refusal is a returned value and not an exception, because the caller has
+    to turn it into an answer for the student.
+
     The comparison is exact. The student sends back one of the values Fynd
     offered, so a quiet repair of the case would hide a real mismatch.
     """
     for domain in offered:
         if domain == pick:
-            return DomainVerdict(kind="kept", domain=domain)
-    return DomainVerdict(kind="not_offered")
+            return DomainKept(domain=domain)
+    return DomainNotOffered(pick=pick)
