@@ -1,6 +1,6 @@
 # Next steps
 
-Updated: 2026-10-08, day 3. Target ship date: 2026-10-26.
+Updated: 2026-10-08, end of day 3. Target ship date: 2026-10-26.
 The ship date is a target and not a constraint. The design phase takes the time it needs, because Deshan must be able to explain every part of this project.
 Read [PRD.md](./PRD.md) for the product and [CONTEXT.md](./CONTEXT.md) for the vocabulary.
 
@@ -170,9 +170,15 @@ A code review of the branch found nine problems, and all nine are fixed in the s
 
 The 5 to 8 question is also settled by reading both documents. Fynd asks the model for 10 Topics and shows 5 to 8, so the extra two cover the items the shape check drops.
 
+## Tomorrow, day 4
+
+Build step 3 of the sequence below, which is written up as [spec 0001](./docs/specs/0001-the-open-copy-and-the-source-text.md). Four small modules and one pipeline function. An OpenAlex client, a fetcher, two extractors, and a quality detector. The run over the Seeded Topic writes `docs/measurements/open-copy-hosts.md`, which is the first published number of the project.
+
+One thing waits for your word before the code starts. The spec names the test seam as the pipeline function taking the resolve function and the fetch function as plain arguments, which is the shape the Stage files already use. Agree it, or name a better one.
+
 ## Open items that need a decision from Deshan
 
-None.
+1. The test seam named in spec 0001.
 
 The embedding model left this list on 2026-10-07. It is no longer a question to answer by preference. Days 8 and 9 answer it with recall at 20 and nDCG on the hand labelled set, and the vector size follows the model that wins.
 
