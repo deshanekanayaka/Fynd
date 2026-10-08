@@ -1,67 +1,51 @@
 """Stage 1: the student picks a Domain.
 
-Two named jobs, as ADR 0006 requires. `offer_domains` produces what the student
-chooses from, and `accept_domain` refuses a Pick the Stage never offered. The
-runner does every save, so nothing here touches the database.
+ADR 0006 gives every Stage two jobs and no saving. The runner writes the rows.
 """
 
-from __future__ import annotations
-
 from dataclasses import dataclass
+from typing import Final
 
-# The two Domains of version 1. ADR 0009 cut Healthcare, and the check
-# constraint on the `project` table holds these same two values.
-SEEDED_DOMAINS = ("technology", "energy")
+# ADR 0009 cut Healthcare. The `project` check constraint holds the same two.
+SEEDED_DOMAINS: Final = ("technology", "energy")
 
 
 @dataclass(frozen=True)
 class DomainKept:
-    """The Pick was one of the offered Domains, so stage 1 keeps it."""
+    """An accepted Domain Pick, holding the Domain the Project saves."""
 
     domain: str
 
 
 @dataclass(frozen=True)
 class DomainNotOffered:
-    """The Pick was not in the offered list, so stage 1 refuses it.
+    """A refused Domain Pick, holding the value that was refused."""
 
-    The refused value travels with the answer, because the route needs it for
-    the 4xx message it sends back.
-    """
-
+    # The refused value travels with the answer, because the route puts it in
+    # the 4xx message it sends back.
     pick: str
 
 
-# What `accept_domain` returns. Two small classes instead of one class with a
-# field that means nothing half the time: a refusal has no Domain to carry.
-# Stage 2 grows a third class for a Topic below the open Paper threshold.
+# What `accept_domain` returns. One class for each answer, so no answer carries
+# a field that means nothing.
 DomainDecision = DomainKept | DomainNotOffered
 
 
 def offer_domains() -> list[str]:
-    """Return the Domains the student chooses from.
-
-    Stage 1 offers a closed set, so no model and no search is involved. A new
-    list is built on every call, because a caller that edits the returned list
-    must not be able to edit the constant behind it.
-    """
+    """Returns the Domains the student chooses from."""
+    # A new list every call, so a caller that edits it cannot edit the constant.
     return list(SEEDED_DOMAINS)
 
 
 def accept_domain(pick: str, offered: list[str]) -> DomainDecision:
-    """Decide whether the Pick is one of the Domains this Stage offered.
+    """Keeps the Pick when it is in `offered`, and refuses it when it is not.
 
-    The `offered` list is the one the runner saved for this Project, and never
-    a list the caller sent with the Pick. The secret link is the only access
-    control, so a caller can send any value it likes.
-
-    A refusal is a returned value and not an exception, because the caller has
-    to turn it into an answer for the student.
-
-    The comparison is exact. The student sends back one of the values Fynd
-    offered, so a quiet repair of the case would hide a real mismatch.
+    `offered` is the list the runner saved for this Project, and never a list
+    the caller sent, because the secret link is the only access control.
     """
     for domain in offered:
+        # Exact comparison. Repairing the case would hide a real mismatch
+        # between what Fynd offered and what came back.
         if domain == pick:
             return DomainKept(domain=domain)
     return DomainNotOffered(pick=pick)

@@ -27,6 +27,10 @@ Write the smallest thing that works, and leave one runnable check behind it. The
 
 The user does not write CSS by hand and has no design training. Use shadcn/ui components with the project token layer. Do not hand write components, and do not ship shadcn defaults.
 
+A docstring opens with one short line in the third person, for example "Greets the user by their name." A function says what it does. A class names what the value is. An exception says when it is raised. The reason goes in a comment beside the code it explains, and not in the docstring.
+
+A pull request opens with a one or two line statement of what it is. Write that line first, in plain words, before any section. A reader who stops after the first line still knows what the pull request does.
+
 ## Decisions you must not reverse without asking
 
 - The Problem comes from the real world. Papers are evidence, not the source of the idea.

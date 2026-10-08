@@ -1,33 +1,34 @@
 """Search for Papers in the Semantic Scholar Academic Graph API.
 
-Two rules shape this file. Semantic Scholar allows one request per second with
-a key, so the client waits between calls. Every response is cached on disk, so
-a second run of the same search costs no request at all.
+Semantic Scholar allows one request per second with a key, so the client waits
+between calls, and every reply is cached on disk.
 """
-
-from __future__ import annotations
 
 import os
 import time
-from typing import Any
+from typing import Any, Final
 
 import httpx
 
 from fynd import cache
 from fynd.models import Paper, SearchResult
 
-SEARCH_URL = "https://api.semanticscholar.org/graph/v1/paper/search"
+SEARCH_URL: Final = "https://api.semanticscholar.org/graph/v1/paper/search"
 
-# The fields Fynd needs. Asking for fewer fields keeps the response small.
-FIELDS = "paperId,title,abstract,year,externalIds,openAccessPdf"
+# The fields Fynd needs. Asking for fewer fields keeps the reply small.
+FIELDS: Final = "paperId,title,abstract,year,externalIds,openAccessPdf"
 
 # The rate limit the PRD records: one request per second on search with a key.
-SECONDS_BETWEEN_REQUESTS = 1.0
+SECONDS_BETWEEN_REQUESTS: Final = 1.0
 
 # A 429 answer means the rate limit was hit. One retry after a wait is enough,
 # because the client already waits a second between its own requests.
 # ponytail: one fixed retry, add real backoff if a Stage starts failing on this.
-RETRY_WAIT_SECONDS = 3.0
+RETRY_WAIT_SECONDS: Final = 3.0
+
+# The shape this file turns a reply into. The cache key carries it, so a change
+# to the fields above does not serve an answer parsed by the old rules.
+REPLY_SHAPE_VERSION: Final = 2
 
 
 class RateLimited(Exception):
@@ -35,10 +36,8 @@ class RateLimited(Exception):
 
 
 def paper_from_api(item: dict[str, Any]) -> Paper:
-    """Turn one item from the API into a Paper.
-
-    The API leaves a field out or sets it to null, so every read has a default.
-    """
+    """Turns one item from the API into a Paper."""
+    # The API leaves a field out or sets it to null, so every read has a default.
     external_ids = item.get("externalIds") or {}
     open_access = item.get("openAccessPdf") or {}
     return Paper(
@@ -46,13 +45,13 @@ def paper_from_api(item: dict[str, Any]) -> Paper:
         title=item.get("title") or "",
         abstract=item.get("abstract") or "",
         year=item.get("year"),
-        arxiv_id=external_ids.get("ArXiv") or "",
+        doi=external_ids.get("DOI") or "",
         open_copy_url=open_access.get("url") or "",
     )
 
 
 class SemanticScholar:
-    """A client for one run. It holds the key and the time of the last request."""
+    """A search client for one run, holding the key and the last request time."""
 
     def __init__(self, client: httpx.Client | None = None) -> None:
         self.api_key = os.environ.get("SEMANTIC_SCHOLAR_API_KEY", "")
@@ -61,7 +60,7 @@ class SemanticScholar:
         self.last_request_at = 0.0
 
     def wait_for_rate_limit(self) -> None:
-        """Wait until one second has passed since the last request."""
+        """Waits until one second has passed since the last request."""
         if self.last_request_at == 0.0:
             return
         waited = time.monotonic() - self.last_request_at
@@ -69,31 +68,49 @@ class SemanticScholar:
         if remaining > 0:
             time.sleep(remaining)
 
-    def search(self, query: str, limit: int = 20) -> SearchResult:
-        """Return the Papers for one query, from the cache when possible."""
-        key = cache.cache_key("s2-search", {"query": query, "limit": limit})
+    def search(self, query: str, year_from: int, limit: int = 20) -> SearchResult:
+        """Returns the Papers for one query, from the cache when possible.
+
+        `year_from` is the first year the search accepts. The Stage passes it
+        in, so this file holds no clock and no window rule of its own.
+        """
+        year_range = f"{year_from}-"
+        parts = {
+            "api": "semantic-scholar-search",
+            "query": query,
+            "limit": limit,
+            "year": year_range,
+            "fields": FIELDS,
+            "shape": REPLY_SHAPE_VERSION,
+        }
+        key = cache.cache_key("s2-search", parts)
         payload = cache.read(key)
         if payload is None:
-            payload = self.fetch_search(query, limit)
-            cache.write(key, payload)
+            payload = self.fetch_search(query, year_range, limit)
+            cache.write(key, parts, payload)
 
         papers = []
         for item in payload.get("data") or []:
             papers.append(paper_from_api(item))
         return SearchResult(query=query, total=payload.get("total") or 0, papers=papers)
 
-    def fetch_search(self, query: str, limit: int) -> dict[str, Any]:
-        """Call the search endpoint. This is the only method that uses the network."""
+    def fetch_search(self, query: str, year_range: str, limit: int) -> dict[str, Any]:
+        """Calls the search endpoint. The only method here that uses the network."""
         headers = {}
         if self.api_key:
             headers["x-api-key"] = self.api_key
 
-        # Two tries at most. A nothing is cached, so a failure costs one wait.
+        # Two tries at most. Nothing is cached, so a failure costs one wait.
         for attempt in (1, 2):
             self.wait_for_rate_limit()
             response = self.client.get(
                 SEARCH_URL,
-                params={"query": query, "limit": limit, "fields": FIELDS},
+                params={
+                    "query": query,
+                    "limit": limit,
+                    "year": year_range,
+                    "fields": FIELDS,
+                },
                 headers=headers,
             )
             self.last_request_at = time.monotonic()

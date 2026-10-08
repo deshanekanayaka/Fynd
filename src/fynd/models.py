@@ -1,12 +1,21 @@
-"""The shapes Fynd reads from an external API.
+"""The shapes Fynd passes between its own parts.
 
-The words here follow CONTEXT.md. A Paper is one published academic work, and
-a Paper is one kind of Source.
+The words follow CONTEXT.md. These are pydantic models, not dataclasses,
+because each one is built from an API reply that leaves fields out.
 """
 
-from __future__ import annotations
-
 from pydantic import BaseModel, Field
+
+
+class Topic(BaseModel):
+    """One Topic a Stage offered."""
+
+    # The slug is what a Pick names, per ADR 0003. The label and the query both
+    # come from the model, per ADR 0002, so no later Stage rewrites one into
+    # the other.
+    slug: str
+    label: str
+    query: str
 
 
 class Paper(BaseModel):
@@ -16,14 +25,15 @@ class Paper(BaseModel):
     title: str
     abstract: str = ""
     year: int | None = None
-    arxiv_id: str = ""
+    # ADR 0007 added the digital object identifier, which OpenAlex needs to
+    # resolve the Open copy, and dropped the arXiv identifier, because the
+    # first live run returned none.
+    doi: str = ""
     open_copy_url: str = ""
-    # The field is on the model because stage 2 counts the Papers with an open
-    # copy, and stage 4 only fetches full text for those.
 
     @property
     def has_open_copy(self) -> bool:
-        """Say whether an open copy exists, which is what stage 2 counts."""
+        """Says whether this Paper has an Open copy link."""
         return bool(self.open_copy_url)
 
 
@@ -36,11 +46,9 @@ class SearchResult(BaseModel):
 
     @property
     def open_copy_count(self) -> int:
-        """Count the Papers with an open copy.
-
-        Stage 2 keeps a Topic only when this count reaches the threshold. See
-        ADR 0002.
-        """
+        """Counts the Papers with an Open copy, which is what stage 2 reads."""
+        # The search asks for the Evidence window, so every Paper counted here
+        # is inside it. See ADR 0008.
         count = 0
         for paper in self.papers:
             if paper.has_open_copy:
