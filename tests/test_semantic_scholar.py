@@ -1,12 +1,12 @@
-"""The search client has to parse the API, count open copies, and use the cache."""
+"""The search client has to parse the API, ask for the Evidence window, and cache."""
 
 import httpx
 import pytest
 
 from fynd.semantic_scholar import RateLimited, SemanticScholar
 
-# One recorded response, trimmed to the fields Fynd asks for.
-RECORDED_RESPONSE = {
+# One recorded reply, trimmed to the fields Fynd asks for.
+RECORDED_REPLY = {
     "total": 2,
     "data": [
         {
@@ -14,8 +14,8 @@ RECORDED_RESPONSE = {
             "title": "Short term load forecasting for United Kingdom households",
             "abstract": "We forecast household demand.",
             "year": 2023,
-            "externalIds": {"ArXiv": "2301.00001"},
-            "openAccessPdf": {"url": "https://arxiv.org/pdf/2301.00001"},
+            "externalIds": {"DOI": "10.1000/aaa"},
+            "openAccessPdf": {"url": "https://dro.dur.ac.uk/aaa.pdf"},
         },
         {
             "paperId": "bbb",
@@ -29,97 +29,115 @@ RECORDED_RESPONSE = {
 }
 
 
-def fake_client(calls: list[httpx.Request]) -> httpx.Client:
-    """Return a client that answers with the recorded response and counts the calls."""
+def client_that_returns(reply: dict, calls: list) -> httpx.Client:
+    """Build an httpx client that answers every request from memory."""
 
     def handler(request: httpx.Request) -> httpx.Response:
         calls.append(request)
-        return httpx.Response(200, json=RECORDED_RESPONSE)
+        return httpx.Response(200, json=reply)
 
     return httpx.Client(transport=httpx.MockTransport(handler))
 
 
-@pytest.fixture(autouse=True)
-def cache_in_a_temporary_directory(tmp_path, monkeypatch):
-    # Every test gets an empty cache, so one test cannot feed another.
+def test_a_paper_keeps_the_fields_fynd_uses(tmp_path, monkeypatch) -> None:
     monkeypatch.setenv("FYND_CACHE_DIR", str(tmp_path))
-    monkeypatch.delenv("SEMANTIC_SCHOLAR_API_KEY", raising=False)
+    calls: list = []
+    search = SemanticScholar(client=client_that_returns(RECORDED_REPLY, calls))
 
-
-def test_search_parses_a_paper_and_tolerates_a_missing_field():
-    result = SemanticScholar(client=fake_client([])).search("energy", limit=2)
+    result = search.search("uk household energy forecasting", year_from=2022)
 
     assert result.total == 2
     assert len(result.papers) == 2
-
     first = result.papers[0]
-    assert first.arxiv_id == "2301.00001"
+    assert first.paper_id == "aaa"
+    assert first.doi == "10.1000/aaa"
+    assert first.open_copy_url == "https://dro.dur.ac.uk/aaa.pdf"
     assert first.has_open_copy is True
 
-    # The second item has null for three fields, which the API really does return.
-    second = result.papers[1]
+
+def test_a_missing_field_becomes_a_default(tmp_path, monkeypatch) -> None:
+    # The API leaves a field out or sets it to null, and neither must raise.
+    monkeypatch.setenv("FYND_CACHE_DIR", str(tmp_path))
+    search = SemanticScholar(client=client_that_returns(RECORDED_REPLY, []))
+
+    second = search.search("anything", year_from=2022).papers[1]
+
     assert second.abstract == ""
+    assert second.doi == ""
     assert second.year is None
     assert second.has_open_copy is False
 
 
-def test_open_copy_count_is_what_stage_2_checks():
-    result = SemanticScholar(client=fake_client([])).search("energy", limit=2)
-    assert result.open_copy_count == 1
+def test_the_open_copy_count_is_what_stage_2_reads(tmp_path, monkeypatch) -> None:
+    monkeypatch.setenv("FYND_CACHE_DIR", str(tmp_path))
+    search = SemanticScholar(client=client_that_returns(RECORDED_REPLY, []))
+
+    assert search.search("anything", year_from=2022).open_copy_count == 1
 
 
-def test_the_second_search_uses_the_cache_and_makes_no_request():
-    calls: list[httpx.Request] = []
-    client = SemanticScholar(client=fake_client(calls))
+def test_the_request_asks_for_the_evidence_window(tmp_path, monkeypatch) -> None:
+    # ADR 0008 puts the year range in the search, so the recent pool is as large
+    # as the API makes it.
+    monkeypatch.setenv("FYND_CACHE_DIR", str(tmp_path))
+    calls: list = []
+    search = SemanticScholar(client=client_that_returns(RECORDED_REPLY, calls))
 
-    client.search("energy", limit=2)
-    client.search("energy", limit=2)
+    search.search("anything", year_from=2022)
+
+    assert calls[0].url.params["year"] == "2022-"
+
+
+def test_a_second_run_of_the_same_search_makes_no_request(tmp_path, monkeypatch) -> None:
+    monkeypatch.setenv("FYND_CACHE_DIR", str(tmp_path))
+    calls: list = []
+    search = SemanticScholar(client=client_that_returns(RECORDED_REPLY, calls))
+
+    search.search("anything", year_from=2022)
+    search.search("anything", year_from=2022)
 
     assert len(calls) == 1
 
 
-def test_the_api_key_is_sent_as_a_header(monkeypatch):
-    monkeypatch.setenv("SEMANTIC_SCHOLAR_API_KEY", "test-key")
-    calls: list[httpx.Request] = []
+def test_a_different_year_range_is_a_different_cache_entry(tmp_path, monkeypatch) -> None:
+    # The window is an input, so a run in a new calendar year asks again.
+    monkeypatch.setenv("FYND_CACHE_DIR", str(tmp_path))
+    calls: list = []
+    search = SemanticScholar(client=client_that_returns(RECORDED_REPLY, calls))
 
-    SemanticScholar(client=fake_client(calls)).search("energy", limit=2)
-
-    assert calls[0].headers["x-api-key"] == "test-key"
-
-
-def test_a_429_answer_is_retried_once_and_then_raises(monkeypatch):
-    # The wait is real time, so the test replaces it.
-    monkeypatch.setattr("fynd.semantic_scholar.RETRY_WAIT_SECONDS", 0.0)
-    calls: list[httpx.Request] = []
-
-    def handler(request: httpx.Request) -> httpx.Response:
-        calls.append(request)
-        return httpx.Response(429)
-
-    client = SemanticScholar(client=httpx.Client(transport=httpx.MockTransport(handler)))
-
-    with pytest.raises(RateLimited):
-        client.search("energy", limit=2)
+    search.search("anything", year_from=2022)
+    search.search("anything", year_from=2023)
 
     assert len(calls) == 2
 
 
-def test_a_429_answer_is_not_cached(monkeypatch):
-    monkeypatch.setattr("fynd.semantic_scholar.RETRY_WAIT_SECONDS", 0.0)
-    answers = [
-        httpx.Response(429),
-        httpx.Response(429),
-        httpx.Response(200, json=RECORDED_RESPONSE),
-    ]
+def test_two_rate_limit_answers_stop_with_a_sentence(tmp_path, monkeypatch) -> None:
+    monkeypatch.setenv("FYND_CACHE_DIR", str(tmp_path))
+    monkeypatch.setattr("fynd.semantic_scholar.RETRY_WAIT_SECONDS", 0)
+    calls: list = []
 
     def handler(request: httpx.Request) -> httpx.Response:
-        return answers.pop(0)
+        calls.append(request)
+        return httpx.Response(429, json={"message": "too many requests"})
 
-    client = SemanticScholar(client=httpx.Client(transport=httpx.MockTransport(handler)))
+    search = SemanticScholar(client=httpx.Client(transport=httpx.MockTransport(handler)))
 
+    with pytest.raises(RateLimited) as error:
+        search.search("anything", year_from=2022)
+
+    assert len(calls) == 2
+    assert "SEMANTIC_SCHOLAR_API_KEY" in str(error.value)
+
+
+def test_a_failed_search_is_never_cached(tmp_path, monkeypatch) -> None:
+    # ADR 0004: a failed reply is never cached, so the next run asks again.
+    monkeypatch.setenv("FYND_CACHE_DIR", str(tmp_path))
+    monkeypatch.setattr("fynd.semantic_scholar.RETRY_WAIT_SECONDS", 0)
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        return httpx.Response(429, json={})
+
+    search = SemanticScholar(client=httpx.Client(transport=httpx.MockTransport(handler)))
     with pytest.raises(RateLimited):
-        client.search("energy", limit=2)
+        search.search("anything", year_from=2022)
 
-    # The failed search must leave nothing behind, or the Topic looks empty forever.
-    result = client.search("energy", limit=2)
-    assert len(result.papers) == 2
+    assert list(tmp_path.iterdir()) == []

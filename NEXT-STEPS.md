@@ -152,9 +152,23 @@ Open item 1 below is closed by this entry.
 
 - A Source and a Claim stay shared across Projects, and a `claim` row carries the hash of the prompt that produced it. See [ADR 0010](./docs/adr/0010-a-source-and-a-claim-are-shared.md).
 
+## Built on day 3: stage 1 and stage 2
+
+- `src/fynd/stages/stage1.py`. `offer_domains` and `accept_domain`, returning `DomainKept` or `DomainNotOffered`.
+- `src/fynd/stages/stage2.py`. `offer_topics` and `accept_topic`, returning `TopicKept`, `TopicBelowThreshold`, or `TopicNotOffered`.
+- `prompts/propose-topics-v1.md`. The first versioned prompt file, with `{{DOMAIN_NAME}}` and `{{AVOID_LIST}}` placeholders.
+- `src/fynd/prompts.py`. Loads a prompt file and hashes its content for the cache key.
+- `src/fynd/cache.py`. The key holds every value that changes the answer, and the file stores those values beside the answer.
+- `src/fynd/claude.py`. Haiku 4.5 at temperature zero, with the answer shape as a JSON schema the Stage passes in.
+- `src/fynd/semantic_scholar.py`. The search now asks for the Evidence window and keeps the digital object identifier.
+- `src/fynd/cli.py`. Two subcommands, `stage1` and `stage2`, which wire the real search and the real model into the Stage files.
+- 39 tests pass with ruff clean. No test reaches the network or spends a token.
+
+A live stage 2 run needs `ANTHROPIC_API_KEY` in `.env`, which is now in `.env.example`.
+
 ## Open items that need a decision from Deshan
 
-None. Every item on this list is now a written decision.
+1. The PRD says stage 2 proposes 5 to 8 Topics. ADR 0004 and the day 2 entry say Fynd asks the model for 10. The code asks for 10, shows every Topic that survives the shape check, and treats a list under 5 as a broken reply. Settle which number the PRD states.
 
 The embedding model left this list on 2026-10-07. It is no longer a question to answer by preference. Days 8 and 9 answer it with recall at 20 and nDCG on the hand labelled set, and the vector size follows the model that wins.
 
@@ -163,7 +177,7 @@ The embedding model left this list on 2026-10-07. It is no longer a question to 
 Backend first, with no frontend.
 
 1. Done. The Python project runs with pytest, type hints, and ruff.
-2. Done. The Semantic Scholar search with the disk cache.
+2. Done. Stage 1, stage 2, the versioned prompt, the replayable cache, and the search with the Evidence window.
 3. Resolve the Open copy with OpenAlex, fetch it, and extract the Source text. Unblocked by ADR 0007.
 4. Extract Claims with Claude Haiku 4.5, one call per chunk, and pass each Claim through the tiered verifier. A Claim that no tier can place in the Source text is dropped.
 5. Produce 3 candidate Problems with their early evidence, as a command line run.

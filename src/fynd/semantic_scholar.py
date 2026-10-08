@@ -1,8 +1,9 @@
 """Search for Papers in the Semantic Scholar Academic Graph API.
 
-Two rules shape this file. Semantic Scholar allows one request per second with
-a key, so the client waits between calls. Every response is cached on disk, so
-a second run of the same search costs no request at all.
+Three rules shape this file. Semantic Scholar allows one request per second
+with a key, so the client waits between calls. Every reply is cached on disk,
+so a second run of the same search costs no request. The search asks for Papers
+inside the Evidence window, because stage 2 counts only those. See ADR 0008.
 """
 
 from __future__ import annotations
@@ -18,7 +19,7 @@ from fynd.models import Paper, SearchResult
 
 SEARCH_URL = "https://api.semanticscholar.org/graph/v1/paper/search"
 
-# The fields Fynd needs. Asking for fewer fields keeps the response small.
+# The fields Fynd needs. Asking for fewer fields keeps the reply small.
 FIELDS = "paperId,title,abstract,year,externalIds,openAccessPdf"
 
 # The rate limit the PRD records: one request per second on search with a key.
@@ -28,6 +29,10 @@ SECONDS_BETWEEN_REQUESTS = 1.0
 # because the client already waits a second between its own requests.
 # ponytail: one fixed retry, add real backoff if a Stage starts failing on this.
 RETRY_WAIT_SECONDS = 3.0
+
+# The shape this file turns a reply into. The cache key carries it, so a change
+# to the fields above does not serve an answer parsed by the old rules.
+REPLY_SHAPE_VERSION = 2
 
 
 class RateLimited(Exception):
@@ -46,7 +51,7 @@ def paper_from_api(item: dict[str, Any]) -> Paper:
         title=item.get("title") or "",
         abstract=item.get("abstract") or "",
         year=item.get("year"),
-        arxiv_id=external_ids.get("ArXiv") or "",
+        doi=external_ids.get("DOI") or "",
         open_copy_url=open_access.get("url") or "",
     )
 
@@ -69,31 +74,50 @@ class SemanticScholar:
         if remaining > 0:
             time.sleep(remaining)
 
-    def search(self, query: str, limit: int = 20) -> SearchResult:
-        """Return the Papers for one query, from the cache when possible."""
-        key = cache.cache_key("s2-search", {"query": query, "limit": limit})
+    def search(self, query: str, year_from: int, limit: int = 20) -> SearchResult:
+        """Return the Papers for one query, from the cache when possible.
+
+        `year_from` is the first year the search accepts. The Evidence window
+        decides it, and the Stage passes it in, so this file holds no clock and
+        no window rule of its own.
+        """
+        year_range = f"{year_from}-"
+        parts = {
+            "api": "semantic-scholar-search",
+            "query": query,
+            "limit": limit,
+            "year": year_range,
+            "fields": FIELDS,
+            "shape": REPLY_SHAPE_VERSION,
+        }
+        key = cache.cache_key("s2-search", parts)
         payload = cache.read(key)
         if payload is None:
-            payload = self.fetch_search(query, limit)
-            cache.write(key, payload)
+            payload = self.fetch_search(query, year_range, limit)
+            cache.write(key, parts, payload)
 
         papers = []
         for item in payload.get("data") or []:
             papers.append(paper_from_api(item))
         return SearchResult(query=query, total=payload.get("total") or 0, papers=papers)
 
-    def fetch_search(self, query: str, limit: int) -> dict[str, Any]:
+    def fetch_search(self, query: str, year_range: str, limit: int) -> dict[str, Any]:
         """Call the search endpoint. This is the only method that uses the network."""
         headers = {}
         if self.api_key:
             headers["x-api-key"] = self.api_key
 
-        # Two tries at most. A nothing is cached, so a failure costs one wait.
+        # Two tries at most. Nothing is cached, so a failure costs one wait.
         for attempt in (1, 2):
             self.wait_for_rate_limit()
             response = self.client.get(
                 SEARCH_URL,
-                params={"query": query, "limit": limit, "fields": FIELDS},
+                params={
+                    "query": query,
+                    "limit": limit,
+                    "year": year_range,
+                    "fields": FIELDS,
+                },
                 headers=headers,
             )
             self.last_request_at = time.monotonic()
