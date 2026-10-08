@@ -1,6 +1,6 @@
 # Next steps
 
-Updated: 2026-10-07, end of day 2. Target ship date: 2026-10-26.
+Updated: 2026-10-08, day 3. Target ship date: 2026-10-26.
 The ship date is a target and not a constraint. The design phase takes the time it needs, because Deshan must be able to explain every part of this project.
 Read [PRD.md](./PRD.md) for the product and [CONTEXT.md](./CONTEXT.md) for the vocabulary.
 
@@ -37,7 +37,7 @@ Deshan does not write the code, but he is in the design phase for the code. Walk
 
 The first live search for the Seeded Topic returned 20 Papers, 12 with an open copy, and zero with an arXiv identifier. The 12 open copies sit on doi.org, sciencedirect.com, mdpi.com, and two university repositories.
 
-Step 3 below says "arXiv PDF", and for this Topic that step returns nothing. The full text source needs a decision before anyone writes that code.
+Step 3 below said "arXiv PDF", and for this Topic that step returns nothing. ADR 0007 answers it. A Paper keeps its digital object identifier, and OpenAlex resolves the Open copy with that key.
 
 ## Settled on day 2: the backend design and stage 2
 
@@ -63,7 +63,7 @@ Two new words are in `CONTEXT.md`. A Pick is the one item a student chooses from
 Stage 2 and the search:
 
 - The search hands the rest of Fynd a list of Papers with the fields Fynd uses, and not the raw reply.
-- A Paper keeps the Semantic Scholar identifier, the title, the abstract, the year, and the open copy link. The arXiv identifier is dropped, because the first live run returned none.
+- A Paper keeps the Semantic Scholar identifier, the title, the abstract, the year, and the Open copy link. The arXiv identifier is dropped, because the first live run returned none. ADR 0007 adds the digital object identifier, because the second lookup needs that key.
 - Every search reply and every model reply is cached in a file on disk. The cache key holds every value that changes the answer. See [ADR 0004](./docs/adr/0004-replayable-runs-and-versioned-prompts.md).
 - A `429` or a timeout gets one retry after a short wait, then stops with a sentence that names the fix. A failed reply is never cached.
 - Haiku 4.5 proposes the Topics, and Fynd asks for 10. A reply that does not match the shape gets one retry.
@@ -89,26 +89,67 @@ Three cuts pay for them. Two Domains instead of three. Three standard cards at s
 
 The source for this change is `docs/architecture-review.md`, which is on disk and out of the repository.
 
-## Still open in the code design
+## Settled on day 3: the shape of a Stage file
 
-1. How a Stage receives its search and its model, so a test runs stage 2 with no network and no token spend.
-2. Whether the rules of a Stage live in a file that knows nothing about HTTP and nothing about the command line, with both callers calling it.
-3. Which two named jobs a Stage file carries, where the second one is the gate that refuses a Pick the Stage never offered.
-4. The stage 3 logic, which is the centre of the product.
+The first code design round is closed. See [ADR 0006](./docs/adr/0006-a-stage-offers-then-accepts.md).
+
+- A Stage is two named jobs in one file. `offer` produces what the student chooses from, and `accept` refuses a Pick the Stage never offered.
+- A Stage file knows nothing about HTTP, nothing about the command line, and nothing about Postgres.
+- A Stage receives its search and its model as plain function arguments, with no default values. The edge wires the real ones.
+- The runner is the one file that writes `stage_run` and `stage_state`, and the one file that knows the order of the seven Stages.
+- `accept` checks the Pick against the offered list stored in `stage_run` `detail`, and never against a list the caller sent.
+- `accept` returns a verdict and does not raise for a normal outcome. Stage 2 has three verdicts: kept, below the threshold with the count, and never offered.
+- Tests pass fake search and model functions. The replay test over the committed cache arrives with the labelled set.
+
+## Settled on day 3: the stage 3 logic
+
+See [ADR 0008](./docs/adr/0008-stage-3-groups-claims-it-already-holds.md).
+
+- Evidence first. Fynd gathers and verifies Claims, then groups them into 3 candidate Problems. The drafting call groups evidence and never invents a fact.
+- The abstract is the Source text for a Paper at stage 3, because stage 4 fetches the Open copy later.
+- A `source` row holds two texts with two hashes, and a `claim` row names which text its offsets belong to.
+- The web search tool on the Anthropic API returns the links for a Statistic and a Product. Fynd fetches and extracts each page itself.
+- The pool is 20 abstracts and at most 6 web pages, about 26 small calls, run one at a time and measured.
+- Every verified Claim is stored. The link table joins only the Claims a candidate Problem uses.
+- A Paper that OpenAlex marks as retracted is dropped, and the drop is counted.
+- The Evidence window is 5 years, and it applies to a Claim that proves the Problem is real. An Existing approach and the Technical core carry no window.
+- Stage 2 and stage 3 search with the year range. Stage 5 searches again with no range.
+- Too little evidence shows fewer cards with a sentence that says why. An empty pool returns the student to stage 2.
+- A Re-roll names the 3 rejected statements and regroups the same cached pool.
+
+The code design for stage 1 to stage 3 is now closed. Nothing is written yet.
 
 ## How the code gets written
 
 The four files from day 2 get deleted and derived again from the design above. Deshan asked for this. Reading inherited code produces memorization and not a mental model, and the design phase gets as much time as it needs. The files stay in git history, and nobody reads them to write the replacement. An agent writes the code once a design round closes.
 
+## Settled on day 3: the Open copy and the Source text
+
+See [ADR 0007](./docs/adr/0007-the-open-copy-is-resolved-then-measured.md). The cached live run says 12 of 20 Papers carry an Open copy link, 18 carry a digital object identifier, and 6 of the 12 links point at doi.org. So at most 4 of the 12 links point at a file.
+
+- A Paper keeps its digital object identifier. OpenAlex resolves the Open copy a second time with that key, and needs no key of its own.
+- Fynd never fetches a publisher. A doi.org link is a lookup key and never a fetch target.
+- The host list is a measurement over the 12 links, and not a guessed allowlist.
+- Two extractors ship. One reads PDF bytes for a Paper, and one reads an HTML page for a Statistic and a Product. Both return a flat string and an offset map.
+- Usable text means three cheap checks: a character count, a share of letters and ordinary punctuation, and one section word.
+- The cache stores the raw bytes. The extracted text is a second cached value.
+- Open copy and Source text are now in `CONTEXT.md`.
+- pdfplumber reads a PDF, and trafilatura reads an HTML page. Both are permissively licensed, and the repository is public.
+- The offset chain starts at the string the extractor produced, which is the Source text.
+- The `source` table gains three columns: the digital object identifier, the license, and the extractor with its version.
+- The fetcher follows 3 redirects, demands a PDF content type or the `%PDF` bytes, caps the body at 20 megabytes and the request at 30 seconds, and names Fynd in the user agent.
+- `uv run python -m fynd.cli measure-open-copies` writes `docs/measurements/open-copy-hosts.md`. Every published number lives in that directory.
+
+Open item 1 below is closed by this entry.
+
 ## Open items that need a decision from Deshan
 
-1. The full text source, now that arXiv returns nothing for the Seeded Topic.
-2. Which two Domains ship, now that the third is cut. Energy holds the Seeded Topic and stays.
-3. Who grades the 5 Projects for metric 2, and when. One evening is enough.
-4. Which typeface pair and which colour scale.
-5. Whether the Render free web service or a different free container host serves the backend on the day. Confirm the free tier before day 12.
-6. Whether a Source stays shared across Projects once two Domains are live.
-7. Whether the `invite` table is needed at all, because a signed code needs no storage to be checked.
+1. Which two Domains ship, now that the third is cut. Energy holds the Seeded Topic and stays.
+2. Who grades the 5 Projects for metric 2, and when. One evening is enough.
+3. Which typeface pair and which colour scale.
+4. Whether the Render free web service or a different free container host serves the backend on the day. Confirm the free tier before day 12.
+5. Whether a Source stays shared across Projects once two Domains are live.
+6. Whether the `invite` table is needed at all, because a signed code needs no storage to be checked.
 
 The embedding model left this list on 2026-10-07. It is no longer a question to answer by preference. Days 8 and 9 answer it with recall at 20 and nDCG on the hand labelled set, and the vector size follows the model that wins.
 
@@ -118,7 +159,7 @@ Backend first, with no frontend.
 
 1. Done. The Python project runs with pytest, type hints, and ruff.
 2. Done. The Semantic Scholar search with the disk cache.
-3. Fetch and extract the full text for each Paper with an open copy. Blocked on open item 1.
+3. Resolve the Open copy with OpenAlex, fetch it, and extract the Source text. Unblocked by ADR 0007.
 4. Extract Claims with Claude Haiku 4.5, one call per chunk, and pass each Claim through the tiered verifier. A Claim that no tier can place in the Source text is dropped.
 5. Produce 3 candidate Problems with their early evidence, as a command line run.
 

@@ -54,6 +54,14 @@ _Avoid_: reference, link, document, result
 One published academic work, with its identifiers, title, abstract, and a link to an open copy if one exists.
 _Avoid_: article, publication, study
 
+**Open copy**:
+The free file of a Paper, held in a repository. Fynd fetches an Open copy and never fetches a publisher page.
+_Avoid_: open access PDF, free version, preprint
+
+**Source text**:
+The one exact string that extraction produced for a Source. A Claim points into it with two character offsets, and the text that passes the quality checks is usable text.
+_Avoid_: content, body, raw text, full text
+
 **Statistic**:
 A published figure or rule from an official body that shows the Problem is real, for example an Office for National Statistics release.
 _Avoid_: data point, evidence, fact
@@ -69,6 +77,10 @@ _Avoid_: prior art, related work, competitor analysis
 **Claim**:
 One sentence from one Source, kept with its citation. A Claim either shows the Problem is real or states a shortcoming of an Existing approach.
 _Avoid_: limitation, finding, insight, quote
+
+**Evidence window**:
+The 5 year age limit on a Source whose Claim proves a Problem is real. An Existing approach and a Technical core carry no limit.
+_Avoid_: recency filter, date cutoff, freshness
 
 **Gap**:
 The shortcoming that several Existing approaches share, supported by Claims from independent Sources. The Gap is what a Proposal aims at.

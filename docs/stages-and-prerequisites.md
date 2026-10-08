@@ -66,7 +66,7 @@ Learn first:
 
 The student does: keeps the Sources that look relevant, and drops the rest.
 
-Fynd does: searches for Sources, fetches the open full text, and shows the titles and abstracts.
+Fynd does: searches for Sources, fetches the Open copy, and shows the titles and abstracts.
 
 Stage state: every fetched Source, and the keep or drop decision for each one.
 

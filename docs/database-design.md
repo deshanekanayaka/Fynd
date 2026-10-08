@@ -1,6 +1,6 @@
 # Database design for stage 1 to stage 3
 
-Updated: 2026-10-06. Postgres on Supabase, with pgvector for stage 5.
+Updated: 2026-10-08. Postgres on Supabase, with pgvector for stage 5.
 Read [CONTEXT.md](../CONTEXT.md) for the words and [PRD.md](../PRD.md) for the scope.
 
 This document covers stage 1 to stage 3, which is the immediate next task in [NEXT-STEPS.md](../NEXT-STEPS.md). It holds seven tables. Stage 4 to stage 7 add tables later, and this document names them at the end without defining them.
@@ -115,26 +115,45 @@ create table source (
   title text not null,
   url text not null,
   external_id text not null default '',
+  doi text not null default '',
   open_copy_url text not null default '',
-  full_text text not null default '',
-  full_text_sha256 text not null default '',
+  license text not null default '',
+  published_year integer not null,
+  abstract text not null default '',
+  abstract_sha256 text not null default '',
+  source_text text not null default '',
+  source_text_sha256 text not null default '',
+  extractor text not null default '',
   structure jsonb not null default '[]',
   retrieved_at timestamptz not null default now(),
   constraint source_type_valid
-    check (source_type in ('paper', 'statistic', 'product'))
+    check (source_type in ('paper', 'statistic', 'product')),
+  constraint source_published_year_valid
+    check (published_year between 1900 and 2100)
 );
 
 create unique index source_external_id_key
   on source (external_id) where external_id <> '';
+
+create unique index source_doi_key
+  on source (doi) where doi <> '';
 ```
 
 A Source is shared across Projects, because the same Paper serves many students and the disk cache already treats it as shared. The `external_id` holds the Semantic Scholar identifier for a Paper. The partial unique index stops the same Paper from arriving twice, and it lets a Statistic or a Product carry no identifier.
 
 An empty string, not a null, marks "this Source has no open copy". That keeps the checks simple and matches the rule above.
 
-The `full_text` column holds one flat string, exactly as extraction produced it. A Claim and a `chunk` row both point into that string with character offsets, so neither one holds a copy of the text. A list of paragraph strings was rejected for this job, because every split and join moves the characters and an offset then needs a paragraph number beside it to mean anything.
+The `source_text` column holds one flat string, exactly as extraction produced it. The column carries the glossary word, because Source text is what a Claim points into. A Claim and a `chunk` row both point into that string with character offsets, so neither one holds a copy of the text. A list of paragraph strings was rejected for this job, because every split and join moves the characters and an offset then needs a paragraph number beside it to mean anything.
 
-The `full_text_sha256` column is what makes an offset honest. An offset is only true against one exact version of the text. If the same paper is extracted again and the text shifts by 40 characters, the hash changes, and every Claim that carries the old hash is known to be stale instead of quietly pointing at the wrong sentence.
+The `doi` column is the lookup key for the second resolution of the Open copy. 18 of the 20 Papers in the first live run carry one, and 6 of the 12 Open copy links point at doi.org, which is a redirect and not a file. The `license` column holds what OpenAlex returned for the location Fynd fetched. See [ADR 0007](./adr/0007-the-open-copy-is-resolved-then-measured.md).
+
+The `published_year` column is what the Evidence window reads. A Claim that proves a Problem is real must come from a Source inside the window, so a Source with no year has no use at stage 3 and Fynd does not store one. A Product carries the year its page was retrieved, because a commercial tool has no publication year. See [ADR 0008](./adr/0008-stage-3-groups-claims-it-already-holds.md).
+
+The `abstract` column holds the Source text that stage 3 works with, and `source_text` holds the Source text of the Open copy that stage 4 fetches. Two texts, two hashes, one row. A Claim names which of the two its offsets belong to. Without that split a stage 5 extraction makes every stage 3 Claim read as stale.
+
+The `extractor` column holds the name and the version of the library that produced `source_text`, for example `pdfplumber 0.11.4`. Without it the text hash says that the text changed, and nothing says what changed it.
+
+The `source_text_sha256` column is what makes an offset honest. An offset is only true against one exact version of the text. If the same paper is extracted again and the text shifts by 40 characters, the hash changes, and every Claim that carries the old hash is known to be stale instead of quietly pointing at the wrong sentence.
 
 The `structure` column holds the section and paragraph boundaries as spans, for example a section called "3 Results" that runs from character 8210 to 11480. It exists for display only. The handover shows "section 3, paragraph 3" beside a Claim, and that label is computed from the offset rather than stored with the Claim.
 
@@ -179,9 +198,12 @@ create table claim (
   start_char integer not null,
   end_char integer not null,
   source_text_sha256 text not null,
+  text_kind text not null,
   verified_by text not null,
   match_score numeric not null,
   created_at timestamptz not null default now(),
+  constraint claim_text_kind_valid
+    check (text_kind in ('abstract', 'source_text')),
   constraint claim_quote_present check (length(quote) > 0),
   constraint claim_span_valid check (start_char >= 0 and end_char > start_char),
   constraint claim_verified_by_valid
@@ -191,7 +213,9 @@ create table claim (
 create index claim_source_id_idx on claim (source_id);
 ```
 
-The `quote` column holds the slice of `source.full_text` between `start_char` and `end_char`, and never the sentence the model wrote. The model locates a Claim and the Source supplies its words, so "invents none" is a property of the data and not a promise. A reviewer takes the two offsets, opens the raw text, and reads the same characters.
+The `quote` column holds the slice of the Source text named by `text_kind`, between `start_char` and `end_char`, and never the sentence the model wrote. The model locates a Claim and the Source supplies its words, so "invents none" is a property of the data and not a promise. A reviewer takes the two offsets, opens the raw text, and reads the same characters.
+
+The `text_kind` column names which text of the Source the offsets belong to. A stage 3 Claim points into the abstract, and a stage 5 Claim points into the Source text of the Open copy. The hash column then repeats the hash of that one text.
 
 The `source_text_sha256` column repeats the hash of the text the offsets were measured against. A re-extraction that changes the text leaves these rows pointing at a version that is named, so nothing silently drifts.
 
