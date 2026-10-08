@@ -29,7 +29,8 @@ Quote only what the repository produces, and name where it lives.
 - Claim extraction: recall and invention rate on a frozen labelled set of 10 Sources, run in continuous integration.
 - The citation guard: precision and recall at each threshold, with the chosen operating point written down.
 - Retrieval: recall at 20 and nDCG for four configurations, on 40 to 60 hand labelled Papers.
-- Full text extraction: the share of Papers that give usable text, for each host.
+- Source text extraction: the share of Papers that give usable text, for each host.
+- Dropped evidence: the count of dropped Claims by reason and tier, and the count of retracted Papers.
 - Every Stage: tokens, cost, and 95th percentile latency.
 
 ## The follow-up questions, and the answers
