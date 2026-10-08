@@ -1,17 +1,16 @@
-"""Every prompt is a file on disk, and never a string inside Python.
+"""Load a prompt from disk and hash it.
 
-ADR 0004 asks for two things. A reader finds the prompt by its version in the
-file name, and the cache key holds the hash of the file content. A typo fixed
-without a rename still misses the cache, so no published number belongs to a
-prompt that no longer exists.
+ADR 0004 keeps every prompt in a file. A reader finds it by the version in the
+file name, and the cache key carries the hash of the content.
 """
-
-from __future__ import annotations
 
 import hashlib
 import os
 from dataclasses import dataclass
 from pathlib import Path
+from typing import Final
+
+PROMPTS_DIR_VARIABLE: Final = "FYND_PROMPTS_DIR"
 
 
 @dataclass(frozen=True)
@@ -24,47 +23,38 @@ class Prompt:
 
 
 def prompts_dir() -> Path:
-    """Return the directory that holds the prompt files.
-
-    The default is the `prompts` directory of the repository. A test points the
-    environment variable at its own directory, so a test never depends on the
-    wording of a real prompt.
-    """
-    from_environment = os.environ.get("FYND_PROMPTS_DIR")
+    """Return the directory that holds the prompt files."""
+    from_environment = os.environ.get(PROMPTS_DIR_VARIABLE)
     if from_environment:
+        # A test points this at its own directory, so no test depends on the
+        # wording of a shipped prompt.
         return Path(from_environment)
     # This file is src/fynd/prompts.py, so two levels up is the repository.
     return Path(__file__).resolve().parents[2] / "prompts"
 
 
 def load(name: str) -> Prompt:
-    """Read one prompt file and hash its content.
-
-    The hash covers the whole file, so any edit changes the cache key. See
-    ADR 0004.
-    """
+    """Read the prompt file called `name` and hash its content."""
+    # The hash covers the whole file, so a typo fixed without a rename still
+    # misses the cache. No published number then belongs to a lost prompt.
     path = prompts_dir() / f"{name}.md"
     text = path.read_text(encoding="utf-8")
-    digest = hashlib.sha256(text.encode("utf-8")).hexdigest()
-    return Prompt(name=name, text=text, sha256=digest)
+    return Prompt(name=name, text=text, sha256=hashlib.sha256(text.encode("utf-8")).hexdigest())
 
 
 def fill(prompt: Prompt, values: dict[str, str]) -> str:
-    """Replace every placeholder in the prompt text.
-
-    A placeholder is an upper case name inside double braces, for example
-    {{DOMAIN_NAME}}. The braces matter: without them the name DOMAIN would
-    replace the first half of DOMAIN_NAME and leave the rest behind.
-    """
+    """Replace every `{{PLACEHOLDER}}` in the prompt with its value."""
     filled = prompt.text
     for name, value in values.items():
         placeholder = "{{" + name + "}}"
+        # The braces matter. Without them the name DOMAIN would replace the
+        # first half of DOMAIN_NAME and leave the rest behind.
         if placeholder not in filled:
             raise KeyError(f"The prompt {prompt.name} holds no placeholder {placeholder}.")
         filled = filled.replace(placeholder, value)
 
-    # A placeholder left in the text would travel to the model as braces, and
-    # the prompt hash would not show the mistake. Stop instead.
+    # A placeholder left behind would travel to the model as braces, and the
+    # prompt hash would not show the mistake.
     if "{{" in filled:
         raise KeyError(f"The prompt {prompt.name} still holds a placeholder after filling.")
     return filled

@@ -1,15 +1,12 @@
 """Run a Stage from the command line.
 
-This file is an edge. It reads the environment, builds the real search and the
-real model, and passes them to the Stage as plain arguments. Every rule lives
-in the Stage file. See ADR 0006.
+An edge. It reads the environment, builds the real search and the real model,
+and passes them to a Stage as plain arguments. Every rule lives in the Stage.
 
-The runner and the database do not exist yet, so this command holds no state
-between runs. It offers the Topics again before it reads a Pick, and the cache
-makes that free and returns the same list, because temperature is zero.
+The runner and the database do not exist yet, so this command keeps no state
+between runs. It offers the Topics again before it reads a Pick, which costs
+nothing and returns the same list, because the cache holds it.
 """
-
-from __future__ import annotations
 
 import argparse
 import datetime as dt
@@ -25,7 +22,7 @@ from fynd.stages import stage1, stage2
 
 
 def search_with(client: SemanticScholar):
-    """Return the search function the Stage calls."""
+    """Return the search function stage 2 calls."""
 
     def search(query: str, year_from: int):
         return client.search(query, year_from=year_from)

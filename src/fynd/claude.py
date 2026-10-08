@@ -1,39 +1,30 @@
 """Ask Claude for one answer in a fixed shape.
 
-This file is an edge. A Stage receives it as a plain function argument, so a
-test runs the Stage with no network and no token spend. See ADR 0006.
-
-Two rules from ADR 0004 live here. Temperature is zero, so the same question
-returns the same answer. Every reply is cached under a key that holds the
-model, the hash of the prompt file, the hash of the filled prompt, the decoding
-parameters, and the version of the shape asked for.
+An edge, not a rule. A Stage receives this function as an argument, so a test
+runs the Stage with no network and no spend. See ADR 0006.
 """
-
-from __future__ import annotations
 
 import hashlib
 import json
-from typing import Any
+from typing import Any, Final
 
 import anthropic
 
 from fynd import cache
 
 # The PRD gives the Topic proposal and the Claim extraction to Haiku 4.5.
-HAIKU = "claude-haiku-4-5"
+HAIKU: Final = "claude-haiku-4-5"
 
-# Decoding is fixed. See ADR 0004.
-TEMPERATURE = 0
-MAX_TOKENS = 4000
+# ADR 0004 fixes decoding, so the same question returns the same answer.
+TEMPERATURE: Final = 0
+MAX_TOKENS: Final = 4000
 
 
 class ModelRefused(Exception):
-    """Raised when the model returns nothing Fynd can read.
+    """The model returned nothing Fynd can read.
 
-    Three cases reach it. The reply holds no text block, the reply stopped
-    because it hit the token ceiling or a safety rule, or the text is not the
-    JSON the schema asked for. None of the three is cached, so the next run
-    asks again.
+    No text block, a reply that stopped early, or text that is not JSON. None
+    of the three is cached, so the next run asks again.
     """
 
 
@@ -44,7 +35,7 @@ def ask_for_json(
     schema_version: int,
     model: str = HAIKU,
 ) -> Any:
-    """Return the answer to one prompt, as data in the shape the schema names.
+    """Return the model's answer to one prompt, in the shape the schema names.
 
     The schema travels from the Stage, because the shape of an answer is a rule
     of the Stage and not a detail of this client.
@@ -71,9 +62,8 @@ def ask_for_json(
         output_config={"format": {"type": "json_schema", "schema": schema}},
     )
 
-    # A reply that stopped early is not an answer. A truncated reply still
-    # carries a text block, so the stop reason is the only honest check, and
-    # without it the broken JSON would raise far from the cause.
+    # A truncated reply still carries a text block, so the stop reason is the
+    # only honest check. Without it the broken JSON raises far from the cause.
     if response.stop_reason in ("max_tokens", "refusal"):
         raise ModelRefused(
             f"The model {model} stopped with the reason {response.stop_reason}. "

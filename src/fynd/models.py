@@ -1,21 +1,18 @@
 """The shapes Fynd passes between its own parts.
 
-The words here follow CONTEXT.md. A Paper is one published academic work, and
-a Paper is one kind of Source. A Topic is the narrow area a Project works in.
+The words follow CONTEXT.md. These are pydantic models, not dataclasses,
+because each one is built from an API reply that leaves fields out.
 """
-
-from __future__ import annotations
 
 from pydantic import BaseModel, Field
 
 
 class Topic(BaseModel):
-    """One Topic a Stage offered.
+    """One Topic a Stage offered."""
 
-    ADR 0002 gives a Topic two fields from the model, so no later Stage rewrites
-    a label into a query. The slug is what a Pick names, per ADR 0003.
-    """
-
+    # The slug is what a Pick names, per ADR 0003. The label and the query both
+    # come from the model, per ADR 0002, so no later Stage rewrites one into
+    # the other.
     slug: str
     label: str
     query: str
@@ -28,15 +25,15 @@ class Paper(BaseModel):
     title: str
     abstract: str = ""
     year: int | None = None
-    # The digital object identifier is the key OpenAlex needs to resolve the
-    # Open copy a second time. ADR 0007 added it, and dropped the arXiv
-    # identifier, because the first live run returned none.
+    # ADR 0007 added the digital object identifier, which OpenAlex needs to
+    # resolve the Open copy, and dropped the arXiv identifier, because the
+    # first live run returned none.
     doi: str = ""
     open_copy_url: str = ""
 
     @property
     def has_open_copy(self) -> bool:
-        """Say whether an Open copy link exists, which is what stage 2 counts."""
+        """Say whether this Paper has an Open copy link."""
         return bool(self.open_copy_url)
 
 
@@ -49,12 +46,9 @@ class SearchResult(BaseModel):
 
     @property
     def open_copy_count(self) -> int:
-        """Count the Papers with an Open copy.
-
-        Stage 2 keeps a Topic only when this count reaches the threshold. The
-        search already asks for Papers inside the Evidence window, so every
-        Paper counted here is inside it. See ADR 0002 and ADR 0008.
-        """
+        """Count the Papers with an Open copy, which is what stage 2 reads."""
+        # The search asks for the Evidence window, so every Paper counted here
+        # is inside it. See ADR 0008.
         count = 0
         for paper in self.papers:
             if paper.has_open_copy:

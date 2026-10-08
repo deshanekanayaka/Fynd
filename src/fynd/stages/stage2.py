@@ -1,51 +1,34 @@
 """Stage 2: the student picks a Topic.
 
-Two named jobs, as ADR 0006 requires. `offer_topics` asks a model for the
-Topics the student chooses from, and `accept_topic` runs the real search for
-the picked Topic and decides whether Fynd keeps it.
-
-The rules of stage 2 live here and nowhere else. This file knows nothing about
-HTTP, nothing about the command line, and nothing about Postgres. The runner
-saves the offered list and the answer.
+`offer_topics` asks a model for Topics. `accept_topic` searches for the picked
+one and decides whether Fynd keeps it. ADR 0006 keeps the saving in the runner.
 """
-
-from __future__ import annotations
 
 import datetime as dt
 from dataclasses import dataclass
-from typing import Any, Protocol
+from typing import Any, Final, Protocol
 
 from fynd import prompts
 from fynd.models import SearchResult, Topic
 
-# Fynd asks the model for 10 Topics and shows 5 to 8 of them. The extra two
-# cover the items the shape check drops. The PRD promises the student 5 to 8,
-# so a list that falls under 5 is a broken reply and not a short list.
-TOPICS_TO_ASK_FOR = 10
-MINIMUM_TOPICS_TO_SHOW = 5
-MAXIMUM_TOPICS_TO_SHOW = 8
+# Ask for 10 and show 5 to 8. The extra two cover the items the shape check
+# drops, and 5 to 8 is the PRD promise to the student.
+TOPICS_TO_ASK_FOR: Final = 10
+MINIMUM_TOPICS_TO_SHOW: Final = 5
+MAXIMUM_TOPICS_TO_SHOW: Final = 8
 
-# What the retry says to the model. The text differs from round 1, so the input
-# hash differs, so the retry misses the cache and reaches the model. Without it
-# the second ask would read the first unusable answer straight back from disk.
-RETRY_NOTE = (
-    "Your earlier answer held too few usable Topics. "
-    "Every Topic needs a label and a query, and neither field is empty."
-)
+# The threshold moved from 5 to 3 on 2026-10-07. See ADR 0002.
+OPEN_PAPER_THRESHOLD: Final = 3
 
-# A Topic is kept only when the real search returns this many Papers with an
-# Open copy. The threshold moved from 5 to 3 on 2026-10-07. See ADR 0002.
-OPEN_PAPER_THRESHOLD = 3
+# The Evidence window of ADR 0008, in years.
+EVIDENCE_WINDOW_YEARS: Final = 5
 
-# The Evidence window from ADR 0008. A Claim that proves a Problem is real must
-# come from a Source inside it, so stage 2 counts only Papers inside it too.
-EVIDENCE_WINDOW_YEARS = 5
+TOPIC_PROMPT_NAME: Final = "propose-topics-v1"
 
-# The prompt file, and the shape its answer must take. Both belong to the cache
-# key, so a change to either one misses the cache. See ADR 0004.
-TOPIC_PROMPT_NAME = "propose-topics-v1"
-TOPIC_LIST_SCHEMA_VERSION = 1
-TOPIC_LIST_SCHEMA: dict[str, Any] = {
+# The cache key carries this version, so a changed shape misses the cache.
+TOPIC_LIST_SCHEMA_VERSION: Final = 1
+
+TOPIC_LIST_SCHEMA: Final[dict[str, Any]] = {
     "type": "object",
     "properties": {
         "topics": {
@@ -65,13 +48,17 @@ TOPIC_LIST_SCHEMA: dict[str, Any] = {
     "additionalProperties": False,
 }
 
+# What the retry adds to the prompt. The text differs from round 1, so the
+# input hash differs, so the retry misses the cache and reaches the model.
+# Without it the second ask reads the first unusable answer back from disk.
+RETRY_NOTE: Final = (
+    "Your earlier answer held too few usable Topics. "
+    "Every Topic needs a label and a query, and neither field is empty."
+)
+
 
 class AskModel(Protocol):
-    """How stage 2 reaches a model.
-
-    A real run passes `fynd.claude.ask_for_json`. A test passes a function of
-    three lines that returns a fixed answer, so the test spends no tokens.
-    """
+    """How stage 2 reaches a model."""
 
     def __call__(
         self,
@@ -83,17 +70,16 @@ class AskModel(Protocol):
 
 
 class Search(Protocol):
-    """How stage 2 reaches the search. A test passes a function instead."""
+    """How stage 2 reaches the search."""
 
     def __call__(self, query: str, year_from: int) -> SearchResult: ...
 
 
 class TopicListUnusable(Exception):
-    """Raised when the model returns no usable Topic list twice in a row.
+    """The model returned no usable Topic list twice in a row.
 
-    This is a broken Stage and not a decision, so the runner writes a failed
-    `stage_run` row. A Topic under the Open copy threshold is a decision, and
-    it never arrives here.
+    This is a broken Stage, so the runner writes a failed `stage_run` row. A
+    Topic under the threshold is a decision instead, and never arrives here.
     """
 
 
@@ -107,10 +93,10 @@ class TopicKept:
 
 @dataclass(frozen=True)
 class TopicBelowThreshold:
-    """The Topic was offered, and the search found too few Papers with an Open copy.
+    """The search found too few Papers with an Open copy.
 
-    This is not a failure. The count shows next to that Topic, the rest of the
-    list stays pickable, and the Re-roll is not spent. See ADR 0002.
+    Not a failure. The count shows next to the Topic, the rest of the list stays
+    pickable, and the Re-roll is not spent. See ADR 0002.
     """
 
     topic: Topic
@@ -124,27 +110,18 @@ class TopicNotOffered:
     pick: str
 
 
-# What `accept_topic` returns. One class for each answer, so no answer carries
-# a field that means nothing. Stage 1 does the same with two classes.
 TopicDecision = TopicKept | TopicBelowThreshold | TopicNotOffered
 
 
 def first_year_in_window(today: dt.date) -> int:
-    """Return the first year the Evidence window accepts.
-
-    The caller passes the date, so this file holds no clock and a test needs no
-    patching. A 5 year window in 2026 starts in 2022, which is why the sum
-    subtracts one less than the window.
-    """
+    """Return the first year the Evidence window accepts."""
+    # The caller passes the date, so this file holds no clock. A 5 year window
+    # in 2026 starts in 2022, which is why the sum subtracts one less.
     return today.year - (EVIDENCE_WINDOW_YEARS - 1)
 
 
 def slugify(label: str) -> str:
-    """Turn a label into the value a Pick names.
-
-    A Pick travels in a request body and in a link, so it holds lower case
-    letters, digits, and hyphens only. ADR 0003 says stage 2 names a Topic slug.
-    """
+    """Turn a label into the slug a Pick names."""
     kept_characters = []
     for character in label.lower():
         # isalnum alone is true for an accented letter and for CJK, and a slug
@@ -159,12 +136,7 @@ def slugify(label: str) -> str:
 
 
 def topics_from_answer(answer: Any) -> list[Topic]:
-    """Turn one model answer into Topics, and drop every unusable item.
-
-    A model returns an item with an empty field, or two labels that produce one
-    slug. Two Topics with the same slug are the same Topic to a Pick, so the
-    first one stays and the second is dropped.
-    """
+    """Turn a model answer into Topics, dropping every item Fynd cannot use."""
     if not isinstance(answer, dict):
         return []
 
@@ -178,6 +150,8 @@ def topics_from_answer(answer: Any) -> list[Topic]:
         if not label or not query:
             continue
         slug = slugify(label)
+        # Two labels that make one slug are one Topic to a Pick, so the first
+        # one stays and the second is dropped.
         if not slug or slug in seen_slugs:
             continue
         seen_slugs.add(slug)
@@ -188,12 +162,8 @@ def topics_from_answer(answer: Any) -> list[Topic]:
 def offer_topics(domain: str, ask_model: AskModel, avoid: list[str] | None = None) -> list[Topic]:
     """Return the Topics the student chooses from.
 
-    `avoid` holds the labels of a list the student already saw. The round 2
-    prompt names them, so a Re-roll asks the model a different question and the
-    cache serves no stale list. See ADR 0004.
-
-    A reply that does not match the shape gets one retry, because a second ask
-    costs one call and a failed Stage costs the student the whole round.
+    `avoid` holds the labels of a list the student already saw, which is a
+    Re-roll. An answer Fynd cannot use gets one retry, then the Stage breaks.
     """
     prompt = prompts.load(TOPIC_PROMPT_NAME)
     avoid_list = "none" if not avoid else ", ".join(avoid)
@@ -205,8 +175,8 @@ def offer_topics(domain: str, ask_model: AskModel, avoid: list[str] | None = Non
                 "TOPIC_COUNT": str(TOPICS_TO_ASK_FOR),
                 "DOMAIN_NAME": domain,
                 "AVOID_LIST": avoid_list,
-                # Round 1 says nothing. Round 2 says why it is asking again, and
-                # that difference is what makes the retry a real second ask.
+                # Round 1 says nothing. Round 2 says why it is asking again,
+                # and that difference is what makes the retry a real ask.
                 "RETRY_NOTE": "" if attempt == 1 else RETRY_NOTE,
             },
         )
@@ -218,8 +188,6 @@ def offer_topics(domain: str, ask_model: AskModel, avoid: list[str] | None = Non
         )
         topics = topics_from_answer(answer)
         if len(topics) >= MINIMUM_TOPICS_TO_SHOW:
-            # The cap is the PRD promise of 5 to 8. Asking for more than the cap
-            # leaves room for the items the shape check drops.
             return topics[:MAXIMUM_TOPICS_TO_SHOW]
         if attempt == 2:
             raise TopicListUnusable(
@@ -235,14 +203,10 @@ def accept_topic(
     search: Search,
     today: dt.date,
 ) -> TopicDecision:
-    """Decide what happens to the Topic the student picked.
+    """Keep the picked Topic when a real search finds enough open Papers.
 
     `offered` is the list the runner saved for this Project, and never a list
-    the caller sent with the Pick. The secret link is the only access control,
-    so a caller can send any slug it likes.
-
-    The search runs here, because "a Topic is kept only when a real search
-    returns enough open Papers" is a rule of this Stage. See ADR 0006.
+    the caller sent, because the secret link is the only access control.
     """
     picked = None
     for topic in offered:
@@ -252,6 +216,7 @@ def accept_topic(
     if picked is None:
         return TopicNotOffered(pick=pick)
 
+    # The search runs here, because the threshold rule belongs to the Stage.
     result = search(query=picked.query, year_from=first_year_in_window(today))
     count = result.open_copy_count
     if count >= OPEN_PAPER_THRESHOLD:
