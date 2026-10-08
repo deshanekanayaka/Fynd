@@ -12,14 +12,14 @@ SEEDED_DOMAINS: Final = ("technology", "energy")
 
 @dataclass(frozen=True)
 class DomainKept:
-    """Stage 1 kept the picked Domain."""
+    """An accepted Domain Pick, holding the Domain the Project saves."""
 
     domain: str
 
 
 @dataclass(frozen=True)
 class DomainNotOffered:
-    """Stage 1 refused the Pick, because it was not in the offered list."""
+    """A refused Domain Pick, holding the value that was refused."""
 
     # The refused value travels with the answer, because the route puts it in
     # the 4xx message it sends back.

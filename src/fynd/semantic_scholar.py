@@ -32,7 +32,7 @@ REPLY_SHAPE_VERSION: Final = 2
 
 
 class RateLimited(Exception):
-    """Semantic Scholar refused the request twice in a row."""
+    """Raised when Semantic Scholar refuses the request twice in a row."""
 
 
 def paper_from_api(item: dict[str, Any]) -> Paper:
@@ -51,7 +51,7 @@ def paper_from_api(item: dict[str, Any]) -> Paper:
 
 
 class SemanticScholar:
-    """A client for one run. It holds the key and the time of the last request."""
+    """A search client for one run, holding the key and the last request time."""
 
     def __init__(self, client: httpx.Client | None = None) -> None:
         self.api_key = os.environ.get("SEMANTIC_SCHOLAR_API_KEY", "")

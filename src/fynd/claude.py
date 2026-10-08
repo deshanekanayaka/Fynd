@@ -21,7 +21,7 @@ MAX_TOKENS: Final = 4000
 
 
 class ModelRefused(Exception):
-    """The model returned nothing Fynd can read.
+    """Raised when the model returns nothing Fynd can read.
 
     No text block, a reply that stopped early, or text that is not JSON. None
     of the three is cached, so the next run asks again.

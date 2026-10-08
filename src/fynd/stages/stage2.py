@@ -58,7 +58,7 @@ RETRY_NOTE: Final = (
 
 
 class AskModel(Protocol):
-    """How stage 2 reaches a model."""
+    """The model call stage 2 needs, which the edge supplies."""
 
     def __call__(
         self,
@@ -70,13 +70,13 @@ class AskModel(Protocol):
 
 
 class Search(Protocol):
-    """How stage 2 reaches the search."""
+    """The search call stage 2 needs, which the edge supplies."""
 
     def __call__(self, query: str, year_from: int) -> SearchResult: ...
 
 
 class TopicListUnusable(Exception):
-    """The model returned no usable Topic list twice in a row.
+    """Raised when the model returns no usable Topic list twice in a row.
 
     This is a broken Stage, so the runner writes a failed `stage_run` row. A
     Topic under the threshold is a decision instead, and never arrives here.
@@ -85,7 +85,7 @@ class TopicListUnusable(Exception):
 
 @dataclass(frozen=True)
 class TopicKept:
-    """The search found enough Papers with an Open copy, so Fynd keeps the Topic."""
+    """An accepted Topic Pick, holding the Topic and its Open copy count."""
 
     topic: Topic
     open_paper_count: int
@@ -93,7 +93,7 @@ class TopicKept:
 
 @dataclass(frozen=True)
 class TopicBelowThreshold:
-    """The search found too few Papers with an Open copy.
+    """A Topic Pick with too few Papers that have an Open copy.
 
     Not a failure. The count shows next to the Topic, the rest of the list stays
     pickable, and the Re-roll is not spent. See ADR 0002.
@@ -105,7 +105,7 @@ class TopicBelowThreshold:
 
 @dataclass(frozen=True)
 class TopicNotOffered:
-    """The Pick names a Topic this Stage never offered."""
+    """A refused Topic Pick, holding the slug that was refused."""
 
     pick: str
 
