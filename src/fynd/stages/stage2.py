@@ -114,14 +114,14 @@ TopicDecision = TopicKept | TopicBelowThreshold | TopicNotOffered
 
 
 def first_year_in_window(today: dt.date) -> int:
-    """Return the first year the Evidence window accepts."""
+    """Returns the first year the Evidence window accepts."""
     # The caller passes the date, so this file holds no clock. A 5 year window
     # in 2026 starts in 2022, which is why the sum subtracts one less.
     return today.year - (EVIDENCE_WINDOW_YEARS - 1)
 
 
 def slugify(label: str) -> str:
-    """Turn a label into the slug a Pick names."""
+    """Turns a label into the slug a Pick names."""
     kept_characters = []
     for character in label.lower():
         # isalnum alone is true for an accented letter and for CJK, and a slug
@@ -136,7 +136,7 @@ def slugify(label: str) -> str:
 
 
 def topics_from_answer(answer: Any) -> list[Topic]:
-    """Turn a model answer into Topics, dropping every item Fynd cannot use."""
+    """Turns a model answer into Topics, dropping every item Fynd cannot use."""
     if not isinstance(answer, dict):
         return []
 
@@ -160,7 +160,7 @@ def topics_from_answer(answer: Any) -> list[Topic]:
 
 
 def offer_topics(domain: str, ask_model: AskModel, avoid: list[str] | None = None) -> list[Topic]:
-    """Return the Topics the student chooses from.
+    """Returns the Topics the student chooses from.
 
     `avoid` holds the labels of a list the student already saw, which is a
     Re-roll. An answer Fynd cannot use gets one retry, then the Stage breaks.
@@ -203,7 +203,7 @@ def accept_topic(
     search: Search,
     today: dt.date,
 ) -> TopicDecision:
-    """Keep the picked Topic when a real search finds enough open Papers.
+    """Keeps the picked Topic when a real search finds enough open Papers.
 
     `offered` is the list the runner saved for this Project, and never a list
     the caller sent, because the secret link is the only access control.

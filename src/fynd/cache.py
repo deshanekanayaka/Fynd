@@ -15,14 +15,14 @@ DEFAULT_CACHE_DIR: Final = ".cache"
 
 
 def cache_dir() -> Path:
-    """Return the cache directory, and create it if it is missing."""
+    """Returns the cache directory, and creates it if it is missing."""
     directory = Path(os.environ.get(CACHE_DIR_VARIABLE, DEFAULT_CACHE_DIR))
     directory.mkdir(parents=True, exist_ok=True)
     return directory
 
 
 def cache_key(name: str, parts: dict[str, Any]) -> str:
-    """Build the file name for one call from the values that change its answer."""
+    """Builds the file name for one call from the values that change its answer."""
     # The name keeps the directory readable. The hash covers the parts, because
     # a query holds any character and a file name cannot. sort_keys makes the
     # same parts give the same key whatever order the caller wrote them in.
@@ -32,7 +32,7 @@ def cache_key(name: str, parts: dict[str, Any]) -> str:
 
 
 def read(key: str) -> Any | None:
-    """Return the cached answer for this key, or None when there is none."""
+    """Returns the cached answer for this key, or None when there is none."""
     path = cache_dir() / key
     if not path.exists():
         return None
@@ -45,7 +45,7 @@ def read(key: str) -> Any | None:
 
 
 def write(key: str, parts: dict[str, Any], value: Any) -> None:
-    """Store one answer with the parts that produced it.
+    """Stores one answer with the parts that produced it.
 
     The parts are stored so a human reading the directory can tell which model
     and which prompt produced which reply. No caller writes a failed answer.

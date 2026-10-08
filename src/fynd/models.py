@@ -33,7 +33,7 @@ class Paper(BaseModel):
 
     @property
     def has_open_copy(self) -> bool:
-        """Say whether this Paper has an Open copy link."""
+        """Says whether this Paper has an Open copy link."""
         return bool(self.open_copy_url)
 
 
@@ -46,7 +46,7 @@ class SearchResult(BaseModel):
 
     @property
     def open_copy_count(self) -> int:
-        """Count the Papers with an Open copy, which is what stage 2 reads."""
+        """Counts the Papers with an Open copy, which is what stage 2 reads."""
         # The search asks for the Evidence window, so every Paper counted here
         # is inside it. See ADR 0008.
         count = 0

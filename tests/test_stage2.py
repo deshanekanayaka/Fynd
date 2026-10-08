@@ -23,12 +23,12 @@ from fynd.stages.stage2 import (
 
 
 def answer_with(labels: list[str]):
-    """Build a model answer that holds one item for each label."""
+    """Builds a model answer that holds one item for each label."""
     return {"topics": [{"label": label, "query": f"{label} search"} for label in labels]}
 
 
 def model_that_returns(*answers, calls: list):
-    """Build a fake ask_model that returns each answer in turn.
+    """Builds a fake ask_model that returns each answer in turn.
 
     A test spends no tokens and reaches no network. ADR 0006 asks for exactly
     this, which is why the Stage takes the model as an argument.
@@ -42,7 +42,7 @@ def model_that_returns(*answers, calls: list):
 
 
 def search_that_returns(open_copies: int, calls: list):
-    """Build a fake search that returns a fixed number of Papers with an Open copy."""
+    """Builds a fake search that returns a fixed number of Papers with an Open copy."""
 
     def search(query: str, year_from: int) -> SearchResult:
         calls.append((query, year_from))

@@ -30,7 +30,7 @@ RECORDED_REPLY = {
 
 
 def client_that_returns(reply: dict, calls: list) -> httpx.Client:
-    """Build an httpx client that answers every request from memory."""
+    """Builds an httpx client that answers every request from memory."""
 
     def handler(request: httpx.Request) -> httpx.Response:
         calls.append(request)

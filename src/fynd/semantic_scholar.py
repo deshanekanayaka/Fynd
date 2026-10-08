@@ -36,7 +36,7 @@ class RateLimited(Exception):
 
 
 def paper_from_api(item: dict[str, Any]) -> Paper:
-    """Turn one item from the API into a Paper."""
+    """Turns one item from the API into a Paper."""
     # The API leaves a field out or sets it to null, so every read has a default.
     external_ids = item.get("externalIds") or {}
     open_access = item.get("openAccessPdf") or {}
@@ -60,7 +60,7 @@ class SemanticScholar:
         self.last_request_at = 0.0
 
     def wait_for_rate_limit(self) -> None:
-        """Wait until one second has passed since the last request."""
+        """Waits until one second has passed since the last request."""
         if self.last_request_at == 0.0:
             return
         waited = time.monotonic() - self.last_request_at
@@ -69,7 +69,7 @@ class SemanticScholar:
             time.sleep(remaining)
 
     def search(self, query: str, year_from: int, limit: int = 20) -> SearchResult:
-        """Return the Papers for one query, from the cache when possible.
+        """Returns the Papers for one query, from the cache when possible.
 
         `year_from` is the first year the search accepts. The Stage passes it
         in, so this file holds no clock and no window rule of its own.
@@ -95,7 +95,7 @@ class SemanticScholar:
         return SearchResult(query=query, total=payload.get("total") or 0, papers=papers)
 
     def fetch_search(self, query: str, year_range: str, limit: int) -> dict[str, Any]:
-        """Call the search endpoint. The only method here that uses the network."""
+        """Calls the search endpoint. The only method here that uses the network."""
         headers = {}
         if self.api_key:
             headers["x-api-key"] = self.api_key

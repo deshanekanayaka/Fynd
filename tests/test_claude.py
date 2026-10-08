@@ -27,7 +27,7 @@ class Reply:
 
 
 def client_that_replies(reply: Reply, calls: list):
-    """Build a stand in for anthropic.Anthropic that answers from memory."""
+    """Builds a stand in for anthropic.Anthropic that answers from memory."""
 
     class Messages:
         def create(self, **kwargs):

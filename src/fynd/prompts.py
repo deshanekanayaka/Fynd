@@ -23,7 +23,7 @@ class Prompt:
 
 
 def prompts_dir() -> Path:
-    """Return the directory that holds the prompt files."""
+    """Returns the directory that holds the prompt files."""
     from_environment = os.environ.get(PROMPTS_DIR_VARIABLE)
     if from_environment:
         # A test points this at its own directory, so no test depends on the
@@ -34,7 +34,7 @@ def prompts_dir() -> Path:
 
 
 def load(name: str) -> Prompt:
-    """Read the prompt file called `name` and hash its content."""
+    """Reads the prompt file called `name` and hashes its content."""
     # The hash covers the whole file, so a typo fixed without a rename still
     # misses the cache. No published number then belongs to a lost prompt.
     path = prompts_dir() / f"{name}.md"
@@ -43,7 +43,7 @@ def load(name: str) -> Prompt:
 
 
 def fill(prompt: Prompt, values: dict[str, str]) -> str:
-    """Replace every `{{PLACEHOLDER}}` in the prompt with its value."""
+    """Replaces every `{{PLACEHOLDER}}` in the prompt with its value."""
     filled = prompt.text
     for name, value in values.items():
         placeholder = "{{" + name + "}}"

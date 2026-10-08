@@ -32,13 +32,13 @@ DomainDecision = DomainKept | DomainNotOffered
 
 
 def offer_domains() -> list[str]:
-    """Return the Domains the student chooses from."""
+    """Returns the Domains the student chooses from."""
     # A new list every call, so a caller that edits it cannot edit the constant.
     return list(SEEDED_DOMAINS)
 
 
 def accept_domain(pick: str, offered: list[str]) -> DomainDecision:
-    """Keep the Pick when it is in `offered`, and refuse it when it is not.
+    """Keeps the Pick when it is in `offered`, and refuses it when it is not.
 
     `offered` is the list the runner saved for this Project, and never a list
     the caller sent, because the secret link is the only access control.

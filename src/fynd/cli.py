@@ -22,7 +22,7 @@ from fynd.stages import stage1, stage2
 
 
 def search_with(client: SemanticScholar):
-    """Return the search function stage 2 calls."""
+    """Returns the search function stage 2 calls."""
 
     def search(query: str, year_from: int):
         return client.search(query, year_from=year_from)

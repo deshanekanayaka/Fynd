@@ -35,7 +35,7 @@ def ask_for_json(
     schema_version: int,
     model: str = HAIKU,
 ) -> Any:
-    """Return the model's answer to one prompt, in the shape the schema names.
+    """Returns the model's answer to one prompt, in the shape the schema names.
 
     The schema travels from the Stage, because the shape of an answer is a rule
     of the Stage and not a detail of this client.
