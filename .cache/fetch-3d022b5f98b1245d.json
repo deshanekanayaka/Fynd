@@ -1,0 +1,15 @@
+{
+  "parts": {
+    "api": "open-copy-fetch",
+    "url": "https://discovery.ucl.ac.uk/id/eprint/10188400/1/1-s2.0-S2214629624000665-main.pdf",
+    "redirects": 3,
+    "max_bytes": 20971520,
+    "shape": 1
+  },
+  "value": {
+    "kind": "bytes",
+    "content_type": "application/pdf",
+    "byte_count": 1128539,
+    "file": "fetch-3d022b5f98b1245d.bin"
+  }
+}

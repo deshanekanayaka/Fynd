@@ -1,0 +1,1230 @@
+{
+  "parts": {
+    "api": "openalex-work",
+    "doi": "10.1016/j.jclepro.2023.139746",
+    "shape": 1
+  },
+  "value": {
+    "found": true,
+    "work": {
+      "id": "https://openalex.org/W4388735954",
+      "doi": "https://doi.org/10.1016/j.jclepro.2023.139746",
+      "title": "What really matters to reduce the energy demand of household electronics? Global sensitivity analysis of circular economy strategies for the United Kingdom",
+      "display_name": "What really matters to reduce the energy demand of household electronics? Global sensitivity analysis of circular economy strategies for the United Kingdom",
+      "publication_year": 2023,
+      "publication_date": "2023-11-16",
+      "ids": {
+        "openalex": "https://openalex.org/W4388735954",
+        "doi": "https://doi.org/10.1016/j.jclepro.2023.139746"
+      },
+      "language": "en",
+      "primary_location": {
+        "id": "doi:10.1016/j.jclepro.2023.139746",
+        "is_oa": true,
+        "landing_page_url": "https://doi.org/10.1016/j.jclepro.2023.139746",
+        "pdf_url": null,
+        "source": {
+          "id": "https://openalex.org/S58516903",
+          "display_name": "Journal of Cleaner Production",
+          "issn_l": "0959-6526",
+          "issn": [
+            "0959-6526",
+            "1879-1786"
+          ],
+          "is_oa": false,
+          "is_in_doaj": false,
+          "is_core": true,
+          "listed_in": [
+            "abdc-c",
+            "cwts-core",
+            "jufo-2",
+            "norway-2"
+          ],
+          "host_organization": "https://openalex.org/P4310320990",
+          "host_organization_name": "Elsevier BV",
+          "host_organization_lineage": [
+            "https://openalex.org/P4310320990"
+          ],
+          "host_organization_lineage_names": [
+            "Elsevier BV"
+          ],
+          "type": "journal"
+        },
+        "license": "cc-by",
+        "license_id": "https://openalex.org/licenses/cc-by",
+        "version": "publishedVersion",
+        "is_accepted": true,
+        "is_published": true,
+        "raw_source_name": "Journal of Cleaner Production",
+        "raw_type": "journal-article"
+      },
+      "type": "article",
+      "indexed_in": [
+        "crossref",
+        "datacite"
+      ],
+      "open_access": {
+        "is_oa": true,
+        "oa_status": "hybrid",
+        "oa_url": "https://doi.org/10.1016/j.jclepro.2023.139746",
+        "any_repository_has_fulltext": true
+      },
+      "authorships": [
+        {
+          "author_position": "first",
+          "author": {
+            "id": null,
+            "display_name": "Jack Lynch",
+            "orcid": null,
+            "observed_orcids": []
+          },
+          "institutions": [
+            {
+              "id": "https://openalex.org/I241749",
+              "display_name": "University of Cambridge",
+              "ror": "https://ror.org/013meh722",
+              "country_code": "GB",
+              "type": "education",
+              "lineage": [
+                "https://openalex.org/I241749"
+              ]
+            }
+          ],
+          "countries": [
+            "GB"
+          ],
+          "is_corresponding": false,
+          "raw_author_name": "Jack Lynch",
+          "raw_affiliation_strings": [
+            "Department of Engineering, University of Cambridge, Trumpington Street, Cambridge, CB2 1PZ, United Kingdom"
+          ],
+          "raw_orcid": null,
+          "affiliations": [
+            {
+              "raw_affiliation_string": "Department of Engineering, University of Cambridge, Trumpington Street, Cambridge, CB2 1PZ, United Kingdom",
+              "institution_ids": [
+                "https://openalex.org/I241749"
+              ]
+            }
+          ]
+        },
+        {
+          "author_position": "last",
+          "author": {
+            "id": "https://openalex.org/A5069727497",
+            "display_name": "Andr\u00e9 Cabrera Serrenho",
+            "orcid": "https://orcid.org/0000-0002-0962-0674",
+            "observed_orcids": [
+              "https://orcid.org/0000-0002-0962-0674"
+            ]
+          },
+          "institutions": [
+            {
+              "id": "https://openalex.org/I241749",
+              "display_name": "University of Cambridge",
+              "ror": "https://ror.org/013meh722",
+              "country_code": "GB",
+              "type": "education",
+              "lineage": [
+                "https://openalex.org/I241749"
+              ]
+            }
+          ],
+          "countries": [
+            "GB"
+          ],
+          "is_corresponding": true,
+          "raw_author_name": "Andr\u00e9 Cabrera Serrenho",
+          "raw_affiliation_strings": [
+            "Department of Engineering, University of Cambridge, Trumpington Street, Cambridge, CB2 1PZ, United Kingdom"
+          ],
+          "raw_orcid": "https://orcid.org/0000-0002-0962-0674",
+          "affiliations": [
+            {
+              "raw_affiliation_string": "Department of Engineering, University of Cambridge, Trumpington Street, Cambridge, CB2 1PZ, United Kingdom",
+              "institution_ids": [
+                "https://openalex.org/I241749"
+              ]
+            }
+          ]
+        }
+      ],
+      "institutions": [],
+      "countries_distinct_count": 1,
+      "institutions_distinct_count": 1,
+      "corresponding_author_ids": [
+        "https://openalex.org/A5069727497"
+      ],
+      "corresponding_institution_ids": [
+        "https://openalex.org/I241749"
+      ],
+      "apc_list": {
+        "value": 3970,
+        "currency": "USD",
+        "value_usd": 3970
+      },
+      "apc_paid": {
+        "value": 3970,
+        "currency": "USD",
+        "value_usd": 3970
+      },
+      "fwci": 0.6749,
+      "has_fulltext": true,
+      "cited_by_count": 3,
+      "citation_normalized_percentile": {
+        "value": 0.80980338,
+        "is_in_top_1_percent": false,
+        "is_in_top_10_percent": false
+      },
+      "cited_by_percentile_year": {
+        "min": 93,
+        "max": 96
+      },
+      "biblio": {
+        "volume": "432",
+        "issue": null,
+        "first_page": "139746",
+        "last_page": "139746"
+      },
+      "is_retracted": false,
+      "is_paratext": false,
+      "is_xpac": false,
+      "primary_topic": {
+        "id": "https://openalex.org/T10539",
+        "display_name": "Sustainable Supply Chain Management",
+        "score": 0.43380001187324524,
+        "subfield": {
+          "id": "https://openalex.org/subfields/1408",
+          "display_name": "Strategy and Management"
+        },
+        "field": {
+          "id": "https://openalex.org/fields/14",
+          "display_name": "Business, Management and Accounting"
+        },
+        "domain": {
+          "id": "https://openalex.org/domains/2",
+          "display_name": "Social Sciences"
+        }
+      },
+      "topics": [
+        {
+          "id": "https://openalex.org/T10539",
+          "display_name": "Sustainable Supply Chain Management",
+          "score": 0.43380001187324524,
+          "subfield": {
+            "id": "https://openalex.org/subfields/1408",
+            "display_name": "Strategy and Management"
+          },
+          "field": {
+            "id": "https://openalex.org/fields/14",
+            "display_name": "Business, Management and Accounting"
+          },
+          "domain": {
+            "id": "https://openalex.org/domains/2",
+            "display_name": "Social Sciences"
+          }
+        },
+        {
+          "id": "https://openalex.org/T10435",
+          "display_name": "Environmental Impact and Sustainability",
+          "score": 0.2632000148296356,
+          "subfield": {
+            "id": "https://openalex.org/subfields/2305",
+            "display_name": "Environmental Engineering"
+          },
+          "field": {
+            "id": "https://openalex.org/fields/23",
+            "display_name": "Environmental Science"
+          },
+          "domain": {
+            "id": "https://openalex.org/domains/3",
+            "display_name": "Physical Sciences"
+          }
+        },
+        {
+          "id": "https://openalex.org/T12017",
+          "display_name": "Recycling and Waste Management Techniques",
+          "score": 0.0925000011920929,
+          "subfield": {
+            "id": "https://openalex.org/subfields/2311",
+            "display_name": "Waste Management and Disposal"
+          },
+          "field": {
+            "id": "https://openalex.org/fields/23",
+            "display_name": "Environmental Science"
+          },
+          "domain": {
+            "id": "https://openalex.org/domains/3",
+            "display_name": "Physical Sciences"
+          }
+        }
+      ],
+      "keywords": [
+        {
+          "id": "https://openalex.org/keywords/consumer-electronics",
+          "display_name": "consumer electronics",
+          "score": 0.8159999847412109
+        },
+        {
+          "id": "https://openalex.org/keywords/electrical-and-electronic-equipment",
+          "display_name": "electrical and electronic equipment",
+          "score": 0.8389999866485596
+        },
+        {
+          "id": "https://openalex.org/keywords/circular-economy",
+          "display_name": "circular economy",
+          "score": 0.8619999885559082
+        },
+        {
+          "id": "https://openalex.org/keywords/energy-demand-reduction",
+          "display_name": "energy demand reduction",
+          "score": 0.8989999890327454
+        },
+        {
+          "id": "https://openalex.org/keywords/repair",
+          "display_name": "repair",
+          "score": 0.49000000953674316
+        },
+        {
+          "id": "https://openalex.org/keywords/device-size",
+          "display_name": "device size",
+          "score": 0.6259999871253967
+        },
+        {
+          "id": "https://openalex.org/keywords/co-ownership",
+          "display_name": "co-ownership",
+          "score": 0.6669999957084656
+        },
+        {
+          "id": "https://openalex.org/keywords/consumption-behaviour",
+          "display_name": "consumption behaviour",
+          "score": 0.5559999942779541
+        },
+        {
+          "id": "https://openalex.org/keywords/greenhouse-gas-emissions",
+          "display_name": "greenhouse gas emissions",
+          "score": 0.8050000071525574
+        },
+        {
+          "id": "https://openalex.org/keywords/net-zero-emissions",
+          "display_name": "net-zero emissions",
+          "score": 0.628000020980835
+        },
+        {
+          "id": "https://openalex.org/keywords/united-kingdom",
+          "display_name": "United Kingdom",
+          "score": 0.8460000157356262
+        }
+      ],
+      "concepts": [
+        {
+          "id": "https://openalex.org/C47737302",
+          "wikidata": "https://www.wikidata.org/wiki/Q167336",
+          "display_name": "Greenhouse gas",
+          "level": 2,
+          "score": 0.5621243715286255
+        },
+        {
+          "id": "https://openalex.org/C2780165032",
+          "wikidata": "https://www.wikidata.org/wiki/Q16869822",
+          "display_name": "Energy consumption",
+          "level": 2,
+          "score": 0.5501750111579895
+        },
+        {
+          "id": "https://openalex.org/C134560507",
+          "wikidata": "https://www.wikidata.org/wiki/Q753291",
+          "display_name": "Environmental economics",
+          "level": 1,
+          "score": 0.4751569926738739
+        },
+        {
+          "id": "https://openalex.org/C30772137",
+          "wikidata": "https://www.wikidata.org/wiki/Q5164762",
+          "display_name": "Consumption (sociology)",
+          "level": 2,
+          "score": 0.4110397696495056
+        },
+        {
+          "id": "https://openalex.org/C39432304",
+          "wikidata": "https://www.wikidata.org/wiki/Q188847",
+          "display_name": "Environmental science",
+          "level": 0,
+          "score": 0.36364468932151794
+        },
+        {
+          "id": "https://openalex.org/C162324750",
+          "wikidata": "https://www.wikidata.org/wiki/Q8134",
+          "display_name": "Economics",
+          "level": 0,
+          "score": 0.3273192048072815
+        },
+        {
+          "id": "https://openalex.org/C127413603",
+          "wikidata": "https://www.wikidata.org/wiki/Q11023",
+          "display_name": "Engineering",
+          "level": 0,
+          "score": 0.2180643379688263
+        },
+        {
+          "id": "https://openalex.org/C119599485",
+          "wikidata": "https://www.wikidata.org/wiki/Q43035",
+          "display_name": "Electrical engineering",
+          "level": 1,
+          "score": 0.13683202862739563
+        },
+        {
+          "id": "https://openalex.org/C86803240",
+          "wikidata": "https://www.wikidata.org/wiki/Q420",
+          "display_name": "Biology",
+          "level": 0,
+          "score": 0.0
+        },
+        {
+          "id": "https://openalex.org/C144024400",
+          "wikidata": "https://www.wikidata.org/wiki/Q21201",
+          "display_name": "Sociology",
+          "level": 0,
+          "score": 0.0
+        },
+        {
+          "id": "https://openalex.org/C18903297",
+          "wikidata": "https://www.wikidata.org/wiki/Q7150",
+          "display_name": "Ecology",
+          "level": 1,
+          "score": 0.0
+        },
+        {
+          "id": "https://openalex.org/C36289849",
+          "wikidata": "https://www.wikidata.org/wiki/Q34749",
+          "display_name": "Social science",
+          "level": 1,
+          "score": 0.0
+        }
+      ],
+      "mesh": [],
+      "locations_count": 3,
+      "locations": [
+        {
+          "id": "doi:10.1016/j.jclepro.2023.139746",
+          "is_oa": true,
+          "landing_page_url": "https://doi.org/10.1016/j.jclepro.2023.139746",
+          "pdf_url": null,
+          "source": {
+            "id": "https://openalex.org/S58516903",
+            "display_name": "Journal of Cleaner Production",
+            "issn_l": "0959-6526",
+            "issn": [
+              "0959-6526",
+              "1879-1786"
+            ],
+            "is_oa": false,
+            "is_in_doaj": false,
+            "is_core": true,
+            "listed_in": [
+              "abdc-c",
+              "cwts-core",
+              "jufo-2",
+              "norway-2"
+            ],
+            "host_organization": "https://openalex.org/P4310320990",
+            "host_organization_name": "Elsevier BV",
+            "host_organization_lineage": [
+              "https://openalex.org/P4310320990"
+            ],
+            "host_organization_lineage_names": [
+              "Elsevier BV"
+            ],
+            "type": "journal"
+          },
+          "license": "cc-by",
+          "license_id": "https://openalex.org/licenses/cc-by",
+          "version": "publishedVersion",
+          "is_accepted": true,
+          "is_published": true,
+          "raw_source_name": "Journal of Cleaner Production",
+          "raw_type": "journal-article"
+        },
+        {
+          "id": "pmh:oai:www.repository.cam.ac.uk:1810/361111",
+          "is_oa": true,
+          "landing_page_url": "https://www.repository.cam.ac.uk/handle/1810/361111",
+          "pdf_url": "https://www.repository.cam.ac.uk/bitstreams/60a4f93c-ac22-48c1-8623-1d547b0bbdc0/download",
+          "source": {
+            "id": "https://openalex.org/S4306401777",
+            "display_name": "Apollo (University of Cambridge)",
+            "issn_l": null,
+            "issn": null,
+            "is_oa": false,
+            "is_in_doaj": false,
+            "is_core": false,
+            "listed_in": [],
+            "host_organization": "https://openalex.org/I241749",
+            "host_organization_name": "University of Cambridge",
+            "host_organization_lineage": [
+              "https://openalex.org/I241749"
+            ],
+            "host_organization_lineage_names": [],
+            "type": "repository"
+          },
+          "license": "cc-by",
+          "license_id": "https://openalex.org/licenses/cc-by",
+          "version": "submittedVersion",
+          "is_accepted": false,
+          "is_published": false,
+          "raw_source_name": null,
+          "raw_type": "Article"
+        },
+        {
+          "id": "doi:10.17863/cam.104184",
+          "is_oa": true,
+          "landing_page_url": "https://doi.org/10.17863/cam.104184",
+          "pdf_url": null,
+          "source": {
+            "id": "https://openalex.org/S7407050737",
+            "display_name": "Apollo",
+            "issn_l": null,
+            "issn": null,
+            "is_oa": false,
+            "is_in_doaj": false,
+            "is_core": false,
+            "listed_in": [],
+            "host_organization": null,
+            "host_organization_name": null,
+            "host_organization_lineage": [],
+            "host_organization_lineage_names": [],
+            "type": "repository"
+          },
+          "license": "cc-by",
+          "license_id": "https://openalex.org/licenses/cc-by",
+          "version": null,
+          "is_accepted": false,
+          "is_published": null,
+          "raw_source_name": null,
+          "raw_type": "JournalArticle"
+        }
+      ],
+      "best_oa_location": {
+        "id": "doi:10.1016/j.jclepro.2023.139746",
+        "is_oa": true,
+        "landing_page_url": "https://doi.org/10.1016/j.jclepro.2023.139746",
+        "pdf_url": null,
+        "source": {
+          "id": "https://openalex.org/S58516903",
+          "display_name": "Journal of Cleaner Production",
+          "issn_l": "0959-6526",
+          "issn": [
+            "0959-6526",
+            "1879-1786"
+          ],
+          "is_oa": false,
+          "is_in_doaj": false,
+          "is_core": true,
+          "listed_in": [
+            "abdc-c",
+            "cwts-core",
+            "jufo-2",
+            "norway-2"
+          ],
+          "host_organization": "https://openalex.org/P4310320990",
+          "host_organization_name": "Elsevier BV",
+          "host_organization_lineage": [
+            "https://openalex.org/P4310320990"
+          ],
+          "host_organization_lineage_names": [
+            "Elsevier BV"
+          ],
+          "type": "journal"
+        },
+        "license": "cc-by",
+        "license_id": "https://openalex.org/licenses/cc-by",
+        "version": "publishedVersion",
+        "is_accepted": true,
+        "is_published": true,
+        "raw_source_name": "Journal of Cleaner Production",
+        "raw_type": "journal-article"
+      },
+      "sustainable_development_goals": [
+        {
+          "id": "https://metadata.un.org/sdg/12",
+          "score": 0.8799999952316284,
+          "display_name": "Responsible consumption and production"
+        },
+        {
+          "id": "https://metadata.un.org/sdg/13",
+          "score": 0.821399986743927,
+          "display_name": "Climate action"
+        },
+        {
+          "id": "https://metadata.un.org/sdg/9",
+          "score": 0.5378999710083008,
+          "display_name": "Industry, innovation and infrastructure"
+        }
+      ],
+      "sustainable_development_goals_aurora": [
+        {
+          "id": "https://metadata.un.org/sdg/7",
+          "score": 0.8799999952316284,
+          "display_name": "Affordable and clean energy"
+        }
+      ],
+      "study_designs": [],
+      "awards": [
+        {
+          "id": "https://openalex.org/G5652537686",
+          "display_name": "UK FIRES: Locating Resource Efficiency at the heart of Future Industrial Strategy in the UK",
+          "funder_award_id": "EP/S019111/1",
+          "funder_id": "https://openalex.org/F4320334627",
+          "funder_display_name": "Engineering and Physical Sciences Research Council"
+        },
+        {
+          "id": "https://openalex.org/G7097328358",
+          "display_name": null,
+          "funder_award_id": "EP/S019111/1",
+          "funder_id": "https://openalex.org/F4320334627",
+          "funder_display_name": "Engineering and Physical Sciences Research Council"
+        }
+      ],
+      "funders": [
+        {
+          "id": "https://openalex.org/F4320334627",
+          "display_name": "Engineering and Physical Sciences Research Council",
+          "ror": "https://ror.org/0439y7842"
+        }
+      ],
+      "has_content": {
+        "grobid_xml": false,
+        "pdf": false
+      },
+      "content_urls": null,
+      "referenced_works_count": 28,
+      "referenced_works": [
+        "https://openalex.org/W1489034231",
+        "https://openalex.org/W1979773402",
+        "https://openalex.org/W2005386442",
+        "https://openalex.org/W2023465818",
+        "https://openalex.org/W2190496599",
+        "https://openalex.org/W2216148103",
+        "https://openalex.org/W2319518054",
+        "https://openalex.org/W2329526371",
+        "https://openalex.org/W2530236251",
+        "https://openalex.org/W2596742252",
+        "https://openalex.org/W2799409500",
+        "https://openalex.org/W2888857819",
+        "https://openalex.org/W2901913156",
+        "https://openalex.org/W2921750462",
+        "https://openalex.org/W2982023731",
+        "https://openalex.org/W2991595188",
+        "https://openalex.org/W2996412460",
+        "https://openalex.org/W3024160678",
+        "https://openalex.org/W3032698782",
+        "https://openalex.org/W3037744732",
+        "https://openalex.org/W3046262883",
+        "https://openalex.org/W3092922853",
+        "https://openalex.org/W3108895169",
+        "https://openalex.org/W3109829720",
+        "https://openalex.org/W3134937369",
+        "https://openalex.org/W3137839892",
+        "https://openalex.org/W3140444195",
+        "https://openalex.org/W4288084397"
+      ],
+      "related_works": [
+        "https://openalex.org/W2474431918",
+        "https://openalex.org/W2898107337",
+        "https://openalex.org/W2078072966",
+        "https://openalex.org/W4383503214",
+        "https://openalex.org/W38287360",
+        "https://openalex.org/W2954886250",
+        "https://openalex.org/W4200539072",
+        "https://openalex.org/W4290997474",
+        "https://openalex.org/W2150802979",
+        "https://openalex.org/W2502168120"
+      ],
+      "abstract_inverted_index": {
+        "Limiting": [
+          0
+        ],
+        "the": [
+          1,
+          32,
+          48,
+          60,
+          75,
+          96,
+          105,
+          116,
+          122,
+          142,
+          152,
+          160,
+          234,
+          240,
+          247
+        ],
+        "global": [
+          2
+        ],
+        "temperatures": [
+          3
+        ],
+        "to": [
+          4,
+          94,
+          113,
+          175,
+          209,
+          238
+        ],
+        "+1.5": [
+          5
+        ],
+        "\u00b0C": [
+          6
+        ],
+        "from": [
+          7,
+          104
+        ],
+        "pre-industrial": [
+          8
+        ],
+        "levels": [
+          9
+        ],
+        "requires": [
+          10,
+          206
+        ],
+        "achieving": [
+          11
+        ],
+        "net-zero": [
+          12
+        ],
+        "greenhouse": [
+          13
+        ],
+        "gas": [
+          14
+        ],
+        "emissions": [
+          15,
+          68
+        ],
+        "by": [
+          16,
+          189,
+          217,
+          224
+        ],
+        "2050.": [
+          17
+        ],
+        "This": [
+          18,
+          231
+        ],
+        "should": [
+          19
+        ],
+        "be": [
+          20,
+          176
+        ],
+        "achieved": [
+          21
+        ],
+        "across": [
+          22
+        ],
+        "all": [
+          23,
+          126,
+          195
+        ],
+        "sectors,": [
+          24
+        ],
+        "and": [
+          25,
+          28,
+          38,
+          58,
+          73,
+          99,
+          107,
+          169,
+          200
+        ],
+        "for": [
+          26,
+          51,
+          156,
+          193
+        ],
+        "electrical": [
+          27
+        ],
+        "electronic": [
+          29
+        ],
+        "equipment": [
+          30
+        ],
+        "(EEE)": [
+          31
+        ],
+        "promotion": [
+          33
+        ],
+        "of": [
+          34,
+          62,
+          109,
+          125,
+          159,
+          184,
+          186,
+          244
+        ],
+        "repair,": [
+          35
+        ],
+        "lifetime": [
+          36,
+          168
+        ],
+        "extension": [
+          37
+        ],
+        "other": [
+          39
+        ],
+        "Circular": [
+          40
+        ],
+        "Economy": [
+          41
+        ],
+        "(CE)": [
+          42
+        ],
+        "strategies": [
+          43,
+          65,
+          237
+        ],
+        "are": [
+          44
+        ],
+        "often": [
+          45
+        ],
+        "proposed": [
+          46
+        ],
+        "as": [
+          47,
+          213
+        ],
+        "main": [
+          49
+        ],
+        "areas": [
+          50
+        ],
+        "intervention.": [
+          52
+        ],
+        "However,": [
+          53,
+          202
+        ],
+        "few": [
+          54
+        ],
+        "studies": [
+          55
+        ],
+        "have": [
+          56
+        ],
+        "quantified": [
+          57
+        ],
+        "compared": [
+          59
+        ],
+        "effectiveness": [
+          61
+        ],
+        "different": [
+          63
+        ],
+        "CE": [
+          64
+        ],
+        "at": [
+          66,
+          69
+        ],
+        "reducing": [
+          67,
+          179
+        ],
+        "a": [
+          70,
+          89,
+          135
+        ],
+        "national": [
+          71
+        ],
+        "level": [
+          72
+        ],
+        "into": [
+          74
+        ],
+        "future.": [
+          76
+        ],
+        "To": [
+          77,
+          120
+        ],
+        "fill": [
+          78
+        ],
+        "this": [
+          79
+        ],
+        "gap,": [
+          80
+        ],
+        "an": [
+          81
+        ],
+        "extended": [
+          82
+        ],
+        "dynamic": [
+          83
+        ],
+        "stock": [
+          84
+        ],
+        "model": [
+          85,
+          93,
+          127
+        ],
+        "was": [
+          86,
+          139
+        ],
+        "combined": [
+          87
+        ],
+        "with": [
+          88
+        ],
+        "device": [
+          90,
+          130,
+          149,
+          167,
+          215
+        ],
+        "energy": [
+          91,
+          101,
+          131,
+          180,
+          187,
+          242
+        ],
+        "consumption": [
+          92,
+          210
+        ],
+        "anticipate": [
+          95
+        ],
+        "embodied,": [
+          97
+        ],
+        "operational,": [
+          98
+        ],
+        "repair": [
+          100,
+          170
+        ],
+        "requirements": [
+          102
+        ],
+        "arising": [
+          103
+        ],
+        "stocks": [
+          106
+        ],
+        "flows": [
+          108
+        ],
+        "seven": [
+          110,
+          161
+        ],
+        "devices": [
+          111
+        ],
+        "up": [
+          112
+        ],
+        "2050": [
+          114,
+          190
+        ],
+        "in": [
+          115,
+          133,
+          166,
+          178,
+          246
+        ],
+        "United": [
+          117
+        ],
+        "Kingdom": [
+          118
+        ],
+        "(UK).": [
+          119
+        ],
+        "understand": [
+          121
+        ],
+        "relative": [
+          123
+        ],
+        "influence": [
+          124
+        ],
+        "inputs": [
+          128
+        ],
+        "on": [
+          129
+        ],
+        "demand": [
+          132,
+          188,
+          243
+        ],
+        "2050,": [
+          134
+        ],
+        "variance-based": [
+          136
+        ],
+        "sensitivity": [
+          137
+        ],
+        "analysis": [
+          138,
+          232
+        ],
+        "performed": [
+          140
+        ],
+        "using": [
+          141
+        ],
+        "Sobol": [
+          143
+        ],
+        "method.": [
+          144
+        ],
+        "The": [
+          145
+        ],
+        "results": [
+          146
+        ],
+        "show": [
+          147
+        ],
+        "that": [
+          148
+        ],
+        "size": [
+          150,
+          216
+        ],
+        "is": [
+          151,
+          191
+        ],
+        "most": [
+          153,
+          235
+        ],
+        "significant": [
+          154,
+          177,
+          207
+        ],
+        "variable": [
+          155
+        ],
+        "six": [
+          157
+        ],
+        "out": [
+          158
+        ],
+        "devices.": [
+          162
+        ],
+        "Whereas": [
+          163
+        ],
+        "substantial": [
+          164
+        ],
+        "increases": [
+          165
+        ],
+        "rates": [
+          171,
+          223
+        ],
+        "were": [
+          172
+        ],
+        "shown": [
+          173
+        ],
+        "not": [
+          174
+        ],
+        "demand.": [
+          181
+        ],
+        "A": [
+          182
+        ],
+        "reduction": [
+          183
+        ],
+        "30%": [
+          185
+        ],
+        "possible": [
+          192
+        ],
+        "almost": [
+          194
+        ],
+        "EEE": [
+          196,
+          245
+        ],
+        "devices,": [
+          197
+        ],
+        "except": [
+          198
+        ],
+        "laptops": [
+          199
+        ],
+        "TVs.": [
+          201
+        ],
+        "delivering": [
+          203
+        ],
+        "these": [
+          204
+        ],
+        "savings": [
+          205
+        ],
+        "changes": [
+          208
+        ],
+        "behaviours": [
+          211
+        ],
+        "such": [
+          212
+        ],
+        "decreasing": [
+          214,
+          221
+        ],
+        "about": [
+          218
+        ],
+        "40%": [
+          219
+        ],
+        "or": [
+          220
+        ],
+        "ownership": [
+          222
+        ],
+        "approximately": [
+          225
+        ],
+        "two": [
+          226
+        ],
+        "thirds": [
+          227
+        ],
+        "through": [
+          228
+        ],
+        "shared": [
+          229
+        ],
+        "ownership.": [
+          230
+        ],
+        "prioritises": [
+          233
+        ],
+        "impactful": [
+          236
+        ],
+        "reduce": [
+          239
+        ],
+        "total": [
+          241
+        ],
+        "UK.": [
+          248
+        ]
+      },
+      "counts_by_year": [
+        {
+          "year": 2026,
+          "cited_by_count": 1
+        },
+        {
+          "year": 2024,
+          "cited_by_count": 2
+        }
+      ],
+      "updated_date": "2026-09-27T08:07:27.782135",
+      "created_date": "2025-10-10T00:00:00"
+    }
+  }
+}

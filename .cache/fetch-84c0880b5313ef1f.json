@@ -1,0 +1,15 @@
+{
+  "parts": {
+    "api": "open-copy-fetch",
+    "url": "https://doaj.org/article/d0251aff8bcb4bb5b8c64f7b2ba4e2c4",
+    "redirects": 3,
+    "max_bytes": 20971520,
+    "shape": 1
+  },
+  "value": {
+    "kind": "refusal",
+    "status": 403,
+    "content_type": "text/html; charset=UTF-8",
+    "reason": "fetch_refused"
+  }
+}

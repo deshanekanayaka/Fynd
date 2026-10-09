@@ -62,18 +62,27 @@ class OpenCopyResult:
         return self.reason == reasons.USABLE
 
 
+def may_fetch(open_copy: OpenCopy | None) -> OpenCopy | None:
+    """Returns the Open copy when Fynd may fetch it, and None when it may not.
+
+    Every location passes through here, the OpenAlex one included. The live run
+    of 2026-10-09 found a work whose repository location was a doi.org address,
+    which is a lookup key and never a fetch target.
+    """
+    if open_copy is None:
+        return None
+    if open_copy.host in LOOKUP_ONLY_HOSTS:
+        return None
+    return open_copy
+
+
 def fallback_open_copy(paper: Paper) -> OpenCopy | None:
     """Returns the Semantic Scholar link as an Open copy, when Fynd may fetch it."""
     url = paper.open_copy_url
     if not url:
         return None
-    host = host_of(url)
-    if host in LOOKUP_ONLY_HOSTS:
-        # An address with no file behind it. 6 of the 12 links in the first
-        # live run were one of these.
-        return None
     # The license is unknown here, because only OpenAlex states one.
-    return OpenCopy(url=url, host=host, license="")
+    return may_fetch(OpenCopy(url=url, host=host_of(url), license=""))
 
 
 def locate(paper: Paper, resolve: Resolve) -> tuple[OpenCopy | None, str]:
@@ -83,8 +92,9 @@ def locate(paper: Paper, resolve: Resolve) -> tuple[OpenCopy | None, str]:
         return (found, "") if found else (None, reasons.NO_DOI)
 
     answer = resolve(paper.doi)
-    if answer.open_copy is not None:
-        return answer.open_copy, ""
+    located = may_fetch(answer.open_copy)
+    if located is not None:
+        return located, ""
 
     # OpenAlex gave no file. The Semantic Scholar link is the second chance,
     # and the reason names which of the two misses when it gives none either.

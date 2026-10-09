@@ -220,3 +220,26 @@ def test_a_text_at_the_ordinary_share_boundary() -> None:
     rubbish = chr(0xE000) * 2000
     assert reason_against(ordinary + rubbish) == ""
     assert reason_against("a" * 7000 + chr(0xE000) * 3000) == reasons.TEXT_NOT_TEXTUAL
+
+
+def test_an_openalex_location_on_doi_org_is_never_fetched() -> None:
+    # The live run of 2026-10-09 found a work whose repository location was a
+    # doi.org address. ADR 0007 fetches no publisher, and that host redirects
+    # to one, so the guard belongs on every location and not on the fallback.
+    asked: list = []
+
+    def fetch(url: str):
+        asked.append(url)
+        return pdf_bytes()
+
+    lookup_only = OpenCopy(url="https://doi.org/10.1000/aaa", host="doi.org", license="cc-by")
+    result = read_open_copy(
+        paper(),
+        resolve_to(Resolution(found=True, open_copy=lookup_only)),
+        fetch,
+        extract_to(A_LONG_TEXT),
+        reason_against,
+    )
+
+    assert result.reason == reasons.NO_REPOSITORY_LOCATION
+    assert asked == []

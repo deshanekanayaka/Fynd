@@ -1,0 +1,1088 @@
+{
+  "parts": {
+    "api": "openalex-work",
+    "doi": "10.17705/1jais.00786",
+    "shape": 1
+  },
+  "value": {
+    "found": true,
+    "work": {
+      "id": "https://openalex.org/W4323519758",
+      "doi": "https://doi.org/10.17705/1jais.00786",
+      "title": "On the Effectiveness of Smart Metering Technology Adoption: Evidence from the National Rollout in the United Kingdom",
+      "display_name": "On the Effectiveness of Smart Metering Technology Adoption: Evidence from the National Rollout in the United Kingdom",
+      "publication_year": 2023,
+      "publication_date": "2023-01-01",
+      "ids": {
+        "openalex": "https://openalex.org/W4323519758",
+        "doi": "https://doi.org/10.17705/1jais.00786"
+      },
+      "language": "en",
+      "primary_location": {
+        "id": "doi:10.17705/1jais.00786",
+        "is_oa": false,
+        "landing_page_url": "https://doi.org/10.17705/1jais.00786",
+        "pdf_url": null,
+        "source": {
+          "id": "https://openalex.org/S30879505",
+          "display_name": "Journal of the Association for Information Systems",
+          "issn_l": "1536-9323",
+          "issn": [
+            "1536-9323"
+          ],
+          "is_oa": false,
+          "is_in_doaj": false,
+          "is_core": true,
+          "listed_in": [
+            "abdc-a-star",
+            "cwts-core",
+            "jufo-3",
+            "norway-2"
+          ],
+          "host_organization": "https://openalex.org/P4310321080",
+          "host_organization_name": "Association for Information Systems",
+          "host_organization_lineage": [
+            "https://openalex.org/P4310321080"
+          ],
+          "host_organization_lineage_names": [
+            "Association for Information Systems"
+          ],
+          "type": "journal"
+        },
+        "license": null,
+        "license_id": null,
+        "version": "publishedVersion",
+        "is_accepted": true,
+        "is_published": true,
+        "raw_source_name": "Journal of the Association for Information Systems",
+        "raw_type": "journal-article"
+      },
+      "type": "article",
+      "indexed_in": [
+        "crossref"
+      ],
+      "open_access": {
+        "is_oa": false,
+        "oa_status": "closed",
+        "oa_url": null,
+        "any_repository_has_fulltext": false
+      },
+      "authorships": [
+        {
+          "author_position": "first",
+          "author": {
+            "id": "https://openalex.org/A5033583124",
+            "display_name": "Jaeung Sim",
+            "orcid": "https://orcid.org/0000-0002-5321-3152",
+            "observed_orcids": [
+              "https://orcid.org/0000-0002-5321-3152"
+            ]
+          },
+          "institutions": [
+            {
+              "id": "https://openalex.org/I140172145",
+              "display_name": "University of Connecticut",
+              "ror": "https://ror.org/02der9h97",
+              "country_code": "US",
+              "type": "education",
+              "lineage": [
+                "https://openalex.org/I140172145"
+              ]
+            }
+          ],
+          "countries": [
+            "US"
+          ],
+          "is_corresponding": false,
+          "raw_author_name": "Jaeung Sim",
+          "raw_affiliation_strings": [
+            "Univerisity of Connecticut"
+          ],
+          "raw_orcid": null,
+          "affiliations": [
+            {
+              "raw_affiliation_string": "Univerisity of Connecticut",
+              "institution_ids": [
+                "https://openalex.org/I140172145"
+              ]
+            }
+          ]
+        },
+        {
+          "author_position": "middle",
+          "author": {
+            "id": "https://openalex.org/A5028623594",
+            "display_name": "Junyeong Lee",
+            "orcid": "https://orcid.org/0000-0001-9178-2287",
+            "observed_orcids": [
+              "https://orcid.org/0000-0001-9178-2287"
+            ]
+          },
+          "institutions": [
+            {
+              "id": "https://openalex.org/I163753206",
+              "display_name": "Chungbuk National University",
+              "ror": "https://ror.org/02wnxgj78",
+              "country_code": "KR",
+              "type": "education",
+              "lineage": [
+                "https://openalex.org/I163753206"
+              ]
+            }
+          ],
+          "countries": [
+            "KR"
+          ],
+          "is_corresponding": false,
+          "raw_author_name": "Junyeong Lee",
+          "raw_affiliation_strings": [
+            "Chungbuk National University"
+          ],
+          "raw_orcid": null,
+          "affiliations": [
+            {
+              "raw_affiliation_string": "Chungbuk National University",
+              "institution_ids": [
+                "https://openalex.org/I163753206"
+              ]
+            }
+          ]
+        },
+        {
+          "author_position": "last",
+          "author": {
+            "id": "https://openalex.org/A5062435140",
+            "display_name": "Daegon Cho",
+            "orcid": "https://orcid.org/0000-0002-3279-8569",
+            "observed_orcids": [
+              "https://orcid.org/0000-0002-3279-8569"
+            ]
+          },
+          "institutions": [
+            {
+              "id": "https://openalex.org/I157485424",
+              "display_name": "Korea Advanced Institute of Science and Technology",
+              "ror": "https://ror.org/05apxxy63",
+              "country_code": "KR",
+              "type": "education",
+              "lineage": [
+                "https://openalex.org/I157485424"
+              ]
+            }
+          ],
+          "countries": [
+            "KR"
+          ],
+          "is_corresponding": false,
+          "raw_author_name": "Daegon Cho",
+          "raw_affiliation_strings": [
+            "Korea Advanced Institute of Science and Technology"
+          ],
+          "raw_orcid": null,
+          "affiliations": [
+            {
+              "raw_affiliation_string": "Korea Advanced Institute of Science and Technology",
+              "institution_ids": [
+                "https://openalex.org/I157485424"
+              ]
+            }
+          ]
+        }
+      ],
+      "institutions": [],
+      "countries_distinct_count": 2,
+      "institutions_distinct_count": 3,
+      "corresponding_author_ids": [],
+      "corresponding_institution_ids": [],
+      "apc_list": null,
+      "apc_paid": null,
+      "fwci": 4.1729,
+      "has_fulltext": false,
+      "cited_by_count": 15,
+      "citation_normalized_percentile": {
+        "value": 0.92961094,
+        "is_in_top_1_percent": false,
+        "is_in_top_10_percent": true
+      },
+      "cited_by_percentile_year": {
+        "min": 93,
+        "max": 99
+      },
+      "biblio": {
+        "volume": "24",
+        "issue": "2",
+        "first_page": "555",
+        "last_page": "591"
+      },
+      "is_retracted": false,
+      "is_paratext": false,
+      "is_xpac": false,
+      "primary_topic": {
+        "id": "https://openalex.org/T10898",
+        "display_name": "Environmental Education and Sustainability",
+        "score": 0.8672000169754028,
+        "subfield": {
+          "id": "https://openalex.org/subfields/2308",
+          "display_name": "Management, Monitoring, Policy and Law"
+        },
+        "field": {
+          "id": "https://openalex.org/fields/23",
+          "display_name": "Environmental Science"
+        },
+        "domain": {
+          "id": "https://openalex.org/domains/3",
+          "display_name": "Physical Sciences"
+        }
+      },
+      "topics": [
+        {
+          "id": "https://openalex.org/T10898",
+          "display_name": "Environmental Education and Sustainability",
+          "score": 0.8672000169754028,
+          "subfield": {
+            "id": "https://openalex.org/subfields/2308",
+            "display_name": "Management, Monitoring, Policy and Law"
+          },
+          "field": {
+            "id": "https://openalex.org/fields/23",
+            "display_name": "Environmental Science"
+          },
+          "domain": {
+            "id": "https://openalex.org/domains/3",
+            "display_name": "Physical Sciences"
+          }
+        },
+        {
+          "id": "https://openalex.org/T10603",
+          "display_name": "Smart Grid Energy Management",
+          "score": 0.03220000118017197,
+          "subfield": {
+            "id": "https://openalex.org/subfields/2208",
+            "display_name": "Electrical and Electronic Engineering"
+          },
+          "field": {
+            "id": "https://openalex.org/fields/22",
+            "display_name": "Engineering"
+          },
+          "domain": {
+            "id": "https://openalex.org/domains/3",
+            "display_name": "Physical Sciences"
+          }
+        },
+        {
+          "id": "https://openalex.org/T12617",
+          "display_name": "Energy, Environment, and Transportation Policies",
+          "score": 0.02160000056028366,
+          "subfield": {
+            "id": "https://openalex.org/subfields/2105",
+            "display_name": "Renewable Energy, Sustainability and the Environment"
+          },
+          "field": {
+            "id": "https://openalex.org/fields/21",
+            "display_name": "Energy"
+          },
+          "domain": {
+            "id": "https://openalex.org/domains/3",
+            "display_name": "Physical Sciences"
+          }
+        }
+      ],
+      "keywords": [
+        {
+          "id": "https://openalex.org/keywords/smart-metering",
+          "display_name": "smart metering",
+          "score": 0.8349999785423279
+        },
+        {
+          "id": "https://openalex.org/keywords/technology-adoption",
+          "display_name": "technology adoption",
+          "score": 0.8889999985694885
+        },
+        {
+          "id": "https://openalex.org/keywords/cognitive-dissonance-theory",
+          "display_name": "cognitive dissonance theory",
+          "score": 0.9240000247955322
+        },
+        {
+          "id": "https://openalex.org/keywords/climate-change-concern",
+          "display_name": "climate change concern",
+          "score": 0.8709999918937683
+        },
+        {
+          "id": "https://openalex.org/keywords/moderating-effect",
+          "display_name": "moderating effect",
+          "score": 0.8790000081062317
+        },
+        {
+          "id": "https://openalex.org/keywords/household-energy-demand",
+          "display_name": "household energy demand",
+          "score": 0.8489999771118164
+        },
+        {
+          "id": "https://openalex.org/keywords/united-kingdom",
+          "display_name": "United Kingdom",
+          "score": 0.8970000147819519
+        }
+      ],
+      "concepts": [
+        {
+          "id": "https://openalex.org/C77513098",
+          "wikidata": "https://www.wikidata.org/wiki/Q209722",
+          "display_name": "Cognitive dissonance",
+          "level": 2,
+          "score": 0.8206677436828613
+        },
+        {
+          "id": "https://openalex.org/C27548731",
+          "wikidata": "https://www.wikidata.org/wiki/Q88272",
+          "display_name": "Investment (military)",
+          "level": 3,
+          "score": 0.48972681164741516
+        },
+        {
+          "id": "https://openalex.org/C144133560",
+          "wikidata": "https://www.wikidata.org/wiki/Q4830453",
+          "display_name": "Business",
+          "level": 0,
+          "score": 0.47639432549476624
+        },
+        {
+          "id": "https://openalex.org/C162853370",
+          "wikidata": "https://www.wikidata.org/wiki/Q39809",
+          "display_name": "Marketing",
+          "level": 1,
+          "score": 0.45490583777427673
+        },
+        {
+          "id": "https://openalex.org/C186370098",
+          "wikidata": "https://www.wikidata.org/wiki/Q442787",
+          "display_name": "Energy (signal processing)",
+          "level": 2,
+          "score": 0.4434431791305542
+        },
+        {
+          "id": "https://openalex.org/C100001284",
+          "wikidata": "https://www.wikidata.org/wiki/Q2248246",
+          "display_name": "Public economics",
+          "level": 1,
+          "score": 0.42144671082496643
+        },
+        {
+          "id": "https://openalex.org/C162324750",
+          "wikidata": "https://www.wikidata.org/wiki/Q8134",
+          "display_name": "Economics",
+          "level": 0,
+          "score": 0.2856575846672058
+        },
+        {
+          "id": "https://openalex.org/C15744967",
+          "wikidata": "https://www.wikidata.org/wiki/Q9418",
+          "display_name": "Psychology",
+          "level": 0,
+          "score": 0.2808758020401001
+        },
+        {
+          "id": "https://openalex.org/C17744445",
+          "wikidata": "https://www.wikidata.org/wiki/Q36442",
+          "display_name": "Political science",
+          "level": 0,
+          "score": 0.1854758858680725
+        },
+        {
+          "id": "https://openalex.org/C77805123",
+          "wikidata": "https://www.wikidata.org/wiki/Q161272",
+          "display_name": "Social psychology",
+          "level": 1,
+          "score": 0.16176888346672058
+        },
+        {
+          "id": "https://openalex.org/C199539241",
+          "wikidata": "https://www.wikidata.org/wiki/Q7748",
+          "display_name": "Law",
+          "level": 1,
+          "score": 0.0
+        },
+        {
+          "id": "https://openalex.org/C94625758",
+          "wikidata": "https://www.wikidata.org/wiki/Q7163",
+          "display_name": "Politics",
+          "level": 2,
+          "score": 0.0
+        },
+        {
+          "id": "https://openalex.org/C33923547",
+          "wikidata": "https://www.wikidata.org/wiki/Q395",
+          "display_name": "Mathematics",
+          "level": 0,
+          "score": 0.0
+        },
+        {
+          "id": "https://openalex.org/C105795698",
+          "wikidata": "https://www.wikidata.org/wiki/Q12483",
+          "display_name": "Statistics",
+          "level": 1,
+          "score": 0.0
+        }
+      ],
+      "mesh": [],
+      "locations_count": 3,
+      "locations": [
+        {
+          "id": "doi:10.17705/1jais.00786",
+          "is_oa": false,
+          "landing_page_url": "https://doi.org/10.17705/1jais.00786",
+          "pdf_url": null,
+          "source": {
+            "id": "https://openalex.org/S30879505",
+            "display_name": "Journal of the Association for Information Systems",
+            "issn_l": "1536-9323",
+            "issn": [
+              "1536-9323"
+            ],
+            "is_oa": false,
+            "is_in_doaj": false,
+            "is_core": true,
+            "listed_in": [
+              "abdc-a-star",
+              "cwts-core",
+              "jufo-3",
+              "norway-2"
+            ],
+            "host_organization": "https://openalex.org/P4310321080",
+            "host_organization_name": "Association for Information Systems",
+            "host_organization_lineage": [
+              "https://openalex.org/P4310321080"
+            ],
+            "host_organization_lineage_names": [
+              "Association for Information Systems"
+            ],
+            "type": "journal"
+          },
+          "license": null,
+          "license_id": null,
+          "version": "publishedVersion",
+          "is_accepted": true,
+          "is_published": true,
+          "raw_source_name": "Journal of the Association for Information Systems",
+          "raw_type": "journal-article"
+        },
+        {
+          "id": "pmh:oai:aisel.aisnet.org:jais-2114",
+          "is_oa": false,
+          "landing_page_url": "https://aisel.aisnet.org/jais/vol24/iss2/2",
+          "pdf_url": null,
+          "source": {
+            "id": "https://openalex.org/S30879505",
+            "display_name": "Journal of the Association for Information Systems",
+            "issn_l": "1536-9323",
+            "issn": [
+              "1536-9323"
+            ],
+            "is_oa": false,
+            "is_in_doaj": false,
+            "is_core": true,
+            "listed_in": [
+              "abdc-a-star",
+              "cwts-core",
+              "jufo-3",
+              "norway-2"
+            ],
+            "host_organization": "https://openalex.org/P4310321080",
+            "host_organization_name": "Association for Information Systems",
+            "host_organization_lineage": [
+              "https://openalex.org/P4310321080"
+            ],
+            "host_organization_lineage_names": [
+              "Association for Information Systems"
+            ],
+            "type": "journal"
+          },
+          "license": null,
+          "license_id": null,
+          "version": "submittedVersion",
+          "is_accepted": false,
+          "is_published": false,
+          "raw_source_name": "Journal of the Association for Information Systems",
+          "raw_type": "text"
+        },
+        {
+          "id": "pmh:oai:aisel.aisnet.org:jais_preprints-1067",
+          "is_oa": false,
+          "landing_page_url": "https://aisel.aisnet.org/jais_preprints/67",
+          "pdf_url": null,
+          "source": {
+            "id": "https://openalex.org/S30879505",
+            "display_name": "Journal of the Association for Information Systems",
+            "issn_l": "1536-9323",
+            "issn": [
+              "1536-9323"
+            ],
+            "is_oa": false,
+            "is_in_doaj": false,
+            "is_core": true,
+            "listed_in": [
+              "abdc-a-star",
+              "cwts-core",
+              "jufo-3",
+              "norway-2"
+            ],
+            "host_organization": "https://openalex.org/P4310321080",
+            "host_organization_name": "Association for Information Systems",
+            "host_organization_lineage": [
+              "https://openalex.org/P4310321080"
+            ],
+            "host_organization_lineage_names": [
+              "Association for Information Systems"
+            ],
+            "type": "journal"
+          },
+          "license": null,
+          "license_id": null,
+          "version": "submittedVersion",
+          "is_accepted": false,
+          "is_published": false,
+          "raw_source_name": "JAIS Preprints (Forthcoming)",
+          "raw_type": "text"
+        }
+      ],
+      "best_oa_location": null,
+      "sustainable_development_goals": [
+        {
+          "score": 0.8485000133514404,
+          "id": "https://metadata.un.org/sdg/7",
+          "display_name": "Affordable and clean energy"
+        },
+        {
+          "score": 0.685699999332428,
+          "id": "https://metadata.un.org/sdg/13",
+          "display_name": "Climate action"
+        },
+        {
+          "score": 0.651199996471405,
+          "id": "https://metadata.un.org/sdg/9",
+          "display_name": "Industry, innovation and infrastructure"
+        }
+      ],
+      "sustainable_development_goals_aurora": [
+        {
+          "score": 0.6399999856948853,
+          "id": "https://metadata.un.org/sdg/13",
+          "display_name": "Climate action"
+        }
+      ],
+      "study_designs": [
+        {
+          "id": "https://openalex.org/study-designs/observational-study",
+          "display_name": "Observational Study"
+        }
+      ],
+      "awards": [],
+      "funders": [],
+      "has_content": {
+        "pdf": false,
+        "grobid_xml": false
+      },
+      "content_urls": null,
+      "referenced_works_count": 0,
+      "referenced_works": [],
+      "related_works": [
+        "https://openalex.org/W3208334015",
+        "https://openalex.org/W2767403522",
+        "https://openalex.org/W2766249179",
+        "https://openalex.org/W2258133373",
+        "https://openalex.org/W2255937062",
+        "https://openalex.org/W1974328274",
+        "https://openalex.org/W1515826403",
+        "https://openalex.org/W4243878060",
+        "https://openalex.org/W4310034585",
+        "https://openalex.org/W1509473192"
+      ],
+      "abstract_inverted_index": {
+        "In": [
+          0
+        ],
+        "response": [
+          1
+        ],
+        "to": [
+          2,
+          9,
+          156
+        ],
+        "the": [
+          3,
+          17,
+          29,
+          49,
+          81,
+          89,
+          157,
+          171
+        ],
+        "burgeoning": [
+          4
+        ],
+        "threats": [
+          5
+        ],
+        "of": [
+          6,
+          16,
+          31,
+          42,
+          51,
+          117,
+          126,
+          165,
+          173
+        ],
+        "climate": [
+          7,
+          129
+        ],
+        "change": [
+          8,
+          130
+        ],
+        "humanity,": [
+          10
+        ],
+        "numerous": [
+          11
+        ],
+        "governments,": [
+          12
+        ],
+        "such": [
+          13
+        ],
+        "as": [
+          14
+        ],
+        "those": [
+          15
+        ],
+        "United": [
+          18,
+          90
+        ],
+        "States": [
+          19
+        ],
+        "and": [
+          20,
+          44,
+          74,
+          94,
+          180,
+          191
+        ],
+        "most": [
+          21
+        ],
+        "European": [
+          22
+        ],
+        "countries,": [
+          23
+        ],
+        "have": [
+          24
+        ],
+        "launched": [
+          25
+        ],
+        "rollout": [
+          26
+        ],
+        "programs": [
+          27
+        ],
+        "for": [
+          28,
+          68,
+          189
+        ],
+        "distribution": [
+          30
+        ],
+        "smart": [
+          32
+        ],
+        "metering": [
+          33
+        ],
+        "technology": [
+          34,
+          150,
+          167
+        ],
+        "(SMT).": [
+          35
+        ],
+        "Despite": [
+          36
+        ],
+        "this": [
+          37,
+          113,
+          132,
+          142,
+          145
+        ],
+        "notable": [
+          38
+        ],
+        "recent": [
+          39
+        ],
+        "investment,": [
+          40
+        ],
+        "questions": [
+          41
+        ],
+        "whether": [
+          43
+        ],
+        "why": [
+          45
+        ],
+        "SMT": [
+          46,
+          69,
+          100,
+          138
+        ],
+        "adoption": [
+          47,
+          101,
+          168
+        ],
+        "facilitates": [
+          48
+        ],
+        "reduction": [
+          50
+        ],
+        "households\u2019": [
+          52
+        ],
+        "energy": [
+          53,
+          121
+        ],
+        "demands": [
+          54
+        ],
+        "remain": [
+          55
+        ],
+        "relatively": [
+          56
+        ],
+        "unexplored.": [
+          57
+        ],
+        "Building": [
+          58
+        ],
+        "on": [
+          59
+        ],
+        "cognitive": [
+          60,
+          174
+        ],
+        "dissonance": [
+          61,
+          175
+        ],
+        "theory,": [
+          62
+        ],
+        "we": [
+          63,
+          135
+        ],
+        "propose": [
+          64
+        ],
+        "a": [
+          65,
+          84,
+          123,
+          163
+        ],
+        "research": [
+          66
+        ],
+        "model": [
+          67,
+          82
+        ],
+        "adoption,": [
+          70
+        ],
+        "residential": [
+          71
+        ],
+        "energy-saving": [
+          72,
+          106
+        ],
+        "behaviors,": [
+          73,
+          107
+        ],
+        "moderating": [
+          75,
+          183
+        ],
+        "factors.": [
+          76
+        ],
+        "We": [
+          77,
+          185
+        ],
+        "then": [
+          78
+        ],
+        "empirically": [
+          79
+        ],
+        "test": [
+          80
+        ],
+        "using": [
+          83
+        ],
+        "rich": [
+          85
+        ],
+        "household": [
+          86
+        ],
+        "dataset": [
+          87
+        ],
+        "from": [
+          88
+        ],
+        "Kingdom": [
+          91
+        ],
+        "between": [
+          92
+        ],
+        "2012": [
+          93
+        ],
+        "2016.": [
+          95
+        ],
+        "Our": [
+          96,
+          153
+        ],
+        "results": [
+          97
+        ],
+        "show": [
+          98
+        ],
+        "that": [
+          99,
+          137
+        ],
+        "is": [
+          102
+        ],
+        "positively": [
+          103,
+          140
+        ],
+        "associated": [
+          104
+        ],
+        "with": [
+          105,
+          170
+        ],
+        "while": [
+          108
+        ],
+        "energysaving": [
+          109
+        ],
+        "motivations": [
+          110
+        ],
+        "substantially": [
+          111
+        ],
+        "moderate": [
+          112
+        ],
+        "association\u2014a": [
+          114
+        ],
+        "lower": [
+          115
+        ],
+        "level": [
+          116,
+          125
+        ],
+        "concern": [
+          118,
+          127
+        ],
+        "about": [
+          119,
+          128
+        ],
+        "saving": [
+          120
+        ],
+        "/": [
+          122
+        ],
+        "higher": [
+          124
+        ],
+        "amplifies": [
+          131
+        ],
+        "effect.": [
+          133
+        ],
+        "Importantly,": [
+          134
+        ],
+        "find": [
+          136
+        ],
+        "usage": [
+          139,
+          151
+        ],
+        "moderates": [
+          141
+        ],
+        "relationship,": [
+          143
+        ],
+        "but": [
+          144
+        ],
+        "marginal": [
+          146
+        ],
+        "gain": [
+          147
+        ],
+        "decreases": [
+          148
+        ],
+        "in": [
+          149,
+          176
+        ],
+        "intensity.": [
+          152
+        ],
+        "findings": [
+          154
+        ],
+        "contribute": [
+          155
+        ],
+        "information": [
+          158
+        ],
+        "systems": [
+          159
+        ],
+        "literature": [
+          160
+        ],
+        "by": [
+          161
+        ],
+        "showing": [
+          162
+        ],
+        "consequence": [
+          164
+        ],
+        "new": [
+          166
+        ],
+        "along": [
+          169
+        ],
+        "role": [
+          172
+        ],
+        "promoting": [
+          177
+        ],
+        "intended": [
+          178
+        ],
+        "objectives": [
+          179
+        ],
+        "identifying": [
+          181
+        ],
+        "potential": [
+          182
+        ],
+        "effects.": [
+          184
+        ],
+        "discuss": [
+          186
+        ],
+        "actionable": [
+          187
+        ],
+        "insights": [
+          188
+        ],
+        "policymakers": [
+          190
+        ],
+        "utility": [
+          192
+        ],
+        "firms.": [
+          193
+        ]
+      },
+      "counts_by_year": [
+        {
+          "year": 2026,
+          "cited_by_count": 5
+        },
+        {
+          "year": 2025,
+          "cited_by_count": 4
+        },
+        {
+          "year": 2024,
+          "cited_by_count": 4
+        },
+        {
+          "year": 2023,
+          "cited_by_count": 2
+        }
+      ],
+      "updated_date": "2026-09-26T08:19:03.415552",
+      "created_date": "2025-10-10T00:00:00"
+    }
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "parts": {
+    "api": "open-copy-fetch",
+    "url": "https://researchonline.lshtm.ac.uk/id/eprint/4682070/1/Essman-etal-2026-Understandings-of-ultra-processed-foods.pdf",
+    "redirects": 3,
+    "max_bytes": 20971520,
+    "shape": 1
+  },
+  "value": {
+    "kind": "bytes",
+    "content_type": "application/pdf",
+    "byte_count": 1055376,
+    "file": "fetch-aa8862478b72b210.bin"
+  }
+}

@@ -1,0 +1,669 @@
+{
+  "parts": {
+    "api": "openalex-work",
+    "doi": "10.2139/ssrn.4821355",
+    "shape": 1
+  },
+  "value": {
+    "found": true,
+    "work": {
+      "id": "https://openalex.org/W4392874114",
+      "doi": "https://doi.org/10.2139/ssrn.4821355",
+      "title": "Energy and Climate Policy in a DSGE Model of the United Kingdom",
+      "display_name": "Energy and Climate Policy in a DSGE Model of the United Kingdom",
+      "publication_year": 2024,
+      "publication_date": "2024-01-01",
+      "ids": {
+        "openalex": "https://openalex.org/W4392874114",
+        "doi": "https://doi.org/10.2139/ssrn.4821355"
+      },
+      "language": "en",
+      "primary_location": {
+        "id": "doi:10.2139/ssrn.4821355",
+        "is_oa": true,
+        "landing_page_url": "https://doi.org/10.2139/ssrn.4821355",
+        "pdf_url": null,
+        "source": {
+          "id": "https://openalex.org/S4210172589",
+          "display_name": "SSRN Electronic Journal",
+          "issn_l": "1556-5068",
+          "issn": [
+            "1556-5068"
+          ],
+          "is_oa": true,
+          "is_in_doaj": false,
+          "is_core": false,
+          "listed_in": [],
+          "host_organization": "https://openalex.org/I1318003438",
+          "host_organization_name": "RELX Group (Netherlands)",
+          "host_organization_lineage": [
+            "https://openalex.org/I1318003438"
+          ],
+          "host_organization_lineage_names": [],
+          "type": "repository"
+        },
+        "license": null,
+        "license_id": null,
+        "version": "acceptedVersion",
+        "is_accepted": true,
+        "is_published": false,
+        "raw_source_name": null,
+        "raw_type": "posted-content"
+      },
+      "type": "preprint",
+      "indexed_in": [
+        "crossref"
+      ],
+      "open_access": {
+        "is_oa": true,
+        "oa_status": "green",
+        "oa_url": "https://doi.org/10.2139/ssrn.4821355",
+        "any_repository_has_fulltext": true
+      },
+      "authorships": [
+        {
+          "author_position": "first",
+          "author": {
+            "id": "https://openalex.org/A5064169213",
+            "display_name": "Sandra Batten",
+            "orcid": null,
+            "observed_orcids": []
+          },
+          "institutions": [
+            {
+              "id": "https://openalex.org/I46860202",
+              "display_name": "Bank of England",
+              "ror": "https://ror.org/04p3y0q03",
+              "country_code": "GB",
+              "type": "other",
+              "lineage": [
+                "https://openalex.org/I46860202"
+              ]
+            }
+          ],
+          "countries": [
+            "GB"
+          ],
+          "is_corresponding": true,
+          "raw_author_name": "Sandra Batten",
+          "raw_affiliation_strings": [
+            "Bank of England",
+            "Bank of England, Threadneedle Street, London, EC2R 8AH, United Kingdom"
+          ],
+          "raw_orcid": null,
+          "affiliations": [
+            {
+              "raw_affiliation_string": "Bank of England",
+              "institution_ids": [
+                "https://openalex.org/I46860202"
+              ]
+            },
+            {
+              "raw_affiliation_string": "Bank of England, Threadneedle Street, London, EC2R 8AH, United Kingdom",
+              "institution_ids": [
+                "https://openalex.org/I46860202"
+              ]
+            }
+          ]
+        },
+        {
+          "author_position": "last",
+          "author": {
+            "id": "https://openalex.org/A5070059561",
+            "display_name": "Stephen P. Millard",
+            "orcid": null,
+            "observed_orcids": []
+          },
+          "institutions": [
+            {
+              "id": "https://openalex.org/I6932186",
+              "display_name": "National Institute of Economic and Social Research",
+              "ror": "https://ror.org/048m81442",
+              "country_code": "GB",
+              "type": "nonprofit",
+              "lineage": [
+                "https://openalex.org/I6932186"
+              ]
+            }
+          ],
+          "countries": [
+            "GB"
+          ],
+          "is_corresponding": false,
+          "raw_author_name": "Stephen Millard",
+          "raw_affiliation_strings": [
+            "National Institute of Economic and Social Research",
+            "National Institute of Economic and Social Research, 2 Dean Trench Street, Smith Square, London, SW1P 3HE, United Kingdom"
+          ],
+          "raw_orcid": null,
+          "affiliations": [
+            {
+              "raw_affiliation_string": "National Institute of Economic and Social Research",
+              "institution_ids": [
+                "https://openalex.org/I6932186"
+              ]
+            },
+            {
+              "raw_affiliation_string": "National Institute of Economic and Social Research, 2 Dean Trench Street, Smith Square, London, SW1P 3HE, United Kingdom",
+              "institution_ids": [
+                "https://openalex.org/I6932186"
+              ]
+            }
+          ]
+        }
+      ],
+      "institutions": [],
+      "countries_distinct_count": 1,
+      "institutions_distinct_count": 2,
+      "corresponding_author_ids": [
+        "https://openalex.org/A5064169213"
+      ],
+      "corresponding_institution_ids": [
+        "https://openalex.org/I46860202"
+      ],
+      "apc_list": null,
+      "apc_paid": null,
+      "fwci": null,
+      "has_fulltext": false,
+      "cited_by_count": 3,
+      "citation_normalized_percentile": null,
+      "cited_by_percentile_year": null,
+      "biblio": {
+        "volume": null,
+        "issue": null,
+        "first_page": null,
+        "last_page": null
+      },
+      "is_retracted": false,
+      "is_paratext": false,
+      "is_xpac": false,
+      "primary_topic": {
+        "id": "https://openalex.org/T10471",
+        "display_name": "Climate Change Policy and Economics",
+        "score": 0.9810000061988831,
+        "subfield": {
+          "id": "https://openalex.org/subfields/2002",
+          "display_name": "Economics and Econometrics"
+        },
+        "field": {
+          "id": "https://openalex.org/fields/20",
+          "display_name": "Economics, Econometrics and Finance"
+        },
+        "domain": {
+          "id": "https://openalex.org/domains/2",
+          "display_name": "Social Sciences"
+        }
+      },
+      "topics": [
+        {
+          "id": "https://openalex.org/T10471",
+          "display_name": "Climate Change Policy and Economics",
+          "score": 0.9810000061988831,
+          "subfield": {
+            "id": "https://openalex.org/subfields/2002",
+            "display_name": "Economics and Econometrics"
+          },
+          "field": {
+            "id": "https://openalex.org/fields/20",
+            "display_name": "Economics, Econometrics and Finance"
+          },
+          "domain": {
+            "id": "https://openalex.org/domains/2",
+            "display_name": "Social Sciences"
+          }
+        },
+        {
+          "id": "https://openalex.org/T12617",
+          "display_name": "Energy, Environment, and Transportation Policies",
+          "score": 0.012900000438094139,
+          "subfield": {
+            "id": "https://openalex.org/subfields/2105",
+            "display_name": "Renewable Energy, Sustainability and the Environment"
+          },
+          "field": {
+            "id": "https://openalex.org/fields/21",
+            "display_name": "Energy"
+          },
+          "domain": {
+            "id": "https://openalex.org/domains/3",
+            "display_name": "Physical Sciences"
+          }
+        },
+        {
+          "id": "https://openalex.org/T10438",
+          "display_name": "Energy, Environment, Economic Growth",
+          "score": 0.0020000000949949026,
+          "subfield": {
+            "id": "https://openalex.org/subfields/2002",
+            "display_name": "Economics and Econometrics"
+          },
+          "field": {
+            "id": "https://openalex.org/fields/20",
+            "display_name": "Economics, Econometrics and Finance"
+          },
+          "domain": {
+            "id": "https://openalex.org/domains/2",
+            "display_name": "Social Sciences"
+          }
+        }
+      ],
+      "keywords": [
+        {
+          "id": "https://openalex.org/keywords/carbon-tax",
+          "display_name": "carbon tax",
+          "score": 0.7929999828338623
+        },
+        {
+          "id": "https://openalex.org/keywords/climate-policy",
+          "display_name": "climate policy",
+          "score": 0.8069999814033508
+        },
+        {
+          "id": "https://openalex.org/keywords/household-energy-consumption",
+          "display_name": "household energy consumption",
+          "score": 0.871999979019165
+        },
+        {
+          "id": "https://openalex.org/keywords/elasticity-of-substitution",
+          "display_name": "elasticity of substitution",
+          "score": 0.7910000085830688
+        },
+        {
+          "id": "https://openalex.org/keywords/renewable-electricity",
+          "display_name": "renewable electricity",
+          "score": 0.7120000123977661
+        },
+        {
+          "id": "https://openalex.org/keywords/fossil-fuel-substitution",
+          "display_name": "fossil fuel substitution",
+          "score": 0.7329999804496765
+        },
+        {
+          "id": "https://openalex.org/keywords/macroeconomic-effects",
+          "display_name": "macroeconomic effects",
+          "score": 0.7210000157356262
+        },
+        {
+          "id": "https://openalex.org/keywords/inflation",
+          "display_name": "inflation",
+          "score": 0.6359999775886536
+        },
+        {
+          "id": "https://openalex.org/keywords/monetary-policy",
+          "display_name": "monetary policy",
+          "score": 0.9340000152587891
+        },
+        {
+          "id": "https://openalex.org/keywords/open-economy-dsge-model",
+          "display_name": "open-economy DSGE model",
+          "score": 0.781000018119812
+        },
+        {
+          "id": "https://openalex.org/keywords/united-kingdom",
+          "display_name": "United Kingdom",
+          "score": 0.9089999794960022
+        }
+      ],
+      "concepts": [
+        {
+          "id": "https://openalex.org/C489367",
+          "wikidata": "https://www.wikidata.org/wiki/Q1962064",
+          "display_name": "Dynamic stochastic general equilibrium",
+          "level": 3,
+          "score": 0.7556144595146179
+        },
+        {
+          "id": "https://openalex.org/C132651083",
+          "wikidata": "https://www.wikidata.org/wiki/Q7942",
+          "display_name": "Climate change",
+          "level": 2,
+          "score": 0.481398344039917
+        },
+        {
+          "id": "https://openalex.org/C186370098",
+          "wikidata": "https://www.wikidata.org/wiki/Q442787",
+          "display_name": "Energy (signal processing)",
+          "level": 2,
+          "score": 0.467398464679718
+        },
+        {
+          "id": "https://openalex.org/C13801280",
+          "wikidata": "https://www.wikidata.org/wiki/Q36732",
+          "display_name": "Kingdom",
+          "level": 2,
+          "score": 0.46143126487731934
+        },
+        {
+          "id": "https://openalex.org/C162324750",
+          "wikidata": "https://www.wikidata.org/wiki/Q8134",
+          "display_name": "Economics",
+          "level": 0,
+          "score": 0.4242202639579773
+        },
+        {
+          "id": "https://openalex.org/C49204034",
+          "wikidata": "https://www.wikidata.org/wiki/Q52139",
+          "display_name": "Climatology",
+          "level": 1,
+          "score": 0.3983966112136841
+        },
+        {
+          "id": "https://openalex.org/C17744445",
+          "wikidata": "https://www.wikidata.org/wiki/Q36442",
+          "display_name": "Political science",
+          "level": 0,
+          "score": 0.3444645404815674
+        },
+        {
+          "id": "https://openalex.org/C39432304",
+          "wikidata": "https://www.wikidata.org/wiki/Q188847",
+          "display_name": "Environmental science",
+          "level": 0,
+          "score": 0.3419358730316162
+        },
+        {
+          "id": "https://openalex.org/C139719470",
+          "wikidata": "https://www.wikidata.org/wiki/Q39680",
+          "display_name": "Macroeconomics",
+          "level": 1,
+          "score": 0.33359992504119873
+        },
+        {
+          "id": "https://openalex.org/C149782125",
+          "wikidata": "https://www.wikidata.org/wiki/Q160039",
+          "display_name": "Econometrics",
+          "level": 1,
+          "score": 0.32908865809440613
+        },
+        {
+          "id": "https://openalex.org/C126285488",
+          "wikidata": "https://www.wikidata.org/wiki/Q178476",
+          "display_name": "Monetary policy",
+          "level": 2,
+          "score": 0.16592082381248474
+        },
+        {
+          "id": "https://openalex.org/C127313418",
+          "wikidata": "https://www.wikidata.org/wiki/Q1069",
+          "display_name": "Geology",
+          "level": 0,
+          "score": 0.10552939772605896
+        },
+        {
+          "id": "https://openalex.org/C105795698",
+          "wikidata": "https://www.wikidata.org/wiki/Q12483",
+          "display_name": "Statistics",
+          "level": 1,
+          "score": 0.08791431784629822
+        },
+        {
+          "id": "https://openalex.org/C33923547",
+          "wikidata": "https://www.wikidata.org/wiki/Q395",
+          "display_name": "Mathematics",
+          "level": 0,
+          "score": 0.0852959156036377
+        },
+        {
+          "id": "https://openalex.org/C111368507",
+          "wikidata": "https://www.wikidata.org/wiki/Q43518",
+          "display_name": "Oceanography",
+          "level": 1,
+          "score": 0.0
+        },
+        {
+          "id": "https://openalex.org/C151730666",
+          "wikidata": "https://www.wikidata.org/wiki/Q7205",
+          "display_name": "Paleontology",
+          "level": 1,
+          "score": 0.0
+        }
+      ],
+      "mesh": [],
+      "locations_count": 3,
+      "locations": [
+        {
+          "id": "doi:10.2139/ssrn.4821355",
+          "is_oa": true,
+          "landing_page_url": "https://doi.org/10.2139/ssrn.4821355",
+          "pdf_url": null,
+          "source": {
+            "id": "https://openalex.org/S4210172589",
+            "display_name": "SSRN Electronic Journal",
+            "issn_l": "1556-5068",
+            "issn": [
+              "1556-5068"
+            ],
+            "is_oa": true,
+            "is_in_doaj": false,
+            "is_core": false,
+            "listed_in": [],
+            "host_organization": "https://openalex.org/I1318003438",
+            "host_organization_name": "RELX Group (Netherlands)",
+            "host_organization_lineage": [
+              "https://openalex.org/I1318003438"
+            ],
+            "host_organization_lineage_names": [],
+            "type": "repository"
+          },
+          "license": null,
+          "license_id": null,
+          "version": "acceptedVersion",
+          "is_accepted": true,
+          "is_published": false,
+          "raw_source_name": null,
+          "raw_type": "posted-content"
+        },
+        {
+          "id": "pmh:oai:RePEc:boe:boeewp:1064",
+          "is_oa": false,
+          "landing_page_url": "https://www.bankofengland.co.uk/-/media/boe/files/working-paper/2024/energy-and-climate-policy-in-a-dsge-model-of-the-united-kingdom.pdf",
+          "pdf_url": "https://www.bankofengland.co.uk/-/media/boe/files/working-paper/2024/energy-and-climate-policy-in-a-dsge-model-of-the-united-kingdom.pdf",
+          "source": {
+            "id": "https://openalex.org/S4306401271",
+            "display_name": "RePEc: Research Papers in Economics",
+            "issn_l": null,
+            "issn": null,
+            "is_oa": false,
+            "is_in_doaj": false,
+            "is_core": false,
+            "listed_in": [],
+            "host_organization": "https://openalex.org/I77793887",
+            "host_organization_name": "Federal Reserve Bank of St. Louis",
+            "host_organization_lineage": [
+              "https://openalex.org/I77793887"
+            ],
+            "host_organization_lineage_names": [],
+            "type": "repository"
+          },
+          "license": null,
+          "license_id": null,
+          "version": "submittedVersion",
+          "is_accepted": false,
+          "is_published": false,
+          "raw_source_name": null,
+          "raw_type": "preprint"
+        },
+        {
+          "id": "pmh:oai:RePEc:nsr:niesrd:553",
+          "is_oa": false,
+          "landing_page_url": "https://www.niesr.ac.uk/wp-content/uploads/2024/03/DP553-merged.pdf?ver=TXYm4ujunRsfErrmj4AC",
+          "pdf_url": "https://www.niesr.ac.uk/wp-content/uploads/2024/03/DP553-merged.pdf?ver=TXYm4ujunRsfErrmj4AC",
+          "source": {
+            "id": "https://openalex.org/S4306401271",
+            "display_name": "RePEc: Research Papers in Economics",
+            "issn_l": null,
+            "issn": null,
+            "is_oa": false,
+            "is_in_doaj": false,
+            "is_core": false,
+            "listed_in": [],
+            "host_organization": "https://openalex.org/I77793887",
+            "host_organization_name": "Federal Reserve Bank of St. Louis",
+            "host_organization_lineage": [
+              "https://openalex.org/I77793887"
+            ],
+            "host_organization_lineage_names": [],
+            "type": "repository"
+          },
+          "license": null,
+          "license_id": null,
+          "version": "submittedVersion",
+          "is_accepted": false,
+          "is_published": false,
+          "raw_source_name": null,
+          "raw_type": "preprint"
+        }
+      ],
+      "best_oa_location": {
+        "id": "doi:10.2139/ssrn.4821355",
+        "is_oa": true,
+        "landing_page_url": "https://doi.org/10.2139/ssrn.4821355",
+        "pdf_url": null,
+        "source": {
+          "id": "https://openalex.org/S4210172589",
+          "display_name": "SSRN Electronic Journal",
+          "issn_l": "1556-5068",
+          "issn": [
+            "1556-5068"
+          ],
+          "is_oa": true,
+          "is_in_doaj": false,
+          "is_core": false,
+          "listed_in": [],
+          "host_organization": "https://openalex.org/I1318003438",
+          "host_organization_name": "RELX Group (Netherlands)",
+          "host_organization_lineage": [
+            "https://openalex.org/I1318003438"
+          ],
+          "host_organization_lineage_names": [],
+          "type": "repository"
+        },
+        "license": null,
+        "license_id": null,
+        "version": "acceptedVersion",
+        "is_accepted": true,
+        "is_published": false,
+        "raw_source_name": null,
+        "raw_type": "posted-content"
+      },
+      "sustainable_development_goals": [
+        {
+          "score": 1.0,
+          "display_name": "Climate action",
+          "id": "https://metadata.un.org/sdg/13"
+        },
+        {
+          "score": 0.8485000133514404,
+          "display_name": "Affordable and clean energy",
+          "id": "https://metadata.un.org/sdg/7"
+        }
+      ],
+      "sustainable_development_goals_aurora": [
+        {
+          "score": 0.8500000238418579,
+          "display_name": "Climate action",
+          "id": "https://metadata.un.org/sdg/13"
+        }
+      ],
+      "study_designs": [],
+      "awards": [],
+      "funders": [],
+      "has_content": {
+        "pdf": false,
+        "grobid_xml": false
+      },
+      "content_urls": null,
+      "referenced_works_count": 63,
+      "referenced_works": [
+        "https://openalex.org/W182403342",
+        "https://openalex.org/W1525260320",
+        "https://openalex.org/W1577100503",
+        "https://openalex.org/W1855173003",
+        "https://openalex.org/W1995278743",
+        "https://openalex.org/W2013930562",
+        "https://openalex.org/W2079300606",
+        "https://openalex.org/W2084245324",
+        "https://openalex.org/W2086270352",
+        "https://openalex.org/W2090956877",
+        "https://openalex.org/W2102085562",
+        "https://openalex.org/W2104519758",
+        "https://openalex.org/W2110766622",
+        "https://openalex.org/W2114748803",
+        "https://openalex.org/W2119870625",
+        "https://openalex.org/W2127513667",
+        "https://openalex.org/W2133627192",
+        "https://openalex.org/W2136010209",
+        "https://openalex.org/W2153743600",
+        "https://openalex.org/W2159420188",
+        "https://openalex.org/W2161057709",
+        "https://openalex.org/W2165942639",
+        "https://openalex.org/W2172094157",
+        "https://openalex.org/W2235733356",
+        "https://openalex.org/W2333324576",
+        "https://openalex.org/W2394566550",
+        "https://openalex.org/W2598760651",
+        "https://openalex.org/W2609323786",
+        "https://openalex.org/W2744990798",
+        "https://openalex.org/W2777151646",
+        "https://openalex.org/W2789455561",
+        "https://openalex.org/W2790989088",
+        "https://openalex.org/W2795716272",
+        "https://openalex.org/W2800013440",
+        "https://openalex.org/W2898894255",
+        "https://openalex.org/W2899508464",
+        "https://openalex.org/W2899688802",
+        "https://openalex.org/W2907074805",
+        "https://openalex.org/W2910870900",
+        "https://openalex.org/W2923169619",
+        "https://openalex.org/W2970981036",
+        "https://openalex.org/W2993957919",
+        "https://openalex.org/W2996766501",
+        "https://openalex.org/W3000241061",
+        "https://openalex.org/W3117248453",
+        "https://openalex.org/W3117364400",
+        "https://openalex.org/W3122217093",
+        "https://openalex.org/W3122318714",
+        "https://openalex.org/W3122680476",
+        "https://openalex.org/W3123436086",
+        "https://openalex.org/W3123589738",
+        "https://openalex.org/W3123629920",
+        "https://openalex.org/W3125577748",
+        "https://openalex.org/W3129287830",
+        "https://openalex.org/W3187090252",
+        "https://openalex.org/W3205464674",
+        "https://openalex.org/W4302323036",
+        "https://openalex.org/W4375933362",
+        "https://openalex.org/W4377234124",
+        "https://openalex.org/W4377247941",
+        "https://openalex.org/W4382863138",
+        "https://openalex.org/W6780285574",
+        "https://openalex.org/W6907440529"
+      ],
+      "related_works": [
+        "https://openalex.org/W3158507869",
+        "https://openalex.org/W3121324396",
+        "https://openalex.org/W1512996543",
+        "https://openalex.org/W2809024758",
+        "https://openalex.org/W1537818452",
+        "https://openalex.org/W4313393022",
+        "https://openalex.org/W2263852497",
+        "https://openalex.org/W2119347197",
+        "https://openalex.org/W3042002792",
+        "https://openalex.org/W4395660752"
+      ],
+      "abstract_inverted_index": null,
+      "counts_by_year": [
+        {
+          "year": 2026,
+          "cited_by_count": 1
+        },
+        {
+          "year": 2025,
+          "cited_by_count": 2
+        }
+      ],
+      "updated_date": "2026-09-29T14:09:16.559479",
+      "created_date": "2025-10-10T00:00:00"
+    }
+  }
+}

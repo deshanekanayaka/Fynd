@@ -1,0 +1,15 @@
+{
+  "parts": {
+    "api": "open-copy-fetch",
+    "url": "https://www.repository.cam.ac.uk/bitstreams/60a4f93c-ac22-48c1-8623-1d547b0bbdc0/download",
+    "redirects": 3,
+    "max_bytes": 20971520,
+    "shape": 1
+  },
+  "value": {
+    "kind": "bytes",
+    "content_type": "application/pdf;charset=UTF-8",
+    "byte_count": 2432491,
+    "file": "fetch-86646a15759f5add.bin"
+  }
+}

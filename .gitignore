@@ -12,14 +12,18 @@ __pycache__/
 !.env.example
 
 # The disk cache for every external fetch. Git holds the OpenAlex answers and
-# the extracted Source text, because continuous integration replays them with
-# no key. Git holds neither the fetched bytes nor the Semantic Scholar replies,
-# which carry full abstracts. See docs/adr/0011.
+# the fetch answers, which are a status and a byte count, because the reason
+# table replays from them with no key. Git holds neither the fetched bytes nor
+# the Semantic Scholar replies, which carry full abstracts.
+# The extracted texts are also out, because the live run of 2026-10-09 found
+# that 2 of the 5 papers that gave usable text state no license at all. The
+# labelled set of day 5 commits the texts it picks, with the license checked
+# one Source at a time. See docs/adr/0011 and its note of 2026-10-09.
 # The rule names the contents and not the directory, because git ignores
 # nothing inside a directory it already excluded.
 .cache/*
 !.cache/openalex-*.json
-!.cache/extract-*.json
+!.cache/fetch-*.json
 
 # Editors and operating system
 .DS_Store

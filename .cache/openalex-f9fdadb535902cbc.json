@@ -1,0 +1,1416 @@
+{
+  "parts": {
+    "api": "openalex-work",
+    "doi": "10.1016/j.ecolecon.2022.107686",
+    "shape": 1
+  },
+  "value": {
+    "found": true,
+    "work": {
+      "id": "https://openalex.org/W4311092030",
+      "doi": "https://doi.org/10.1016/j.ecolecon.2022.107686",
+      "title": "Social outcomes of energy use in the United Kingdom: Household energy footprints and their links to well-being",
+      "display_name": "Social outcomes of energy use in the United Kingdom: Household energy footprints and their links to well-being",
+      "publication_year": 2022,
+      "publication_date": "2022-12-07",
+      "ids": {
+        "openalex": "https://openalex.org/W4311092030",
+        "doi": "https://doi.org/10.1016/j.ecolecon.2022.107686"
+      },
+      "language": "en",
+      "primary_location": {
+        "id": "doi:10.1016/j.ecolecon.2022.107686",
+        "is_oa": true,
+        "landing_page_url": "https://doi.org/10.1016/j.ecolecon.2022.107686",
+        "pdf_url": null,
+        "source": {
+          "id": "https://openalex.org/S136211407",
+          "display_name": "Ecological Economics",
+          "issn_l": "0921-8009",
+          "issn": [
+            "0921-8009",
+            "1873-6106"
+          ],
+          "is_oa": false,
+          "is_in_doaj": false,
+          "is_core": true,
+          "listed_in": [
+            "abdc-a",
+            "cwts-core",
+            "jufo-2",
+            "ki-jl-1",
+            "norway-1"
+          ],
+          "host_organization": "https://openalex.org/P4310320990",
+          "host_organization_name": "Elsevier BV",
+          "host_organization_lineage": [
+            "https://openalex.org/P4310320990"
+          ],
+          "host_organization_lineage_names": [
+            "Elsevier BV"
+          ],
+          "type": "journal"
+        },
+        "license": "cc-by",
+        "license_id": "https://openalex.org/licenses/cc-by",
+        "version": "publishedVersion",
+        "is_accepted": true,
+        "is_published": true,
+        "raw_source_name": "Ecological Economics",
+        "raw_type": "journal-article"
+      },
+      "type": "article",
+      "indexed_in": [
+        "crossref"
+      ],
+      "open_access": {
+        "is_oa": true,
+        "oa_status": "hybrid",
+        "oa_url": "https://doi.org/10.1016/j.ecolecon.2022.107686",
+        "any_repository_has_fulltext": true
+      },
+      "authorships": [
+        {
+          "author_position": "first",
+          "author": {
+            "id": "https://openalex.org/A5007938209",
+            "display_name": "Marta Baltruszewicz",
+            "orcid": "https://orcid.org/0000-0001-7192-070X",
+            "observed_orcids": [
+              "https://orcid.org/0000-0001-7192-070X"
+            ]
+          },
+          "institutions": [
+            {
+              "id": "https://openalex.org/I130828816",
+              "display_name": "University of Leeds",
+              "ror": "https://ror.org/024mrxd33",
+              "country_code": "GB",
+              "type": "education",
+              "lineage": [
+                "https://openalex.org/I130828816"
+              ]
+            }
+          ],
+          "countries": [
+            "GB"
+          ],
+          "is_corresponding": true,
+          "raw_author_name": "Marta Baltruszewicz",
+          "raw_affiliation_strings": [
+            "Sustainability Research Institute, School of Earth and Environment, University of Leeds, Leeds LS2 9JT, UK"
+          ],
+          "raw_orcid": null,
+          "affiliations": [
+            {
+              "raw_affiliation_string": "Sustainability Research Institute, School of Earth and Environment, University of Leeds, Leeds LS2 9JT, UK",
+              "institution_ids": [
+                "https://openalex.org/I130828816"
+              ]
+            }
+          ]
+        },
+        {
+          "author_position": "middle",
+          "author": {
+            "id": "https://openalex.org/A5089821134",
+            "display_name": "Julia  K. Steinberger",
+            "orcid": "https://orcid.org/0000-0002-5925-9602",
+            "observed_orcids": [
+              "https://orcid.org/0000-0002-5925-9602"
+            ]
+          },
+          "institutions": [
+            {
+              "id": "https://openalex.org/I97565354",
+              "display_name": "University of Lausanne",
+              "ror": "https://ror.org/019whta54",
+              "country_code": "CH",
+              "type": "education",
+              "lineage": [
+                "https://openalex.org/I97565354"
+              ]
+            }
+          ],
+          "countries": [
+            "CH"
+          ],
+          "is_corresponding": false,
+          "raw_author_name": "Julia K. Steinberger",
+          "raw_affiliation_strings": [
+            "Institute of Geography and Sustainability, University of Lausanne, Lausanne CH-1015, Switzerland"
+          ],
+          "raw_orcid": null,
+          "affiliations": [
+            {
+              "raw_affiliation_string": "Institute of Geography and Sustainability, University of Lausanne, Lausanne CH-1015, Switzerland",
+              "institution_ids": [
+                "https://openalex.org/I97565354"
+              ]
+            }
+          ]
+        },
+        {
+          "author_position": "middle",
+          "author": {
+            "id": "https://openalex.org/A5013362461",
+            "display_name": "Jouni Paavola",
+            "orcid": "https://orcid.org/0000-0001-5720-466X",
+            "observed_orcids": [
+              "https://orcid.org/0000-0001-5720-466X"
+            ]
+          },
+          "institutions": [
+            {
+              "id": "https://openalex.org/I130828816",
+              "display_name": "University of Leeds",
+              "ror": "https://ror.org/024mrxd33",
+              "country_code": "GB",
+              "type": "education",
+              "lineage": [
+                "https://openalex.org/I130828816"
+              ]
+            }
+          ],
+          "countries": [
+            "GB"
+          ],
+          "is_corresponding": false,
+          "raw_author_name": "Jouni Paavola",
+          "raw_affiliation_strings": [
+            "Sustainability Research Institute, School of Earth and Environment, University of Leeds, Leeds LS2 9JT, UK"
+          ],
+          "raw_orcid": null,
+          "affiliations": [
+            {
+              "raw_affiliation_string": "Sustainability Research Institute, School of Earth and Environment, University of Leeds, Leeds LS2 9JT, UK",
+              "institution_ids": [
+                "https://openalex.org/I130828816"
+              ]
+            }
+          ]
+        },
+        {
+          "author_position": "middle",
+          "author": {
+            "id": "https://openalex.org/A5079468190",
+            "display_name": "Diana Ivanova",
+            "orcid": "https://orcid.org/0000-0002-3890-481X",
+            "observed_orcids": [
+              "https://orcid.org/0000-0002-3890-481X"
+            ]
+          },
+          "institutions": [
+            {
+              "id": "https://openalex.org/I130828816",
+              "display_name": "University of Leeds",
+              "ror": "https://ror.org/024mrxd33",
+              "country_code": "GB",
+              "type": "education",
+              "lineage": [
+                "https://openalex.org/I130828816"
+              ]
+            }
+          ],
+          "countries": [
+            "GB"
+          ],
+          "is_corresponding": false,
+          "raw_author_name": "Diana Ivanova",
+          "raw_affiliation_strings": [
+            "Sustainability Research Institute, School of Earth and Environment, University of Leeds, Leeds LS2 9JT, UK"
+          ],
+          "raw_orcid": null,
+          "affiliations": [
+            {
+              "raw_affiliation_string": "Sustainability Research Institute, School of Earth and Environment, University of Leeds, Leeds LS2 9JT, UK",
+              "institution_ids": [
+                "https://openalex.org/I130828816"
+              ]
+            }
+          ]
+        },
+        {
+          "author_position": "middle",
+          "author": {
+            "id": "https://openalex.org/A5009958353",
+            "display_name": "Lina I. Brand-Correa",
+            "orcid": "https://orcid.org/0000-0003-3142-8766",
+            "observed_orcids": [
+              "https://orcid.org/0000-0003-3142-8766"
+            ]
+          },
+          "institutions": [
+            {
+              "id": "https://openalex.org/I192455969",
+              "display_name": "York University",
+              "ror": "https://ror.org/05fq50484",
+              "country_code": "CA",
+              "type": "education",
+              "lineage": [
+                "https://openalex.org/I192455969"
+              ]
+            }
+          ],
+          "countries": [
+            "CA"
+          ],
+          "is_corresponding": false,
+          "raw_author_name": "Lina I. Brand-Correa",
+          "raw_affiliation_strings": [
+            "Faculty of Environmental and Urban Change, York University, Toronto M3J 1P3, Canada"
+          ],
+          "raw_orcid": null,
+          "affiliations": [
+            {
+              "raw_affiliation_string": "Faculty of Environmental and Urban Change, York University, Toronto M3J 1P3, Canada",
+              "institution_ids": [
+                "https://openalex.org/I192455969"
+              ]
+            }
+          ]
+        },
+        {
+          "author_position": "last",
+          "author": {
+            "id": "https://openalex.org/A5030894146",
+            "display_name": "Anne Owen",
+            "orcid": "https://orcid.org/0000-0002-3872-9900",
+            "observed_orcids": [
+              "https://orcid.org/0000-0002-3872-9900"
+            ]
+          },
+          "institutions": [
+            {
+              "id": "https://openalex.org/I130828816",
+              "display_name": "University of Leeds",
+              "ror": "https://ror.org/024mrxd33",
+              "country_code": "GB",
+              "type": "education",
+              "lineage": [
+                "https://openalex.org/I130828816"
+              ]
+            }
+          ],
+          "countries": [
+            "GB"
+          ],
+          "is_corresponding": false,
+          "raw_author_name": "Anne Owen",
+          "raw_affiliation_strings": [
+            "Sustainability Research Institute, School of Earth and Environment, University of Leeds, Leeds LS2 9JT, UK"
+          ],
+          "raw_orcid": null,
+          "affiliations": [
+            {
+              "raw_affiliation_string": "Sustainability Research Institute, School of Earth and Environment, University of Leeds, Leeds LS2 9JT, UK",
+              "institution_ids": [
+                "https://openalex.org/I130828816"
+              ]
+            }
+          ]
+        }
+      ],
+      "institutions": [],
+      "countries_distinct_count": 3,
+      "institutions_distinct_count": 3,
+      "corresponding_author_ids": [
+        "https://openalex.org/A5007938209"
+      ],
+      "corresponding_institution_ids": [
+        "https://openalex.org/I130828816"
+      ],
+      "apc_list": {
+        "value": 3580,
+        "currency": "USD",
+        "value_usd": 3580
+      },
+      "apc_paid": {
+        "value": 3580,
+        "currency": "USD",
+        "value_usd": 3580
+      },
+      "fwci": 2.4066,
+      "has_fulltext": true,
+      "cited_by_count": 67,
+      "citation_normalized_percentile": {
+        "value": 0.90162937,
+        "is_in_top_1_percent": false,
+        "is_in_top_10_percent": true
+      },
+      "cited_by_percentile_year": {
+        "min": 99,
+        "max": 100
+      },
+      "biblio": {
+        "volume": "205",
+        "issue": null,
+        "first_page": "107686",
+        "last_page": "107686"
+      },
+      "is_retracted": false,
+      "is_paratext": false,
+      "is_xpac": false,
+      "primary_topic": {
+        "id": "https://openalex.org/T12617",
+        "display_name": "Energy, Environment, and Transportation Policies",
+        "score": 0.6991999745368958,
+        "subfield": {
+          "id": "https://openalex.org/subfields/2105",
+          "display_name": "Renewable Energy, Sustainability and the Environment"
+        },
+        "field": {
+          "id": "https://openalex.org/fields/21",
+          "display_name": "Energy"
+        },
+        "domain": {
+          "id": "https://openalex.org/domains/3",
+          "display_name": "Physical Sciences"
+        }
+      },
+      "topics": [
+        {
+          "id": "https://openalex.org/T12617",
+          "display_name": "Energy, Environment, and Transportation Policies",
+          "score": 0.6991999745368958,
+          "subfield": {
+            "id": "https://openalex.org/subfields/2105",
+            "display_name": "Renewable Energy, Sustainability and the Environment"
+          },
+          "field": {
+            "id": "https://openalex.org/fields/21",
+            "display_name": "Energy"
+          },
+          "domain": {
+            "id": "https://openalex.org/domains/3",
+            "display_name": "Physical Sciences"
+          }
+        },
+        {
+          "id": "https://openalex.org/T10435",
+          "display_name": "Environmental Impact and Sustainability",
+          "score": 0.15449999272823334,
+          "subfield": {
+            "id": "https://openalex.org/subfields/2305",
+            "display_name": "Environmental Engineering"
+          },
+          "field": {
+            "id": "https://openalex.org/fields/23",
+            "display_name": "Environmental Science"
+          },
+          "domain": {
+            "id": "https://openalex.org/domains/3",
+            "display_name": "Physical Sciences"
+          }
+        },
+        {
+          "id": "https://openalex.org/T10898",
+          "display_name": "Environmental Education and Sustainability",
+          "score": 0.08919999748468399,
+          "subfield": {
+            "id": "https://openalex.org/subfields/2308",
+            "display_name": "Management, Monitoring, Policy and Law"
+          },
+          "field": {
+            "id": "https://openalex.org/fields/23",
+            "display_name": "Environmental Science"
+          },
+          "domain": {
+            "id": "https://openalex.org/domains/3",
+            "display_name": "Physical Sciences"
+          }
+        }
+      ],
+      "keywords": [
+        {
+          "id": "https://openalex.org/keywords/well-being",
+          "display_name": "well-being",
+          "score": 0.9179999828338623
+        },
+        {
+          "id": "https://openalex.org/keywords/energy-poverty",
+          "display_name": "energy poverty",
+          "score": 0.9169999957084656
+        },
+        {
+          "id": "https://openalex.org/keywords/energy-demand",
+          "display_name": "energy demand",
+          "score": 0.4300000071525574
+        },
+        {
+          "id": "https://openalex.org/keywords/protected-characteristics",
+          "display_name": "protected characteristics",
+          "score": 0.7409999966621399
+        },
+        {
+          "id": "https://openalex.org/keywords/sufficiency",
+          "display_name": "sufficiency",
+          "score": 0.902999997138977
+        },
+        {
+          "id": "https://openalex.org/keywords/overconsumption",
+          "display_name": "overconsumption",
+          "score": 0.9900000095367432
+        },
+        {
+          "id": "https://openalex.org/keywords/climate-justice",
+          "display_name": "climate justice",
+          "score": 0.9430000185966492
+        },
+        {
+          "id": "https://openalex.org/keywords/united-kingdom",
+          "display_name": "United Kingdom",
+          "score": 0.7689999938011169
+        }
+      ],
+      "concepts": [
+        {
+          "id": "https://openalex.org/C20533482",
+          "wikidata": "https://www.wikidata.org/wiki/Q3174091",
+          "display_name": "Overconsumption",
+          "level": 3,
+          "score": 0.8316745758056641
+        },
+        {
+          "id": "https://openalex.org/C2777416314",
+          "wikidata": "https://www.wikidata.org/wiki/Q1341244",
+          "display_name": "Energy poverty",
+          "level": 4,
+          "score": 0.7074260115623474
+        },
+        {
+          "id": "https://openalex.org/C186370098",
+          "wikidata": "https://www.wikidata.org/wiki/Q442787",
+          "display_name": "Energy (signal processing)",
+          "level": 2,
+          "score": 0.6316893100738525
+        },
+        {
+          "id": "https://openalex.org/C2779343474",
+          "wikidata": "https://www.wikidata.org/wiki/Q3109175",
+          "display_name": "Context (archaeology)",
+          "level": 2,
+          "score": 0.6222826838493347
+        },
+        {
+          "id": "https://openalex.org/C132943942",
+          "wikidata": "https://www.wikidata.org/wiki/Q2562511",
+          "display_name": "Footprint",
+          "level": 2,
+          "score": 0.5389754176139832
+        },
+        {
+          "id": "https://openalex.org/C162324750",
+          "wikidata": "https://www.wikidata.org/wiki/Q8134",
+          "display_name": "Economics",
+          "level": 0,
+          "score": 0.5039867758750916
+        },
+        {
+          "id": "https://openalex.org/C189326681",
+          "wikidata": "https://www.wikidata.org/wiki/Q10294",
+          "display_name": "Poverty",
+          "level": 2,
+          "score": 0.49362313747406006
+        },
+        {
+          "id": "https://openalex.org/C83516724",
+          "wikidata": "https://www.wikidata.org/wiki/Q234173",
+          "display_name": "Ecological footprint",
+          "level": 3,
+          "score": 0.46429261565208435
+        },
+        {
+          "id": "https://openalex.org/C100001284",
+          "wikidata": "https://www.wikidata.org/wiki/Q2248246",
+          "display_name": "Public economics",
+          "level": 1,
+          "score": 0.4485286474227905
+        },
+        {
+          "id": "https://openalex.org/C45555294",
+          "wikidata": "https://www.wikidata.org/wiki/Q28113351",
+          "display_name": "Inequality",
+          "level": 2,
+          "score": 0.4418613910675049
+        },
+        {
+          "id": "https://openalex.org/C175605778",
+          "wikidata": "https://www.wikidata.org/wiki/Q3299701",
+          "display_name": "Natural resource economics",
+          "level": 1,
+          "score": 0.44104379415512085
+        },
+        {
+          "id": "https://openalex.org/C2780165032",
+          "wikidata": "https://www.wikidata.org/wiki/Q16869822",
+          "display_name": "Energy consumption",
+          "level": 2,
+          "score": 0.4300777018070221
+        },
+        {
+          "id": "https://openalex.org/C110121322",
+          "wikidata": "https://www.wikidata.org/wiki/Q865811",
+          "display_name": "Distribution (mathematics)",
+          "level": 2,
+          "score": 0.41298460960388184
+        },
+        {
+          "id": "https://openalex.org/C134560507",
+          "wikidata": "https://www.wikidata.org/wiki/Q753291",
+          "display_name": "Environmental economics",
+          "level": 1,
+          "score": 0.3996720612049103
+        },
+        {
+          "id": "https://openalex.org/C4249254",
+          "wikidata": "https://www.wikidata.org/wiki/Q3044431",
+          "display_name": "Demographic economics",
+          "level": 1,
+          "score": 0.3571479320526123
+        },
+        {
+          "id": "https://openalex.org/C50522688",
+          "wikidata": "https://www.wikidata.org/wiki/Q189833",
+          "display_name": "Economic growth",
+          "level": 1,
+          "score": 0.3516180217266083
+        },
+        {
+          "id": "https://openalex.org/C66204764",
+          "wikidata": "https://www.wikidata.org/wiki/Q219416",
+          "display_name": "Sustainability",
+          "level": 2,
+          "score": 0.28933191299438477
+        },
+        {
+          "id": "https://openalex.org/C205649164",
+          "wikidata": "https://www.wikidata.org/wiki/Q1071",
+          "display_name": "Geography",
+          "level": 0,
+          "score": 0.1934867799282074
+        },
+        {
+          "id": "https://openalex.org/C175444787",
+          "wikidata": "https://www.wikidata.org/wiki/Q39072",
+          "display_name": "Microeconomics",
+          "level": 1,
+          "score": 0.1450406014919281
+        },
+        {
+          "id": "https://openalex.org/C18903297",
+          "wikidata": "https://www.wikidata.org/wiki/Q7150",
+          "display_name": "Ecology",
+          "level": 1,
+          "score": 0.11194252967834473
+        },
+        {
+          "id": "https://openalex.org/C2778348673",
+          "wikidata": "https://www.wikidata.org/wiki/Q739302",
+          "display_name": "Production (economics)",
+          "level": 2,
+          "score": 0.11018955707550049
+        },
+        {
+          "id": "https://openalex.org/C26993612",
+          "wikidata": "https://www.wikidata.org/wiki/Q910154",
+          "display_name": "Panacea (medicine)",
+          "level": 3,
+          "score": 0.0
+        },
+        {
+          "id": "https://openalex.org/C134306372",
+          "wikidata": "https://www.wikidata.org/wiki/Q7754",
+          "display_name": "Mathematical analysis",
+          "level": 1,
+          "score": 0.0
+        },
+        {
+          "id": "https://openalex.org/C71924100",
+          "wikidata": "https://www.wikidata.org/wiki/Q11190",
+          "display_name": "Medicine",
+          "level": 0,
+          "score": 0.0
+        },
+        {
+          "id": "https://openalex.org/C86803240",
+          "wikidata": "https://www.wikidata.org/wiki/Q420",
+          "display_name": "Biology",
+          "level": 0,
+          "score": 0.0
+        },
+        {
+          "id": "https://openalex.org/C105795698",
+          "wikidata": "https://www.wikidata.org/wiki/Q12483",
+          "display_name": "Statistics",
+          "level": 1,
+          "score": 0.0
+        },
+        {
+          "id": "https://openalex.org/C142724271",
+          "wikidata": "https://www.wikidata.org/wiki/Q7208",
+          "display_name": "Pathology",
+          "level": 1,
+          "score": 0.0
+        },
+        {
+          "id": "https://openalex.org/C166957645",
+          "wikidata": "https://www.wikidata.org/wiki/Q23498",
+          "display_name": "Archaeology",
+          "level": 1,
+          "score": 0.0
+        },
+        {
+          "id": "https://openalex.org/C204787440",
+          "wikidata": "https://www.wikidata.org/wiki/Q188504",
+          "display_name": "Alternative medicine",
+          "level": 2,
+          "score": 0.0
+        },
+        {
+          "id": "https://openalex.org/C33923547",
+          "wikidata": "https://www.wikidata.org/wiki/Q395",
+          "display_name": "Mathematics",
+          "level": 0,
+          "score": 0.0
+        }
+      ],
+      "mesh": [],
+      "locations_count": 5,
+      "locations": [
+        {
+          "id": "doi:10.1016/j.ecolecon.2022.107686",
+          "is_oa": true,
+          "landing_page_url": "https://doi.org/10.1016/j.ecolecon.2022.107686",
+          "pdf_url": null,
+          "source": {
+            "id": "https://openalex.org/S136211407",
+            "display_name": "Ecological Economics",
+            "issn_l": "0921-8009",
+            "issn": [
+              "0921-8009",
+              "1873-6106"
+            ],
+            "is_oa": false,
+            "is_in_doaj": false,
+            "is_core": true,
+            "listed_in": [
+              "abdc-a",
+              "cwts-core",
+              "jufo-2",
+              "ki-jl-1",
+              "norway-1"
+            ],
+            "host_organization": "https://openalex.org/P4310320990",
+            "host_organization_name": "Elsevier BV",
+            "host_organization_lineage": [
+              "https://openalex.org/P4310320990"
+            ],
+            "host_organization_lineage_names": [
+              "Elsevier BV"
+            ],
+            "type": "journal"
+          },
+          "license": "cc-by",
+          "license_id": "https://openalex.org/licenses/cc-by",
+          "version": "publishedVersion",
+          "is_accepted": true,
+          "is_published": true,
+          "raw_source_name": "Ecological Economics",
+          "raw_type": "journal-article"
+        },
+        {
+          "id": "pmh:oai:eprints.whiterose.ac.uk:194270",
+          "is_oa": true,
+          "landing_page_url": "https://eprints.whiterose.ac.uk/194270/1/1-s2.0-S0921800922003470-main.pdf",
+          "pdf_url": "https://eprints.whiterose.ac.uk/194270/1/1-s2.0-S0921800922003470-main.pdf",
+          "source": {
+            "id": "https://openalex.org/S4306400854",
+            "display_name": "White Rose Research Online (University of Leeds, The University of Sheffield, University of York)",
+            "issn_l": null,
+            "issn": null,
+            "is_oa": false,
+            "is_in_doaj": false,
+            "is_core": false,
+            "listed_in": [],
+            "host_organization": "https://openalex.org/I2800616092",
+            "host_organization_name": "White Rose University Consortium",
+            "host_organization_lineage": [
+              "https://openalex.org/I2800616092"
+            ],
+            "host_organization_lineage_names": [],
+            "type": "repository"
+          },
+          "license": null,
+          "license_id": null,
+          "version": "submittedVersion",
+          "is_accepted": false,
+          "is_published": false,
+          "raw_source_name": "",
+          "raw_type": "Article"
+        },
+        {
+          "id": "pmh:oai:serval.unil.ch:BIB_2BF8F92E0639",
+          "is_oa": true,
+          "landing_page_url": "https://serval.unil.ch/notice/serval:BIB_2BF8F92E0639",
+          "pdf_url": "https://serval.unil.ch/resource/serval:BIB_2BF8F92E0639.P001/REF.pdf",
+          "source": {
+            "id": "https://openalex.org/S4306401797",
+            "display_name": "SERVAL (Universit\u00e9 de Lausanne)",
+            "issn_l": null,
+            "issn": null,
+            "is_oa": false,
+            "is_in_doaj": false,
+            "is_core": false,
+            "listed_in": [],
+            "host_organization": "https://openalex.org/I4210093590",
+            "host_organization_name": "Swiss School of Archaeology in Greece",
+            "host_organization_lineage": [
+              "https://openalex.org/I4210093590"
+            ],
+            "host_organization_lineage_names": [],
+            "type": "repository"
+          },
+          "license": "cc-by",
+          "license_id": "https://openalex.org/licenses/cc-by",
+          "version": "submittedVersion",
+          "is_accepted": false,
+          "is_published": false,
+          "raw_source_name": "Ecological Economics, vol. 205, pp. 107686",
+          "raw_type": "info:eu-repo/semantics/article"
+        },
+        {
+          "id": "pmh:oai:RePEc:eee:ecolec:v:205:y:2023:i:c:s0921800922003470",
+          "is_oa": false,
+          "landing_page_url": "http://www.sciencedirect.com/science/article/pii/S0921800922003470",
+          "pdf_url": null,
+          "source": {
+            "id": "https://openalex.org/S4306401271",
+            "display_name": "RePEc: Research Papers in Economics",
+            "issn_l": null,
+            "issn": null,
+            "is_oa": false,
+            "is_in_doaj": false,
+            "is_core": false,
+            "listed_in": [],
+            "host_organization": "https://openalex.org/I77793887",
+            "host_organization_name": "Federal Reserve Bank of St. Louis",
+            "host_organization_lineage": [
+              "https://openalex.org/I77793887"
+            ],
+            "host_organization_lineage_names": [],
+            "type": "repository"
+          },
+          "license": null,
+          "license_id": null,
+          "version": "submittedVersion",
+          "is_accepted": false,
+          "is_published": false,
+          "raw_source_name": null,
+          "raw_type": "article"
+        },
+        {
+          "id": "pmh:oai:iris.unil.ch:iris/109825",
+          "is_oa": true,
+          "landing_page_url": "https://iris.unil.ch/handle/iris/109825",
+          "pdf_url": null,
+          "source": {
+            "id": "https://openalex.org/S7407055444",
+            "display_name": "IRIS",
+            "issn_l": null,
+            "issn": null,
+            "is_oa": false,
+            "is_in_doaj": false,
+            "is_core": false,
+            "listed_in": [],
+            "host_organization": null,
+            "host_organization_name": null,
+            "host_organization_lineage": [],
+            "host_organization_lineage_names": [],
+            "type": "repository"
+          },
+          "license": "cc-by",
+          "license_id": "https://openalex.org/licenses/cc-by",
+          "version": "submittedVersion",
+          "is_accepted": false,
+          "is_published": false,
+          "raw_source_name": null,
+          "raw_type": "journal article"
+        }
+      ],
+      "best_oa_location": {
+        "id": "doi:10.1016/j.ecolecon.2022.107686",
+        "is_oa": true,
+        "landing_page_url": "https://doi.org/10.1016/j.ecolecon.2022.107686",
+        "pdf_url": null,
+        "source": {
+          "id": "https://openalex.org/S136211407",
+          "display_name": "Ecological Economics",
+          "issn_l": "0921-8009",
+          "issn": [
+            "0921-8009",
+            "1873-6106"
+          ],
+          "is_oa": false,
+          "is_in_doaj": false,
+          "is_core": true,
+          "listed_in": [
+            "abdc-a",
+            "cwts-core",
+            "jufo-2",
+            "ki-jl-1",
+            "norway-1"
+          ],
+          "host_organization": "https://openalex.org/P4310320990",
+          "host_organization_name": "Elsevier BV",
+          "host_organization_lineage": [
+            "https://openalex.org/P4310320990"
+          ],
+          "host_organization_lineage_names": [
+            "Elsevier BV"
+          ],
+          "type": "journal"
+        },
+        "license": "cc-by",
+        "license_id": "https://openalex.org/licenses/cc-by",
+        "version": "publishedVersion",
+        "is_accepted": true,
+        "is_published": true,
+        "raw_source_name": "Ecological Economics",
+        "raw_type": "journal-article"
+      },
+      "sustainable_development_goals": [
+        {
+          "id": "https://metadata.un.org/sdg/10",
+          "score": 0.8974000215530396,
+          "display_name": "Reduced inequalities"
+        },
+        {
+          "id": "https://metadata.un.org/sdg/1",
+          "score": 0.8928999900817871,
+          "display_name": "No poverty"
+        },
+        {
+          "id": "https://metadata.un.org/sdg/7",
+          "score": 0.8485000133514404,
+          "display_name": "Affordable and clean energy"
+        },
+        {
+          "id": "https://metadata.un.org/sdg/13",
+          "score": 0.685699999332428,
+          "display_name": "Climate action"
+        }
+      ],
+      "sustainable_development_goals_aurora": [
+        {
+          "id": "https://metadata.un.org/sdg/1",
+          "score": 0.49000000953674316,
+          "display_name": "No poverty"
+        }
+      ],
+      "study_designs": [
+        {
+          "id": "https://openalex.org/study-designs/observational-study",
+          "display_name": "Observational Study"
+        }
+      ],
+      "awards": [
+        {
+          "id": "https://openalex.org/G1522874055",
+          "display_name": null,
+          "funder_award_id": "RL-2016\u2013048",
+          "funder_id": "https://openalex.org/F4320319993",
+          "funder_display_name": "Leverhulme Trust"
+        },
+        {
+          "id": "https://openalex.org/G5538129245",
+          "display_name": null,
+          "funder_award_id": "EP/R035288/1",
+          "funder_id": "https://openalex.org/F4320334627",
+          "funder_display_name": "Engineering and Physical Sciences Research Council"
+        }
+      ],
+      "funders": [
+        {
+          "id": "https://openalex.org/F4320319993",
+          "display_name": "Leverhulme Trust",
+          "ror": "https://ror.org/012mzw131"
+        },
+        {
+          "id": "https://openalex.org/F4320334627",
+          "display_name": "Engineering and Physical Sciences Research Council",
+          "ror": "https://ror.org/0439y7842"
+        }
+      ],
+      "has_content": {
+        "grobid_xml": false,
+        "pdf": false
+      },
+      "content_urls": null,
+      "referenced_works_count": 73,
+      "referenced_works": [
+        "https://openalex.org/W1493472778",
+        "https://openalex.org/W1881738340",
+        "https://openalex.org/W1967154308",
+        "https://openalex.org/W1996223957",
+        "https://openalex.org/W2018839821",
+        "https://openalex.org/W2024725622",
+        "https://openalex.org/W2026606088",
+        "https://openalex.org/W2033293263",
+        "https://openalex.org/W2041324949",
+        "https://openalex.org/W2041407064",
+        "https://openalex.org/W2050863192",
+        "https://openalex.org/W2068463018",
+        "https://openalex.org/W2084745246",
+        "https://openalex.org/W2087770338",
+        "https://openalex.org/W2095542753",
+        "https://openalex.org/W2096890648",
+        "https://openalex.org/W2099356901",
+        "https://openalex.org/W2105381553",
+        "https://openalex.org/W2115837987",
+        "https://openalex.org/W2136118455",
+        "https://openalex.org/W2140726154",
+        "https://openalex.org/W2147625908",
+        "https://openalex.org/W2150047500",
+        "https://openalex.org/W2163397388",
+        "https://openalex.org/W2164334321",
+        "https://openalex.org/W2195032685",
+        "https://openalex.org/W2290457140",
+        "https://openalex.org/W2296325555",
+        "https://openalex.org/W2339486189",
+        "https://openalex.org/W2406214154",
+        "https://openalex.org/W2427675198",
+        "https://openalex.org/W2530306804",
+        "https://openalex.org/W2568144536",
+        "https://openalex.org/W2607149239",
+        "https://openalex.org/W2611813929",
+        "https://openalex.org/W2615071902",
+        "https://openalex.org/W2616883054",
+        "https://openalex.org/W2769284788",
+        "https://openalex.org/W2771530224",
+        "https://openalex.org/W2773795309",
+        "https://openalex.org/W2789910207",
+        "https://openalex.org/W2790010484",
+        "https://openalex.org/W2800190939",
+        "https://openalex.org/W2806198981",
+        "https://openalex.org/W2883545908",
+        "https://openalex.org/W2892584900",
+        "https://openalex.org/W3011774154",
+        "https://openalex.org/W3023507250",
+        "https://openalex.org/W3033901667",
+        "https://openalex.org/W3036679823",
+        "https://openalex.org/W3090228490",
+        "https://openalex.org/W3093917140",
+        "https://openalex.org/W3114470305",
+        "https://openalex.org/W3114659140",
+        "https://openalex.org/W3126971941",
+        "https://openalex.org/W3129084528",
+        "https://openalex.org/W3131956693",
+        "https://openalex.org/W3156551595",
+        "https://openalex.org/W3163912458",
+        "https://openalex.org/W3187949645",
+        "https://openalex.org/W3203995609",
+        "https://openalex.org/W4200228110",
+        "https://openalex.org/W4213325112",
+        "https://openalex.org/W4242692799",
+        "https://openalex.org/W6680121926",
+        "https://openalex.org/W6737346037",
+        "https://openalex.org/W6770366586",
+        "https://openalex.org/W6783367043",
+        "https://openalex.org/W6784811325",
+        "https://openalex.org/W6789637877",
+        "https://openalex.org/W6790568183",
+        "https://openalex.org/W6802006915",
+        "https://openalex.org/W6808742516"
+      ],
+      "related_works": [
+        "https://openalex.org/W2036990038",
+        "https://openalex.org/W2150333995",
+        "https://openalex.org/W4214892024",
+        "https://openalex.org/W272600989",
+        "https://openalex.org/W3126096793",
+        "https://openalex.org/W3145710810",
+        "https://openalex.org/W1973227074",
+        "https://openalex.org/W3046513822",
+        "https://openalex.org/W2906815486",
+        "https://openalex.org/W4311092030"
+      ],
+      "abstract_inverted_index": {
+        "How": [
+          0
+        ],
+        "energy": [
+          1,
+          27,
+          48,
+          63,
+          69,
+          77,
+          93,
+          101,
+          133,
+          141
+        ],
+        "relates": [
+          2
+        ],
+        "to": [
+          3,
+          45,
+          92,
+          99,
+          145
+        ],
+        "human": [
+          4
+        ],
+        "need": [
+          5,
+          144
+        ],
+        "satisfaction,": [
+          6
+        ],
+        "for": [
+          7,
+          139
+        ],
+        "whom,": [
+          8
+        ],
+        "and": [
+          9,
+          29,
+          39,
+          52,
+          65,
+          95,
+          135,
+          143
+        ],
+        "with": [
+          10,
+          71,
+          86
+        ],
+        "what": [
+          11
+        ],
+        "wellbeing": [
+          12
+        ],
+        "outcomes": [
+          13
+        ],
+        "has": [
+          14
+        ],
+        "remained": [
+          15
+        ],
+        "under-researched.": [
+          16
+        ],
+        "We": [
+          17,
+          55,
+          105
+        ],
+        "address": [
+          18
+        ],
+        "this": [
+          19
+        ],
+        "gap": [
+          20
+        ],
+        "by": [
+          21
+        ],
+        "investigating": [
+          22
+        ],
+        "the": [
+          23,
+          32,
+          43,
+          46,
+          60,
+          67,
+          112,
+          122,
+          130
+        ],
+        "relationship": [
+          24
+        ],
+        "between": [
+          25
+        ],
+        "household": [
+          26
+        ],
+        "footprint": [
+          28,
+          49
+        ],
+        "well-being": [
+          30,
+          73,
+          110
+        ],
+        "in": [
+          31,
+          59
+        ],
+        "UK.": [
+          33
+        ],
+        "Our": [
+          34
+        ],
+        "results": [
+          35
+        ],
+        "indicate": [
+          36
+        ],
+        "that": [
+          37,
+          66,
+          84,
+          96,
+          107
+        ],
+        "car": [
+          38
+        ],
+        "air": [
+          40
+        ],
+        "transportation": [
+          41
+        ],
+        "contributed": [
+          42
+        ],
+        "most": [
+          44
+        ],
+        "total": [
+          47
+        ],
+        "of": [
+          50,
+          62,
+          116,
+          132,
+          151
+        ],
+        "high-income": [
+          51
+        ],
+        "high-energy": [
+          53
+        ],
+        "users.": [
+          54
+        ],
+        "find": [
+          56,
+          106
+        ],
+        "significant": [
+          57
+        ],
+        "inequalities": [
+          58,
+          136
+        ],
+        "distribution": [
+          61
+        ],
+        "use": [
+          64
+        ],
+        "top": [
+          68
+        ],
+        "users": [
+          70
+        ],
+        "high": [
+          72
+        ],
+        "are": [
+          74,
+          89,
+          137
+        ],
+        "driving": [
+          75
+        ],
+        "excess": [
+          76
+        ],
+        "use.": [
+          78
+        ],
+        "A": [
+          79
+        ],
+        "more": [
+          80
+        ],
+        "detailed": [
+          81
+        ],
+        "analysis": [
+          82
+        ],
+        "reveals": [
+          83
+        ],
+        "individuals": [
+          85
+        ],
+        "protected": [
+          87
+        ],
+        "characteristics": [
+          88
+        ],
+        "particularly": [
+          90
+        ],
+        "vulnerable": [
+          91
+        ],
+        "poverty": [
+          94,
+          134
+        ],
+        "their": [
+          97
+        ],
+        "contribution": [
+          98
+        ],
+        "overall": [
+          100
+        ],
+        "demand": [
+          102,
+          142
+        ],
+        "is": [
+          103
+        ],
+        "negligible.": [
+          104
+        ],
+        "focusing": [
+          108
+        ],
+        "on": [
+          109
+        ],
+        "steers": [
+          111
+        ],
+        "attention": [
+          113
+        ],
+        "towards": [
+          114
+        ],
+        "questions": [
+          115
+        ],
+        "sufficiency,": [
+          117
+        ],
+        "overconsumption": [
+          118
+        ],
+        "as": [
+          119,
+          121,
+          148
+        ],
+        "well": [
+          120
+        ],
+        "context": [
+          123
+        ],
+        "within": [
+          124
+        ],
+        "which": [
+          125
+        ],
+        "we": [
+          126
+        ],
+        "satisfy": [
+          127
+        ],
+        "needs.": [
+          128
+        ],
+        "Tackling": [
+          129
+        ],
+        "issues": [
+          131
+        ],
+        "important": [
+          138
+        ],
+        "lowering": [
+          140
+        ],
+        "be": [
+          146
+        ],
+        "addressed": [
+          147
+        ],
+        "a": [
+          149
+        ],
+        "matter": [
+          150
+        ],
+        "climate": [
+          152
+        ],
+        "justice.": [
+          153
+        ]
+      },
+      "counts_by_year": [
+        {
+          "year": 2026,
+          "cited_by_count": 12
+        },
+        {
+          "year": 2025,
+          "cited_by_count": 22
+        },
+        {
+          "year": 2024,
+          "cited_by_count": 23
+        },
+        {
+          "year": 2023,
+          "cited_by_count": 10
+        }
+      ],
+      "updated_date": "2026-10-08T09:06:37.294493",
+      "created_date": "2025-10-10T00:00:00"
+    }
+  }
+}

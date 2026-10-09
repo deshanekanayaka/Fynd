@@ -202,6 +202,27 @@ Usable text is now its own entry in `CONTEXT.md`, because three code paths read 
 
 The one open item is a number and not a preference. The two thresholds and the section word check are set by the first measurement, which is issue 13.
 
+## Measured on day 4: the first real number
+
+`uv run python -m fynd.cli measure-open-copies` ran live on 2026-10-09. The table is [docs/measurements/open-copy-hosts.md](./docs/measurements/open-copy-hosts.md).
+
+5 of 20 Papers reached Usable text, which is 25 percent. The 15 that did not split like this.
+
+- 9 Papers have no repository location at all. OpenAlex holds a record for each one, and every location it names is a publisher.
+- 4 fetches were refused with a 403. Two of them are doaj.org, which is an index and not a file host, and two are a university repository that refuses a program.
+- 2 links gave a web page and not a PDF, from pmc.ncbi.nlm.nih.gov and from www.research.ed.ac.uk.
+- 0 Papers failed a usable text check. Every file that arrived gave between 60,000 and 92,000 characters.
+
+Three findings follow from that run.
+
+The stage 2 threshold of 3 Papers with an Open copy holds for this Topic, but the margin is thin. 5 files is above the stage 4 guard of 2, and a Topic one step narrower returns fewer.
+
+The search is not precise. 3 of the 20 Papers are about ultra-processed food, which is what the labelled set of day 7 exists to measure.
+
+A doi.org address arrived from OpenAlex as a repository location, and the first run fetched it. ADR 0007 forbids that, so the guard now covers every location and not only the Semantic Scholar fallback. One test holds it.
+
+The licence finding changed what git holds. 2 of the 5 Papers that gave Usable text state no licence at all. So the extracted texts stay out of git. A text enters git with the labelled set, where the licence of each Source is read one at a time. See the note of 2026-10-09 in [ADR 0011](./docs/adr/0011-the-public-repository-holds-the-text-and-not-the-files.md).
+
 ## Open items that need a decision from Deshan
 
 None.

@@ -1,0 +1,1587 @@
+{
+  "parts": {
+    "api": "openalex-work",
+    "doi": "10.1371/journal.pone.0307840",
+    "shape": 1
+  },
+  "value": {
+    "found": true,
+    "work": {
+      "id": "https://openalex.org/W4406657492",
+      "doi": "https://doi.org/10.1371/journal.pone.0307840",
+      "title": "Can household energy efficiency dampen crude oil price volatility in the United States?",
+      "display_name": "Can household energy efficiency dampen crude oil price volatility in the United States?",
+      "publication_year": 2025,
+      "publication_date": "2025-01-21",
+      "ids": {
+        "openalex": "https://openalex.org/W4406657492",
+        "doi": "https://doi.org/10.1371/journal.pone.0307840",
+        "pmid": "https://pubmed.ncbi.nlm.nih.gov/39836693"
+      },
+      "language": "en",
+      "primary_location": {
+        "id": "doi:10.1371/journal.pone.0307840",
+        "is_oa": true,
+        "landing_page_url": "https://doi.org/10.1371/journal.pone.0307840",
+        "pdf_url": "https://journals.plos.org/plosone/article/file?id=10.1371/journal.pone.0307840&type=printable",
+        "source": {
+          "id": "https://openalex.org/S202381698",
+          "display_name": "PLoS ONE",
+          "issn_l": "1932-6203",
+          "issn": [
+            "1932-6203"
+          ],
+          "is_oa": true,
+          "is_in_doaj": true,
+          "is_core": true,
+          "listed_in": [
+            "cwts-core",
+            "doaj",
+            "doyens",
+            "erih-plus",
+            "jufo-1",
+            "ki-jl-1",
+            "medline",
+            "norway-1"
+          ],
+          "host_organization": "https://openalex.org/P4310315706",
+          "host_organization_name": "Public Library of Science",
+          "host_organization_lineage": [
+            "https://openalex.org/P4310315706"
+          ],
+          "host_organization_lineage_names": [
+            "Public Library of Science"
+          ],
+          "type": "journal"
+        },
+        "license": "cc-by",
+        "license_id": "https://openalex.org/licenses/cc-by",
+        "version": "publishedVersion",
+        "is_accepted": true,
+        "is_published": true,
+        "raw_source_name": "PLOS ONE",
+        "raw_type": "journal-article"
+      },
+      "type": "article",
+      "indexed_in": [
+        "crossref",
+        "doaj",
+        "pubmed"
+      ],
+      "open_access": {
+        "is_oa": true,
+        "oa_status": "gold",
+        "oa_url": "https://journals.plos.org/plosone/article/file?id=10.1371/journal.pone.0307840&type=printable",
+        "any_repository_has_fulltext": true
+      },
+      "authorships": [
+        {
+          "author_position": "first",
+          "author": {
+            "id": "https://openalex.org/A5072492667",
+            "display_name": "Ojonugwa Usman",
+            "orcid": "https://orcid.org/0000-0002-6459-9898",
+            "observed_orcids": [
+              "https://orcid.org/0000-0002-6459-9898"
+            ]
+          },
+          "institutions": [
+            {
+              "id": "https://openalex.org/I4210092610",
+              "display_name": "VIZJA University",
+              "ror": "https://ror.org/00523a319",
+              "country_code": "PL",
+              "type": "education",
+              "lineage": [
+                "https://openalex.org/I4210092610"
+              ]
+            },
+            {
+              "id": "https://openalex.org/I53210213",
+              "display_name": "Istanbul Commerce University",
+              "ror": "https://ror.org/02v3kkq53",
+              "country_code": "TR",
+              "type": "education",
+              "lineage": [
+                "https://openalex.org/I53210213"
+              ]
+            },
+            {
+              "id": "https://openalex.org/I56306041",
+              "display_name": "Lebanese American University",
+              "ror": "https://ror.org/00hqkan37",
+              "country_code": "LB",
+              "type": "education",
+              "lineage": [
+                "https://openalex.org/I56306041"
+              ]
+            }
+          ],
+          "countries": [
+            "LB",
+            "PL",
+            "TR"
+          ],
+          "is_corresponding": false,
+          "raw_author_name": "Ojonugwa Usman",
+          "raw_affiliation_strings": [
+            "Adnan Kassar School of Business, Lebanese American University, Beirut, Lebanon",
+            "Department of Economics, Istanbul Ticaret University, Istanbul, Turkey",
+            "University of Economics and Human Sciences in Warsaw, Warszawa, Poland"
+          ],
+          "raw_orcid": null,
+          "affiliations": [
+            {
+              "raw_affiliation_string": "Adnan Kassar School of Business, Lebanese American University, Beirut, Lebanon",
+              "institution_ids": [
+                "https://openalex.org/I56306041"
+              ]
+            },
+            {
+              "raw_affiliation_string": "Department of Economics, Istanbul Ticaret University, Istanbul, Turkey",
+              "institution_ids": [
+                "https://openalex.org/I53210213"
+              ]
+            },
+            {
+              "raw_affiliation_string": "University of Economics and Human Sciences in Warsaw, Warszawa, Poland",
+              "institution_ids": [
+                "https://openalex.org/I4210092610"
+              ]
+            }
+          ]
+        },
+        {
+          "author_position": "middle",
+          "author": {
+            "id": "https://openalex.org/A5017528789",
+            "display_name": "Oktay \u00d6zkan",
+            "orcid": "https://orcid.org/0000-0001-9419-8115",
+            "observed_orcids": [
+              "https://orcid.org/0000-0001-9419-8115"
+            ]
+          },
+          "institutions": [
+            {
+              "id": "https://openalex.org/I238144855",
+              "display_name": "Tokat Gaziosmanpa\u015fa \u00dcniversitesi",
+              "ror": "https://ror.org/01rpe9k96",
+              "country_code": "TR",
+              "type": "education",
+              "lineage": [
+                "https://openalex.org/I238144855"
+              ]
+            }
+          ],
+          "countries": [
+            "TR"
+          ],
+          "is_corresponding": false,
+          "raw_author_name": "Oktay Ozkan",
+          "raw_affiliation_strings": [
+            "Department of Business Administration, Faculty of Economics and Administrative Sciences, Tokat Gaziosmanpasa University, Tokat, Turkey"
+          ],
+          "raw_orcid": null,
+          "affiliations": [
+            {
+              "raw_affiliation_string": "Department of Business Administration, Faculty of Economics and Administrative Sciences, Tokat Gaziosmanpasa University, Tokat, Turkey",
+              "institution_ids": [
+                "https://openalex.org/I238144855"
+              ]
+            }
+          ]
+        },
+        {
+          "author_position": "middle",
+          "author": {
+            "id": "https://openalex.org/A5011097751",
+            "display_name": "Chinazaekpere Nwani",
+            "orcid": "https://orcid.org/0000-0003-4451-1833",
+            "observed_orcids": [
+              "https://orcid.org/0000-0003-4451-1833"
+            ]
+          },
+          "institutions": [
+            {
+              "id": "https://openalex.org/I4387155461",
+              "display_name": "Alex Ekwueme Federal University, Ndufu-Alike",
+              "ror": "https://ror.org/04thacr56",
+              "country_code": null,
+              "type": "education",
+              "lineage": [
+                "https://openalex.org/I4387155461"
+              ]
+            }
+          ],
+          "countries": [
+            "NG"
+          ],
+          "is_corresponding": false,
+          "raw_author_name": "Chinazaekpere Nwani",
+          "raw_affiliation_strings": [
+            "Department of Economics and Development Studies, Alex Ekwueme Federal University, Ndufu-Alike, Ebonyi State, Nigeria"
+          ],
+          "raw_orcid": null,
+          "affiliations": [
+            {
+              "raw_affiliation_string": "Department of Economics and Development Studies, Alex Ekwueme Federal University, Ndufu-Alike, Ebonyi State, Nigeria",
+              "institution_ids": [
+                "https://openalex.org/I4387155461"
+              ]
+            }
+          ]
+        },
+        {
+          "author_position": "middle",
+          "author": {
+            "id": "https://openalex.org/A5060883496",
+            "display_name": "Festus V\u00edctor Bekun",
+            "orcid": "https://orcid.org/0000-0003-4948-6905",
+            "observed_orcids": [
+              "https://orcid.org/0000-0003-4948-6905",
+              "https://orcid.org/0000-0002-0464-4677"
+            ]
+          },
+          "institutions": [
+            {
+              "id": "https://openalex.org/I161597582",
+              "display_name": "Recep Tayyip Erdo\u011fan University",
+              "ror": "https://ror.org/0468j1635",
+              "country_code": "TR",
+              "type": "education",
+              "lineage": [
+                "https://openalex.org/I161597582"
+              ]
+            },
+            {
+              "id": "https://openalex.org/I4210086371",
+              "display_name": "Azerbaijan State University of Economics",
+              "ror": "https://ror.org/000y2g343",
+              "country_code": "AZ",
+              "type": "education",
+              "lineage": [
+                "https://openalex.org/I4210086371"
+              ]
+            },
+            {
+              "id": "https://openalex.org/I4210091267",
+              "display_name": "\u0130stanbul Geli\u015fim \u00dcniversitesi",
+              "ror": "https://ror.org/0188hvh39",
+              "country_code": "TR",
+              "type": "education",
+              "lineage": [
+                "https://openalex.org/I4210091267"
+              ]
+            },
+            {
+              "id": "https://openalex.org/I4210092610",
+              "display_name": "VIZJA University",
+              "ror": "https://ror.org/00523a319",
+              "country_code": "PL",
+              "type": "education",
+              "lineage": [
+                "https://openalex.org/I4210092610"
+              ]
+            },
+            {
+              "id": "https://openalex.org/I56306041",
+              "display_name": "Lebanese American University",
+              "ror": "https://ror.org/00hqkan37",
+              "country_code": "LB",
+              "type": "education",
+              "lineage": [
+                "https://openalex.org/I56306041"
+              ]
+            }
+          ],
+          "countries": [
+            "AZ",
+            "LB",
+            "PL",
+            "TR"
+          ],
+          "is_corresponding": false,
+          "raw_author_name": "Festus Victor Bekun",
+          "raw_affiliation_strings": [
+            "Department of Economics, Adnan Kassar School of Business, Lebanese American University, Beirut, Lebanon",
+            "Department of Logistics Management, Faculty of Economics Administrative and Social Sciences, Istanbul Gelisim University, Istanbul, Turkey",
+            "Faculty of Economics and Administrative Sciences, Recep Tayyip Erdogan University, Rize, T\u00fcrkiye",
+            "Research Center of Development, Economics, University of Economics (UNEC), Baku, Azerbaijan State, Azerbaijan",
+            "University of Economics and Human Sciences in Warsaw, Warszawa, Poland"
+          ],
+          "raw_orcid": null,
+          "affiliations": [
+            {
+              "raw_affiliation_string": "Department of Economics, Adnan Kassar School of Business, Lebanese American University, Beirut, Lebanon",
+              "institution_ids": [
+                "https://openalex.org/I56306041"
+              ]
+            },
+            {
+              "raw_affiliation_string": "Department of Logistics Management, Faculty of Economics Administrative and Social Sciences, Istanbul Gelisim University, Istanbul, Turkey",
+              "institution_ids": [
+                "https://openalex.org/I4210091267"
+              ]
+            },
+            {
+              "raw_affiliation_string": "Faculty of Economics and Administrative Sciences, Recep Tayyip Erdogan University, Rize, T\u00fcrkiye",
+              "institution_ids": [
+                "https://openalex.org/I161597582"
+              ]
+            },
+            {
+              "raw_affiliation_string": "Research Center of Development, Economics, University of Economics (UNEC), Baku, Azerbaijan State, Azerbaijan",
+              "institution_ids": [
+                "https://openalex.org/I4210086371"
+              ]
+            },
+            {
+              "raw_affiliation_string": "University of Economics and Human Sciences in Warsaw, Warszawa, Poland",
+              "institution_ids": [
+                "https://openalex.org/I4210092610"
+              ]
+            }
+          ]
+        },
+        {
+          "author_position": "last",
+          "author": {
+            "id": "https://openalex.org/A5061106578",
+            "display_name": "Andrew Adewale Alola",
+            "orcid": "https://orcid.org/0000-0001-5355-3707",
+            "observed_orcids": [
+              "https://orcid.org/0000-0001-5355-3707"
+            ]
+          },
+          "institutions": [
+            {
+              "id": "https://openalex.org/I282159120",
+              "display_name": "\u0130stanbul Ni\u015fanta\u015f\u0131 \u00dcniversitesi",
+              "ror": "https://ror.org/04tah3159",
+              "country_code": "TR",
+              "type": "education",
+              "lineage": [
+                "https://openalex.org/I282159120"
+              ]
+            },
+            {
+              "id": "https://openalex.org/I4210116649",
+              "display_name": "University of Inland Norway",
+              "ror": "https://ror.org/02dx4dc92",
+              "country_code": "NO",
+              "type": "education",
+              "lineage": [
+                "https://openalex.org/I4210116649"
+              ]
+            }
+          ],
+          "countries": [
+            "NO",
+            "TR"
+          ],
+          "is_corresponding": true,
+          "raw_author_name": "Andrew Adewale Alola",
+          "raw_affiliation_strings": [
+            "Faculty of Economics, Administrative and Social Sciences, Nisantasi University, Istanbul, Turkey",
+            "University of Inland Norway, Elverum, Norway"
+          ],
+          "raw_orcid": "https://orcid.org/0000-0001-5355-3707",
+          "affiliations": [
+            {
+              "raw_affiliation_string": "Faculty of Economics, Administrative and Social Sciences, Nisantasi University, Istanbul, Turkey",
+              "institution_ids": [
+                "https://openalex.org/I282159120"
+              ]
+            },
+            {
+              "raw_affiliation_string": "University of Inland Norway, Elverum, Norway",
+              "institution_ids": [
+                "https://openalex.org/I4210116649"
+              ]
+            }
+          ]
+        }
+      ],
+      "institutions": [],
+      "countries_distinct_count": 5,
+      "institutions_distinct_count": 10,
+      "corresponding_author_ids": [
+        "https://openalex.org/A5061106578"
+      ],
+      "corresponding_institution_ids": [
+        "https://openalex.org/I282159120",
+        "https://openalex.org/I4210116649"
+      ],
+      "apc_list": {
+        "value": 2382,
+        "currency": "USD",
+        "value_usd": 2382
+      },
+      "apc_paid": {
+        "value": 2382,
+        "currency": "USD",
+        "value_usd": 2382
+      },
+      "fwci": 10.6973,
+      "has_fulltext": true,
+      "cited_by_count": 11,
+      "citation_normalized_percentile": {
+        "value": 0.98004431,
+        "is_in_top_1_percent": false,
+        "is_in_top_10_percent": true
+      },
+      "cited_by_percentile_year": {
+        "min": 98,
+        "max": 99
+      },
+      "biblio": {
+        "volume": "20",
+        "issue": "1",
+        "first_page": "e0307840",
+        "last_page": "e0307840"
+      },
+      "is_retracted": false,
+      "is_paratext": false,
+      "is_xpac": false,
+      "primary_topic": {
+        "id": "https://openalex.org/T11059",
+        "display_name": "Market Dynamics and Volatility",
+        "score": 0.9976000189781189,
+        "subfield": {
+          "id": "https://openalex.org/subfields/2002",
+          "display_name": "Economics and Econometrics"
+        },
+        "field": {
+          "id": "https://openalex.org/fields/20",
+          "display_name": "Economics, Econometrics and Finance"
+        },
+        "domain": {
+          "id": "https://openalex.org/domains/2",
+          "display_name": "Social Sciences"
+        }
+      },
+      "topics": [
+        {
+          "id": "https://openalex.org/T11059",
+          "display_name": "Market Dynamics and Volatility",
+          "score": 0.9976000189781189,
+          "subfield": {
+            "id": "https://openalex.org/subfields/2002",
+            "display_name": "Economics and Econometrics"
+          },
+          "field": {
+            "id": "https://openalex.org/fields/20",
+            "display_name": "Economics, Econometrics and Finance"
+          },
+          "domain": {
+            "id": "https://openalex.org/domains/2",
+            "display_name": "Social Sciences"
+          }
+        },
+        {
+          "id": "https://openalex.org/T12617",
+          "display_name": "Energy, Environment, and Transportation Policies",
+          "score": 0.0017000000225380063,
+          "subfield": {
+            "id": "https://openalex.org/subfields/2105",
+            "display_name": "Renewable Energy, Sustainability and the Environment"
+          },
+          "field": {
+            "id": "https://openalex.org/fields/21",
+            "display_name": "Energy"
+          },
+          "domain": {
+            "id": "https://openalex.org/domains/3",
+            "display_name": "Physical Sciences"
+          }
+        },
+        {
+          "id": "https://openalex.org/T12129",
+          "display_name": "Global Energy Security and Policy",
+          "score": 9.999999747378752e-05,
+          "subfield": {
+            "id": "https://openalex.org/subfields/2100",
+            "display_name": "General Energy"
+          },
+          "field": {
+            "id": "https://openalex.org/fields/21",
+            "display_name": "Energy"
+          },
+          "domain": {
+            "id": "https://openalex.org/domains/3",
+            "display_name": "Physical Sciences"
+          }
+        }
+      ],
+      "keywords": [
+        {
+          "id": "https://openalex.org/keywords/residential-energy-efficiency",
+          "display_name": "residential energy efficiency",
+          "score": 0.996999979019165
+        },
+        {
+          "id": "https://openalex.org/keywords/oil-price-volatility",
+          "display_name": "oil price volatility",
+          "score": 1.0
+        },
+        {
+          "id": "https://openalex.org/keywords/oil-price-shocks",
+          "display_name": "oil price shocks",
+          "score": 0.9710000157356262
+        },
+        {
+          "id": "https://openalex.org/keywords/asymmetric-effects",
+          "display_name": "asymmetric effects",
+          "score": 0.7620000243186951
+        },
+        {
+          "id": "https://openalex.org/keywords/quantile-on-quantile-regression",
+          "display_name": "quantile-on-quantile regression",
+          "score": 0.9359999895095825
+        },
+        {
+          "id": "https://openalex.org/keywords/energy-related-co2-emissions",
+          "display_name": "energy-related CO2 emissions",
+          "score": 0.984000027179718
+        },
+        {
+          "id": "https://openalex.org/keywords/retail-electricity-prices",
+          "display_name": "retail electricity prices",
+          "score": 0.9300000071525574
+        },
+        {
+          "id": "https://openalex.org/keywords/energy-policy",
+          "display_name": "energy policy",
+          "score": 0.6800000071525574
+        },
+        {
+          "id": "https://openalex.org/keywords/united-states",
+          "display_name": "United States",
+          "score": 0.9390000104904175
+        }
+      ],
+      "concepts": [
+        {
+          "id": "https://openalex.org/C91602232",
+          "wikidata": "https://www.wikidata.org/wiki/Q756115",
+          "display_name": "Volatility (finance)",
+          "level": 2,
+          "score": 0.7953139543533325
+        },
+        {
+          "id": "https://openalex.org/C162324750",
+          "wikidata": "https://www.wikidata.org/wiki/Q8134",
+          "display_name": "Economics",
+          "level": 0,
+          "score": 0.7217479944229126
+        },
+        {
+          "id": "https://openalex.org/C118671147",
+          "wikidata": "https://www.wikidata.org/wiki/Q578714",
+          "display_name": "Quantile",
+          "level": 2,
+          "score": 0.6822949051856995
+        },
+        {
+          "id": "https://openalex.org/C2987168347",
+          "wikidata": "https://www.wikidata.org/wiki/Q22656",
+          "display_name": "Crude oil",
+          "level": 2,
+          "score": 0.6330623030662537
+        },
+        {
+          "id": "https://openalex.org/C149782125",
+          "wikidata": "https://www.wikidata.org/wiki/Q160039",
+          "display_name": "Econometrics",
+          "level": 1,
+          "score": 0.6226255893707275
+        },
+        {
+          "id": "https://openalex.org/C63817138",
+          "wikidata": "https://www.wikidata.org/wiki/Q3455889",
+          "display_name": "Quantile regression",
+          "level": 2,
+          "score": 0.5991058945655823
+        },
+        {
+          "id": "https://openalex.org/C2984556133",
+          "wikidata": "https://www.wikidata.org/wiki/Q297279",
+          "display_name": "Oil price",
+          "level": 2,
+          "score": 0.5225119590759277
+        },
+        {
+          "id": "https://openalex.org/C2742236",
+          "wikidata": "https://www.wikidata.org/wiki/Q924713",
+          "display_name": "Efficient energy use",
+          "level": 2,
+          "score": 0.47199347615242004
+        },
+        {
+          "id": "https://openalex.org/C556758197",
+          "wikidata": "https://www.wikidata.org/wiki/Q580018",
+          "display_name": "Monetary economics",
+          "level": 1,
+          "score": 0.26749187707901
+        },
+        {
+          "id": "https://openalex.org/C119599485",
+          "wikidata": "https://www.wikidata.org/wiki/Q43035",
+          "display_name": "Electrical engineering",
+          "level": 1,
+          "score": 0.0
+        },
+        {
+          "id": "https://openalex.org/C78762247",
+          "wikidata": "https://www.wikidata.org/wiki/Q1273174",
+          "display_name": "Petroleum engineering",
+          "level": 1,
+          "score": 0.0
+        },
+        {
+          "id": "https://openalex.org/C127413603",
+          "wikidata": "https://www.wikidata.org/wiki/Q11023",
+          "display_name": "Engineering",
+          "level": 0,
+          "score": 0.0
+        }
+      ],
+      "mesh": [
+        {
+          "descriptor_ui": "D003132",
+          "descriptor_name": "Commerce",
+          "qualifier_ui": "Q000191",
+          "qualifier_name": "economics",
+          "is_major_topic": false
+        },
+        {
+          "descriptor_ui": "D003132",
+          "descriptor_name": "Commerce",
+          "qualifier_ui": "Q000191",
+          "qualifier_name": "economics",
+          "is_major_topic": true
+        },
+        {
+          "descriptor_ui": "D003132",
+          "descriptor_name": "Commerce",
+          "qualifier_ui": "Q000191",
+          "qualifier_name": "economics",
+          "is_major_topic": true
+        },
+        {
+          "descriptor_ui": "D003132",
+          "descriptor_name": "Commerce",
+          "qualifier_ui": "Q000191",
+          "qualifier_name": "economics",
+          "is_major_topic": false
+        },
+        {
+          "descriptor_ui": "D003132",
+          "descriptor_name": "Commerce",
+          "qualifier_ui": "Q000191",
+          "qualifier_name": "economics",
+          "is_major_topic": false
+        },
+        {
+          "descriptor_ui": "D003132",
+          "descriptor_name": "Commerce",
+          "qualifier_ui": "Q000191",
+          "qualifier_name": "economics",
+          "is_major_topic": true
+        },
+        {
+          "descriptor_ui": "D005191",
+          "descriptor_name": "Family Characteristics",
+          "qualifier_ui": null,
+          "qualifier_name": null,
+          "is_major_topic": true
+        },
+        {
+          "descriptor_ui": "D005191",
+          "descriptor_name": "Family Characteristics",
+          "qualifier_ui": null,
+          "qualifier_name": null,
+          "is_major_topic": false
+        },
+        {
+          "descriptor_ui": "D005191",
+          "descriptor_name": "Family Characteristics",
+          "qualifier_ui": null,
+          "qualifier_name": null,
+          "is_major_topic": false
+        },
+        {
+          "descriptor_ui": "D005191",
+          "descriptor_name": "Family Characteristics",
+          "qualifier_ui": null,
+          "qualifier_name": null,
+          "is_major_topic": true
+        },
+        {
+          "descriptor_ui": "D005191",
+          "descriptor_name": "Family Characteristics",
+          "qualifier_ui": null,
+          "qualifier_name": null,
+          "is_major_topic": true
+        },
+        {
+          "descriptor_ui": "D005191",
+          "descriptor_name": "Family Characteristics",
+          "qualifier_ui": null,
+          "qualifier_name": null,
+          "is_major_topic": false
+        },
+        {
+          "descriptor_ui": "D006801",
+          "descriptor_name": "Humans",
+          "qualifier_ui": null,
+          "qualifier_name": null,
+          "is_major_topic": false
+        },
+        {
+          "descriptor_ui": "D006801",
+          "descriptor_name": "Humans",
+          "qualifier_ui": null,
+          "qualifier_name": null,
+          "is_major_topic": false
+        },
+        {
+          "descriptor_ui": "D006801",
+          "descriptor_name": "Humans",
+          "qualifier_ui": null,
+          "qualifier_name": null,
+          "is_major_topic": false
+        },
+        {
+          "descriptor_ui": "D006801",
+          "descriptor_name": "Humans",
+          "qualifier_ui": null,
+          "qualifier_name": null,
+          "is_major_topic": false
+        },
+        {
+          "descriptor_ui": "D006801",
+          "descriptor_name": "Humans",
+          "qualifier_ui": null,
+          "qualifier_name": null,
+          "is_major_topic": false
+        },
+        {
+          "descriptor_ui": "D006801",
+          "descriptor_name": "Humans",
+          "qualifier_ui": null,
+          "qualifier_name": null,
+          "is_major_topic": false
+        },
+        {
+          "descriptor_ui": "D010578",
+          "descriptor_name": "Petroleum",
+          "qualifier_ui": "Q000191",
+          "qualifier_name": "economics",
+          "is_major_topic": true
+        },
+        {
+          "descriptor_ui": "D010578",
+          "descriptor_name": "Petroleum",
+          "qualifier_ui": "Q000191",
+          "qualifier_name": "economics",
+          "is_major_topic": true
+        },
+        {
+          "descriptor_ui": "D010578",
+          "descriptor_name": "Petroleum",
+          "qualifier_ui": "Q000191",
+          "qualifier_name": "economics",
+          "is_major_topic": true
+        },
+        {
+          "descriptor_ui": "D010578",
+          "descriptor_name": "Petroleum",
+          "qualifier_ui": "Q000191",
+          "qualifier_name": "economics",
+          "is_major_topic": true
+        },
+        {
+          "descriptor_ui": "D010578",
+          "descriptor_name": "Petroleum",
+          "qualifier_ui": "Q000191",
+          "qualifier_name": "economics",
+          "is_major_topic": true
+        },
+        {
+          "descriptor_ui": "D010578",
+          "descriptor_name": "Petroleum",
+          "qualifier_ui": "Q000191",
+          "qualifier_name": "economics",
+          "is_major_topic": true
+        },
+        {
+          "descriptor_ui": "D014481",
+          "descriptor_name": "United States",
+          "qualifier_ui": null,
+          "qualifier_name": null,
+          "is_major_topic": false
+        },
+        {
+          "descriptor_ui": "D014481",
+          "descriptor_name": "United States",
+          "qualifier_ui": null,
+          "qualifier_name": null,
+          "is_major_topic": false
+        },
+        {
+          "descriptor_ui": "D014481",
+          "descriptor_name": "United States",
+          "qualifier_ui": null,
+          "qualifier_name": null,
+          "is_major_topic": false
+        },
+        {
+          "descriptor_ui": "D014481",
+          "descriptor_name": "United States",
+          "qualifier_ui": null,
+          "qualifier_name": null,
+          "is_major_topic": false
+        },
+        {
+          "descriptor_ui": "D014481",
+          "descriptor_name": "United States",
+          "qualifier_ui": null,
+          "qualifier_name": null,
+          "is_major_topic": false
+        },
+        {
+          "descriptor_ui": "D014481",
+          "descriptor_name": "United States",
+          "qualifier_ui": null,
+          "qualifier_name": null,
+          "is_major_topic": false
+        }
+      ],
+      "locations_count": 6,
+      "locations": [
+        {
+          "id": "doi:10.1371/journal.pone.0307840",
+          "is_oa": true,
+          "landing_page_url": "https://doi.org/10.1371/journal.pone.0307840",
+          "pdf_url": "https://journals.plos.org/plosone/article/file?id=10.1371/journal.pone.0307840&type=printable",
+          "source": {
+            "id": "https://openalex.org/S202381698",
+            "display_name": "PLoS ONE",
+            "issn_l": "1932-6203",
+            "issn": [
+              "1932-6203"
+            ],
+            "is_oa": true,
+            "is_in_doaj": true,
+            "is_core": true,
+            "listed_in": [
+              "cwts-core",
+              "doaj",
+              "doyens",
+              "erih-plus",
+              "jufo-1",
+              "ki-jl-1",
+              "medline",
+              "norway-1"
+            ],
+            "host_organization": "https://openalex.org/P4310315706",
+            "host_organization_name": "Public Library of Science",
+            "host_organization_lineage": [
+              "https://openalex.org/P4310315706"
+            ],
+            "host_organization_lineage_names": [
+              "Public Library of Science"
+            ],
+            "type": "journal"
+          },
+          "license": "cc-by",
+          "license_id": "https://openalex.org/licenses/cc-by",
+          "version": "publishedVersion",
+          "is_accepted": true,
+          "is_published": true,
+          "raw_source_name": "PLOS ONE",
+          "raw_type": "journal-article"
+        },
+        {
+          "id": "pmid:39836693",
+          "is_oa": false,
+          "landing_page_url": "https://pubmed.ncbi.nlm.nih.gov/39836693",
+          "pdf_url": null,
+          "source": {
+            "id": "https://openalex.org/S4306525036",
+            "display_name": "PubMed",
+            "issn_l": null,
+            "issn": null,
+            "is_oa": false,
+            "is_in_doaj": false,
+            "is_core": false,
+            "listed_in": [],
+            "host_organization": "https://openalex.org/I1299303238",
+            "host_organization_name": "National Institutes of Health",
+            "host_organization_lineage": [
+              "https://openalex.org/I1299303238"
+            ],
+            "host_organization_lineage_names": [],
+            "type": "repository"
+          },
+          "license": null,
+          "license_id": null,
+          "version": "publishedVersion",
+          "is_accepted": true,
+          "is_published": true,
+          "raw_source_name": "PloS one",
+          "raw_type": "Journal Article"
+        },
+        {
+          "id": "pmh:oai:pubmedcentral.nih.gov:11750086",
+          "is_oa": true,
+          "landing_page_url": "https://www.ncbi.nlm.nih.gov/pmc/articles/11750086",
+          "pdf_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11750086/pdf/pone.0307840.pdf",
+          "source": {
+            "id": "https://openalex.org/S2764455111",
+            "display_name": "PubMed Central",
+            "issn_l": null,
+            "issn": null,
+            "is_oa": true,
+            "is_in_doaj": false,
+            "is_core": false,
+            "listed_in": [],
+            "host_organization": "https://openalex.org/I1299303238",
+            "host_organization_name": "National Institutes of Health",
+            "host_organization_lineage": [
+              "https://openalex.org/I1299303238"
+            ],
+            "host_organization_lineage_names": [],
+            "type": "repository"
+          },
+          "license": "cc-by",
+          "license_id": "https://openalex.org/licenses/cc-by",
+          "version": "submittedVersion",
+          "is_accepted": false,
+          "is_published": false,
+          "raw_source_name": "PLoS One",
+          "raw_type": "Text"
+        },
+        {
+          "id": "pmh:oai:RePEc:plo:pone00:0307840",
+          "is_oa": false,
+          "landing_page_url": "https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0307840",
+          "pdf_url": null,
+          "source": {
+            "id": "https://openalex.org/S4306401271",
+            "display_name": "RePEc: Research Papers in Economics",
+            "issn_l": null,
+            "issn": null,
+            "is_oa": false,
+            "is_in_doaj": false,
+            "is_core": false,
+            "listed_in": [],
+            "host_organization": "https://openalex.org/I77793887",
+            "host_organization_name": "Federal Reserve Bank of St. Louis",
+            "host_organization_lineage": [
+              "https://openalex.org/I77793887"
+            ],
+            "host_organization_lineage_names": [],
+            "type": "repository"
+          },
+          "license": null,
+          "license_id": null,
+          "version": "submittedVersion",
+          "is_accepted": false,
+          "is_published": false,
+          "raw_source_name": null,
+          "raw_type": "article"
+        },
+        {
+          "id": "pmh:oai:doaj.org/article:d23062be6ecf4d19aa11fd9a6fac2bcf",
+          "is_oa": true,
+          "landing_page_url": "https://doaj.org/article/d23062be6ecf4d19aa11fd9a6fac2bcf",
+          "pdf_url": null,
+          "source": {
+            "id": "https://openalex.org/S4306401280",
+            "display_name": "DOAJ (DOAJ: Directory of Open Access Journals)",
+            "issn_l": null,
+            "issn": null,
+            "is_oa": false,
+            "is_in_doaj": false,
+            "is_core": false,
+            "listed_in": [],
+            "host_organization": null,
+            "host_organization_name": null,
+            "host_organization_lineage": [],
+            "host_organization_lineage_names": [],
+            "type": "repository"
+          },
+          "license": "cc-by-sa",
+          "license_id": "https://openalex.org/licenses/cc-by-sa",
+          "version": "submittedVersion",
+          "is_accepted": false,
+          "is_published": false,
+          "raw_source_name": "PLoS ONE, Vol 20, Iss 1 (2025)",
+          "raw_type": "article"
+        },
+        {
+          "id": "pmh:oai:doaj.org/article:d735368eabae4884a52717e4c812cd77",
+          "is_oa": true,
+          "landing_page_url": "https://doaj.org/article/d735368eabae4884a52717e4c812cd77",
+          "pdf_url": null,
+          "source": {
+            "id": "https://openalex.org/S4306401280",
+            "display_name": "DOAJ (DOAJ: Directory of Open Access Journals)",
+            "issn_l": null,
+            "issn": null,
+            "is_oa": false,
+            "is_in_doaj": false,
+            "is_core": false,
+            "listed_in": [],
+            "host_organization": null,
+            "host_organization_name": null,
+            "host_organization_lineage": [],
+            "host_organization_lineage_names": [],
+            "type": "repository"
+          },
+          "license": "cc-by-sa",
+          "license_id": "https://openalex.org/licenses/cc-by-sa",
+          "version": "submittedVersion",
+          "is_accepted": false,
+          "is_published": false,
+          "raw_source_name": "PLoS ONE, Vol 20, Iss 1, p e0307840 (2025)",
+          "raw_type": "article"
+        }
+      ],
+      "best_oa_location": {
+        "id": "doi:10.1371/journal.pone.0307840",
+        "is_oa": true,
+        "landing_page_url": "https://doi.org/10.1371/journal.pone.0307840",
+        "pdf_url": "https://journals.plos.org/plosone/article/file?id=10.1371/journal.pone.0307840&type=printable",
+        "source": {
+          "id": "https://openalex.org/S202381698",
+          "display_name": "PLoS ONE",
+          "issn_l": "1932-6203",
+          "issn": [
+            "1932-6203"
+          ],
+          "is_oa": true,
+          "is_in_doaj": true,
+          "is_core": true,
+          "listed_in": [
+            "cwts-core",
+            "doaj",
+            "doyens",
+            "erih-plus",
+            "jufo-1",
+            "ki-jl-1",
+            "medline",
+            "norway-1"
+          ],
+          "host_organization": "https://openalex.org/P4310315706",
+          "host_organization_name": "Public Library of Science",
+          "host_organization_lineage": [
+            "https://openalex.org/P4310315706"
+          ],
+          "host_organization_lineage_names": [
+            "Public Library of Science"
+          ],
+          "type": "journal"
+        },
+        "license": "cc-by",
+        "license_id": "https://openalex.org/licenses/cc-by",
+        "version": "publishedVersion",
+        "is_accepted": true,
+        "is_published": true,
+        "raw_source_name": "PLOS ONE",
+        "raw_type": "journal-article"
+      },
+      "sustainable_development_goals": [
+        {
+          "id": "https://metadata.un.org/sdg/7",
+          "display_name": "Affordable and clean energy",
+          "score": 0.878000020980835
+        },
+        {
+          "id": "https://metadata.un.org/sdg/13",
+          "display_name": "Climate action",
+          "score": 0.685699999332428
+        }
+      ],
+      "sustainable_development_goals_aurora": [
+        {
+          "id": "https://metadata.un.org/sdg/7",
+          "display_name": "Affordable and clean energy",
+          "score": 0.6000000238418579
+        }
+      ],
+      "study_designs": [],
+      "awards": [],
+      "funders": [],
+      "has_content": {
+        "grobid_xml": true,
+        "pdf": true
+      },
+      "content_urls": {
+        "pdf": "https://content.openalex.org/works/W4406657492.pdf",
+        "grobid_xml": "https://content.openalex.org/works/W4406657492.grobid-xml"
+      },
+      "referenced_works_count": 36,
+      "referenced_works": [
+        "https://openalex.org/W1486341985",
+        "https://openalex.org/W1507259579",
+        "https://openalex.org/W1540852633",
+        "https://openalex.org/W1988514462",
+        "https://openalex.org/W2026903979",
+        "https://openalex.org/W2039734130",
+        "https://openalex.org/W2040826293",
+        "https://openalex.org/W2079615115",
+        "https://openalex.org/W2109842534",
+        "https://openalex.org/W2111244735",
+        "https://openalex.org/W2119159910",
+        "https://openalex.org/W2914321185",
+        "https://openalex.org/W2989851835",
+        "https://openalex.org/W3012903550",
+        "https://openalex.org/W3020982786",
+        "https://openalex.org/W3080253822",
+        "https://openalex.org/W3123816619",
+        "https://openalex.org/W3123913173",
+        "https://openalex.org/W3124700334",
+        "https://openalex.org/W3127118016",
+        "https://openalex.org/W3166138147",
+        "https://openalex.org/W4224435167",
+        "https://openalex.org/W4233104270",
+        "https://openalex.org/W4283363751",
+        "https://openalex.org/W4285211530",
+        "https://openalex.org/W4295997449",
+        "https://openalex.org/W4297991522",
+        "https://openalex.org/W4299349607",
+        "https://openalex.org/W4318041073",
+        "https://openalex.org/W4323349606",
+        "https://openalex.org/W4377018605",
+        "https://openalex.org/W4386570088",
+        "https://openalex.org/W4390987595",
+        "https://openalex.org/W4393536458",
+        "https://openalex.org/W4396216075",
+        "https://openalex.org/W4396749604"
+      ],
+      "related_works": [
+        "https://openalex.org/W4206511378",
+        "https://openalex.org/W4206618949",
+        "https://openalex.org/W2526321210",
+        "https://openalex.org/W3205863630",
+        "https://openalex.org/W4318833145",
+        "https://openalex.org/W2364275385",
+        "https://openalex.org/W4388704167",
+        "https://openalex.org/W2007977664",
+        "https://openalex.org/W4376874882",
+        "https://openalex.org/W2224749288"
+      ],
+      "abstract_inverted_index": {
+        "Even": [
+          0
+        ],
+        "though": [
+          1
+        ],
+        "the": [
+          2,
+          14,
+          45,
+          49,
+          59,
+          65,
+          85,
+          94,
+          107,
+          139,
+          146
+        ],
+        "effect": [
+          3,
+          95
+        ],
+        "of": [
+          4,
+          62,
+          88,
+          96,
+          106,
+          149
+        ],
+        "oil": [
+          5,
+          25,
+          40,
+          75,
+          90,
+          109,
+          126
+        ],
+        "price": [
+          6,
+          26,
+          41,
+          76,
+          91,
+          110,
+          123,
+          127
+        ],
+        "shocks": [
+          7
+        ],
+        "on": [
+          8,
+          16
+        ],
+        "macroeconomics": [
+          9
+        ],
+        "has": [
+          10
+        ],
+        "been": [
+          11
+        ],
+        "extensively": [
+          12
+        ],
+        "investigated,": [
+          13
+        ],
+        "literature": [
+          15
+        ],
+        "how": [
+          17
+        ],
+        "efficiency": [
+          18,
+          37,
+          72,
+          99
+        ],
+        "in": [
+          19,
+          44,
+          82
+        ],
+        "household": [
+          20,
+          35,
+          70,
+          97,
+          169
+        ],
+        "energy": [
+          21,
+          36,
+          71,
+          98
+        ],
+        "use": [
+          22
+        ],
+        "affect": [
+          23
+        ],
+        "crude": [
+          24,
+          39,
+          74,
+          89,
+          108,
+          125
+        ],
+        "volatility": [
+          27,
+          42,
+          77,
+          128
+        ],
+        "is": [
+          28,
+          152
+        ],
+        "yet": [
+          29
+        ],
+        "explored.": [
+          30
+        ],
+        "This": [
+          31
+        ],
+        "study": [
+          32
+        ],
+        "unveils": [
+          33
+        ],
+        "whether": [
+          34
+        ],
+        "lower": [
+          38
+        ],
+        "asymmetrically": [
+          43
+        ],
+        "United": [
+          46
+        ],
+        "States": [
+          47
+        ],
+        "using": [
+          48
+        ],
+        "historical": [
+          50
+        ],
+        "and": [
+          51,
+          120,
+          142,
+          155
+        ],
+        "forecast": [
+          52
+        ],
+        "dataset": [
+          53
+        ],
+        "that": [
+          54,
+          69,
+          116,
+          153
+        ],
+        "spans": [
+          55
+        ],
+        "from": [
+          56
+        ],
+        "1970:Q1-2040:Q1.": [
+          57
+        ],
+        "Applying": [
+          58
+        ],
+        "multivariate": [
+          60
+        ],
+        "case": [
+          61
+        ],
+        "Quantile-on-Quantile": [
+          63
+        ],
+        "Regression,": [
+          64
+        ],
+        "empirical": [
+          66
+        ],
+        "results": [
+          67,
+          113
+        ],
+        "show": [
+          68,
+          115
+        ],
+        "dampens": [
+          73
+        ],
+        "with": [
+          78,
+          101,
+          129
+        ],
+        "a": [
+          79
+        ],
+        "stronger": [
+          80
+        ],
+        "connection": [
+          81
+        ],
+        "quantiles": [
+          83,
+          87,
+          105
+        ],
+        "before": [
+          84
+        ],
+        "median": [
+          86
+        ],
+        "volatility.": [
+          92,
+          111
+        ],
+        "However,": [
+          93
+        ],
+        "decreases": [
+          100
+        ],
+        "an": [
+          102
+        ],
+        "increase": [
+          103
+        ],
+        "across": [
+          104,
+          132
+        ],
+        "The": [
+          112
+        ],
+        "further": [
+          114
+        ],
+        "energy-related": [
+          117,
+          175
+        ],
+        "CO2": [
+          118
+        ],
+        "emissions": [
+          119
+        ],
+        "retail": [
+          121
+        ],
+        "electricity": [
+          122
+        ],
+        "intensify": [
+          124
+        ],
+        "varying": [
+          130
+        ],
+        "effects": [
+          131
+        ],
+        "quantiles.": [
+          133
+        ],
+        "These": [
+          134
+        ],
+        "findings": [
+          135,
+          151
+        ],
+        "are": [
+          136
+        ],
+        "similar": [
+          137
+        ],
+        "to": [
+          138,
+          158,
+          162,
+          173
+        ],
+        "sensitivity": [
+          140
+        ],
+        "analysis": [
+          141
+        ],
+        "robustness": [
+          143
+        ],
+        "checks.": [
+          144
+        ],
+        "Overall,": [
+          145
+        ],
+        "policy": [
+          147
+        ],
+        "implication": [
+          148
+        ],
+        "our": [
+          150
+        ],
+        "government": [
+          154
+        ],
+        "policymakers": [
+          156
+        ],
+        "need": [
+          157
+        ],
+        "demonstrate": [
+          159
+        ],
+        "unequivocal": [
+          160
+        ],
+        "commitments": [
+          161
+        ],
+        "improving": [
+          163
+        ],
+        "not": [
+          164
+        ],
+        "only": [
+          165
+        ],
+        "energy-efficient": [
+          166
+        ],
+        "practices": [
+          167
+        ],
+        "at": [
+          168
+        ],
+        "level": [
+          170
+        ],
+        "but": [
+          171
+        ],
+        "also": [
+          172
+        ],
+        "mitigate": [
+          174
+        ],
+        "environmental": [
+          176
+        ],
+        "disasters.": [
+          177
+        ]
+      },
+      "counts_by_year": [
+        {
+          "year": 2026,
+          "cited_by_count": 4
+        },
+        {
+          "year": 2025,
+          "cited_by_count": 7
+        }
+      ],
+      "updated_date": "2026-10-09T09:14:12.587421",
+      "created_date": "2025-10-10T00:00:00"
+    }
+  }
+}

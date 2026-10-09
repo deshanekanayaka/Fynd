@@ -7,6 +7,16 @@ date: 2026-10-09
 
 The disk cache keeps every external answer, and git keeps part of it. Git holds the extracted Source text, the OpenAlex answers, and the refusals. Git does not hold the fetched bytes, and it does not hold the Semantic Scholar search replies.
 
+## Note added 2026-10-09, after the first live run
+
+This record says that git holds the extracted Source text. The first live run narrows that. It fetched 20 Papers of the Seeded Topic, and 5 gave Usable text. OpenAlex states a Creative Commons license for 2 of the 5. For 2 more it states no license at all, and the fifth arrived through the Semantic Scholar link, where Fynd reads no license.
+
+A full text with no stated license is the case this record exists for. So `.gitignore` keeps the extracted texts out of git for now.
+
+Git holds the OpenAlex answers and the fetch answers, which are a status, a content type and a byte count. The reason table replays from those with no key.
+
+The labelled set of 10 Sources is the place a text enters git. It is hand picked, the license of each Source is read one at a time, and only an open license goes in. That is the condition this record already states for the labelled set, and now it is the only path.
+
 ## The conflict this resolves
 
 [ADR 0004](./0004-replayable-runs-and-versioned-prompts.md) says a whole Project replays from disk with no network, so the regression tests repeat and continuous integration needs no key. Metric 1 runs in continuous integration against a labelled set of 10 Sources. A replay needs the cache in git.
