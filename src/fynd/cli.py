@@ -17,6 +17,8 @@ import anthropic
 from dotenv import load_dotenv
 
 from fynd.claude import ModelRefused, ask_for_json
+from fynd.contact import ContactEmailMissing
+from fynd.openalex import OpenAlex, WorkNotRead
 from fynd.semantic_scholar import RateLimited, SemanticScholar
 from fynd.stages import stage1, stage2
 
@@ -71,6 +73,20 @@ def run_stage_2(domain: str, pick: str, avoid: list[str]) -> None:
         raise SystemExit(1)
 
 
+def run_resolve_open_copy(doi: str) -> None:
+    answer = OpenAlex().resolve(doi)
+    if not answer.found:
+        print(f"OpenAlex holds no record for {doi}.")
+        raise SystemExit(1)
+    if answer.open_copy is None:
+        print(f"OpenAlex holds {doi}, and no repository location for it.")
+        raise SystemExit(1)
+    copy = answer.open_copy
+    print(f"url     {copy.url}")
+    print(f"host    {copy.host}")
+    print(f"license {copy.license or 'not stated'}")
+
+
 def main() -> None:
     # Only the command line reads the .env file. A library that reads it would
     # change the environment under a test.
@@ -91,18 +107,27 @@ def main() -> None:
         help="comma separated labels the student already saw, which is a Re-roll",
     )
 
+    resolve = stages.add_parser(
+        "resolve-open-copy", help="find the Open copy of one Paper with OpenAlex"
+    )
+    resolve.add_argument("--doi", required=True, help="the digital object identifier of the Paper")
+
     args = parser.parse_args()
 
     try:
         if args.stage == "stage1":
             run_stage_1(args.domain)
-        else:
+        elif args.stage == "stage2":
             avoid = [label.strip() for label in args.avoid.split(",") if label.strip()]
             run_stage_2(args.domain, args.pick, avoid)
+        else:
+            run_resolve_open_copy(args.doi)
     except (
         RateLimited,
         ModelRefused,
         stage2.TopicListUnusable,
+        WorkNotRead,
+        ContactEmailMissing,
         anthropic.AnthropicError,
     ) as error:
         # A traceback teaches the reader nothing here. The message is the fix.

@@ -54,3 +54,13 @@ class SearchResult(BaseModel):
             if paper.has_open_copy:
                 count += 1
         return count
+
+
+class OpenCopy(BaseModel):
+    """The free file of a Paper, as OpenAlex located it."""
+
+    # The host is kept beside the link, because the measured table in
+    # docs/measurements groups every number by host. See ADR 0007.
+    url: str
+    host: str
+    license: str = ""
