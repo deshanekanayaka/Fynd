@@ -11,6 +11,7 @@ nothing and returns the same list, because the cache holds it.
 import argparse
 import datetime as dt
 import os
+import pathlib
 import sys
 
 import anthropic
@@ -18,6 +19,7 @@ from dotenv import load_dotenv
 
 from fynd.claude import ModelRefused, ask_for_json
 from fynd.contact import ContactEmailMissing
+from fynd.extract import extract_pdf
 from fynd.fetcher import Fetched, Fetcher, FetchFailed
 from fynd.openalex import OpenAlex, WorkNotRead
 from fynd.semantic_scholar import RateLimited, SemanticScholar
@@ -100,6 +102,17 @@ def run_fetch_open_copy(url: str) -> None:
     raise SystemExit(1)
 
 
+def run_extract(path: str) -> None:
+    data = pathlib.Path(path).read_bytes()
+    answer = extract_pdf(data)
+    print(f"extractor  {answer.extractor}")
+    print(f"characters {len(answer.text)}")
+    for span in answer.structure:
+        print(f"{span.kind} {span.label}: {span.start} to {span.end}")
+    print()
+    print(answer.text[:500])
+
+
 def main() -> None:
     # Only the command line reads the .env file. A library that reads it would
     # change the environment under a test.
@@ -125,6 +138,9 @@ def main() -> None:
     )
     resolve.add_argument("--doi", required=True, help="the digital object identifier of the Paper")
 
+    extract = stages.add_parser("extract", help="turn one file into a Source text")
+    extract.add_argument("--path", required=True, help="the file on disk to read")
+
     fetch = stages.add_parser("fetch-open-copy", help="fetch one Open copy and keep the bytes")
     fetch.add_argument("--url", required=True, help="the repository link OpenAlex resolved")
 
@@ -138,6 +154,8 @@ def main() -> None:
             run_stage_2(args.domain, args.pick, avoid)
         elif args.stage == "resolve-open-copy":
             run_resolve_open_copy(args.doi)
+        elif args.stage == "extract":
+            run_extract(args.path)
         else:
             run_fetch_open_copy(args.url)
     except (

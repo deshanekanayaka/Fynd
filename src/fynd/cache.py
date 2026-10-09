@@ -138,3 +138,18 @@ def write_refusal(
 def is_refusal(value: Any) -> bool:
     """Says whether a cached value is a host that returned no file."""
     return isinstance(value, dict) and value.get("kind") == REFUSAL_KIND
+
+
+def sha256_of(data: bytes) -> str:
+    """Returns the hex digest of these bytes, which a cache key carries."""
+    return hashlib.sha256(data).hexdigest()
+
+
+def read_parts(key: str) -> dict[str, Any]:
+    """Returns the parts stored beside one cached answer, for a test or a reader."""
+    path = cache_dir() / key
+    if not path.exists():
+        return {}
+    stored = json.loads(path.read_text(encoding="utf-8"))
+    parts = stored.get("parts") if isinstance(stored, dict) else None
+    return parts if isinstance(parts, dict) else {}

@@ -15,6 +15,10 @@ ADR 0005 is correct. An extractor returns the Source text plus the structure, wh
 
 Read "an offset map" in the decisions section as "the structure". Nothing else in this record changes.
 
+A second sentence needs a condition. The extractors section says pdfminer.six under pdfplumber reads a two column paper. That is true for one call per column, and false for one call per page. A measured run on 2026-10-09 read a two column page. It returned "Household energy demand in the We fit a model to half hourly meter". That is the first line of each column, joined into one line. A Claim quoted from such a line says something no author wrote.
+
+So `extract.py` looks for the gutter. The gutter is a vertical band that no word crosses, inside the middle third of the page, and at least 18 points wide. A page with a gutter is read as two columns, left first. A page without one is read whole, because a cut through a full width line is worse than an interleaved page. A page with three columns gives one column of the three, and the measurement shows it.
+
 ## The fact that forced this
 
 The first live search for the Seeded Topic returned 20 Papers. 12 carry an Open copy link, and 18 carry a digital object identifier. The 12 links split by host:
