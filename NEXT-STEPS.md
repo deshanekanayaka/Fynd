@@ -24,10 +24,14 @@ Written today:
 - [docs/stages-and-prerequisites.md](./docs/stages-and-prerequisites.md) lists the Stages and the subjects behind each one.
 - [docs/database-design.md](./docs/database-design.md) holds the seven tables for stage 1 to stage 3.
 
-Code that runs today:
+Code that runs today, as `uv run python -m fynd.cli <command>`:
 
-- `uv run python -m fynd.cli` searches Semantic Scholar for one Topic and prints the Papers with the open copy count. The run needs `SEMANTIC_SCHOLAR_API_KEY` in a `.env` file.
-- Every response is cached on disk, a 429 answer is retried once and never cached, and 9 tests pass with ruff clean.
+- `stage1` and `stage2` run one Stage each.
+- `resolve-open-copy` asks OpenAlex about one Paper, and `fetch-open-copy` fetches one link.
+- `extract` turns one file into a Source text.
+- `measure-open-copies` runs the whole Open copy pipeline over 20 Papers and writes the published table.
+- A run needs `SEMANTIC_SCHOLAR_API_KEY`, `ANTHROPIC_API_KEY` and `FYND_CONTACT_EMAIL` in a `.env` file. The command names the missing one.
+- Every external answer is cached on disk, including a refusal. 133 tests pass with ruff clean, and no test reaches the network or spends a token.
 
 ## How we work
 
@@ -237,11 +241,30 @@ Backend first, with no frontend.
 
 1. Done. The Python project runs with pytest, type hints, and ruff.
 2. Done. Stage 1, stage 2, the versioned prompt, the replayable cache, and the search with the Evidence window.
-3. Resolve the Open copy with OpenAlex, fetch it, and extract the Source text. Unblocked by ADR 0007.
+3. Done, and then measured. Resolve the Open copy with OpenAlex, fetch it, and extract the Source text. The measurement found that the location rule loses half the free files, and issues 14 to 19 fix it.
 4. Extract Claims with Claude Haiku 4.5, one call per chunk, and pass each Claim through the tiered verifier. A Claim that no tier can place in the Source text is dropped.
 5. Produce 3 candidate Problems with their early evidence, as a command line run.
 
 Make sure that step 5 runs end to end from the command line before any FastAPI endpoint or any React component exists.
+
+## The task for day 5
+
+The coverage of the Open copy comes first, because every later number rests on it. Six issues hold the work, numbered 14 to 19 on GitHub, and three of them can start now.
+
+The finding, from the cached records of the run of 2026-10-09 over the same 20 Papers. 6 Papers are closed, with no free copy anywhere. 14 are open. 10 of the 14 carry a direct PDF link on a host Fynd is allowed to fetch. The pipeline reached 5.
+
+So the gate walls cost 6 Papers, and our own rule costs 5 more. The rule accepts a location whose OpenAlex source is a repository, and nothing else. It refuses a `cc-by` file at a journal. ADR 0012, in issue 14, records the reversal: an open file is a licence question and not a host question.
+
+Four changes follow, with a number predicted for each one.
+
+- Accept every open location with a PDF link, rank a repository first and a journal second, and try up to 3. Predicted 10 of 20, against 5 today. Issue 15.
+- Read `citation_pdf_url` from a landing page and follow it once. Pure, EPrints and DSpace all emit that tag, and Zotero and Unpaywall both read it. Predicted up to 4 more. Issue 16.
+- Read and obey robots.txt, under RFC 9309. Fynd reads none today, and it fetches from 9 university hosts. Issue 17.
+- Count the open locations for the stage 2 gate. Semantic Scholar said 12 of 20, and 5 gave text, so a student can pass stage 2 and collapse at stage 4. Issue 18.
+
+Issue 19 measures again and publishes the gain. Europe PMC and CORE stay on the shelf until that number says they are worth a day.
+
+One more finding waits for day 7. 3 of the 20 Papers are about ultra-processed food, so the search is not precise. The retrieval labelled set is where that gets a number.
 
 ## Do not do yet
 
