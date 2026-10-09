@@ -110,8 +110,13 @@ def gutter_of(page: Any) -> float | None:
     # Walk the middle third of the page and keep the longest run of positions
     # that no word crosses. A plain loop, because the page is a few hundred
     # points wide and clarity matters more than speed here.
-    start = page.width * GUTTER_SEARCH_START
-    end = page.width * GUTTER_SEARCH_END
+    # The band is measured in page coordinates and never from the width alone,
+    # because a real page box starts where it likes. A word position is in the
+    # same coordinates, so the two must agree.
+    left, _, right, _ = page.bbox
+    width = right - left
+    start = left + width * GUTTER_SEARCH_START
+    end = left + width * GUTTER_SEARCH_END
     best_run = (0.0, 0.0)
     run_start: float | None = None
     x = start
@@ -125,8 +130,7 @@ def gutter_of(page: Any) -> float | None:
                 best_run = (run_start, x)
         x += GUTTER_STEP_POINTS
 
-    width = best_run[1] - best_run[0]
-    if width < MIN_GUTTER_POINTS:
+    if best_run[1] - best_run[0] < MIN_GUTTER_POINTS:
         return None
     middle = (best_run[0] + best_run[1]) / 2
     if not words_on_both_sides(words, middle):
@@ -141,9 +145,12 @@ def page_text(page: Any) -> str:
         return page.extract_text() or ""
 
     columns = []
-    edges = [0.0, gutter, page.width]
+    left, top, right, bottom = page.bbox
+    edges = [left, gutter, right]
     for index in range(MAX_COLUMNS):
-        box = (edges[index], 0, edges[index + 1], page.height)
+        # The crop box lives inside the page box, so the top and the bottom
+        # come from the page and never from its height.
+        box = (edges[index], top, edges[index + 1], bottom)
         text = page.crop(box).extract_text() or ""
         if text:
             columns.append(text)
@@ -178,10 +185,11 @@ def read_html(data: bytes) -> Extracted:
     structure stays empty, because trafilatura returns headings with no
     character positions, and nothing before the handover reads a section label.
     """
-    page = data.decode("utf-8", errors="replace")
-    # The tables stay in, because a statistics page keeps its numbers there and
-    # a Claim about a number is the Claim stage 3 wants.
-    text = trafilatura.extract(page, output_format="txt", include_tables=True)
+    # The bytes go in whole, because trafilatura reads the encoding the page
+    # declares. A decode to utf-8 here turns every character of a page in
+    # another encoding into one replacement glyph, which both breaks the text
+    # and pushes it under the ordinary share check.
+    text = trafilatura.extract(data, output_format="txt", include_tables=True)
     return Extracted(text=text or "", extractor=html_extractor_name(), structure=[])
 
 

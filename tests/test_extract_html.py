@@ -88,3 +88,19 @@ def test_the_two_extractors_do_not_share_a_cache_entry(tmp_path, monkeypatch) ->
 )
 def test_every_saved_page_reads_without_raising(name: str) -> None:
     read_html(page(name))
+
+
+def test_a_page_in_another_encoding_keeps_its_letters() -> None:
+    # A decode to utf-8 with a replacement turns every accented letter into one
+    # glyph that no check counts as ordinary.
+    html = (
+        '<html><head><meta charset="iso-8859-1"><title>Preise</title></head>'
+        "<body><article><h1>Preise</h1>"
+        "<p>Preis in Euro f\xfcr W\xe4rme und K\xe4lte in jedem Haushalt.</p>"
+        "</article></body></html>"
+    ).encode("iso-8859-1")
+
+    answer = read_html(html)
+
+    assert "für Wärme und Kälte" in answer.text
+    assert "\ufffd" not in answer.text

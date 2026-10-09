@@ -49,12 +49,21 @@ def cache_key(name: str, parts: dict[str, Any]) -> str:
     return f"{name}-{digest}.json"
 
 
-def read(key: str) -> Any | None:
-    """Returns the cached answer for this key, or None when there is none."""
-    path = cache_dir() / key
+def read_file(path: Path) -> Any | None:
+    """Returns the whole stored object in one cache file, or None."""
     if not path.exists():
         return None
-    stored = json.loads(path.read_text(encoding="utf-8"))
+    try:
+        return json.loads(path.read_text(encoding="utf-8"))
+    except json.JSONDecodeError:
+        # A run that died inside the write leaves half a file. A miss costs one
+        # fetch, and a raised error costs the whole Stage.
+        return None
+
+
+def read(key: str) -> Any | None:
+    """Returns the cached answer for this key, or None when there is none."""
+    stored = read_file(cache_dir() / key)
     if not isinstance(stored, dict) or "value" not in stored:
         # A file from an older shape, or a run that died inside the write. A
         # miss costs one fetch, and a raised error costs the whole Stage.
@@ -104,7 +113,13 @@ def read_bytes(key: str) -> CachedBytes | None:
         # A run that died inside the write, or a sidecar a human deleted. A
         # miss costs one fetch.
         return None
-    return CachedBytes(data=path.read_bytes(), content_type=str(value.get("content_type") or ""))
+    data = path.read_bytes()
+    if len(data) != value.get("byte_count"):
+        # A sidecar cut short by a full disk. Half a PDF extracts to rubbish,
+        # and the measurement then records a wrong fact that a second run
+        # repeats, because the cache keeps hitting.
+        return None
+    return CachedBytes(data=data, content_type=str(value.get("content_type") or ""))
 
 
 def write_refusal(
@@ -147,9 +162,6 @@ def sha256_of(data: bytes) -> str:
 
 def read_parts(key: str) -> dict[str, Any]:
     """Returns the parts stored beside one cached answer, for a test or a reader."""
-    path = cache_dir() / key
-    if not path.exists():
-        return {}
-    stored = json.loads(path.read_text(encoding="utf-8"))
+    stored = read_file(cache_dir() / key)
     parts = stored.get("parts") if isinstance(stored, dict) else None
     return parts if isinstance(parts, dict) else {}

@@ -8,6 +8,7 @@ from fynd import cache, extract
 from fynd.extract import PAGE_SEPARATOR, extract_pdf, read_pdf
 
 TWO_COLUMN_PDF = pathlib.Path(__file__).parent / "files" / "two-column-paper.pdf"
+OFFSET_ORIGIN_PDF = pathlib.Path(__file__).parent / "files" / "offset-origin-paper.pdf"
 
 
 @pytest.fixture
@@ -77,6 +78,10 @@ class FakePage:
         self.height = 800.0
         self.words = words
 
+    @property
+    def bbox(self):
+        return (0.0, 0.0, self.width, self.height)
+
     def extract_words(self) -> list[dict]:
         return self.words
 
@@ -103,3 +108,43 @@ def test_a_narrow_word_space_is_not_a_gutter() -> None:
 
 def test_a_page_with_no_words_has_no_gutter() -> None:
     assert extract.gutter_of(FakePage([])) is None
+
+
+def test_a_page_whose_origin_is_not_zero_reads_the_same() -> None:
+    # A real page box starts where it likes. A crop that assumes an origin of
+    # zero raises, and one bad Paper then ends the whole measurement run.
+    plain = read_pdf(TWO_COLUMN_PDF.read_bytes())
+    offset = read_pdf(OFFSET_ORIGIN_PDF.read_bytes())
+
+    assert offset.text == plain.text
+    assert "in the We fit" not in offset.text
+
+
+def test_a_two_column_page_with_an_offset_origin_finds_its_gutter() -> None:
+    import pdfplumber
+
+    with pdfplumber.open(OFFSET_ORIGIN_PDF) as pdf:
+        page = pdf.pages[0]
+        gutter = extract.gutter_of(page)
+
+    assert gutter is not None
+    # The words of the left column end at 20 + 275, and the right column starts
+    # at 20 + 330, so the gap sits inside that band and not at the page middle.
+    assert 295.0 < gutter < 350.0
+
+
+class FakeOffsetPage(FakePage):
+    """A page whose box starts at x of 100, as a real page box may."""
+
+    @property
+    def bbox(self):
+        return (100.0, 0.0, 700.0, 800.0)
+
+
+def test_the_gutter_band_follows_the_page_box() -> None:
+    # Words sit from 150 to 380 and from 420 to 650, so the gap is near 400.
+    # A band measured from the width alone would scan 198 to 402 and miss it.
+    words = [{"x0": 150.0, "x1": 380.0}, {"x0": 420.0, "x1": 650.0}]
+    gutter = extract.gutter_of(FakeOffsetPage(words))
+    assert gutter is not None
+    assert 380.0 < gutter < 420.0

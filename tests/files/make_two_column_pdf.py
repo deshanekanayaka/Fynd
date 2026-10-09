@@ -15,6 +15,11 @@ from typing import Final
 
 OUTPUT: Final = pathlib.Path(__file__).with_name("two-column-paper.pdf")
 
+# A second file with the same text, on a page whose origin is not zero. A real
+# PDF does that, and a crop that assumes an origin of zero raises there.
+OFFSET_OUTPUT: Final = pathlib.Path(__file__).with_name("offset-origin-paper.pdf")
+OFFSET_ORIGIN: Final = (20, 30)
+
 # Each page holds two columns. The reading order is the whole left column, then
 # the whole right column, which is what a human reads and what the test asks
 # the extractor to produce.
@@ -54,7 +59,7 @@ LINE_HEIGHT: Final = 18
 FONT_SIZE: Final = 11
 
 
-def content_stream(page: dict[str, list[str]]) -> str:
+def content_stream(page: dict[str, list[str]], origin: tuple[int, int] = (0, 0)) -> str:
     """Returns the PDF drawing commands for one page."""
     parts = ["BT", f"/F1 {FONT_SIZE} Tf"]
     for column, x in (("left", LEFT_COLUMN_X), ("right", RIGHT_COLUMN_X)):
@@ -62,15 +67,15 @@ def content_stream(page: dict[str, list[str]]) -> str:
         for line in page[column]:
             # Td moves the text position in absolute page coordinates, so each
             # line is placed where a two column layout would put it.
-            parts.append(f"1 0 0 1 {x} {y} Tm")
+            parts.append(f"1 0 0 1 {x + origin[0]} {y + origin[1]} Tm")
             parts.append(f"({line}) Tj")
             y -= LINE_HEIGHT
     parts.append("ET")
     return "\n".join(parts)
 
 
-def build() -> bytes:
-    """Returns the bytes of the whole PDF."""
+def build(origin: tuple[int, int] = (0, 0)) -> bytes:
+    """Returns the bytes of the whole PDF, with the page origin you ask for."""
     objects: list[str] = []
 
     page_count = len(PAGES)
@@ -85,10 +90,11 @@ def build() -> bytes:
     objects.append("<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>")
 
     for index, page in enumerate(PAGES):
-        stream = content_stream(page)
+        stream = content_stream(page, origin)
         objects.append(
             "<< /Type /Page /Parent 2 0 R "
-            f"/MediaBox [0 0 {PAGE_WIDTH} {PAGE_HEIGHT}] "
+            f"/MediaBox [{origin[0]} {origin[1]} "
+            f"{origin[0] + PAGE_WIDTH} {origin[1] + PAGE_HEIGHT}] "
             "/Resources << /Font << /F1 3 0 R >> >> "
             f"/Contents {content_ids[index]} 0 R >>"
         )
@@ -113,5 +119,6 @@ def build() -> bytes:
 
 
 if __name__ == "__main__":
-    OUTPUT.write_bytes(build())
-    print(f"wrote {OUTPUT} with {OUTPUT.stat().st_size} bytes")
+    for path, origin in ((OUTPUT, (0, 0)), (OFFSET_OUTPUT, OFFSET_ORIGIN)):
+        path.write_bytes(build(origin))
+        print(f"wrote {path} with {path.stat().st_size} bytes")

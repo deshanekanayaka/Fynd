@@ -59,7 +59,13 @@ def test_the_report_holds_the_three_tables_and_the_query() -> None:
         result(reasons.NO_DOI),
     ]
 
-    text = report(results, "United Kingdom household energy forecasting", 2022, TODAY)
+    text = report(
+        results,
+        query="United Kingdom household energy forecasting",
+        year_from=2022,
+        limit=20,
+        today=TODAY,
+    )
 
     assert "United Kingdom household energy forecasting" in text
     assert "from 2022 onward" in text
@@ -67,13 +73,26 @@ def test_the_report_holds_the_three_tables_and_the_query() -> None:
     assert "## By host" in text
     assert "## By reason" in text
     assert "## By Paper" in text
+    assert "limit 20" in text
     assert "1 of 3 Papers reached Usable text, which is 33%" in text
     assert "dro.dur.ac.uk" in text
-    assert NO_HOST in text
+    # A Paper with no link is counted in a sentence and not as a host row. The
+    # per Paper table below still names it, because that table is one row for
+    # one Paper.
+    host_table = text[text.index("## By host") : text.index("## By reason")]
+    assert f"| {NO_HOST} |" not in host_table
+    assert "1 Papers never reached a link" in host_table
+    assert f"| {NO_HOST} |" in text[text.index("## By Paper") :]
 
 
 def test_the_report_says_the_files_are_not_in_git() -> None:
-    text = report([result(reasons.USABLE, "www.mdpi.com", characters=9000)], "a query", 2022, TODAY)
+    text = report(
+        [result(reasons.USABLE, "www.mdpi.com", characters=9000)],
+        query="a query",
+        year_from=2022,
+        limit=20,
+        today=TODAY,
+    )
     assert "not in git" in text
 
 
@@ -86,12 +105,28 @@ def test_a_title_with_a_pipe_does_not_break_the_table() -> None:
         extracted=one.extracted,
     )
 
-    text = report([broken], "a query", 2022, TODAY)
+    text = report([broken], query="a query", year_from=2022, limit=20, today=TODAY)
 
     assert "Energy   demand" in text
     assert "Energy | demand" not in text
 
 
 def test_an_empty_pool_still_writes_a_file() -> None:
-    text = report([], "a query", 2022, TODAY)
+    text = report([], query="a query", year_from=2022, limit=20, today=TODAY)
     assert "0 of 0 Papers reached Usable text, which is -" in text
+
+
+def test_a_dropped_paper_stays_in_the_denominator() -> None:
+    # A run that broke with a rate limit has no reason row, so the file says
+    # how many Papers are missing instead of shrinking the pool in silence.
+    text = report(
+        [result(reasons.USABLE, "www.mdpi.com", characters=9000)],
+        query="a query",
+        year_from=2022,
+        limit=20,
+        today=TODAY,
+        dropped=2,
+    )
+
+    assert "1 of 3 Papers reached Usable text, which is 33%" in text
+    assert "2 Papers are missing from the tables below" in text

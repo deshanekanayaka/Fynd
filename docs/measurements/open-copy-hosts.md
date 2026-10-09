@@ -12,7 +12,6 @@ The fetched files are not in git. A reader runs the command again to get them. S
 
 | Host | Links tried | Files received | Usable text | Share usable |
 |---|---|---|---|---|
-| no link | 10 | 0 | 0 | 0% |
 | eprints.whiterose.ac.uk | 1 | 1 | 1 | 100% |
 | www.repository.cam.ac.uk | 1 | 1 | 1 | 100% |
 | pmc.ncbi.nlm.nih.gov | 1 | 0 | 0 | 0% |
@@ -24,6 +23,8 @@ The fetched files are not in git. A reader runs the command again to get them. S
 | research.bangor.ac.uk | 1 | 0 | 0 | 0% |
 
 5 of 20 Papers reached Usable text, which is 25%.
+
+10 Papers never reached a link, so no host row holds them. The reason table below says why.
 
 ## By reason
 

@@ -11,8 +11,9 @@ from typing import Final
 from fynd import reasons
 from fynd.open_copy import OpenCopyResult
 
-# The host a row gets when a Paper never reached a link. A count with no host
-# still belongs in the reason table.
+# The host a row gets when a Paper never reached a link. Such a Paper is left
+# out of the host table and counted in one sentence below it, because no link
+# was tried for it.
 NO_HOST: Final = "no link"
 
 
@@ -42,7 +43,7 @@ def host_rows(results: list[OpenCopyResult]) -> list[dict[str, object]]:
 
 
 def reason_counts(results: list[OpenCopyResult]) -> dict[str, int]:
-    """Counts every one of the eight reasons, including the ones at zero."""
+    """Counts every reason in `reasons.ALL`, including the ones at zero."""
     counts = {reason: 0 for reason in reasons.ALL}
     for result in results:
         counts[result.reason] = counts.get(result.reason, 0) + 1
@@ -56,13 +57,25 @@ def share(part: int, whole: int) -> str:
     return f"{round(100 * part / whole)}%"
 
 
-def report(results: list[OpenCopyResult], query: str, year_from: int, today: dt.date) -> str:
-    """Returns the whole measurement file as one string."""
+def report(
+    results: list[OpenCopyResult],
+    query: str,
+    year_from: int,
+    limit: int,
+    today: dt.date,
+    dropped: int = 0,
+) -> str:
+    """Returns the whole measurement file as one string.
+
+    `limit` is the size of the searched pool, and `dropped` is the number of
+    Papers whose run broke, so the denominator is the pool and never the rows
+    that survived.
+    """
     lines = [
         "# The Open copy of a Paper, by host",
         "",
         f"Measured on {today.isoformat()} by `uv run python -m fynd.cli measure-open-copies`.",
-        f"The pool is the Seeded Topic query `{query}`, limit {len(results)}, "
+        f"The pool is the Seeded Topic query `{query}`, limit {limit}, "
         f"from {year_from} onward.",
         "",
         "The Evidence window applies, because the table says what stage 4 will really see.",
@@ -78,17 +91,37 @@ def report(results: list[OpenCopyResult], query: str, year_from: int, today: dt.
         "|---|---|---|---|---|",
     ]
     for row in host_rows(results):
+        if row["host"] == NO_HOST:
+            # No link was tried for these Papers, so a row of links would read
+            # as a host that refused 10 fetches it never received.
+            continue
         tried = int(row["tried"])
         files = int(row["files"])
         usable = int(row["usable"])
         lines.append(f"| {row['host']} | {tried} | {files} | {usable} | {share(usable, tried)} |")
 
-    total = len(results)
+    total = len(results) + dropped
     usable_total = sum(1 for result in results if result.is_usable)
     lines += [
         "",
         f"{usable_total} of {total} Papers reached Usable text, which is "
         f"{share(usable_total, total)}.",
+    ]
+    if dropped:
+        lines.append("")
+        lines.append(
+            f"{dropped} Papers are missing from the tables below. Their run broke with a "
+            "rate limit or a timeout, which is a failure and not an answer, so nothing of "
+            "it is cached and no row names a reason."
+        )
+    no_link = sum(1 for result in results if result.open_copy is None)
+    lines += [
+        "",
+        f"{no_link} Papers never reached a link, so no host row holds them. "
+        "The reason table below says why.",
+    ]
+
+    lines += [
         "",
         "## By reason",
         "",

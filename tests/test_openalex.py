@@ -213,3 +213,18 @@ def test_a_missing_contact_email_stops_the_lookup(tmp_path, monkeypatch) -> None
     with pytest.raises(ContactEmailMissing):
         resolver.resolve("10.1000/aaa")
     assert calls == []
+
+
+def test_an_identifier_with_a_hash_is_escaped(tmp_path, monkeypatch) -> None:
+    # A doi with a `#` or a `?` in it ends the URL path early. The request then
+    # asks about a different work, whose file is measured as this one.
+    monkeypatch.setenv("FYND_CACHE_DIR", str(tmp_path))
+    monkeypatch.setenv("FYND_CONTACT_EMAIL", "deshan@example.org")
+    calls: list = []
+    resolver = OpenAlex(client=client_that_returns(200, RECORDED_WORK, calls))
+
+    resolver.resolve("10.1000/a#b?c=1")
+
+    asked = str(calls[0].url)
+    assert "10.1000%2Fa%23b%3Fc%3D1" in asked
+    assert asked.count("#") == 0

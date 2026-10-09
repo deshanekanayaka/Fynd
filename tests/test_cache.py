@@ -131,3 +131,25 @@ def test_a_rate_limit_is_never_cached(tmp_path, monkeypatch) -> None:
     with pytest.raises(ValueError):
         cache.write_refusal(key, parts, status=429, content_type="text/html")
     assert not (tmp_path / key).exists()
+
+
+def test_a_truncated_file_reads_as_a_miss(tmp_path, monkeypatch) -> None:
+    # write is one plain write, so a run killed inside it leaves half a file.
+    # A miss costs one fetch, and a raised error costs the whole Stage.
+    monkeypatch.setenv("FYND_CACHE_DIR", str(tmp_path))
+    (tmp_path / "half.json").write_text('{"parts": {"a": 1}, "val', encoding="utf-8")
+
+    assert cache.read("half.json") is None
+    assert cache.read_parts("half.json") == {}
+    assert cache.read_bytes("half.json") is None
+
+
+def test_truncated_bytes_read_as_a_miss(tmp_path, monkeypatch) -> None:
+    monkeypatch.setenv("FYND_CACHE_DIR", str(tmp_path))
+    parts = {"url": "https://example.org/paper.pdf"}
+    key = cache.cache_key("fetch", parts)
+    cache.write_bytes(key, parts, b"%PDF-1.7 a whole file", "application/pdf")
+    stored = json.loads((tmp_path / key).read_text(encoding="utf-8"))
+    (tmp_path / stored["value"]["file"]).write_bytes(b"%PDF-1.7 half")
+
+    assert cache.read_bytes(key) is None

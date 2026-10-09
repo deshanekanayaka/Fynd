@@ -8,7 +8,7 @@ holds the file. See ADR 0007.
 
 from dataclasses import dataclass
 from typing import Any, Final
-from urllib.parse import urlparse
+from urllib.parse import quote, urlparse
 
 import httpx
 
@@ -113,8 +113,11 @@ class OpenAlex:
 
     def fetch_work(self, doi: str) -> dict[str, Any]:
         """Calls the works endpoint. The only method here that uses the network."""
+        # The identifier is escaped, because a real one holds a character that
+        # ends a URL path. An unescaped `#` or `?` asks about another work, and
+        # that work's file would be measured as this Paper's Source text.
         response = self.client.get(
-            WORK_URL + doi,
+            WORK_URL + quote(doi, safe=""),
             params={"mailto": contact_email()},
             headers={"User-Agent": user_agent()},
         )

@@ -19,8 +19,8 @@ from dotenv import load_dotenv
 
 from fynd.claude import ModelRefused, ask_for_json
 from fynd.contact import ContactEmailMissing
-from fynd.extract import extract_pdf
-from fynd.fetcher import Fetched, Fetcher, FetchFailed
+from fynd.extract import extract_html, extract_pdf
+from fynd.fetcher import Fetched, Fetcher, FetchFailed, looks_like_a_pdf
 from fynd.measure import report
 from fynd.open_copy import read_open_copy
 from fynd.openalex import OpenAlex, WorkNotRead
@@ -107,7 +107,11 @@ def run_fetch_open_copy(url: str) -> None:
 
 def run_extract(path: str) -> None:
     data = pathlib.Path(path).read_bytes()
-    answer = extract_pdf(data)
+    # The bytes decide, and not the file name. A page saved as a .pdf is a page.
+    if looks_like_a_pdf("", data):
+        answer = extract_pdf(data)
+    else:
+        answer = extract_html(data)
     print(f"extractor  {answer.extractor}")
     print(f"characters {len(answer.text)}")
     for span in answer.structure:
@@ -122,6 +126,10 @@ def run_extract(path: str) -> None:
 SEEDED_TOPIC_QUERY = "United Kingdom household energy forecasting"
 MEASUREMENT_FILE = pathlib.Path("docs/measurements/open-copy-hosts.md")
 
+# The size of the measured pool. The table names it, so a reader knows the
+# denominator even when a Paper drops out of the run.
+MEASURED_POOL_SIZE = 20
+
 
 def run_measure_open_copies() -> None:
     if not os.environ.get("SEMANTIC_SCHOLAR_API_KEY"):
@@ -132,12 +140,13 @@ def run_measure_open_copies() -> None:
 
     year_from = stage2.first_year_in_window(dt.date.today())
     search = SemanticScholar()
-    found = search.search(SEEDED_TOPIC_QUERY, year_from=year_from)
+    found = search.search(SEEDED_TOPIC_QUERY, year_from=year_from, limit=MEASURED_POOL_SIZE)
     print(f"{len(found.papers)} Papers for the Seeded Topic, from {year_from} onward.")
 
     resolver = OpenAlex()
     fetcher = Fetcher()
     results = []
+    dropped: list = []
     for number, paper in enumerate(found.papers, start=1):
         # One Paper at a time. The fetcher waits one second for each host, and
         # a refused host never stops the run.
@@ -146,9 +155,11 @@ def run_measure_open_copies() -> None:
                 paper, resolver.resolve, fetcher.fetch, extract_pdf, reason_against_paper_text
             )
         except (WorkNotRead, FetchFailed) as error:
-            # A failure is not an answer, so nothing of it is cached and the
-            # line says which Paper to look at.
+            # A failure is not an answer, so nothing of it is cached. The Paper
+            # is counted as dropped, because a table that loses a Paper in
+            # silence under counts the pool and says nothing about it.
             print(f"{number:3} {paper.title[:50]:50} failed: {error}")
+            dropped.append(paper)
             continue
         results.append(result)
         host = result.open_copy.host if result.open_copy else "-"
@@ -156,7 +167,15 @@ def run_measure_open_copies() -> None:
 
     MEASUREMENT_FILE.parent.mkdir(parents=True, exist_ok=True)
     MEASUREMENT_FILE.write_text(
-        report(results, SEEDED_TOPIC_QUERY, year_from, dt.date.today()), encoding="utf-8"
+        report(
+            results,
+            query=SEEDED_TOPIC_QUERY,
+            year_from=year_from,
+            limit=MEASURED_POOL_SIZE,
+            dropped=len(dropped),
+            today=dt.date.today(),
+        ),
+        encoding="utf-8",
     )
     print(f"\nWrote {MEASUREMENT_FILE}")
 
