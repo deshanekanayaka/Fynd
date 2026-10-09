@@ -107,7 +107,9 @@ def read_bytes(key: str) -> CachedBytes | None:
     return CachedBytes(data=path.read_bytes(), content_type=str(value.get("content_type") or ""))
 
 
-def write_refusal(key: str, parts: dict[str, Any], status: int, content_type: str) -> None:
+def write_refusal(
+    key: str, parts: dict[str, Any], status: int, content_type: str, reason: str = ""
+) -> None:
     """Stores the answer of a host that returned no file.
 
     Raises ValueError when the status is one that must never be cached.
@@ -119,7 +121,18 @@ def write_refusal(key: str, parts: dict[str, Any], status: int, content_type: st
             f"A status of {UNCACHEABLE_STATUS} is a rate limit and never a cached answer. "
             "Wait and ask again, and cache nothing."
         )
-    write(key, parts, {"kind": REFUSAL_KIND, "status": status, "content_type": content_type})
+    # The reason is stored and never recomputed on a read. One status covers
+    # several refusals, so a rule that reads the status back guesses.
+    write(
+        key,
+        parts,
+        {
+            "kind": REFUSAL_KIND,
+            "status": status,
+            "content_type": content_type,
+            "reason": reason,
+        },
+    )
 
 
 def is_refusal(value: Any) -> bool:

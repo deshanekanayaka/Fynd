@@ -105,11 +105,12 @@ def test_a_refusal_reads_back_as_a_refusal(tmp_path, monkeypatch) -> None:
     monkeypatch.setenv("FYND_CACHE_DIR", str(tmp_path))
     parts = {"url": "https://www.sciencedirect.com/paper.pdf"}
     key = cache.cache_key("fetch", parts)
-    cache.write_refusal(key, parts, status=403, content_type="text/html")
+    cache.write_refusal(key, parts, status=403, content_type="text/html", reason="fetch_refused")
     value = cache.read(key)
     assert cache.is_refusal(value)
     assert value["status"] == 403
     assert value["content_type"] == "text/html"
+    assert value["reason"] == "fetch_refused"
     assert cache.read_bytes(key) is None
 
 

@@ -18,6 +18,7 @@ from dotenv import load_dotenv
 
 from fynd.claude import ModelRefused, ask_for_json
 from fynd.contact import ContactEmailMissing
+from fynd.fetcher import Fetched, Fetcher, FetchFailed
 from fynd.openalex import OpenAlex, WorkNotRead
 from fynd.semantic_scholar import RateLimited, SemanticScholar
 from fynd.stages import stage1, stage2
@@ -87,6 +88,18 @@ def run_resolve_open_copy(doi: str) -> None:
     print(f"license {copy.license or 'not stated'}")
 
 
+def run_fetch_open_copy(url: str) -> None:
+    answer = Fetcher().fetch(url)
+    if isinstance(answer, Fetched):
+        print(f"bytes        {len(answer.data)}")
+        print(f"content type {answer.content_type}")
+        return
+    print(f"refused      {answer.reason}")
+    print(f"status       {answer.status or 'none'}")
+    print(f"content type {answer.content_type or 'not stated'}")
+    raise SystemExit(1)
+
+
 def main() -> None:
     # Only the command line reads the .env file. A library that reads it would
     # change the environment under a test.
@@ -112,6 +125,9 @@ def main() -> None:
     )
     resolve.add_argument("--doi", required=True, help="the digital object identifier of the Paper")
 
+    fetch = stages.add_parser("fetch-open-copy", help="fetch one Open copy and keep the bytes")
+    fetch.add_argument("--url", required=True, help="the repository link OpenAlex resolved")
+
     args = parser.parse_args()
 
     try:
@@ -120,13 +136,16 @@ def main() -> None:
         elif args.stage == "stage2":
             avoid = [label.strip() for label in args.avoid.split(",") if label.strip()]
             run_stage_2(args.domain, args.pick, avoid)
-        else:
+        elif args.stage == "resolve-open-copy":
             run_resolve_open_copy(args.doi)
+        else:
+            run_fetch_open_copy(args.url)
     except (
         RateLimited,
         ModelRefused,
         stage2.TopicListUnusable,
         WorkNotRead,
+        FetchFailed,
         ContactEmailMissing,
         anthropic.AnthropicError,
     ) as error:
