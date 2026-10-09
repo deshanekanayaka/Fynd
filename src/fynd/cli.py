@@ -21,8 +21,11 @@ from fynd.claude import ModelRefused, ask_for_json
 from fynd.contact import ContactEmailMissing
 from fynd.extract import extract_pdf
 from fynd.fetcher import Fetched, Fetcher, FetchFailed
+from fynd.measure import report
+from fynd.open_copy import read_open_copy
 from fynd.openalex import OpenAlex, WorkNotRead
 from fynd.semantic_scholar import RateLimited, SemanticScholar
+from fynd.source_text import reason_against
 from fynd.stages import stage1, stage2
 
 
@@ -113,6 +116,51 @@ def run_extract(path: str) -> None:
     print(answer.text[:500])
 
 
+# The Seeded Topic, fixed here so the published table names one query. The
+# label and the query of a real stage 2 run come from a model, and a published
+# number cannot depend on a model call.
+SEEDED_TOPIC_QUERY = "United Kingdom household energy forecasting"
+MEASUREMENT_FILE = pathlib.Path("docs/measurements/open-copy-hosts.md")
+
+
+def run_measure_open_copies() -> None:
+    if not os.environ.get("SEMANTIC_SCHOLAR_API_KEY"):
+        raise SystemExit(
+            "Set SEMANTIC_SCHOLAR_API_KEY in your .env file. The measurement searches "
+            "for the Seeded Topic before it fetches anything."
+        )
+
+    year_from = stage2.first_year_in_window(dt.date.today())
+    search = SemanticScholar()
+    found = search.search(SEEDED_TOPIC_QUERY, year_from=year_from)
+    print(f"{len(found.papers)} Papers for the Seeded Topic, from {year_from} onward.")
+
+    resolver = OpenAlex()
+    fetcher = Fetcher()
+    results = []
+    for number, paper in enumerate(found.papers, start=1):
+        # One Paper at a time. The fetcher waits one second for each host, and
+        # a refused host never stops the run.
+        try:
+            result = read_open_copy(
+                paper, resolver.resolve, fetcher.fetch, extract_pdf, reason_against
+            )
+        except (WorkNotRead, FetchFailed) as error:
+            # A failure is not an answer, so nothing of it is cached and the
+            # line says which Paper to look at.
+            print(f"{number:3} {paper.title[:50]:50} failed: {error}")
+            continue
+        results.append(result)
+        host = result.open_copy.host if result.open_copy else "-"
+        print(f"{number:3} {paper.title[:50]:50} {host:28} {result.reason}")
+
+    MEASUREMENT_FILE.parent.mkdir(parents=True, exist_ok=True)
+    MEASUREMENT_FILE.write_text(
+        report(results, SEEDED_TOPIC_QUERY, year_from, dt.date.today()), encoding="utf-8"
+    )
+    print(f"\nWrote {MEASUREMENT_FILE}")
+
+
 def main() -> None:
     # Only the command line reads the .env file. A library that reads it would
     # change the environment under a test.
@@ -141,6 +189,8 @@ def main() -> None:
     extract = stages.add_parser("extract", help="turn one file into a Source text")
     extract.add_argument("--path", required=True, help="the file on disk to read")
 
+    stages.add_parser("measure-open-copies", help="run the pipeline and write the table")
+
     fetch = stages.add_parser("fetch-open-copy", help="fetch one Open copy and keep the bytes")
     fetch.add_argument("--url", required=True, help="the repository link OpenAlex resolved")
 
@@ -156,6 +206,8 @@ def main() -> None:
             run_resolve_open_copy(args.doi)
         elif args.stage == "extract":
             run_extract(args.path)
+        elif args.stage == "measure-open-copies":
+            run_measure_open_copies()
         else:
             run_fetch_open_copy(args.url)
     except (
