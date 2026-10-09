@@ -6,9 +6,13 @@ from fynd.fetcher import Fetched, Refused
 from fynd.models import OpenCopy, Paper
 from fynd.open_copy import read_open_copy
 from fynd.openalex import Resolution
-from fynd.source_text import MIN_CHARACTERS, reason_against
+from fynd.source_text import (
+    MIN_CHARACTERS,
+    reason_against_page_text,
+    reason_against_paper_text,
+)
 
-A_LONG_TEXT = "The household energy demand of England rose again. " * 200
+A_LONG_TEXT = "Results. The household energy demand of England rose again. " * 200
 REPOSITORY_COPY = OpenCopy(
     url="https://dro.dur.ac.uk/aaa.pdf", host="dro.dur.ac.uk", license="cc-by"
 )
@@ -52,7 +56,7 @@ def test_a_paper_that_reaches_usable_text() -> None:
         resolve_to(Resolution(found=True, open_copy=REPOSITORY_COPY)),
         fetch_to(pdf_bytes()),
         extract_to(A_LONG_TEXT),
-        reason_against,
+        reason_against_paper_text,
     )
 
     assert result.reason == reasons.USABLE
@@ -68,7 +72,7 @@ def test_a_paper_with_no_identifier_and_no_link() -> None:
         resolve_to(Resolution(found=False, open_copy=None)),
         fetch_to(pdf_bytes()),
         extract_to(A_LONG_TEXT),
-        reason_against,
+        reason_against_paper_text,
     )
     assert result.reason == reasons.NO_DOI
 
@@ -79,7 +83,7 @@ def test_a_paper_openalex_never_heard_of() -> None:
         resolve_to(Resolution(found=False, open_copy=None)),
         fetch_to(pdf_bytes()),
         extract_to(A_LONG_TEXT),
-        reason_against,
+        reason_against_paper_text,
     )
     assert result.reason == reasons.NO_OPENALEX_RECORD
 
@@ -90,7 +94,7 @@ def test_a_paper_with_only_a_publisher_location() -> None:
         resolve_to(Resolution(found=True, open_copy=None)),
         fetch_to(pdf_bytes()),
         extract_to(A_LONG_TEXT),
-        reason_against,
+        reason_against_paper_text,
     )
     assert result.reason == reasons.NO_REPOSITORY_LOCATION
 
@@ -101,7 +105,7 @@ def test_the_semantic_scholar_link_is_the_second_chance() -> None:
         resolve_to(Resolution(found=True, open_copy=None)),
         fetch_to(pdf_bytes()),
         extract_to(A_LONG_TEXT),
-        reason_against,
+        reason_against_paper_text,
     )
 
     assert result.reason == reasons.USABLE
@@ -118,7 +122,7 @@ def test_a_doi_org_link_is_never_a_fetch_target() -> None:
         resolve_to(Resolution(found=True, open_copy=None)),
         fetch_to(pdf_bytes()),
         extract_to(A_LONG_TEXT),
-        reason_against,
+        reason_against_paper_text,
     )
     assert result.reason == reasons.NO_REPOSITORY_LOCATION
 
@@ -130,7 +134,7 @@ def test_a_refused_fetch_keeps_its_reason() -> None:
         resolve_to(Resolution(found=True, open_copy=REPOSITORY_COPY)),
         fetch_to(refused),
         extract_to(A_LONG_TEXT),
-        reason_against,
+        reason_against_paper_text,
     )
 
     assert result.reason == reasons.FETCH_REFUSED
@@ -145,7 +149,7 @@ def test_a_page_that_is_not_a_pdf_keeps_its_reason() -> None:
         resolve_to(Resolution(found=True, open_copy=REPOSITORY_COPY)),
         fetch_to(refused),
         extract_to(A_LONG_TEXT),
-        reason_against,
+        reason_against_paper_text,
     )
     assert result.reason == reasons.NOT_A_PDF
 
@@ -156,7 +160,7 @@ def test_a_short_text_is_not_usable() -> None:
         resolve_to(Resolution(found=True, open_copy=REPOSITORY_COPY)),
         fetch_to(pdf_bytes()),
         extract_to("Please accept our cookies to continue."),
-        reason_against,
+        reason_against_paper_text,
     )
     assert result.reason == reasons.TEXT_TOO_SHORT
 
@@ -170,7 +174,7 @@ def test_a_text_of_rubbish_is_not_usable() -> None:
         resolve_to(Resolution(found=True, open_copy=REPOSITORY_COPY)),
         fetch_to(pdf_bytes()),
         extract_to(rubbish),
-        reason_against,
+        reason_against_paper_text,
     )
     assert result.reason == reasons.TEXT_NOT_TEXTUAL
 
@@ -187,7 +191,7 @@ def test_the_resolve_is_skipped_when_a_paper_has_no_identifier() -> None:
         resolve,
         fetch_to(pdf_bytes()),
         extract_to(A_LONG_TEXT),
-        reason_against,
+        reason_against_paper_text,
     )
     assert asked == []
 
@@ -206,20 +210,32 @@ def test_every_reason_is_one_of_the_eight() -> None:
         reasons.TEXT_NOT_TEXTUAL,
     ):
         assert reason in reasons.ALL
-    assert len(reasons.ALL) == 8
+    assert len(reasons.ALL) == 9
 
 
-def test_a_text_at_the_threshold_is_usable() -> None:
-    assert reason_against("a" * (MIN_CHARACTERS - 1)) == reasons.TEXT_TOO_SHORT
-    assert reason_against("a" * MIN_CHARACTERS) == ""
+def test_a_text_at_the_length_threshold() -> None:
+    # The text holds a section word, so only the length decides.
+    short = "results " + "a" * (MIN_CHARACTERS - 9)
+    assert len(short) == MIN_CHARACTERS - 1
+    assert reason_against_paper_text(short) == reasons.TEXT_TOO_SHORT
+    assert reason_against_paper_text(short + "a") == ""
+
+
+def test_a_paper_text_with_no_section_word_is_refused() -> None:
+    # A repository landing page is long and holds no section word. The 5 Papers
+    # of the live run of 2026-10-09 all hold method, results and references.
+    assert reason_against_paper_text("energy " * 2000) == reasons.NO_SECTION_WORD
+    assert reason_against_page_text("energy " * 2000) == ""
 
 
 def test_a_text_at_the_ordinary_share_boundary() -> None:
-    # Four fifths ordinary passes, and anything below it does not.
-    ordinary = "a" * 8000
-    rubbish = chr(0xE000) * 2000
-    assert reason_against(ordinary + rubbish) == ""
-    assert reason_against("a" * 7000 + chr(0xE000) * 3000) == reasons.TEXT_NOT_TEXTUAL
+    # 0.95 of the characters must be ordinary. Every real text of the live run
+    # scored above 0.996, and the old value of 0.80 passed a text that was one
+    # fifth rubbish.
+    assert reason_against_page_text("a" * 9600 + chr(0xE000) * 400) == ""
+    assert (
+        reason_against_page_text("a" * 9000 + chr(0xE000) * 1000) == reasons.TEXT_NOT_TEXTUAL
+    )
 
 
 def test_an_openalex_location_on_doi_org_is_never_fetched() -> None:
@@ -238,7 +254,7 @@ def test_an_openalex_location_on_doi_org_is_never_fetched() -> None:
         resolve_to(Resolution(found=True, open_copy=lookup_only)),
         fetch,
         extract_to(A_LONG_TEXT),
-        reason_against,
+        reason_against_paper_text,
     )
 
     assert result.reason == reasons.NO_REPOSITORY_LOCATION

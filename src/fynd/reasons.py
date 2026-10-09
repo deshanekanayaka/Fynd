@@ -16,6 +16,10 @@ NOT_A_PDF: Final = "not_a_pdf"
 TEXT_TOO_SHORT: Final = "text_too_short"
 TEXT_NOT_TEXTUAL: Final = "text_not_textual"
 
+# The ninth reason, added on 2026-10-09 with the third check. The eight above
+# were named before the first measurement, which had no check to fail.
+NO_SECTION_WORD: Final = "no_section_word"
+
 # The order the reason table prints, which follows the pipeline from the first
 # step to the last.
 ALL: Final = (
@@ -27,4 +31,5 @@ ALL: Final = (
     NOT_A_PDF,
     TEXT_TOO_SHORT,
     TEXT_NOT_TEXTUAL,
+    NO_SECTION_WORD,
 )

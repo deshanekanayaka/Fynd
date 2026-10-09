@@ -25,7 +25,7 @@ from fynd.measure import report
 from fynd.open_copy import read_open_copy
 from fynd.openalex import OpenAlex, WorkNotRead
 from fynd.semantic_scholar import RateLimited, SemanticScholar
-from fynd.source_text import reason_against
+from fynd.source_text import reason_against_paper_text
 from fynd.stages import stage1, stage2
 
 
@@ -143,7 +143,7 @@ def run_measure_open_copies() -> None:
         # a refused host never stops the run.
         try:
             result = read_open_copy(
-                paper, resolver.resolve, fetcher.fetch, extract_pdf, reason_against
+                paper, resolver.resolve, fetcher.fetch, extract_pdf, reason_against_paper_text
             )
         except (WorkNotRead, FetchFailed) as error:
             # A failure is not an answer, so nothing of it is cached and the

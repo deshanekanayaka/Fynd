@@ -208,10 +208,10 @@ The one open item is a number and not a preference. The two thresholds and the s
 
 5 of 20 Papers reached Usable text, which is 25 percent. The 15 that did not split like this.
 
-- 9 Papers have no repository location at all. OpenAlex holds a record for each one, and every location it names is a publisher.
-- 4 fetches were refused with a 403. Two of them are doaj.org, which is an index and not a file host, and two are a university repository that refuses a program.
+- 10 Papers have no repository location at all. OpenAlex holds a record for each one, and every location it names is a publisher or a doi.org address.
+- 3 fetches were refused with a 403. Two of them are doaj.org, which is an index and not a file host, and one is a university repository that refuses a program.
 - 2 links gave a web page and not a PDF, from pmc.ncbi.nlm.nih.gov and from www.research.ed.ac.uk.
-- 0 Papers failed a usable text check. Every file that arrived gave between 60,000 and 92,000 characters.
+- 0 Papers failed a usable text check. Every file that arrived gave between 60,363 and 91,205 characters.
 
 Three findings follow from that run.
 
@@ -220,6 +220,8 @@ The stage 2 threshold of 3 Papers with an Open copy holds for this Topic, but th
 The search is not precise. 3 of the 20 Papers are about ultra-processed food, which is what the labelled set of day 7 exists to measure.
 
 A doi.org address arrived from OpenAlex as a repository location, and the first run fetched it. ADR 0007 forbids that, so the guard now covers every location and not only the Semantic Scholar fallback. One test holds it.
+
+The three thresholds are now measured, which closes the last open item of day 4. The character count stays at 3,000. The smallest real text is 60,363, and the two pages that gave nothing are 1,898 and 631. The ordinary share moves from 0.80 to 0.95. Every real text scored between 0.9968 and 0.9991, and 0.80 passed a text that was one fifth rubbish. The section word check ships for a Paper and not for a web page. All 5 Papers hold the words method, results and references. A gov.uk release page holds no section word at all. A ninth reason, `no_section_word`, joins the eight, because the reason table exists to tell failures apart.
 
 The licence finding changed what git holds. 2 of the 5 Papers that gave Usable text state no licence at all. So the extracted texts stay out of git. A text enters git with the labelled set, where the licence of each Source is read one at a time. See the note of 2026-10-09 in [ADR 0011](./docs/adr/0011-the-public-repository-holds-the-text-and-not-the-files.md).
 

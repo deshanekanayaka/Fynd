@@ -49,7 +49,7 @@ def test_every_reason_is_counted_including_the_ones_at_zero() -> None:
 
     assert counts[reasons.USABLE] == 1
     assert counts[reasons.NOT_A_PDF] == 0
-    assert len(counts) == 8
+    assert len(counts) == 9
 
 
 def test_the_report_holds_the_three_tables_and_the_query() -> None:

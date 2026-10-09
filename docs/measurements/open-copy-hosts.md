@@ -37,6 +37,7 @@ The fetched files are not in git. A reader runs the command again to get them. S
 | `not_a_pdf` | 2 |
 | `text_too_short` | 0 |
 | `text_not_textual` | 0 |
+| `no_section_word` | 0 |
 
 ## By Paper
 
