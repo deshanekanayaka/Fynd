@@ -7,6 +7,14 @@ date: 2026-10-08
 
 Fynd fetches an Open copy from a repository, and never from a publisher. OpenAlex resolves the Open copy a second time, keyed by the digital object identifier. The host list comes from a measurement and not from a guess.
 
+## Note added 2026-10-09
+
+One sentence below is wrong. The decisions section says that both extractors return a flat string and an offset map. [ADR 0005](./0005-a-claim-is-a-located-span.md) says that an offset cannot point into the PDF bytes, because a PDF holds no reading order. Both cannot be true of one map.
+
+ADR 0005 is correct. An extractor returns the Source text plus the structure, which is the page and section spans the database design already marks as display only. The offset chain starts at the string the extractor produced, and normalization and chunking compose their maps on top of it.
+
+Read "an offset map" in the decisions section as "the structure". Nothing else in this record changes.
+
 ## The fact that forced this
 
 The first live search for the Seeded Topic returned 20 Papers. 12 carry an Open copy link, and 18 carry a digital object identifier. The 12 links split by host:

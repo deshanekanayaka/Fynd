@@ -59,8 +59,12 @@ The free file of a Paper, held in a repository. Fynd fetches an Open copy and ne
 _Avoid_: open access PDF, free version, preprint
 
 **Source text**:
-The one exact string that extraction produced for a Source. A Claim points into it with two character offsets, and the text that passes the quality checks is usable text.
+The one exact string that extraction produced for a Source. A Claim points into it with two character offsets. Text that passes the checks is Usable text.
 _Avoid_: content, body, raw text, full text
+
+**Usable text**:
+A Source text that passes the quality checks, so Fynd reads Claims from it.
+_Avoid_: good text, clean text, valid text, quality text
 
 **Statistic**:
 A published figure or rule from an official body that shows the Problem is real, for example an Office for National Statistics release.
