@@ -19,6 +19,10 @@ A second sentence needs a condition. The extractors section says pdfminer.six un
 
 So `extract.py` looks for the gutter. The gutter is a vertical band that no word crosses, inside the middle third of the page, and at least 18 points wide. A page with a gutter is read as two columns, left first. A page without one is read whole, because a cut through a full width line is worse than an interleaved page. A page with three columns gives one column of the three, and the measurement shows it.
 
+A third sentence is now measured. The extractors section names readability-lxml as the fallback for a lost table on a statistics page. A measured run on 2026-10-09 read four United Kingdom government pages. None of them holds an HTML table at all. The numbers live in a chart drawn by a script, or in a spreadsheet behind a link.
+
+So the risk is not a lost table. The risk is a statistics page that holds no number in its text. One gov.uk release page gave 1,898 characters, and its figures sit in a spreadsheet. A hand written page with a real table shows that trafilatura keeps a table and its numbers. readability-lxml stays uninstalled.
+
 ## The fact that forced this
 
 The first live search for the Seeded Topic returned 20 Papers. 12 carry an Open copy link, and 18 carry a digital object identifier. The 12 links split by host:

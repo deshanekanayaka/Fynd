@@ -11,9 +11,10 @@ so a byte position names no sentence.
 
 import io
 from dataclasses import dataclass, field
-from typing import Any, Final
+from typing import Any, Final, Protocol
 
 import pdfplumber
+import trafilatura
 
 from fynd import cache
 
@@ -56,11 +57,22 @@ class Extracted:
     structure: list[Span] = field(default_factory=list)
 
 
-def extractor_name() -> str:
-    """Returns the extractor and its version, for example `pdfplumber 0.11.4`."""
+class Reader(Protocol):
+    """The job of turning bytes into a Source text, which the cache wraps."""
+
+    def __call__(self, data: bytes) -> "Extracted": ...
+
+
+def pdf_extractor_name() -> str:
+    """Returns the PDF extractor and its version, for example `pdfplumber 0.11.4`."""
     # The name travels with the text, because a text hash says that the text
     # changed and nothing else says what changed it.
     return f"pdfplumber {pdfplumber.__version__}"
+
+
+def html_extractor_name() -> str:
+    """Returns the HTML extractor and its version, for example `trafilatura 2.3.1`."""
+    return f"trafilatura {trafilatura.__version__}"
 
 
 def crossing_words(words: list[dict[str, Any]], x: float) -> bool:
@@ -154,27 +166,41 @@ def read_pdf(data: bytes) -> Extracted:
 
     return Extracted(
         text=PAGE_SEPARATOR.join(texts),
-        extractor=extractor_name(),
+        extractor=pdf_extractor_name(),
         structure=spans,
     )
 
 
-def extract_pdf(data: bytes) -> Extracted:
+def read_html(data: bytes) -> Extracted:
+    """Turns the bytes of a web page into a Source text, with no structure.
+
+    trafilatura removes the navigation, the cookie banner, and the footer. The
+    structure stays empty, because trafilatura returns headings with no
+    character positions, and nothing before the handover reads a section label.
+    """
+    page = data.decode("utf-8", errors="replace")
+    # The tables stay in, because a statistics page keeps its numbers there and
+    # a Claim about a number is the Claim stage 3 wants.
+    text = trafilatura.extract(page, output_format="txt", include_tables=True)
+    return Extracted(text=text or "", extractor=html_extractor_name(), structure=[])
+
+
+def cached_extraction(step: str, data: bytes, extractor: str, reader: Reader) -> Extracted:
     """Returns the Source text for these bytes, from the cache when possible.
 
     The key holds the hash of the bytes and the extractor with its version, so
     a new library version misses this cache and reads the stored bytes again.
     """
     parts = {
-        "step": "extract-pdf",
+        "step": step,
         "bytes_sha256": cache.sha256_of(data),
-        "extractor": extractor_name(),
+        "extractor": extractor,
         "shape": EXTRACT_SHAPE_VERSION,
     }
     key = cache.cache_key("extract", parts)
     stored = cache.read(key)
     if stored is None:
-        answer = read_pdf(data)
+        answer = reader(data)
         cache.write(
             key,
             parts,
@@ -191,3 +217,13 @@ def extract_pdf(data: bytes) -> Extracted:
         extractor=str(stored.get("extractor") or ""),
         structure=[Span(**span) for span in stored.get("structure") or []],
     )
+
+
+def extract_pdf(data: bytes) -> Extracted:
+    """Returns the Source text of a PDF, from the cache when possible."""
+    return cached_extraction("extract-pdf", data, pdf_extractor_name(), read_pdf)
+
+
+def extract_html(data: bytes) -> Extracted:
+    """Returns the Source text of a web page, from the cache when possible."""
+    return cached_extraction("extract-html", data, html_extractor_name(), read_html)
