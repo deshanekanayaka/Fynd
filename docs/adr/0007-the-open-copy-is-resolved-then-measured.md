@@ -7,6 +7,8 @@ date: 2026-10-08
 
 Fynd fetches an Open copy from a repository, and never from a publisher. OpenAlex resolves the Open copy a second time, keyed by the digital object identifier. The host list comes from a measurement and not from a guess.
 
+One rule here is superseded. [ADR 0012](./0012-an-open-file-is-a-licence-question.md) of 2026-10-11 accepts an open file at a journal, because an open file is a licence question and not a host question.
+
 ## Note added 2026-10-09
 
 One sentence below is wrong. The decisions section says that both extractors return a flat string and an offset map. [ADR 0005](./0005-a-claim-is-a-located-span.md) says that an offset cannot point into the PDF bytes, because a PDF holds no reading order. Both cannot be true of one map.
@@ -45,6 +47,8 @@ A Paper keeps its digital object identifier. The day 2 code dropped the arXiv id
 OpenAlex is the second lookup. For one digital object identifier it returns the Open copy locations and the license, and it needs no key. Fynd takes the repository location and ignores the publisher location.
 
 Fynd never fetches a publisher. A doi.org link is a key for the OpenAlex lookup and never a fetch target.
+
+Superseded on 2026-10-11 by [ADR 0012](./0012-an-open-file-is-a-licence-question.md). Fynd now takes any open location with a PDF link, and ranks a repository first and a journal second. A doi.org link stays a lookup key and never a fetch target, and it is on the blocklist that record holds. The measured reason: this rule refused 7 open PDF links in the pool of 2026-10-09, and OpenAlex states a `cc-by` licence for 5 of them.
 
 The host list is a measurement. Fynd fetches all 12 links of the Seeded Topic once and records what each host returned. The per host success rate in the PRD becomes the list.
 
