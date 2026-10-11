@@ -212,6 +212,7 @@ def test_every_reason_is_a_name_the_table_prints() -> None:
         reasons.NO_OPEN_LOCATION,
         reasons.NO_PDF_LINK,
         reasons.BLOCKLISTED_ONLY,
+        reasons.ROBOTS_REFUSED,
         reasons.FETCH_REFUSED,
         reasons.NOT_A_PDF,
         reasons.TEXT_TOO_SHORT,
@@ -219,7 +220,7 @@ def test_every_reason_is_a_name_the_table_prints() -> None:
         reasons.NO_SECTION_WORD,
     ):
         assert reason in reasons.ALL
-    assert len(reasons.ALL) == 11
+    assert len(reasons.ALL) == 12
     assert not hasattr(reasons, "NO_REPOSITORY_LOCATION")
 
 

@@ -16,6 +16,9 @@ NO_OPENALEX_RECORD: Final = "no_openalex_record"
 NO_OPEN_LOCATION: Final = "no_open_location"
 NO_PDF_LINK: Final = "no_pdf_link"
 BLOCKLISTED_ONLY: Final = "blocklisted_only"
+# A path robots.txt disallows, which is apart from a 403, because the two say
+# different things about a host. See ADR 0012 and RFC 9309.
+ROBOTS_REFUSED: Final = "robots_refused"
 FETCH_REFUSED: Final = "fetch_refused"
 NOT_A_PDF: Final = "not_a_pdf"
 TEXT_TOO_SHORT: Final = "text_too_short"
@@ -34,6 +37,7 @@ ALL: Final = (
     NO_OPEN_LOCATION,
     NO_PDF_LINK,
     BLOCKLISTED_ONLY,
+    ROBOTS_REFUSED,
     FETCH_REFUSED,
     NOT_A_PDF,
     TEXT_TOO_SHORT,

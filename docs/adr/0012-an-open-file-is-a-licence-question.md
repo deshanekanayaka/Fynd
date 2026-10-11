@@ -39,7 +39,15 @@ The blocklist holds one kind of entry, which is a host that holds no file by des
 
 A host that refused once is not listed. The fetch cache already holds its status, the measurement table already counts it, and a dated list of refusals in the source code needs a human to edit it after every run.
 
-Fynd reads robots.txt before the first fetch to a host and obeys it, under RFC 9309. A 404 allows everything. A 5xx or a timeout allows nothing on that host for this run, and neither answer is cached, so one bad day at one university does not wall that host off for ever. The user agent the rules match against is the user agent Fynd sends, which names the repository and the operator.
+Fynd reads robots.txt before the first fetch to a host and obeys it, under RFC 9309. A 404, and any other 4xx but a rate limit, allows everything. A 5xx, a rate limit and a timeout allow nothing on that host for this run, and none of those answers is cached, so one bad day at one university does not wall that host off for ever. The user agent the rules match against is the user agent Fynd sends, which names the repository and the operator.
+
+The check runs before the fetch cache, so a path a host disallows is refused even when an earlier run already holds its bytes. A published table must not count a file Fynd may no longer ask for.
+
+A stored robots answer is read again after one day, which is the limit RFC 9309 names, because a repository that adds a rule next week must win over a file Fynd read today. The body is capped at 500 kibibytes, which is the size that standard asks a crawler to read. A redirect chain that never ends counts as unreachable, with a timeout and a 5xx and a rate limit. A link with no host or with a scheme that is not http or https is never fetched, because such a link would share one robots answer with every other one, and the rules of one host must never govern another.
+
+`urllib.robotparser` from the standard library matches the rules, and Fynd fetches the file itself, so the timeout, the cache and the user agent stay Fynd's own. Two differences are worth knowing. That module is not a certified RFC 9309 implementation, and it reads a whole number `Crawl-delay` and ignores a fractional one, so `Crawl-delay: 0.5` reads as no delay and Fynd then waits its own one second, which is longer.
+
+Fynd waits the larger of one second and a named `Crawl-delay`, up to 10 seconds. A longer delay skips that host, because 30 seconds for each file is 10 minutes over 20 Papers. A robots refusal spends one of the 3 attempts, so a Paper whose every candidate is disallowed records 3 attempts and the reason `robots_refused`.
 
 The Semantic Scholar link survives as the last resort, and only when OpenAlex names no candidate at all. It produced none of the 5 usable files of the run of 2026-10-09 and cost 3 refused fetches, but it is the only path for a Paper with no digital object identifier, which was 2 of 20 Papers in the day 1 pool. It passes the same blocklist.
 
@@ -57,7 +65,7 @@ The cost of the refusal is countable, and it is small. A Paper that is open at a
 
 The predicted yield is 10 Papers with a file against 5 today, and the run of issue 19 says what really happened.
 
-The reason vocabulary changes, because the old names say host things. `no_repository_location` becomes `no_open_location`, for a Paper that OpenAlex marks open nowhere. `no_pdf_link` joins it, for a Paper whose open locations are all landing pages. `blocklisted_only` joins it, for a Paper whose every open PDF link sits on the blocklist. `robots_refused` joins it, and it stays apart from `fetch_refused`, because a 403 and a disallowed path say different things about a host.
+The reason vocabulary changes, because the old names say host things. `no_repository_location` becomes `no_open_location`, for a Paper that OpenAlex marks open nowhere. `no_pdf_link` joins it, for a Paper whose open locations are all landing pages. `blocklisted_only` joins it, for a Paper whose every open PDF link sits on the blocklist. `robots_refused` joins it, and it stays apart from `fetch_refused`, because a 403 and a disallowed path say different things about a host. The reason table prints them in pipeline order, which is the order the pipeline reaches them.
 
 The stage 2 gate counts a different thing. See the note of 2026-10-11 in [ADR 0002](./0002-topics-are-generated-then-verified.md).
 

@@ -19,10 +19,24 @@ def a_cache_and_an_address(tmp_path, monkeypatch):
     return tmp_path
 
 
-def transport_that_returns(responses: list, calls: list) -> httpx.MockTransport:
-    """Builds a transport that answers each request from the list in order."""
+def transport_that_returns(
+    responses: list,
+    calls: list,
+    robots: httpx.Response | None = None,
+    robots_calls: list | None = None,
+) -> httpx.MockTransport:
+    """Builds a transport that answers each file request from the list in order.
+
+    A request for `robots.txt` is answered apart, and it is not counted in
+    `calls`, so a test about the file says what it means. The default answer
+    is a 404, which allows everything under RFC 9309.
+    """
 
     def handler(request: httpx.Request) -> httpx.Response:
+        if request.url.path == "/robots.txt":
+            if robots_calls is not None:
+                robots_calls.append(request)
+            return robots if robots is not None else httpx.Response(404)
         calls.append(request)
         index = min(len(calls) - 1, len(responses) - 1)
         return responses[index]
@@ -150,6 +164,9 @@ def test_a_timeout_gets_one_retry_then_raises() -> None:
     calls: list = []
 
     def handler(request: httpx.Request) -> httpx.Response:
+        # The host answers its robots.txt and then times out on the file.
+        if request.url.path == "/robots.txt":
+            return httpx.Response(404)
         calls.append(request)
         raise httpx.ConnectTimeout("too slow")
 
@@ -164,6 +181,8 @@ def test_a_timeout_that_passes_on_the_retry_returns_the_pdf() -> None:
     calls: list = []
 
     def handler(request: httpx.Request) -> httpx.Response:
+        if request.url.path == "/robots.txt":
+            return httpx.Response(404)
         calls.append(request)
         if len(calls) == 1:
             raise httpx.ConnectTimeout("too slow")
@@ -184,14 +203,18 @@ def test_two_links_on_one_host_wait_and_two_hosts_do_not(monkeypatch) -> None:
     monkeypatch.setattr("fynd.fetcher.time.monotonic", lambda: 100.0)
     fetcher = Fetcher(transport=transport_that_returns([pdf_response()], []))
 
+    # The robots.txt of a host is a request to that host, so the file after it
+    # waits the full second.
     fetcher.fetch("https://dro.dur.ac.uk/aaa.pdf")
-    assert waits == []
+    assert waits == [1.0]
 
     fetcher.fetch("https://dro.dur.ac.uk/bbb.pdf")
-    assert waits == [1.0]
+    assert waits == [1.0, 1.0]
 
+    # A second host is read from its own robots.txt, so it waits once for
+    # that request and not for the first host.
     fetcher.fetch("https://www.mdpi.com/ccc.pdf")
-    assert waits == [1.0]
+    assert waits == [1.0, 1.0, 1.0]
 
 
 def test_the_request_names_fynd_and_the_operator() -> None:
