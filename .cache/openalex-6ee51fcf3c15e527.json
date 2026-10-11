@@ -1,0 +1,1368 @@
+{
+  "parts": {
+    "api": "openalex-work",
+    "doi": "10.3390/en15197437",
+    "shape": 1
+  },
+  "value": {
+    "found": true,
+    "work": {
+      "id": "https://openalex.org/W4304127761",
+      "doi": "https://doi.org/10.3390/en15197437",
+      "title": "Multi-Step Ahead Natural Gas Consumption Forecasting Based on a Hybrid Model: Case Studies in The Netherlands and the United Kingdom",
+      "display_name": "Multi-Step Ahead Natural Gas Consumption Forecasting Based on a Hybrid Model: Case Studies in The Netherlands and the United Kingdom",
+      "publication_year": 2022,
+      "publication_date": "2022-10-10",
+      "ids": {
+        "openalex": "https://openalex.org/W4304127761",
+        "doi": "https://doi.org/10.3390/en15197437"
+      },
+      "language": "en",
+      "primary_location": {
+        "id": "doi:10.3390/en15197437",
+        "is_oa": true,
+        "landing_page_url": "https://doi.org/10.3390/en15197437",
+        "pdf_url": "https://www.mdpi.com/1996-1073/15/19/7437/pdf?version=1665551986",
+        "source": {
+          "id": "https://openalex.org/S198098182",
+          "display_name": "Energies",
+          "issn_l": "1996-1073",
+          "issn": [
+            "1996-1073"
+          ],
+          "is_oa": true,
+          "is_in_doaj": true,
+          "is_core": true,
+          "listed_in": [
+            "cwts-core",
+            "doaj",
+            "norway-1"
+          ],
+          "host_organization": "https://openalex.org/P4310310987",
+          "host_organization_name": "Multidisciplinary Digital Publishing Institute",
+          "host_organization_lineage": [
+            "https://openalex.org/P4310310987"
+          ],
+          "host_organization_lineage_names": [
+            "Multidisciplinary Digital Publishing Institute"
+          ],
+          "type": "journal"
+        },
+        "license": "cc-by",
+        "license_id": "https://openalex.org/licenses/cc-by",
+        "version": "publishedVersion",
+        "is_accepted": true,
+        "is_published": true,
+        "raw_source_name": "Energies",
+        "raw_type": "journal-article"
+      },
+      "type": "article",
+      "indexed_in": [
+        "crossref",
+        "doaj"
+      ],
+      "open_access": {
+        "is_oa": true,
+        "oa_status": "gold",
+        "oa_url": "https://www.mdpi.com/1996-1073/15/19/7437/pdf?version=1665551986",
+        "any_repository_has_fulltext": true
+      },
+      "authorships": [
+        {
+          "author_position": "first",
+          "author": {
+            "id": "https://openalex.org/A5078777500",
+            "display_name": "Longfeng Zhang",
+            "orcid": null,
+            "observed_orcids": []
+          },
+          "institutions": [
+            {
+              "id": "https://openalex.org/I1297991670",
+              "display_name": "Southwest University of Science and Technology",
+              "ror": "https://ror.org/04d996474",
+              "country_code": "CN",
+              "type": "education",
+              "lineage": [
+                "https://openalex.org/I1297991670"
+              ]
+            }
+          ],
+          "countries": [
+            "CN"
+          ],
+          "is_corresponding": false,
+          "raw_author_name": "Longfeng Zhang",
+          "raw_affiliation_strings": [
+            "School of Science, Southwest University of Science and Technology, Mianyang 621010, China"
+          ],
+          "raw_orcid": null,
+          "affiliations": [
+            {
+              "raw_affiliation_string": "School of Science, Southwest University of Science and Technology, Mianyang 621010, China",
+              "institution_ids": [
+                "https://openalex.org/I1297991670"
+              ]
+            }
+          ]
+        },
+        {
+          "author_position": "middle",
+          "author": {
+            "id": "https://openalex.org/A5070296642",
+            "display_name": "Xin Ma",
+            "orcid": "https://orcid.org/0000-0001-7847-911X",
+            "observed_orcids": [
+              "https://orcid.org/0000-0001-7847-911X"
+            ]
+          },
+          "institutions": [
+            {
+              "id": "https://openalex.org/I1297991670",
+              "display_name": "Southwest University of Science and Technology",
+              "ror": "https://ror.org/04d996474",
+              "country_code": "CN",
+              "type": "education",
+              "lineage": [
+                "https://openalex.org/I1297991670"
+              ]
+            }
+          ],
+          "countries": [
+            "CN"
+          ],
+          "is_corresponding": true,
+          "raw_author_name": "Xin Ma",
+          "raw_affiliation_strings": [
+            "Center for Information Management and Service Studies of Sichuan, Mianyang 621010, China",
+            "School of Science, Southwest University of Science and Technology, Mianyang 621010, China"
+          ],
+          "raw_orcid": "https://orcid.org/0000-0001-7847-911X",
+          "affiliations": [
+            {
+              "raw_affiliation_string": "Center for Information Management and Service Studies of Sichuan, Mianyang 621010, China",
+              "institution_ids": []
+            },
+            {
+              "raw_affiliation_string": "School of Science, Southwest University of Science and Technology, Mianyang 621010, China",
+              "institution_ids": [
+                "https://openalex.org/I1297991670"
+              ]
+            }
+          ]
+        },
+        {
+          "author_position": "middle",
+          "author": {
+            "id": "https://openalex.org/A5100323562",
+            "display_name": "Hui Zhang",
+            "orcid": "https://orcid.org/0000-0003-4366-4002",
+            "observed_orcids": [
+              "https://orcid.org/0000-0003-4366-4002"
+            ]
+          },
+          "institutions": [
+            {
+              "id": "https://openalex.org/I1297991670",
+              "display_name": "Southwest University of Science and Technology",
+              "ror": "https://ror.org/04d996474",
+              "country_code": "CN",
+              "type": "education",
+              "lineage": [
+                "https://openalex.org/I1297991670"
+              ]
+            }
+          ],
+          "countries": [
+            "CN"
+          ],
+          "is_corresponding": false,
+          "raw_author_name": "Hui Zhang",
+          "raw_affiliation_strings": [
+            "School of Science, Southwest University of Science and Technology, Mianyang 621010, China"
+          ],
+          "raw_orcid": null,
+          "affiliations": [
+            {
+              "raw_affiliation_string": "School of Science, Southwest University of Science and Technology, Mianyang 621010, China",
+              "institution_ids": [
+                "https://openalex.org/I1297991670"
+              ]
+            }
+          ]
+        },
+        {
+          "author_position": "middle",
+          "author": {
+            "id": "https://openalex.org/A5069806731",
+            "display_name": "Gaoxun Zhang",
+            "orcid": "https://orcid.org/0000-0003-4027-3321",
+            "observed_orcids": [
+              "https://orcid.org/0000-0003-4027-3321"
+            ]
+          },
+          "institutions": [
+            {
+              "id": "https://openalex.org/I1297991670",
+              "display_name": "Southwest University of Science and Technology",
+              "ror": "https://ror.org/04d996474",
+              "country_code": "CN",
+              "type": "education",
+              "lineage": [
+                "https://openalex.org/I1297991670"
+              ]
+            }
+          ],
+          "countries": [
+            "CN"
+          ],
+          "is_corresponding": false,
+          "raw_author_name": "Gaoxun Zhang",
+          "raw_affiliation_strings": [
+            "School of Science, Southwest University of Science and Technology, Mianyang 621010, China"
+          ],
+          "raw_orcid": null,
+          "affiliations": [
+            {
+              "raw_affiliation_string": "School of Science, Southwest University of Science and Technology, Mianyang 621010, China",
+              "institution_ids": [
+                "https://openalex.org/I1297991670"
+              ]
+            }
+          ]
+        },
+        {
+          "author_position": "last",
+          "author": {
+            "id": "https://openalex.org/A5080422647",
+            "display_name": "Peng Zhang",
+            "orcid": "https://orcid.org/0000-0001-6753-6430",
+            "observed_orcids": [
+              "https://orcid.org/0000-0001-6753-6430"
+            ]
+          },
+          "institutions": [
+            {
+              "id": "https://openalex.org/I1297991670",
+              "display_name": "Southwest University of Science and Technology",
+              "ror": "https://ror.org/04d996474",
+              "country_code": "CN",
+              "type": "education",
+              "lineage": [
+                "https://openalex.org/I1297991670"
+              ]
+            }
+          ],
+          "countries": [
+            "CN"
+          ],
+          "is_corresponding": false,
+          "raw_author_name": "Peng Zhang",
+          "raw_affiliation_strings": [
+            "School of Science, Southwest University of Science and Technology, Mianyang 621010, China"
+          ],
+          "raw_orcid": "https://orcid.org/0000-0001-6753-6430",
+          "affiliations": [
+            {
+              "raw_affiliation_string": "School of Science, Southwest University of Science and Technology, Mianyang 621010, China",
+              "institution_ids": [
+                "https://openalex.org/I1297991670"
+              ]
+            }
+          ]
+        }
+      ],
+      "institutions": [],
+      "countries_distinct_count": 1,
+      "institutions_distinct_count": 1,
+      "corresponding_author_ids": [
+        "https://openalex.org/A5070296642"
+      ],
+      "corresponding_institution_ids": [
+        "https://openalex.org/I1297991670"
+      ],
+      "apc_list": {
+        "value": 2200,
+        "currency": "CHF",
+        "value_usd": 2303
+      },
+      "apc_paid": {
+        "value": 2200,
+        "currency": "CHF",
+        "value_usd": 2303
+      },
+      "fwci": 0.4018,
+      "has_fulltext": true,
+      "cited_by_count": 6,
+      "citation_normalized_percentile": {
+        "value": 0.50745963,
+        "is_in_top_1_percent": false,
+        "is_in_top_10_percent": false
+      },
+      "cited_by_percentile_year": {
+        "min": 89,
+        "max": 98
+      },
+      "biblio": {
+        "volume": "15",
+        "issue": "19",
+        "first_page": "7437",
+        "last_page": "7437"
+      },
+      "is_retracted": false,
+      "is_paratext": false,
+      "is_xpac": false,
+      "primary_topic": {
+        "id": "https://openalex.org/T11052",
+        "display_name": "Energy Load and Power Forecasting",
+        "score": 0.9692000150680542,
+        "subfield": {
+          "id": "https://openalex.org/subfields/2208",
+          "display_name": "Electrical and Electronic Engineering"
+        },
+        "field": {
+          "id": "https://openalex.org/fields/22",
+          "display_name": "Engineering"
+        },
+        "domain": {
+          "id": "https://openalex.org/domains/3",
+          "display_name": "Physical Sciences"
+        }
+      },
+      "topics": [
+        {
+          "id": "https://openalex.org/T11052",
+          "display_name": "Energy Load and Power Forecasting",
+          "score": 0.9692000150680542,
+          "subfield": {
+            "id": "https://openalex.org/subfields/2208",
+            "display_name": "Electrical and Electronic Engineering"
+          },
+          "field": {
+            "id": "https://openalex.org/fields/22",
+            "display_name": "Engineering"
+          },
+          "domain": {
+            "id": "https://openalex.org/domains/3",
+            "display_name": "Physical Sciences"
+          }
+        },
+        {
+          "id": "https://openalex.org/T11918",
+          "display_name": "Forecasting Techniques and Applications",
+          "score": 0.015799999237060547,
+          "subfield": {
+            "id": "https://openalex.org/subfields/1803",
+            "display_name": "Management Science and Operations Research"
+          },
+          "field": {
+            "id": "https://openalex.org/fields/18",
+            "display_name": "Decision Sciences"
+          },
+          "domain": {
+            "id": "https://openalex.org/domains/2",
+            "display_name": "Social Sciences"
+          }
+        },
+        {
+          "id": "https://openalex.org/T11326",
+          "display_name": "Stock Market Forecasting Methods",
+          "score": 0.004999999888241291,
+          "subfield": {
+            "id": "https://openalex.org/subfields/1803",
+            "display_name": "Management Science and Operations Research"
+          },
+          "field": {
+            "id": "https://openalex.org/fields/18",
+            "display_name": "Decision Sciences"
+          },
+          "domain": {
+            "id": "https://openalex.org/domains/2",
+            "display_name": "Social Sciences"
+          }
+        }
+      ],
+      "keywords": [
+        {
+          "id": "https://openalex.org/keywords/natural-gas-demand-forecasting",
+          "display_name": "natural gas demand forecasting",
+          "score": 0.9990000128746033
+        },
+        {
+          "id": "https://openalex.org/keywords/multi-step-forecasting",
+          "display_name": "multi-step forecasting",
+          "score": 0.9980000257492065
+        },
+        {
+          "id": "https://openalex.org/keywords/hybrid-forecasting-model",
+          "display_name": "hybrid forecasting model",
+          "score": 0.7730000019073486
+        },
+        {
+          "id": "https://openalex.org/keywords/xgboost",
+          "display_name": "XGBoost",
+          "score": 0.9120000004768372
+        },
+        {
+          "id": "https://openalex.org/keywords/salp-swarm-algorithm",
+          "display_name": "salp swarm algorithm",
+          "score": 0.9150000214576721
+        },
+        {
+          "id": "https://openalex.org/keywords/swarm-intelligence",
+          "display_name": "swarm intelligence",
+          "score": 0.7590000033378601
+        },
+        {
+          "id": "https://openalex.org/keywords/hyperparameter-optimization",
+          "display_name": "hyperparameter optimization",
+          "score": 0.9549999833106995
+        },
+        {
+          "id": "https://openalex.org/keywords/carbon-neutrality",
+          "display_name": "carbon neutrality",
+          "score": 0.6779999732971191
+        },
+        {
+          "id": "https://openalex.org/keywords/load-forecasting",
+          "display_name": "load forecasting",
+          "score": 0.4390000104904175
+        }
+      ],
+      "concepts": [
+        {
+          "id": "https://openalex.org/C41008148",
+          "wikidata": "https://www.wikidata.org/wiki/Q21198",
+          "display_name": "Computer science",
+          "level": 0,
+          "score": 0.6456736326217651
+        },
+        {
+          "id": "https://openalex.org/C10485038",
+          "wikidata": "https://www.wikidata.org/wiki/Q48996162",
+          "display_name": "Hyperparameter optimization",
+          "level": 3,
+          "score": 0.5248446464538574
+        },
+        {
+          "id": "https://openalex.org/C158622935",
+          "wikidata": "https://www.wikidata.org/wiki/Q660848",
+          "display_name": "Nonlinear system",
+          "level": 2,
+          "score": 0.4827286899089813
+        },
+        {
+          "id": "https://openalex.org/C8642999",
+          "wikidata": "https://www.wikidata.org/wiki/Q4171168",
+          "display_name": "Hyperparameter",
+          "level": 2,
+          "score": 0.47149011492729187
+        },
+        {
+          "id": "https://openalex.org/C181335050",
+          "wikidata": "https://www.wikidata.org/wiki/Q14915018",
+          "display_name": "Swarm behaviour",
+          "level": 2,
+          "score": 0.45587509870529175
+        },
+        {
+          "id": "https://openalex.org/C85617194",
+          "wikidata": "https://www.wikidata.org/wiki/Q2072794",
+          "display_name": "Particle swarm optimization",
+          "level": 2,
+          "score": 0.42549845576286316
+        },
+        {
+          "id": "https://openalex.org/C119487961",
+          "wikidata": "https://www.wikidata.org/wiki/Q863960",
+          "display_name": "Swarm intelligence",
+          "level": 3,
+          "score": 0.42238110303878784
+        },
+        {
+          "id": "https://openalex.org/C126255220",
+          "wikidata": "https://www.wikidata.org/wiki/Q141495",
+          "display_name": "Mathematical optimization",
+          "level": 1,
+          "score": 0.42099636793136597
+        },
+        {
+          "id": "https://openalex.org/C154945302",
+          "wikidata": "https://www.wikidata.org/wiki/Q11660",
+          "display_name": "Artificial intelligence",
+          "level": 1,
+          "score": 0.40667349100112915
+        },
+        {
+          "id": "https://openalex.org/C119857082",
+          "wikidata": "https://www.wikidata.org/wiki/Q2539",
+          "display_name": "Machine learning",
+          "level": 1,
+          "score": 0.3325190842151642
+        },
+        {
+          "id": "https://openalex.org/C12267149",
+          "wikidata": "https://www.wikidata.org/wiki/Q282453",
+          "display_name": "Support vector machine",
+          "level": 2,
+          "score": 0.19862979650497437
+        },
+        {
+          "id": "https://openalex.org/C33923547",
+          "wikidata": "https://www.wikidata.org/wiki/Q395",
+          "display_name": "Mathematics",
+          "level": 0,
+          "score": 0.15356391668319702
+        },
+        {
+          "id": "https://openalex.org/C62520636",
+          "wikidata": "https://www.wikidata.org/wiki/Q944",
+          "display_name": "Quantum mechanics",
+          "level": 1,
+          "score": 0.0
+        },
+        {
+          "id": "https://openalex.org/C121332964",
+          "wikidata": "https://www.wikidata.org/wiki/Q413",
+          "display_name": "Physics",
+          "level": 0,
+          "score": 0.0
+        }
+      ],
+      "mesh": [],
+      "locations_count": 3,
+      "locations": [
+        {
+          "id": "doi:10.3390/en15197437",
+          "is_oa": true,
+          "landing_page_url": "https://doi.org/10.3390/en15197437",
+          "pdf_url": "https://www.mdpi.com/1996-1073/15/19/7437/pdf?version=1665551986",
+          "source": {
+            "id": "https://openalex.org/S198098182",
+            "display_name": "Energies",
+            "issn_l": "1996-1073",
+            "issn": [
+              "1996-1073"
+            ],
+            "is_oa": true,
+            "is_in_doaj": true,
+            "is_core": true,
+            "listed_in": [
+              "cwts-core",
+              "doaj",
+              "norway-1"
+            ],
+            "host_organization": "https://openalex.org/P4310310987",
+            "host_organization_name": "Multidisciplinary Digital Publishing Institute",
+            "host_organization_lineage": [
+              "https://openalex.org/P4310310987"
+            ],
+            "host_organization_lineage_names": [
+              "Multidisciplinary Digital Publishing Institute"
+            ],
+            "type": "journal"
+          },
+          "license": "cc-by",
+          "license_id": "https://openalex.org/licenses/cc-by",
+          "version": "publishedVersion",
+          "is_accepted": true,
+          "is_published": true,
+          "raw_source_name": "Energies",
+          "raw_type": "journal-article"
+        },
+        {
+          "id": "pmh:oai:RePEc:gam:jeners:v:15:y:2022:i:19:p:7437-:d:937991",
+          "is_oa": false,
+          "landing_page_url": "https://www.mdpi.com/1996-1073/15/19/7437/",
+          "pdf_url": null,
+          "source": {
+            "id": "https://openalex.org/S4306401271",
+            "display_name": "RePEc: Research Papers in Economics",
+            "issn_l": null,
+            "issn": null,
+            "is_oa": false,
+            "is_in_doaj": false,
+            "is_core": false,
+            "listed_in": [],
+            "host_organization": "https://openalex.org/I77793887",
+            "host_organization_name": "Federal Reserve Bank of St. Louis",
+            "host_organization_lineage": [
+              "https://openalex.org/I77793887"
+            ],
+            "host_organization_lineage_names": [],
+            "type": "repository"
+          },
+          "license": null,
+          "license_id": null,
+          "version": "submittedVersion",
+          "is_accepted": false,
+          "is_published": false,
+          "raw_source_name": null,
+          "raw_type": "article"
+        },
+        {
+          "id": "pmh:oai:doaj.org/article:cd31451bbd774ceb929a05d2209c5949",
+          "is_oa": true,
+          "landing_page_url": "https://doaj.org/article/cd31451bbd774ceb929a05d2209c5949",
+          "pdf_url": null,
+          "source": {
+            "id": "https://openalex.org/S4306401280",
+            "display_name": "DOAJ (DOAJ: Directory of Open Access Journals)",
+            "issn_l": null,
+            "issn": null,
+            "is_oa": false,
+            "is_in_doaj": false,
+            "is_core": false,
+            "listed_in": [],
+            "host_organization": null,
+            "host_organization_name": null,
+            "host_organization_lineage": [],
+            "host_organization_lineage_names": [],
+            "type": "repository"
+          },
+          "license": "cc-by-sa",
+          "license_id": "https://openalex.org/licenses/cc-by-sa",
+          "version": "submittedVersion",
+          "is_accepted": false,
+          "is_published": false,
+          "raw_source_name": "Energies, Vol 15, Iss 19, p 7437 (2022)",
+          "raw_type": "article"
+        }
+      ],
+      "best_oa_location": {
+        "id": "doi:10.3390/en15197437",
+        "is_oa": true,
+        "landing_page_url": "https://doi.org/10.3390/en15197437",
+        "pdf_url": "https://www.mdpi.com/1996-1073/15/19/7437/pdf?version=1665551986",
+        "source": {
+          "id": "https://openalex.org/S198098182",
+          "display_name": "Energies",
+          "issn_l": "1996-1073",
+          "issn": [
+            "1996-1073"
+          ],
+          "is_oa": true,
+          "is_in_doaj": true,
+          "is_core": true,
+          "listed_in": [
+            "cwts-core",
+            "doaj",
+            "norway-1"
+          ],
+          "host_organization": "https://openalex.org/P4310310987",
+          "host_organization_name": "Multidisciplinary Digital Publishing Institute",
+          "host_organization_lineage": [
+            "https://openalex.org/P4310310987"
+          ],
+          "host_organization_lineage_names": [
+            "Multidisciplinary Digital Publishing Institute"
+          ],
+          "type": "journal"
+        },
+        "license": "cc-by",
+        "license_id": "https://openalex.org/licenses/cc-by",
+        "version": "publishedVersion",
+        "is_accepted": true,
+        "is_published": true,
+        "raw_source_name": "Energies",
+        "raw_type": "journal-article"
+      },
+      "sustainable_development_goals": [
+        {
+          "display_name": "Affordable and clean energy",
+          "score": 0.9853000044822693,
+          "id": "https://metadata.un.org/sdg/7"
+        },
+        {
+          "display_name": "Climate action",
+          "score": 0.9786999821662903,
+          "id": "https://metadata.un.org/sdg/13"
+        }
+      ],
+      "sustainable_development_goals_aurora": [
+        {
+          "display_name": "Affordable and clean energy",
+          "score": 0.41999998688697815,
+          "id": "https://metadata.un.org/sdg/7"
+        }
+      ],
+      "study_designs": [],
+      "awards": [],
+      "funders": [
+        {
+          "id": "https://openalex.org/F4320336008",
+          "display_name": "National College Students Innovation and Entrepreneurship Training Program",
+          "ror": null
+        }
+      ],
+      "has_content": {
+        "grobid_xml": true,
+        "pdf": true
+      },
+      "content_urls": {
+        "pdf": "https://content.openalex.org/works/W4304127761.pdf",
+        "grobid_xml": "https://content.openalex.org/works/W4304127761.grobid-xml"
+      },
+      "referenced_works_count": 54,
+      "referenced_works": [
+        "https://openalex.org/W1599300385",
+        "https://openalex.org/W1678356000",
+        "https://openalex.org/W1968537188",
+        "https://openalex.org/W1995221739",
+        "https://openalex.org/W2007435376",
+        "https://openalex.org/W2031183907",
+        "https://openalex.org/W2061438946",
+        "https://openalex.org/W2062151674",
+        "https://openalex.org/W2152195021",
+        "https://openalex.org/W2194194703",
+        "https://openalex.org/W2290883490",
+        "https://openalex.org/W2295598076",
+        "https://openalex.org/W2558972342",
+        "https://openalex.org/W2606233713",
+        "https://openalex.org/W2738900493",
+        "https://openalex.org/W2768348081",
+        "https://openalex.org/W2791299376",
+        "https://openalex.org/W2792836463",
+        "https://openalex.org/W2795799072",
+        "https://openalex.org/W2885046688",
+        "https://openalex.org/W2911964244",
+        "https://openalex.org/W2919979744",
+        "https://openalex.org/W2921748836",
+        "https://openalex.org/W2936287033",
+        "https://openalex.org/W2941382837",
+        "https://openalex.org/W2943899862",
+        "https://openalex.org/W2973155373",
+        "https://openalex.org/W2990064447",
+        "https://openalex.org/W2992177290",
+        "https://openalex.org/W3013959850",
+        "https://openalex.org/W3093553909",
+        "https://openalex.org/W3093580335",
+        "https://openalex.org/W3094828723",
+        "https://openalex.org/W3135011374",
+        "https://openalex.org/W3156193004",
+        "https://openalex.org/W3158564889",
+        "https://openalex.org/W3170886625",
+        "https://openalex.org/W3173373210",
+        "https://openalex.org/W3176741621",
+        "https://openalex.org/W3186375200",
+        "https://openalex.org/W3186933108",
+        "https://openalex.org/W3188057000",
+        "https://openalex.org/W3188529979",
+        "https://openalex.org/W3214126381",
+        "https://openalex.org/W4221102375",
+        "https://openalex.org/W4225666890",
+        "https://openalex.org/W4280493402",
+        "https://openalex.org/W4280601473",
+        "https://openalex.org/W4281632200",
+        "https://openalex.org/W4289866076",
+        "https://openalex.org/W4294114289",
+        "https://openalex.org/W4294316324",
+        "https://openalex.org/W6797671110",
+        "https://openalex.org/W6983612401"
+      ],
+      "related_works": [
+        "https://openalex.org/W2953665647",
+        "https://openalex.org/W4281646320",
+        "https://openalex.org/W4205712847",
+        "https://openalex.org/W3169687406",
+        "https://openalex.org/W4388119537",
+        "https://openalex.org/W3014750173",
+        "https://openalex.org/W3114025147",
+        "https://openalex.org/W4287818966",
+        "https://openalex.org/W3192751261",
+        "https://openalex.org/W3200811867"
+      ],
+      "abstract_inverted_index": {
+        "With": [
+          0
+        ],
+        "worldwide": [
+          1
+        ],
+        "activities": [
+          2
+        ],
+        "of": [
+          3,
+          20,
+          50,
+          100,
+          115,
+          135,
+          185,
+          209,
+          216,
+          221,
+          226,
+          256
+        ],
+        "carbon": [
+          4
+        ],
+        "neutrality,": [
+          5
+        ],
+        "clean": [
+          6,
+          24
+        ],
+        "energy": [
+          7,
+          52
+        ],
+        "is": [
+          8,
+          18,
+          67,
+          86,
+          108,
+          230
+        ],
+        "playing": [
+          9
+        ],
+        "an": [
+          10
+        ],
+        "important": [
+          11
+        ],
+        "role": [
+          12
+        ],
+        "these": [
+          13
+        ],
+        "days.": [
+          14
+        ],
+        "Natural": [
+          15,
+          118
+        ],
+        "gas": [
+          16,
+          119
+        ],
+        "(NG)": [
+          17
+        ],
+        "one": [
+          19
+        ],
+        "the": [
+          21,
+          60,
+          70,
+          96,
+          101,
+          105,
+          111,
+          117,
+          123,
+          133,
+          136,
+          173,
+          176,
+          182,
+          188,
+          193,
+          200,
+          222,
+          227,
+          259
+        ],
+        "most": [
+          22,
+          97
+        ],
+        "efficient": [
+          23
+        ],
+        "energies": [
+          25
+        ],
+        "with": [
+          26,
+          142,
+          162,
+          202
+        ],
+        "less": [
+          27
+        ],
+        "harmful": [
+          28
+        ],
+        "emissions": [
+          29
+        ],
+        "and": [
+          30,
+          59,
+          103,
+          127,
+          148,
+          166,
+          187,
+          211,
+          224,
+          245
+        ],
+        "abundant": [
+          31
+        ],
+        "reservoirs.": [
+          32
+        ],
+        "This": [
+          33
+        ],
+        "work": [
+          34
+        ],
+        "aims": [
+          35
+        ],
+        "at": [
+          36
+        ],
+        "developing": [
+          37
+        ],
+        "a": [
+          38,
+          74,
+          90,
+          253
+        ],
+        "swarm": [
+          39
+        ],
+        "intelligence-based": [
+          40
+        ],
+        "tool": [
+          41
+        ],
+        "for": [
+          42,
+          94
+        ],
+        "NG": [
+          43
+        ],
+        "forecasting": [
+          44,
+          116,
+          164,
+          208,
+          215,
+          244
+        ],
+        "to": [
+          45,
+          78,
+          88,
+          131,
+          249
+        ],
+        "make": [
+          46,
+          79
+        ],
+        "more": [
+          47
+        ],
+        "convincing": [
+          48
+        ],
+        "projections": [
+          49
+        ],
+        "future": [
+          51
+        ],
+        "consumption,": [
+          53
+        ],
+        "combining": [
+          54
+        ],
+        "Extreme": [
+          55
+        ],
+        "Gradient": [
+          56
+        ],
+        "Boosting": [
+          57
+        ],
+        "(XGBoost)": [
+          58
+        ],
+        "Salp": [
+          61
+        ],
+        "Swarm": [
+          62
+        ],
+        "Algorithm": [
+          63
+        ],
+        "(SSA).": [
+          64
+        ],
+        "The": [
+          65,
+          169
+        ],
+        "XGBoost": [
+          66,
+          186
+        ],
+        "used": [
+          68,
+          251
+        ],
+        "as": [
+          69
+        ],
+        "core": [
+          71
+        ],
+        "model": [
+          72,
+          139,
+          190,
+          229
+        ],
+        "in": [
+          73,
+          122,
+          140,
+          157,
+          159,
+          180,
+          198,
+          206,
+          213,
+          233,
+          242,
+          252,
+          258
+        ],
+        "nonlinear": [
+          75,
+          91,
+          106
+        ],
+        "auto-regression": [
+          76
+        ],
+        "procedure": [
+          77
+        ],
+        "multi-step": [
+          80
+        ],
+        "ahead": [
+          81
+        ],
+        "forecasting.": [
+          82
+        ],
+        "A": [
+          83
+        ],
+        "cross-validation": [
+          84
+        ],
+        "scheme": [
+          85
+        ],
+        "adopted": [
+          87
+        ],
+        "build": [
+          89
+        ],
+        "programming": [
+          92
+        ],
+        "problem": [
+          93
+        ],
+        "optimizing": [
+          95
+        ],
+        "sensitive": [
+          98
+        ],
+        "hyperparameters": [
+          99
+        ],
+        "XGBoost,": [
+          102
+        ],
+        "then": [
+          104
+        ],
+        "optimization": [
+          107,
+          146
+        ],
+        "solved": [
+          109
+        ],
+        "by": [
+          110
+        ],
+        "SSA.": [
+          112
+        ],
+        "Case": [
+          113
+        ],
+        "studies": [
+          114
+        ],
+        "consumption": [
+          120
+        ],
+        "(NGC)": [
+          121
+        ],
+        "United": [
+          124
+        ],
+        "Kingdom": [
+          125
+        ],
+        "(UK)": [
+          126
+        ],
+        "Netherlands": [
+          128
+        ],
+        "are": [
+          129
+        ],
+        "presented": [
+          130
+        ],
+        "illustrate": [
+          132
+        ],
+        "performance": [
+          134,
+          223
+        ],
+        "proposed": [
+          137,
+          228
+        ],
+        "hybrid": [
+          138,
+          155,
+          189,
+          196
+        ],
+        "comparison": [
+          141
+        ],
+        "five": [
+          143
+        ],
+        "other": [
+          144,
+          150,
+          177,
+          194
+        ],
+        "intelligence": [
+          145
+        ],
+        "algorithms": [
+          147,
+          179
+        ],
+        "two": [
+          149
+        ],
+        "decision": [
+          151
+        ],
+        "tree-based": [
+          152
+        ],
+        "models": [
+          153,
+          197
+        ],
+        "(15": [
+          154
+        ],
+        "schemes": [
+          156
+        ],
+        "total)": [
+          158
+        ],
+        "6": [
+          160
+        ],
+        "subcases": [
+          161,
+          201
+        ],
+        "different": [
+          163
+        ],
+        "steps": [
+          165
+        ],
+        "time": [
+          167
+        ],
+        "lags.": [
+          168
+        ],
+        "results": [
+          170
+        ],
+        "show": [
+          171
+        ],
+        "that": [
+          172
+        ],
+        "SSA": [
+          174
+        ],
+        "outperforms": [
+          175,
+          191
+        ],
+        "5": [
+          178
+        ],
+        "searching": [
+          181
+        ],
+        "optimal": [
+          183
+        ],
+        "parameters": [
+          184
+        ],
+        "all": [
+          192,
+          199
+        ],
+        "15": [
+          195
+        ],
+        "average": [
+          203
+        ],
+        "MAPE": [
+          204
+        ],
+        "4.9828%": [
+          205
+        ],
+        "NGC": [
+          207,
+          214,
+          243
+        ],
+        "UK": [
+          210
+        ],
+        "9.0547%": [
+          212
+        ],
+        "Netherlands,": [
+          217
+        ],
+        "respectively.": [
+          218
+        ],
+        "Detailed": [
+          219
+        ],
+        "analysis": [
+          220
+        ],
+        "properties": [
+          225
+        ],
+        "also": [
+          231
+        ],
+        "summarized": [
+          232
+        ],
+        "this": [
+          234
+        ],
+        "work,": [
+          235
+        ],
+        "which": [
+          236
+        ],
+        "indicates": [
+          237
+        ],
+        "it": [
+          238
+        ],
+        "has": [
+          239
+        ],
+        "high": [
+          240
+        ],
+        "potential": [
+          241
+        ],
+        "can": [
+          246
+        ],
+        "be": [
+          247,
+          250
+        ],
+        "expected": [
+          248
+        ],
+        "wider": [
+          254
+        ],
+        "range": [
+          255
+        ],
+        "applications": [
+          257
+        ],
+        "future.": [
+          260
+        ]
+      },
+      "counts_by_year": [
+        {
+          "year": 2025,
+          "cited_by_count": 5
+        },
+        {
+          "year": 2023,
+          "cited_by_count": 1
+        }
+      ],
+      "updated_date": "2026-10-08T09:06:37.294493",
+      "created_date": "2025-10-10T00:00:00"
+    }
+  }
+}

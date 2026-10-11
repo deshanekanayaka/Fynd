@@ -7,6 +7,22 @@ date: 2026-10-08
 
 Fynd fetches an Open copy from a repository, and never from a publisher. OpenAlex resolves the Open copy a second time, keyed by the digital object identifier. The host list comes from a measurement and not from a guess.
 
+## Note added 2026-10-09
+
+One sentence below is wrong. The decisions section says that both extractors return a flat string and an offset map. [ADR 0005](./0005-a-claim-is-a-located-span.md) says that an offset cannot point into the PDF bytes, because a PDF holds no reading order. Both cannot be true of one map.
+
+ADR 0005 is correct. An extractor returns the Source text plus the structure, which is the page and section spans the database design already marks as display only. The offset chain starts at the string the extractor produced, and normalization and chunking compose their maps on top of it.
+
+Read "an offset map" in the decisions section as "the structure". Nothing else in this record changes.
+
+A second sentence needs a condition. The extractors section says pdfminer.six under pdfplumber reads a two column paper. That is true for one call per column, and false for one call per page. A measured run on 2026-10-09 read a two column page. It returned "Household energy demand in the We fit a model to half hourly meter". That is the first line of each column, joined into one line. A Claim quoted from such a line says something no author wrote.
+
+So `extract.py` looks for the gutter. The gutter is a vertical band that no word crosses, inside the middle third of the page, and at least 18 points wide. A page with a gutter is read as two columns, left first. A page without one is read whole, because a cut through a full width line is worse than an interleaved page. A page with three columns gives one column of the three, and the measurement shows it.
+
+A third sentence is now measured. The extractors section names readability-lxml as the fallback for a lost table on a statistics page. A measured run on 2026-10-09 read four United Kingdom government pages. None of them holds an HTML table at all. The numbers live in a chart drawn by a script, or in a spreadsheet behind a link.
+
+So the risk is not a lost table. The risk is a statistics page that holds no number in its text. One gov.uk release page gave 1,898 characters, and its figures sit in a spreadsheet. A hand written page with a real table shows that trafilatura keeps a table and its numbers. readability-lxml stays uninstalled.
+
 ## The fact that forced this
 
 The first live search for the Seeded Topic returned 20 Papers. 12 carry an Open copy link, and 18 carry a digital object identifier. The 12 links split by host:

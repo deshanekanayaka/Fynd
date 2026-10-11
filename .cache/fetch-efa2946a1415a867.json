@@ -1,0 +1,15 @@
+{
+  "parts": {
+    "api": "open-copy-fetch",
+    "url": "https://research.bangor.ac.uk/files/53794468/Helping_the_poor_and_the_vulnerable_with_their_energy_bills_during_the_energy_crisis_of_2022_2023.pdf",
+    "redirects": 3,
+    "max_bytes": 20971520,
+    "shape": 1
+  },
+  "value": {
+    "kind": "refusal",
+    "status": 403,
+    "content_type": "text/html; charset=UTF-8",
+    "reason": "fetch_refused"
+  }
+}

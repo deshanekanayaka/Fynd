@@ -1,0 +1,1151 @@
+{
+  "parts": {
+    "api": "openalex-work",
+    "doi": "10.3390/environments11090199",
+    "shape": 1
+  },
+  "value": {
+    "found": true,
+    "work": {
+      "id": "https://openalex.org/W4402481521",
+      "doi": "https://doi.org/10.3390/environments11090199",
+      "title": "Climate Change Adaptation through Renewable Energy: The Cases of Australia, Canada, and the United Kingdom",
+      "display_name": "Climate Change Adaptation through Renewable Energy: The Cases of Australia, Canada, and the United Kingdom",
+      "publication_year": 2024,
+      "publication_date": "2024-09-12",
+      "ids": {
+        "openalex": "https://openalex.org/W4402481521",
+        "doi": "https://doi.org/10.3390/environments11090199"
+      },
+      "language": "en",
+      "primary_location": {
+        "id": "doi:10.3390/environments11090199",
+        "is_oa": true,
+        "landing_page_url": "https://doi.org/10.3390/environments11090199",
+        "pdf_url": "https://www.mdpi.com/2076-3298/11/9/199/pdf?version=1726147204",
+        "source": {
+          "id": "https://openalex.org/S4210187256",
+          "display_name": "Environments",
+          "issn_l": "2076-3298",
+          "issn": [
+            "2076-3298"
+          ],
+          "is_oa": true,
+          "is_in_doaj": false,
+          "is_core": true,
+          "listed_in": [
+            "cwts-core",
+            "norway-1"
+          ],
+          "host_organization": "https://openalex.org/P4310310987",
+          "host_organization_name": "Multidisciplinary Digital Publishing Institute",
+          "host_organization_lineage": [
+            "https://openalex.org/P4310310987"
+          ],
+          "host_organization_lineage_names": [
+            "Multidisciplinary Digital Publishing Institute"
+          ],
+          "type": "journal"
+        },
+        "license": "cc-by",
+        "license_id": "https://openalex.org/licenses/cc-by",
+        "version": "publishedVersion",
+        "is_accepted": true,
+        "is_published": true,
+        "raw_source_name": "Environments",
+        "raw_type": "journal-article"
+      },
+      "type": "article",
+      "indexed_in": [
+        "crossref"
+      ],
+      "open_access": {
+        "is_oa": true,
+        "oa_status": "gold",
+        "oa_url": "https://www.mdpi.com/2076-3298/11/9/199/pdf?version=1726147204",
+        "any_repository_has_fulltext": false
+      },
+      "authorships": [
+        {
+          "author_position": "first",
+          "author": {
+            "id": "https://openalex.org/A5025322208",
+            "display_name": "Avri Eitan",
+            "orcid": "https://orcid.org/0000-0003-1533-5279",
+            "observed_orcids": [
+              "https://orcid.org/0000-0003-1533-5279"
+            ]
+          },
+          "institutions": [
+            {
+              "id": "https://openalex.org/I197251160",
+              "display_name": "Hebrew University of Jerusalem",
+              "ror": "https://ror.org/03qxff017",
+              "country_code": "IL",
+              "type": "education",
+              "lineage": [
+                "https://openalex.org/I197251160"
+              ]
+            }
+          ],
+          "countries": [
+            "IL"
+          ],
+          "is_corresponding": true,
+          "raw_author_name": "Avri Eitan",
+          "raw_affiliation_strings": [
+            "Department of Geography, The Hebrew University of Jerusalem, Jerusalem 9190500, Israel"
+          ],
+          "raw_orcid": null,
+          "affiliations": [
+            {
+              "raw_affiliation_string": "Department of Geography, The Hebrew University of Jerusalem, Jerusalem 9190500, Israel",
+              "institution_ids": [
+                "https://openalex.org/I197251160"
+              ]
+            }
+          ]
+        }
+      ],
+      "institutions": [],
+      "countries_distinct_count": 1,
+      "institutions_distinct_count": 1,
+      "corresponding_author_ids": [
+        "https://openalex.org/A5025322208"
+      ],
+      "corresponding_institution_ids": [
+        "https://openalex.org/I197251160"
+      ],
+      "apc_list": {
+        "value": 1800,
+        "currency": "CHF",
+        "value_usd": 2046
+      },
+      "apc_paid": {
+        "value": 1800,
+        "currency": "CHF",
+        "value_usd": 2046
+      },
+      "fwci": 1.7323,
+      "has_fulltext": true,
+      "cited_by_count": 9,
+      "citation_normalized_percentile": {
+        "value": 0.83682442,
+        "is_in_top_1_percent": false,
+        "is_in_top_10_percent": false
+      },
+      "cited_by_percentile_year": {
+        "min": 96,
+        "max": 99
+      },
+      "biblio": {
+        "volume": "11",
+        "issue": "9",
+        "first_page": "199",
+        "last_page": "199"
+      },
+      "is_retracted": false,
+      "is_paratext": false,
+      "is_xpac": false,
+      "primary_topic": {
+        "id": "https://openalex.org/T10119",
+        "display_name": "Sustainability and Climate Change Governance",
+        "score": 0.9775000214576721,
+        "subfield": {
+          "id": "https://openalex.org/subfields/2306",
+          "display_name": "Global and Planetary Change"
+        },
+        "field": {
+          "id": "https://openalex.org/fields/23",
+          "display_name": "Environmental Science"
+        },
+        "domain": {
+          "id": "https://openalex.org/domains/3",
+          "display_name": "Physical Sciences"
+        }
+      },
+      "topics": [
+        {
+          "id": "https://openalex.org/T10119",
+          "display_name": "Sustainability and Climate Change Governance",
+          "score": 0.9775000214576721,
+          "subfield": {
+            "id": "https://openalex.org/subfields/2306",
+            "display_name": "Global and Planetary Change"
+          },
+          "field": {
+            "id": "https://openalex.org/fields/23",
+            "display_name": "Environmental Science"
+          },
+          "domain": {
+            "id": "https://openalex.org/domains/3",
+            "display_name": "Physical Sciences"
+          }
+        },
+        {
+          "id": "https://openalex.org/T14296",
+          "display_name": "Climate Change and Sustainable Development",
+          "score": 0.00930000003427267,
+          "subfield": {
+            "id": "https://openalex.org/subfields/2306",
+            "display_name": "Global and Planetary Change"
+          },
+          "field": {
+            "id": "https://openalex.org/fields/23",
+            "display_name": "Environmental Science"
+          },
+          "domain": {
+            "id": "https://openalex.org/domains/3",
+            "display_name": "Physical Sciences"
+          }
+        },
+        {
+          "id": "https://openalex.org/T10471",
+          "display_name": "Climate Change Policy and Economics",
+          "score": 0.005400000140070915,
+          "subfield": {
+            "id": "https://openalex.org/subfields/2002",
+            "display_name": "Economics and Econometrics"
+          },
+          "field": {
+            "id": "https://openalex.org/fields/20",
+            "display_name": "Economics, Econometrics and Finance"
+          },
+          "domain": {
+            "id": "https://openalex.org/domains/2",
+            "display_name": "Social Sciences"
+          }
+        }
+      ],
+      "keywords": [
+        {
+          "id": "https://openalex.org/keywords/climate-change-adaptation",
+          "display_name": "climate change adaptation",
+          "score": 0.9980000257492065
+        },
+        {
+          "id": "https://openalex.org/keywords/renewable-energy",
+          "display_name": "renewable energy",
+          "score": 0.9950000047683716
+        },
+        {
+          "id": "https://openalex.org/keywords/climate-change-adaptation-policy",
+          "display_name": "climate adaptation policy",
+          "score": 0.7350000143051147
+        },
+        {
+          "id": "https://openalex.org/keywords/energy-infrastructure-resilience",
+          "display_name": "energy infrastructure resilience",
+          "score": 0.8610000014305115
+        },
+        {
+          "id": "https://openalex.org/keywords/extreme-climate-events",
+          "display_name": "climate extremes",
+          "score": 0.6790000200271606
+        },
+        {
+          "id": "https://openalex.org/keywords/energy-diversification",
+          "display_name": "energy diversification",
+          "score": 0.6309999823570251
+        },
+        {
+          "id": "https://openalex.org/keywords/australia",
+          "display_name": "Australia",
+          "score": 0.6140000224113464
+        },
+        {
+          "id": "https://openalex.org/keywords/canada",
+          "display_name": "Canada",
+          "score": 1.0
+        },
+        {
+          "id": "https://openalex.org/keywords/united-kingdom",
+          "display_name": "United Kingdom",
+          "score": 1.0
+        }
+      ],
+      "concepts": [
+        {
+          "id": "https://openalex.org/C188573790",
+          "wikidata": "https://www.wikidata.org/wiki/Q12705",
+          "display_name": "Renewable energy",
+          "level": 2,
+          "score": 0.7557449340820312
+        },
+        {
+          "id": "https://openalex.org/C132651083",
+          "wikidata": "https://www.wikidata.org/wiki/Q7942",
+          "display_name": "Climate change",
+          "level": 2,
+          "score": 0.7363237738609314
+        },
+        {
+          "id": "https://openalex.org/C180916674",
+          "wikidata": "https://www.wikidata.org/wiki/Q3711935",
+          "display_name": "Diversification (marketing strategy)",
+          "level": 2,
+          "score": 0.5832972526550293
+        },
+        {
+          "id": "https://openalex.org/C107826830",
+          "wikidata": "https://www.wikidata.org/wiki/Q929380",
+          "display_name": "Environmental resource management",
+          "level": 1,
+          "score": 0.5752165913581848
+        },
+        {
+          "id": "https://openalex.org/C175605778",
+          "wikidata": "https://www.wikidata.org/wiki/Q3299701",
+          "display_name": "Natural resource economics",
+          "level": 1,
+          "score": 0.539583146572113
+        },
+        {
+          "id": "https://openalex.org/C47737302",
+          "wikidata": "https://www.wikidata.org/wiki/Q167336",
+          "display_name": "Greenhouse gas",
+          "level": 2,
+          "score": 0.5014212131500244
+        },
+        {
+          "id": "https://openalex.org/C144133560",
+          "wikidata": "https://www.wikidata.org/wiki/Q4830453",
+          "display_name": "Business",
+          "level": 0,
+          "score": 0.4932629466056824
+        },
+        {
+          "id": "https://openalex.org/C139807058",
+          "wikidata": "https://www.wikidata.org/wiki/Q352374",
+          "display_name": "Adaptation (eye)",
+          "level": 2,
+          "score": 0.4892127513885498
+        },
+        {
+          "id": "https://openalex.org/C509746633",
+          "wikidata": "https://www.wikidata.org/wiki/Q898653",
+          "display_name": "Climate change mitigation",
+          "level": 3,
+          "score": 0.4651098847389221
+        },
+        {
+          "id": "https://openalex.org/C137176749",
+          "wikidata": "https://www.wikidata.org/wiki/Q4105337",
+          "display_name": "Psychological resilience",
+          "level": 2,
+          "score": 0.4546111822128296
+        },
+        {
+          "id": "https://openalex.org/C131046424",
+          "wikidata": "https://www.wikidata.org/wiki/Q1805337",
+          "display_name": "Energy policy",
+          "level": 3,
+          "score": 0.44509634375572205
+        },
+        {
+          "id": "https://openalex.org/C2779585090",
+          "wikidata": "https://www.wikidata.org/wiki/Q3457762",
+          "display_name": "Resilience (materials science)",
+          "level": 2,
+          "score": 0.4103337228298187
+        },
+        {
+          "id": "https://openalex.org/C91375879",
+          "wikidata": "https://www.wikidata.org/wiki/Q15473274",
+          "display_name": "Environmental planning",
+          "level": 1,
+          "score": 0.3697007894515991
+        },
+        {
+          "id": "https://openalex.org/C134560507",
+          "wikidata": "https://www.wikidata.org/wiki/Q753291",
+          "display_name": "Environmental economics",
+          "level": 1,
+          "score": 0.325857937335968
+        },
+        {
+          "id": "https://openalex.org/C162324750",
+          "wikidata": "https://www.wikidata.org/wiki/Q8134",
+          "display_name": "Economics",
+          "level": 0,
+          "score": 0.2876281142234802
+        },
+        {
+          "id": "https://openalex.org/C205649164",
+          "wikidata": "https://www.wikidata.org/wiki/Q1071",
+          "display_name": "Geography",
+          "level": 0,
+          "score": 0.21697470545768738
+        },
+        {
+          "id": "https://openalex.org/C127413603",
+          "wikidata": "https://www.wikidata.org/wiki/Q11023",
+          "display_name": "Engineering",
+          "level": 0,
+          "score": 0.16689527034759521
+        },
+        {
+          "id": "https://openalex.org/C18903297",
+          "wikidata": "https://www.wikidata.org/wiki/Q7150",
+          "display_name": "Ecology",
+          "level": 1,
+          "score": 0.09743943810462952
+        },
+        {
+          "id": "https://openalex.org/C86803240",
+          "wikidata": "https://www.wikidata.org/wiki/Q420",
+          "display_name": "Biology",
+          "level": 0,
+          "score": 0.0
+        },
+        {
+          "id": "https://openalex.org/C15744967",
+          "wikidata": "https://www.wikidata.org/wiki/Q9418",
+          "display_name": "Psychology",
+          "level": 0,
+          "score": 0.0
+        },
+        {
+          "id": "https://openalex.org/C121332964",
+          "wikidata": "https://www.wikidata.org/wiki/Q413",
+          "display_name": "Physics",
+          "level": 0,
+          "score": 0.0
+        },
+        {
+          "id": "https://openalex.org/C119599485",
+          "wikidata": "https://www.wikidata.org/wiki/Q43035",
+          "display_name": "Electrical engineering",
+          "level": 1,
+          "score": 0.0
+        },
+        {
+          "id": "https://openalex.org/C542102704",
+          "wikidata": "https://www.wikidata.org/wiki/Q183257",
+          "display_name": "Psychotherapist",
+          "level": 1,
+          "score": 0.0
+        },
+        {
+          "id": "https://openalex.org/C97355855",
+          "wikidata": "https://www.wikidata.org/wiki/Q11473",
+          "display_name": "Thermodynamics",
+          "level": 1,
+          "score": 0.0
+        },
+        {
+          "id": "https://openalex.org/C120665830",
+          "wikidata": "https://www.wikidata.org/wiki/Q14620",
+          "display_name": "Optics",
+          "level": 1,
+          "score": 0.0
+        },
+        {
+          "id": "https://openalex.org/C162853370",
+          "wikidata": "https://www.wikidata.org/wiki/Q39809",
+          "display_name": "Marketing",
+          "level": 1,
+          "score": 0.0
+        }
+      ],
+      "mesh": [],
+      "locations_count": 1,
+      "locations": [
+        {
+          "id": "doi:10.3390/environments11090199",
+          "is_oa": true,
+          "landing_page_url": "https://doi.org/10.3390/environments11090199",
+          "pdf_url": "https://www.mdpi.com/2076-3298/11/9/199/pdf?version=1726147204",
+          "source": {
+            "id": "https://openalex.org/S4210187256",
+            "display_name": "Environments",
+            "issn_l": "2076-3298",
+            "issn": [
+              "2076-3298"
+            ],
+            "is_oa": true,
+            "is_in_doaj": false,
+            "is_core": true,
+            "listed_in": [
+              "cwts-core",
+              "norway-1"
+            ],
+            "host_organization": "https://openalex.org/P4310310987",
+            "host_organization_name": "Multidisciplinary Digital Publishing Institute",
+            "host_organization_lineage": [
+              "https://openalex.org/P4310310987"
+            ],
+            "host_organization_lineage_names": [
+              "Multidisciplinary Digital Publishing Institute"
+            ],
+            "type": "journal"
+          },
+          "license": "cc-by",
+          "license_id": "https://openalex.org/licenses/cc-by",
+          "version": "publishedVersion",
+          "is_accepted": true,
+          "is_published": true,
+          "raw_source_name": "Environments",
+          "raw_type": "journal-article"
+        }
+      ],
+      "best_oa_location": {
+        "id": "doi:10.3390/environments11090199",
+        "is_oa": true,
+        "landing_page_url": "https://doi.org/10.3390/environments11090199",
+        "pdf_url": "https://www.mdpi.com/2076-3298/11/9/199/pdf?version=1726147204",
+        "source": {
+          "id": "https://openalex.org/S4210187256",
+          "display_name": "Environments",
+          "issn_l": "2076-3298",
+          "issn": [
+            "2076-3298"
+          ],
+          "is_oa": true,
+          "is_in_doaj": false,
+          "is_core": true,
+          "listed_in": [
+            "cwts-core",
+            "norway-1"
+          ],
+          "host_organization": "https://openalex.org/P4310310987",
+          "host_organization_name": "Multidisciplinary Digital Publishing Institute",
+          "host_organization_lineage": [
+            "https://openalex.org/P4310310987"
+          ],
+          "host_organization_lineage_names": [
+            "Multidisciplinary Digital Publishing Institute"
+          ],
+          "type": "journal"
+        },
+        "license": "cc-by",
+        "license_id": "https://openalex.org/licenses/cc-by",
+        "version": "publishedVersion",
+        "is_accepted": true,
+        "is_published": true,
+        "raw_source_name": "Environments",
+        "raw_type": "journal-article"
+      },
+      "sustainable_development_goals": [
+        {
+          "id": "https://metadata.un.org/sdg/13",
+          "display_name": "Climate action",
+          "score": 1.0
+        },
+        {
+          "id": "https://metadata.un.org/sdg/7",
+          "display_name": "Affordable and clean energy",
+          "score": 0.75
+        }
+      ],
+      "sustainable_development_goals_aurora": [
+        {
+          "id": "https://metadata.un.org/sdg/13",
+          "display_name": "Climate action",
+          "score": 0.5099999904632568
+        }
+      ],
+      "study_designs": [],
+      "awards": [],
+      "funders": [],
+      "has_content": {
+        "pdf": true,
+        "grobid_xml": true
+      },
+      "content_urls": {
+        "pdf": "https://content.openalex.org/works/W4402481521.pdf",
+        "grobid_xml": "https://content.openalex.org/works/W4402481521.grobid-xml"
+      },
+      "referenced_works_count": 102,
+      "referenced_works": [
+        "https://openalex.org/W75231382",
+        "https://openalex.org/W1508162533",
+        "https://openalex.org/W1627978401",
+        "https://openalex.org/W1967279730",
+        "https://openalex.org/W1967297859",
+        "https://openalex.org/W1974424100",
+        "https://openalex.org/W1985292228",
+        "https://openalex.org/W1989099801",
+        "https://openalex.org/W1991858973",
+        "https://openalex.org/W1998525562",
+        "https://openalex.org/W1998839648",
+        "https://openalex.org/W2002046221",
+        "https://openalex.org/W2004848061",
+        "https://openalex.org/W2005805347",
+        "https://openalex.org/W2007339478",
+        "https://openalex.org/W2013133221",
+        "https://openalex.org/W2013266710",
+        "https://openalex.org/W2017054881",
+        "https://openalex.org/W2027564955",
+        "https://openalex.org/W2029979372",
+        "https://openalex.org/W2032221228",
+        "https://openalex.org/W2037335891",
+        "https://openalex.org/W2049890359",
+        "https://openalex.org/W2050407666",
+        "https://openalex.org/W2050486724",
+        "https://openalex.org/W2050903003",
+        "https://openalex.org/W2053503022",
+        "https://openalex.org/W2054653365",
+        "https://openalex.org/W2055864149",
+        "https://openalex.org/W2063270130",
+        "https://openalex.org/W2064556155",
+        "https://openalex.org/W2081757228",
+        "https://openalex.org/W2088687444",
+        "https://openalex.org/W2090352428",
+        "https://openalex.org/W2099652575",
+        "https://openalex.org/W2105389536",
+        "https://openalex.org/W2112027169",
+        "https://openalex.org/W2120012334",
+        "https://openalex.org/W2122140248",
+        "https://openalex.org/W2133501143",
+        "https://openalex.org/W2135082567",
+        "https://openalex.org/W2136235409",
+        "https://openalex.org/W2136244454",
+        "https://openalex.org/W2138045617",
+        "https://openalex.org/W2138879095",
+        "https://openalex.org/W2139494527",
+        "https://openalex.org/W2140965658",
+        "https://openalex.org/W2148939675",
+        "https://openalex.org/W2154062353",
+        "https://openalex.org/W2155122311",
+        "https://openalex.org/W2156087273",
+        "https://openalex.org/W2160137676",
+        "https://openalex.org/W2160883209",
+        "https://openalex.org/W2161013171",
+        "https://openalex.org/W2164906782",
+        "https://openalex.org/W2168515722",
+        "https://openalex.org/W2168693520",
+        "https://openalex.org/W2171733339",
+        "https://openalex.org/W2336998050",
+        "https://openalex.org/W2340341377",
+        "https://openalex.org/W2345773973",
+        "https://openalex.org/W2398325845",
+        "https://openalex.org/W2407257848",
+        "https://openalex.org/W2521391974",
+        "https://openalex.org/W2597296452",
+        "https://openalex.org/W2737048685",
+        "https://openalex.org/W2746456090",
+        "https://openalex.org/W2783400274",
+        "https://openalex.org/W2784098876",
+        "https://openalex.org/W2909483557",
+        "https://openalex.org/W2922223396",
+        "https://openalex.org/W2947202110",
+        "https://openalex.org/W2953748503",
+        "https://openalex.org/W2976658012",
+        "https://openalex.org/W3021184060",
+        "https://openalex.org/W3035157120",
+        "https://openalex.org/W3046476263",
+        "https://openalex.org/W3111442832",
+        "https://openalex.org/W3112814935",
+        "https://openalex.org/W3123460699",
+        "https://openalex.org/W3137355421",
+        "https://openalex.org/W3138531832",
+        "https://openalex.org/W3158733397",
+        "https://openalex.org/W3189565667",
+        "https://openalex.org/W4200489924",
+        "https://openalex.org/W4205441145",
+        "https://openalex.org/W4206185351",
+        "https://openalex.org/W4206455204",
+        "https://openalex.org/W4210464014",
+        "https://openalex.org/W4245041963",
+        "https://openalex.org/W4282913475",
+        "https://openalex.org/W4288058405",
+        "https://openalex.org/W4308951083",
+        "https://openalex.org/W4309651334",
+        "https://openalex.org/W4318339133",
+        "https://openalex.org/W4319017587",
+        "https://openalex.org/W4381459954",
+        "https://openalex.org/W4382490752",
+        "https://openalex.org/W4386092851",
+        "https://openalex.org/W4394933544",
+        "https://openalex.org/W6791741431",
+        "https://openalex.org/W7018294876"
+      ],
+      "related_works": [
+        "https://openalex.org/W4389391504",
+        "https://openalex.org/W4301410663",
+        "https://openalex.org/W4312472185",
+        "https://openalex.org/W2382761395",
+        "https://openalex.org/W2358904772",
+        "https://openalex.org/W2897048536",
+        "https://openalex.org/W2480512091",
+        "https://openalex.org/W2741848782",
+        "https://openalex.org/W4387213622",
+        "https://openalex.org/W2036196442"
+      ],
+      "abstract_inverted_index": {
+        "In": [
+          0
+        ],
+        "recent": [
+          1
+        ],
+        "years,": [
+          2
+        ],
+        "climate": [
+          3,
+          32,
+          54,
+          69,
+          113
+        ],
+        "change": [
+          4,
+          33,
+          114
+        ],
+        "has": [
+          5
+        ],
+        "escalated": [
+          6
+        ],
+        "significantly,": [
+          7
+        ],
+        "with": [
+          8
+        ],
+        "forecasts": [
+          9
+        ],
+        "indicating": [
+          10
+        ],
+        "that": [
+          11,
+          171
+        ],
+        "this": [
+          12,
+          100,
+          168
+        ],
+        "trend": [
+          13
+        ],
+        "will": [
+          14
+        ],
+        "further": [
+          15
+        ],
+        "accelerate": [
+          16
+        ],
+        "in": [
+          17,
+          27,
+          79,
+          92,
+          117,
+          162,
+          189
+        ],
+        "the": [
+          18,
+          45,
+          49,
+          62,
+          123,
+          132,
+          148,
+          172,
+          190
+        ],
+        "future.": [
+          19
+        ],
+        "Renewable": [
+          20
+        ],
+        "energy": [
+          21,
+          50,
+          65,
+          109,
+          136,
+          165,
+          177,
+          191
+        ],
+        "systems": [
+          22,
+          42
+        ],
+        "play": [
+          23
+        ],
+        "a": [
+          24,
+          103,
+          128
+        ],
+        "crucial": [
+          25,
+          186
+        ],
+        "role": [
+          26,
+          78,
+          133
+        ],
+        "global": [
+          28,
+          80
+        ],
+        "efforts": [
+          29
+        ],
+        "to": [
+          30,
+          35,
+          47,
+          53,
+          67,
+          98
+        ],
+        "mitigate": [
+          31
+        ],
+        "due": [
+          34
+        ],
+        "their": [
+          36,
+          57,
+          77,
+          85
+        ],
+        "minimal": [
+          37
+        ],
+        "greenhouse": [
+          38
+        ],
+        "gas": [
+          39
+        ],
+        "emissions.": [
+          40
+        ],
+        "These": [
+          41
+        ],
+        "also": [
+          43
+        ],
+        "have": [
+          44
+        ],
+        "potential": [
+          46
+        ],
+        "facilitate": [
+          48
+        ],
+        "sector\u2019s": [
+          51
+        ],
+        "adaptation": [
+          52,
+          87,
+          115,
+          140,
+          187
+        ],
+        "change,": [
+          55
+        ],
+        "given": [
+          56
+        ],
+        "decentralized": [
+          58
+        ],
+        "nature,": [
+          59
+        ],
+        "which": [
+          60
+        ],
+        "enhances": [
+          61
+        ],
+        "resilience": [
+          63
+        ],
+        "of": [
+          64,
+          106,
+          131,
+          134,
+          150,
+          175
+        ],
+        "infrastructure": [
+          66
+        ],
+        "extreme": [
+          68
+        ],
+        "events.": [
+          70
+        ],
+        "Nevertheless,": [
+          71
+        ],
+        "existing": [
+          72
+        ],
+        "literature": [
+          73
+        ],
+        "predominantly": [
+          74
+        ],
+        "focuses": [
+          75
+        ],
+        "on": [
+          76,
+          147,
+          181
+        ],
+        "mitigation": [
+          81,
+          182
+        ],
+        "efforts,": [
+          82,
+          183
+        ],
+        "often": [
+          83
+        ],
+        "overlooking": [
+          84
+        ],
+        "significant": [
+          86
+        ],
+        "capacity,": [
+          88
+        ],
+        "particularly": [
+          89
+        ],
+        "as": [
+          90,
+          154,
+          194
+        ],
+        "reflected": [
+          91
+        ],
+        "national": [
+          93
+        ],
+        "policies.": [
+          94,
+          141
+        ],
+        "This": [
+          95
+        ],
+        "study": [
+          96,
+          169
+        ],
+        "seeks": [
+          97
+        ],
+        "bridge": [
+          99
+        ],
+        "gap": [
+          101
+        ],
+        "through": [
+          102
+        ],
+        "qualitative": [
+          104
+        ],
+        "examination": [
+          105
+        ],
+        "how": [
+          107
+        ],
+        "renewable": [
+          108,
+          135,
+          164,
+          176
+        ],
+        "is": [
+          110,
+          145
+        ],
+        "incorporated": [
+          111
+        ],
+        "into": [
+          112
+        ],
+        "policies": [
+          116
+        ],
+        "three": [
+          118
+        ],
+        "countries:": [
+          119
+        ],
+        "Australia,": [
+          120
+        ],
+        "Canada,": [
+          121
+        ],
+        "and": [
+          122,
+          159,
+          196
+        ],
+        "United": [
+          124
+        ],
+        "Kingdom.": [
+          125
+        ],
+        "It": [
+          126
+        ],
+        "highlights": [
+          127
+        ],
+        "growing": [
+          129
+        ],
+        "awareness": [
+          130
+        ],
+        "within": [
+          137
+        ],
+        "these": [
+          138
+        ],
+        "countries\u2019": [
+          139
+        ],
+        "However,": [
+          142
+        ],
+        "while": [
+          143
+        ],
+        "there": [
+          144
+        ],
+        "consensus": [
+          146
+        ],
+        "importance": [
+          149
+        ],
+        "policy": [
+          151
+        ],
+        "factors": [
+          152
+        ],
+        "such": [
+          153,
+          193
+        ],
+        "local": [
+          155
+        ],
+        "focus,": [
+          156
+        ],
+        "research": [
+          157
+        ],
+        "initiatives,": [
+          158
+        ],
+        "risk": [
+          160
+        ],
+        "assessment": [
+          161
+        ],
+        "utilizing": [
+          163
+        ],
+        "for": [
+          166
+        ],
+        "adaptation,": [
+          167
+        ],
+        "reveals": [
+          170
+        ],
+        "actual": [
+          173
+        ],
+        "deployment": [
+          174
+        ],
+        "remains": [
+          178
+        ],
+        "largely": [
+          179
+        ],
+        "centered": [
+          180
+        ],
+        "partly": [
+          184
+        ],
+        "neglecting": [
+          185
+        ],
+        "needs": [
+          188
+        ],
+        "sector,": [
+          192
+        ],
+        "geographical": [
+          195
+        ],
+        "technological": [
+          197
+        ],
+        "diversification.": [
+          198
+        ]
+      },
+      "counts_by_year": [
+        {
+          "year": 2026,
+          "cited_by_count": 6
+        },
+        {
+          "year": 2025,
+          "cited_by_count": 3
+        }
+      ],
+      "updated_date": "2026-09-10T07:47:47.112893",
+      "created_date": "2025-10-10T00:00:00"
+    }
+  }
+}

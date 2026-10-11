@@ -1,0 +1,1852 @@
+{
+  "parts": {
+    "api": "openalex-work",
+    "doi": "10.1016/j.enpol.2022.113132",
+    "shape": 1
+  },
+  "value": {
+    "found": true,
+    "work": {
+      "id": "https://openalex.org/W4284691873",
+      "doi": "https://doi.org/10.1016/j.enpol.2022.113132",
+      "title": "\u2018We're going all out for shale:\u2019 explaining shale gas energy policy failure in the United Kingdom",
+      "display_name": "\u2018We're going all out for shale:\u2019 explaining shale gas energy policy failure in the United Kingdom",
+      "publication_year": 2022,
+      "publication_date": "2022-07-07",
+      "ids": {
+        "openalex": "https://openalex.org/W4284691873",
+        "doi": "https://doi.org/10.1016/j.enpol.2022.113132"
+      },
+      "language": "en",
+      "primary_location": {
+        "id": "doi:10.1016/j.enpol.2022.113132",
+        "is_oa": true,
+        "landing_page_url": "https://doi.org/10.1016/j.enpol.2022.113132",
+        "pdf_url": "https://www.sciencedirect.com/science/article/pii/S0301421522003573/pdf",
+        "source": {
+          "id": "https://openalex.org/S175056054",
+          "display_name": "Energy Policy",
+          "issn_l": "0301-4215",
+          "issn": [
+            "0301-4215",
+            "1873-6777"
+          ],
+          "is_oa": false,
+          "is_in_doaj": false,
+          "is_core": true,
+          "listed_in": [
+            "abdc-a",
+            "cwts-core",
+            "jufo-1",
+            "norway-1"
+          ],
+          "host_organization": "https://openalex.org/P4310320990",
+          "host_organization_name": "Elsevier BV",
+          "host_organization_lineage": [
+            "https://openalex.org/P4310320990"
+          ],
+          "host_organization_lineage_names": [
+            "Elsevier BV"
+          ],
+          "type": "journal"
+        },
+        "license": "cc-by",
+        "license_id": "https://openalex.org/licenses/cc-by",
+        "version": "publishedVersion",
+        "is_accepted": true,
+        "is_published": true,
+        "raw_source_name": "Energy Policy",
+        "raw_type": "journal-article"
+      },
+      "type": "article",
+      "indexed_in": [
+        "crossref"
+      ],
+      "open_access": {
+        "is_oa": true,
+        "oa_status": "hybrid",
+        "oa_url": "https://www.sciencedirect.com/science/article/pii/S0301421522003573/pdf",
+        "any_repository_has_fulltext": true
+      },
+      "authorships": [
+        {
+          "author_position": "first",
+          "author": {
+            "id": "https://openalex.org/A5032990221",
+            "display_name": "Michael Bradshaw",
+            "orcid": "https://orcid.org/0000-0001-8842-3953",
+            "observed_orcids": [
+              "https://orcid.org/0000-0001-8842-3953"
+            ]
+          },
+          "institutions": [
+            {
+              "id": "https://openalex.org/I39555362",
+              "display_name": "University of Warwick",
+              "ror": "https://ror.org/01a77tt86",
+              "country_code": "GB",
+              "type": "education",
+              "lineage": [
+                "https://openalex.org/I39555362"
+              ]
+            }
+          ],
+          "countries": [
+            "GB"
+          ],
+          "is_corresponding": true,
+          "raw_author_name": "Michael Bradshaw",
+          "raw_affiliation_strings": [
+            "Warwick Business School, University of Warwick, UK"
+          ],
+          "raw_orcid": "https://orcid.org/0000-0001-8842-3953",
+          "affiliations": [
+            {
+              "raw_affiliation_string": "Warwick Business School, University of Warwick, UK",
+              "institution_ids": [
+                "https://openalex.org/I39555362"
+              ]
+            }
+          ]
+        },
+        {
+          "author_position": "middle",
+          "author": {
+            "id": "https://openalex.org/A5060396563",
+            "display_name": "Patrick Devine\u2010Wright",
+            "orcid": "https://orcid.org/0000-0001-5768-4835",
+            "observed_orcids": [
+              "https://orcid.org/0000-0001-5768-4835"
+            ]
+          },
+          "institutions": [
+            {
+              "id": "https://openalex.org/I23923803",
+              "display_name": "University of Exeter",
+              "ror": "https://ror.org/03yghzc09",
+              "country_code": "GB",
+              "type": "education",
+              "lineage": [
+                "https://openalex.org/I23923803"
+              ]
+            }
+          ],
+          "countries": [
+            "GB"
+          ],
+          "is_corresponding": false,
+          "raw_author_name": "Patrick Devine-Wright",
+          "raw_affiliation_strings": [
+            "Department of Geography, University of Exeter, UK"
+          ],
+          "raw_orcid": "https://orcid.org/0000-0001-5768-4835",
+          "affiliations": [
+            {
+              "raw_affiliation_string": "Department of Geography, University of Exeter, UK",
+              "institution_ids": [
+                "https://openalex.org/I23923803"
+              ]
+            }
+          ]
+        },
+        {
+          "author_position": "middle",
+          "author": {
+            "id": "https://openalex.org/A5036732687",
+            "display_name": "Darrick T. N. Evensen",
+            "orcid": "https://orcid.org/0000-0001-8892-0052",
+            "observed_orcids": [
+              "https://orcid.org/0000-0001-8892-0052"
+            ]
+          },
+          "institutions": [
+            {
+              "id": "https://openalex.org/I98677209",
+              "display_name": "University of Edinburgh",
+              "ror": "https://ror.org/01nrxwf90",
+              "country_code": "GB",
+              "type": "education",
+              "lineage": [
+                "https://openalex.org/I98677209"
+              ]
+            }
+          ],
+          "countries": [
+            "GB"
+          ],
+          "is_corresponding": false,
+          "raw_author_name": "Darrick Evensen",
+          "raw_affiliation_strings": [
+            "School of Social and Political Sciences, University of Edinburgh, UK"
+          ],
+          "raw_orcid": "https://orcid.org/0000-0001-8892-0052",
+          "affiliations": [
+            {
+              "raw_affiliation_string": "School of Social and Political Sciences, University of Edinburgh, UK",
+              "institution_ids": [
+                "https://openalex.org/I98677209"
+              ]
+            }
+          ]
+        },
+        {
+          "author_position": "middle",
+          "author": {
+            "id": null,
+            "display_name": "Owen King",
+            "orcid": null,
+            "observed_orcids": []
+          },
+          "institutions": [
+            {
+              "id": "https://openalex.org/I32394136",
+              "display_name": "Northumbria University",
+              "ror": "https://ror.org/049e6bc10",
+              "country_code": "GB",
+              "type": "education",
+              "lineage": [
+                "https://openalex.org/I32394136"
+              ]
+            }
+          ],
+          "countries": [
+            "GB"
+          ],
+          "is_corresponding": false,
+          "raw_author_name": "Owen King",
+          "raw_affiliation_strings": [
+            "Department of Social Sciences, Northumbria University Newcastle, UK"
+          ],
+          "raw_orcid": null,
+          "affiliations": [
+            {
+              "raw_affiliation_string": "Department of Social Sciences, Northumbria University Newcastle, UK",
+              "institution_ids": [
+                "https://openalex.org/I32394136"
+              ]
+            }
+          ]
+        },
+        {
+          "author_position": "middle",
+          "author": {
+            "id": "https://openalex.org/A5103939772",
+            "display_name": "Abigail N. Martin",
+            "orcid": "https://orcid.org/0000-0002-0521-0010",
+            "observed_orcids": [
+              "https://orcid.org/0000-0002-0521-0010"
+            ]
+          },
+          "institutions": [
+            {
+              "id": "https://openalex.org/I162608824",
+              "display_name": "University of Sussex",
+              "ror": "https://ror.org/00ayhx656",
+              "country_code": "GB",
+              "type": "education",
+              "lineage": [
+                "https://openalex.org/I162608824"
+              ]
+            }
+          ],
+          "countries": [
+            "GB"
+          ],
+          "is_corresponding": false,
+          "raw_author_name": "Abigail Martin",
+          "raw_affiliation_strings": [
+            "SPRU, University of Sussex, UK"
+          ],
+          "raw_orcid": null,
+          "affiliations": [
+            {
+              "raw_affiliation_string": "SPRU, University of Sussex, UK",
+              "institution_ids": [
+                "https://openalex.org/I162608824"
+              ]
+            }
+          ]
+        },
+        {
+          "author_position": "middle",
+          "author": {
+            "id": "https://openalex.org/A5030194868",
+            "display_name": "Stacia Ryder",
+            "orcid": "https://orcid.org/0000-0001-5282-0316",
+            "observed_orcids": [
+              "https://orcid.org/0000-0001-5282-0316"
+            ]
+          },
+          "institutions": [
+            {
+              "id": "https://openalex.org/I23923803",
+              "display_name": "University of Exeter",
+              "ror": "https://ror.org/03yghzc09",
+              "country_code": "GB",
+              "type": "education",
+              "lineage": [
+                "https://openalex.org/I23923803"
+              ]
+            }
+          ],
+          "countries": [
+            "GB"
+          ],
+          "is_corresponding": false,
+          "raw_author_name": "Stacia Ryder",
+          "raw_affiliation_strings": [
+            "Department of Geography, University of Exeter, UK"
+          ],
+          "raw_orcid": "https://orcid.org/0000-0001-5282-0316",
+          "affiliations": [
+            {
+              "raw_affiliation_string": "Department of Geography, University of Exeter, UK",
+              "institution_ids": [
+                "https://openalex.org/I23923803"
+              ]
+            }
+          ]
+        },
+        {
+          "author_position": "middle",
+          "author": {
+            "id": "https://openalex.org/A5066943013",
+            "display_name": "Damien Short",
+            "orcid": "https://orcid.org/0000-0001-5897-2732",
+            "observed_orcids": [
+              "https://orcid.org/0000-0001-5897-2732"
+            ]
+          },
+          "institutions": [
+            {
+              "id": "https://openalex.org/I124357947",
+              "display_name": "University of London",
+              "ror": "https://ror.org/04cw6st05",
+              "country_code": "GB",
+              "type": "education",
+              "lineage": [
+                "https://openalex.org/I124357947"
+              ]
+            },
+            {
+              "id": "https://openalex.org/I2802488147",
+              "display_name": "School of Advanced Study",
+              "ror": "https://ror.org/039594g80",
+              "country_code": "GB",
+              "type": "education",
+              "lineage": [
+                "https://openalex.org/I124357947",
+                "https://openalex.org/I2802488147"
+              ]
+            }
+          ],
+          "countries": [
+            "GB"
+          ],
+          "is_corresponding": false,
+          "raw_author_name": "Damien Short",
+          "raw_affiliation_strings": [
+            "School of Advanced Study, University of London, UK"
+          ],
+          "raw_orcid": null,
+          "affiliations": [
+            {
+              "raw_affiliation_string": "School of Advanced Study, University of London, UK",
+              "institution_ids": [
+                "https://openalex.org/I124357947",
+                "https://openalex.org/I2802488147"
+              ]
+            }
+          ]
+        },
+        {
+          "author_position": "middle",
+          "author": {
+            "id": "https://openalex.org/A5088822272",
+            "display_name": "Benjamin Kenneth Sovacool",
+            "orcid": "https://orcid.org/0000-0002-4794-9403",
+            "observed_orcids": [
+              "https://orcid.org/0000-0002-4794-9403"
+            ]
+          },
+          "institutions": [
+            {
+              "id": "https://openalex.org/I162608824",
+              "display_name": "University of Sussex",
+              "ror": "https://ror.org/00ayhx656",
+              "country_code": "GB",
+              "type": "education",
+              "lineage": [
+                "https://openalex.org/I162608824"
+              ]
+            }
+          ],
+          "countries": [
+            "GB"
+          ],
+          "is_corresponding": false,
+          "raw_author_name": "Benjamin K. Sovacool",
+          "raw_affiliation_strings": [
+            "SPRU, University of Sussex, UK"
+          ],
+          "raw_orcid": "https://orcid.org/0000-0002-4794-9403",
+          "affiliations": [
+            {
+              "raw_affiliation_string": "SPRU, University of Sussex, UK",
+              "institution_ids": [
+                "https://openalex.org/I162608824"
+              ]
+            }
+          ]
+        },
+        {
+          "author_position": "middle",
+          "author": {
+            "id": "https://openalex.org/A5001040330",
+            "display_name": "Paul B. Stretesky",
+            "orcid": "https://orcid.org/0000-0001-5927-1882",
+            "observed_orcids": [
+              "https://orcid.org/0000-0001-5927-1882"
+            ]
+          },
+          "institutions": [
+            {
+              "id": "https://openalex.org/I32394136",
+              "display_name": "Northumbria University",
+              "ror": "https://ror.org/049e6bc10",
+              "country_code": "GB",
+              "type": "education",
+              "lineage": [
+                "https://openalex.org/I32394136"
+              ]
+            }
+          ],
+          "countries": [
+            "GB"
+          ],
+          "is_corresponding": false,
+          "raw_author_name": "Paul Stretesky",
+          "raw_affiliation_strings": [
+            "Department of Social Sciences, Northumbria University Newcastle, UK"
+          ],
+          "raw_orcid": null,
+          "affiliations": [
+            {
+              "raw_affiliation_string": "Department of Social Sciences, Northumbria University Newcastle, UK",
+              "institution_ids": [
+                "https://openalex.org/I32394136"
+              ]
+            }
+          ]
+        },
+        {
+          "author_position": "middle",
+          "author": {
+            "id": "https://openalex.org/A5055999597",
+            "display_name": "Anna Szo\u0142ucha",
+            "orcid": "https://orcid.org/0000-0001-8938-6066",
+            "observed_orcids": [
+              "https://orcid.org/0000-0001-8938-6066"
+            ]
+          },
+          "institutions": [
+            {
+              "id": "https://openalex.org/I126596746",
+              "display_name": "Jagiellonian University",
+              "ror": "https://ror.org/03bqmcz70",
+              "country_code": "PL",
+              "type": "education",
+              "lineage": [
+                "https://openalex.org/I126596746"
+              ]
+            },
+            {
+              "id": "https://openalex.org/I32394136",
+              "display_name": "Northumbria University",
+              "ror": "https://ror.org/049e6bc10",
+              "country_code": "GB",
+              "type": "education",
+              "lineage": [
+                "https://openalex.org/I32394136"
+              ]
+            }
+          ],
+          "countries": [
+            "GB",
+            "PL"
+          ],
+          "is_corresponding": false,
+          "raw_author_name": "Anna Szolucha",
+          "raw_affiliation_strings": [
+            "Department of Social Sciences, Northumbria University Newcastle, UK",
+            "Institute of Ethnology and Anthropology, Jagiellonian University, Krakow, Poland"
+          ],
+          "raw_orcid": null,
+          "affiliations": [
+            {
+              "raw_affiliation_string": "Department of Social Sciences, Northumbria University Newcastle, UK",
+              "institution_ids": [
+                "https://openalex.org/I32394136"
+              ]
+            },
+            {
+              "raw_affiliation_string": "Institute of Ethnology and Anthropology, Jagiellonian University, Krakow, Poland",
+              "institution_ids": [
+                "https://openalex.org/I126596746"
+              ]
+            }
+          ]
+        },
+        {
+          "author_position": "last",
+          "author": {
+            "id": "https://openalex.org/A5073302034",
+            "display_name": "Laurence Williams",
+            "orcid": "https://orcid.org/0000-0002-5023-9584",
+            "observed_orcids": [
+              "https://orcid.org/0000-0002-5023-9584"
+            ]
+          },
+          "institutions": [
+            {
+              "id": "https://openalex.org/I162608824",
+              "display_name": "University of Sussex",
+              "ror": "https://ror.org/00ayhx656",
+              "country_code": "GB",
+              "type": "education",
+              "lineage": [
+                "https://openalex.org/I162608824"
+              ]
+            }
+          ],
+          "countries": [
+            "GB"
+          ],
+          "is_corresponding": false,
+          "raw_author_name": "Laurence Williams",
+          "raw_affiliation_strings": [
+            "SPRU, University of Sussex, UK"
+          ],
+          "raw_orcid": "https://orcid.org/0000-0002-5023-9584",
+          "affiliations": [
+            {
+              "raw_affiliation_string": "SPRU, University of Sussex, UK",
+              "institution_ids": [
+                "https://openalex.org/I162608824"
+              ]
+            }
+          ]
+        }
+      ],
+      "institutions": [],
+      "countries_distinct_count": 2,
+      "institutions_distinct_count": 8,
+      "corresponding_author_ids": [
+        "https://openalex.org/A5032990221"
+      ],
+      "corresponding_institution_ids": [
+        "https://openalex.org/I39555362"
+      ],
+      "apc_list": {
+        "value": 3240,
+        "currency": "USD",
+        "value_usd": 3240
+      },
+      "apc_paid": {
+        "value": 3240,
+        "currency": "USD",
+        "value_usd": 3240
+      },
+      "fwci": 3.1916,
+      "has_fulltext": true,
+      "cited_by_count": 17,
+      "citation_normalized_percentile": {
+        "value": 0.93302048,
+        "is_in_top_1_percent": false,
+        "is_in_top_10_percent": true
+      },
+      "cited_by_percentile_year": {
+        "min": 89,
+        "max": 99
+      },
+      "biblio": {
+        "volume": "168",
+        "issue": null,
+        "first_page": "113132",
+        "last_page": "113132"
+      },
+      "is_retracted": false,
+      "is_paratext": false,
+      "is_xpac": false,
+      "primary_topic": {
+        "id": "https://openalex.org/T12129",
+        "display_name": "Global Energy Security and Policy",
+        "score": 0.8906000256538391,
+        "subfield": {
+          "id": "https://openalex.org/subfields/2100",
+          "display_name": "General Energy"
+        },
+        "field": {
+          "id": "https://openalex.org/fields/21",
+          "display_name": "Energy"
+        },
+        "domain": {
+          "id": "https://openalex.org/domains/3",
+          "display_name": "Physical Sciences"
+        }
+      },
+      "topics": [
+        {
+          "id": "https://openalex.org/T12129",
+          "display_name": "Global Energy Security and Policy",
+          "score": 0.8906000256538391,
+          "subfield": {
+            "id": "https://openalex.org/subfields/2100",
+            "display_name": "General Energy"
+          },
+          "field": {
+            "id": "https://openalex.org/fields/21",
+            "display_name": "Energy"
+          },
+          "domain": {
+            "id": "https://openalex.org/domains/3",
+            "display_name": "Physical Sciences"
+          }
+        },
+        {
+          "id": "https://openalex.org/T12503",
+          "display_name": "Social Acceptance of Renewable Energy",
+          "score": 0.07739999890327454,
+          "subfield": {
+            "id": "https://openalex.org/subfields/3312",
+            "display_name": "Sociology and Political Science"
+          },
+          "field": {
+            "id": "https://openalex.org/fields/33",
+            "display_name": "Social Sciences"
+          },
+          "domain": {
+            "id": "https://openalex.org/domains/2",
+            "display_name": "Social Sciences"
+          }
+        },
+        {
+          "id": "https://openalex.org/T13758",
+          "display_name": "Energy Law and Policy",
+          "score": 0.0066999997943639755,
+          "subfield": {
+            "id": "https://openalex.org/subfields/1802",
+            "display_name": "Information Systems and Management"
+          },
+          "field": {
+            "id": "https://openalex.org/fields/18",
+            "display_name": "Decision Sciences"
+          },
+          "domain": {
+            "id": "https://openalex.org/domains/2",
+            "display_name": "Social Sciences"
+          }
+        }
+      ],
+      "keywords": [
+        {
+          "id": "https://openalex.org/keywords/shale-gas",
+          "display_name": "shale gas",
+          "score": 0.9919999837875366
+        },
+        {
+          "id": "https://openalex.org/keywords/hydraulic-fracturing",
+          "display_name": "hydraulic fracturing",
+          "score": 0.7850000262260437
+        },
+        {
+          "id": "https://openalex.org/keywords/net-zero-energy-transition",
+          "display_name": "net-zero energy transition",
+          "score": 0.8389999866485596
+        },
+        {
+          "id": "https://openalex.org/keywords/energy-policy-lessons",
+          "display_name": "energy policy lessons",
+          "score": 0.47099998593330383
+        },
+        {
+          "id": "https://openalex.org/keywords/boris-johnson-government",
+          "display_name": "Boris Johnson government",
+          "score": 0.9010000228881836
+        }
+      ],
+      "concepts": [
+        {
+          "id": "https://openalex.org/C2993020645",
+          "wikidata": "https://www.wikidata.org/wiki/Q564726",
+          "display_name": "Shale gas",
+          "level": 3,
+          "score": 0.827197790145874
+        },
+        {
+          "id": "https://openalex.org/C153127940",
+          "wikidata": "https://www.wikidata.org/wiki/Q221378",
+          "display_name": "Oil shale",
+          "level": 2,
+          "score": 0.650336503982544
+        },
+        {
+          "id": "https://openalex.org/C131046424",
+          "wikidata": "https://www.wikidata.org/wiki/Q1805337",
+          "display_name": "Energy policy",
+          "level": 3,
+          "score": 0.4369908571243286
+        },
+        {
+          "id": "https://openalex.org/C78762247",
+          "wikidata": "https://www.wikidata.org/wiki/Q1273174",
+          "display_name": "Petroleum engineering",
+          "level": 1,
+          "score": 0.3733091950416565
+        },
+        {
+          "id": "https://openalex.org/C162324750",
+          "wikidata": "https://www.wikidata.org/wiki/Q8134",
+          "display_name": "Economics",
+          "level": 0,
+          "score": 0.322742760181427
+        },
+        {
+          "id": "https://openalex.org/C127313418",
+          "wikidata": "https://www.wikidata.org/wiki/Q1069",
+          "display_name": "Geology",
+          "level": 0,
+          "score": 0.29950642585754395
+        },
+        {
+          "id": "https://openalex.org/C127413603",
+          "wikidata": "https://www.wikidata.org/wiki/Q11023",
+          "display_name": "Engineering",
+          "level": 0,
+          "score": 0.23090502619743347
+        },
+        {
+          "id": "https://openalex.org/C188573790",
+          "wikidata": "https://www.wikidata.org/wiki/Q12705",
+          "display_name": "Renewable energy",
+          "level": 2,
+          "score": 0.15750879049301147
+        },
+        {
+          "id": "https://openalex.org/C151730666",
+          "wikidata": "https://www.wikidata.org/wiki/Q7205",
+          "display_name": "Paleontology",
+          "level": 1,
+          "score": 0.07264697551727295
+        },
+        {
+          "id": "https://openalex.org/C119599485",
+          "wikidata": "https://www.wikidata.org/wiki/Q43035",
+          "display_name": "Electrical engineering",
+          "level": 1,
+          "score": 0.0
+        }
+      ],
+      "mesh": [],
+      "locations_count": 9,
+      "locations": [
+        {
+          "id": "doi:10.1016/j.enpol.2022.113132",
+          "is_oa": true,
+          "landing_page_url": "https://doi.org/10.1016/j.enpol.2022.113132",
+          "pdf_url": "https://www.sciencedirect.com/science/article/pii/S0301421522003573/pdf",
+          "source": {
+            "id": "https://openalex.org/S175056054",
+            "display_name": "Energy Policy",
+            "issn_l": "0301-4215",
+            "issn": [
+              "0301-4215",
+              "1873-6777"
+            ],
+            "is_oa": false,
+            "is_in_doaj": false,
+            "is_core": true,
+            "listed_in": [
+              "abdc-a",
+              "cwts-core",
+              "jufo-1",
+              "norway-1"
+            ],
+            "host_organization": "https://openalex.org/P4310320990",
+            "host_organization_name": "Elsevier BV",
+            "host_organization_lineage": [
+              "https://openalex.org/P4310320990"
+            ],
+            "host_organization_lineage_names": [
+              "Elsevier BV"
+            ],
+            "type": "journal"
+          },
+          "license": "cc-by",
+          "license_id": "https://openalex.org/licenses/cc-by",
+          "version": "publishedVersion",
+          "is_accepted": true,
+          "is_published": true,
+          "raw_source_name": "Energy Policy",
+          "raw_type": "journal-article"
+        },
+        {
+          "id": "pmh:oai:pure.ed.ac.uk:openaire/124d2336-7220-4a1b-a88d-b12af72bfce3",
+          "is_oa": true,
+          "landing_page_url": "https://www.research.ed.ac.uk/en/publications/124d2336-7220-4a1b-a88d-b12af72bfce3",
+          "pdf_url": null,
+          "source": {
+            "id": "https://openalex.org/S4306400321",
+            "display_name": "Edinburgh Research Explorer (University of Edinburgh)",
+            "issn_l": null,
+            "issn": null,
+            "is_oa": false,
+            "is_in_doaj": false,
+            "is_core": false,
+            "listed_in": [],
+            "host_organization": "https://openalex.org/I98677209",
+            "host_organization_name": "University of Edinburgh",
+            "host_organization_lineage": [
+              "https://openalex.org/I98677209"
+            ],
+            "host_organization_lineage_names": [],
+            "type": "repository"
+          },
+          "license": "cc-by",
+          "license_id": "https://openalex.org/licenses/cc-by",
+          "version": "publishedVersion",
+          "is_accepted": true,
+          "is_published": true,
+          "raw_source_name": "Bradshaw, M, Devine-Wright, P, Evensen, D, King, O, Martin, A, Ryder, S, Short, D, Sovacool, B K, Stretesky, P, Szolucha, A & Williams, L 2022, '\u2018We're going all out for shale\u2019 : Explaining shale gas energy policy failure in the United Kingdom', Energy Policy, vol. 168, 113132. https://doi.org/10.1016/j.enpol.2022.113132",
+          "raw_type": "info:eu-repo/semantics/article"
+        },
+        {
+          "id": "pmh:oai:nrl.northumbria.ac.uk:49659",
+          "is_oa": false,
+          "landing_page_url": "http://nrl.northumbria.ac.uk/id/eprint/49659/1/1-s2.0-S0301421522003573-main.pdf",
+          "pdf_url": "http://nrl.northumbria.ac.uk/id/eprint/49659/1/1-s2.0-S0301421522003573-main.pdf",
+          "source": {
+            "id": "https://openalex.org/S4306401884",
+            "display_name": "Northumbria Research Link (Northumbria University)",
+            "issn_l": null,
+            "issn": null,
+            "is_oa": false,
+            "is_in_doaj": false,
+            "is_core": false,
+            "listed_in": [],
+            "host_organization": "https://openalex.org/I32394136",
+            "host_organization_name": "Northumbria University",
+            "host_organization_lineage": [
+              "https://openalex.org/I32394136"
+            ],
+            "host_organization_lineage_names": [],
+            "type": "repository"
+          },
+          "license": null,
+          "license_id": null,
+          "version": "acceptedVersion",
+          "is_accepted": true,
+          "is_published": false,
+          "raw_source_name": "",
+          "raw_type": "Article"
+        },
+        {
+          "id": "pmh:oai:wrap.warwick.ac.uk:167382",
+          "is_oa": false,
+          "landing_page_url": "http://wrap.warwick.ac.uk/167382/1/WRAP-%E2%80%98We%27re-going-all-out-for-shale%E2%80%99-explaining-shale-gas-energy-policy-failure-United-Kingdom-2022.pdf",
+          "pdf_url": "http://wrap.warwick.ac.uk/167382/1/WRAP-%E2%80%98We%27re-going-all-out-for-shale%E2%80%99-explaining-shale-gas-energy-policy-failure-United-Kingdom-2022.pdf",
+          "source": {
+            "id": "https://openalex.org/S4306400665",
+            "display_name": "Warwick Research Archive Portal (University of Warwick)",
+            "issn_l": null,
+            "issn": null,
+            "is_oa": false,
+            "is_in_doaj": false,
+            "is_core": false,
+            "listed_in": [],
+            "host_organization": "https://openalex.org/I39555362",
+            "host_organization_name": "University of Warwick",
+            "host_organization_lineage": [
+              "https://openalex.org/I39555362"
+            ],
+            "host_organization_lineage_names": [],
+            "type": "repository"
+          },
+          "license": null,
+          "license_id": null,
+          "version": "acceptedVersion",
+          "is_accepted": true,
+          "is_published": false,
+          "raw_source_name": "",
+          "raw_type": "Journal Article"
+        },
+        {
+          "id": "pmh:oai:wrap.warwick.ac.uk:167641",
+          "is_oa": false,
+          "landing_page_url": "https://wrap.warwick.ac.uk/167641/1/WRAP-We-re-going-all-out-for-shale-explaining-shale-gas-energy-policy-failure-in-the-United-Kingdom-Bradshaw-22.pdf",
+          "pdf_url": "https://wrap.warwick.ac.uk/167641/1/WRAP-We-re-going-all-out-for-shale-explaining-shale-gas-energy-policy-failure-in-the-United-Kingdom-Bradshaw-22.pdf",
+          "source": {
+            "id": "https://openalex.org/S4306400665",
+            "display_name": "Warwick Research Archive Portal (University of Warwick)",
+            "issn_l": null,
+            "issn": null,
+            "is_oa": false,
+            "is_in_doaj": false,
+            "is_core": false,
+            "listed_in": [],
+            "host_organization": "https://openalex.org/I39555362",
+            "host_organization_name": "University of Warwick",
+            "host_organization_lineage": [
+              "https://openalex.org/I39555362"
+            ],
+            "host_organization_lineage_names": [],
+            "type": "repository"
+          },
+          "license": null,
+          "license_id": null,
+          "version": "acceptedVersion",
+          "is_accepted": true,
+          "is_published": false,
+          "raw_source_name": "",
+          "raw_type": "Journal Article"
+        },
+        {
+          "id": "pmh:oai:ruj.uj.edu.pl:item/297212",
+          "is_oa": true,
+          "landing_page_url": "https://ruj.uj.edu.pl/xmlui/handle/item/297212",
+          "pdf_url": "http://ruj.uj.edu.pl/bitstreams/ce2e0fba-8462-4019-b465-915fdc982f4c/download",
+          "source": {
+            "id": "https://openalex.org/S4306401249",
+            "display_name": "Jagiellonian University Repository (Jagiellonian University)",
+            "issn_l": null,
+            "issn": null,
+            "is_oa": false,
+            "is_in_doaj": false,
+            "is_core": false,
+            "listed_in": [],
+            "host_organization": "https://openalex.org/I126596746",
+            "host_organization_name": "Jagiellonian University",
+            "host_organization_lineage": [
+              "https://openalex.org/I126596746"
+            ],
+            "host_organization_lineage_names": [],
+            "type": "repository"
+          },
+          "license": "cc-by-nc-nd",
+          "license_id": "https://openalex.org/licenses/cc-by-nc-nd",
+          "version": "submittedVersion",
+          "is_accepted": false,
+          "is_published": false,
+          "raw_source_name": null,
+          "raw_type": "info:eu-repo/semantics/article"
+        },
+        {
+          "id": "pmh:oai:sro.sussex.ac.uk:106862",
+          "is_oa": true,
+          "landing_page_url": "http://sro.sussex.ac.uk/id/eprint/106862/1/1-s2.0-S0301421522003573-main.pdf",
+          "pdf_url": "http://sro.sussex.ac.uk/id/eprint/106862/1/1-s2.0-S0301421522003573-main.pdf",
+          "source": {
+            "id": "https://openalex.org/S4306400129",
+            "display_name": "Sussex Research Online (University of Sussex)",
+            "issn_l": null,
+            "issn": null,
+            "is_oa": false,
+            "is_in_doaj": false,
+            "is_core": false,
+            "listed_in": [],
+            "host_organization": "https://openalex.org/I162608824",
+            "host_organization_name": "University of Sussex",
+            "host_organization_lineage": [
+              "https://openalex.org/I162608824"
+            ],
+            "host_organization_lineage_names": [],
+            "type": "repository"
+          },
+          "license": "cc-by",
+          "license_id": "https://openalex.org/licenses/cc-by",
+          "version": "submittedVersion",
+          "is_accepted": false,
+          "is_published": false,
+          "raw_source_name": "",
+          "raw_type": "Article"
+        },
+        {
+          "id": "pmh:oai:RePEc:eee:enepol:v:168:y:2022:i:c:s0301421522003573",
+          "is_oa": false,
+          "landing_page_url": "http://www.sciencedirect.com/science/article/pii/S0301421522003573",
+          "pdf_url": null,
+          "source": {
+            "id": "https://openalex.org/S4306401271",
+            "display_name": "RePEc: Research Papers in Economics",
+            "issn_l": null,
+            "issn": null,
+            "is_oa": false,
+            "is_in_doaj": false,
+            "is_core": false,
+            "listed_in": [],
+            "host_organization": "https://openalex.org/I77793887",
+            "host_organization_name": "Federal Reserve Bank of St. Louis",
+            "host_organization_lineage": [
+              "https://openalex.org/I77793887"
+            ],
+            "host_organization_lineage_names": [],
+            "type": "repository"
+          },
+          "license": null,
+          "license_id": null,
+          "version": "submittedVersion",
+          "is_accepted": false,
+          "is_published": false,
+          "raw_source_name": null,
+          "raw_type": "article"
+        },
+        {
+          "id": "pmh:oai:figshare.com:article/23490647",
+          "is_oa": true,
+          "landing_page_url": "https://figshare.com/articles/journal_contribution/_We_re_going_all_out_for_shale_explaining_shale_gas_energy_policy_failure_in_the_United_Kingdom/23490647",
+          "pdf_url": null,
+          "source": {
+            "id": "https://openalex.org/S4377196282",
+            "display_name": "Figshare",
+            "issn_l": null,
+            "issn": null,
+            "is_oa": false,
+            "is_in_doaj": false,
+            "is_core": false,
+            "listed_in": [],
+            "host_organization": "https://openalex.org/I4210132348",
+            "host_organization_name": "Figshare (United Kingdom)",
+            "host_organization_lineage": [
+              "https://openalex.org/I4210132348"
+            ],
+            "host_organization_lineage_names": [],
+            "type": "repository"
+          },
+          "license": "cc-by",
+          "license_id": "https://openalex.org/licenses/cc-by",
+          "version": "submittedVersion",
+          "is_accepted": false,
+          "is_published": false,
+          "raw_source_name": "",
+          "raw_type": "Text"
+        }
+      ],
+      "best_oa_location": {
+        "id": "doi:10.1016/j.enpol.2022.113132",
+        "is_oa": true,
+        "landing_page_url": "https://doi.org/10.1016/j.enpol.2022.113132",
+        "pdf_url": "https://www.sciencedirect.com/science/article/pii/S0301421522003573/pdf",
+        "source": {
+          "id": "https://openalex.org/S175056054",
+          "display_name": "Energy Policy",
+          "issn_l": "0301-4215",
+          "issn": [
+            "0301-4215",
+            "1873-6777"
+          ],
+          "is_oa": false,
+          "is_in_doaj": false,
+          "is_core": true,
+          "listed_in": [
+            "abdc-a",
+            "cwts-core",
+            "jufo-1",
+            "norway-1"
+          ],
+          "host_organization": "https://openalex.org/P4310320990",
+          "host_organization_name": "Elsevier BV",
+          "host_organization_lineage": [
+            "https://openalex.org/P4310320990"
+          ],
+          "host_organization_lineage_names": [
+            "Elsevier BV"
+          ],
+          "type": "journal"
+        },
+        "license": "cc-by",
+        "license_id": "https://openalex.org/licenses/cc-by",
+        "version": "publishedVersion",
+        "is_accepted": true,
+        "is_published": true,
+        "raw_source_name": "Energy Policy",
+        "raw_type": "journal-article"
+      },
+      "sustainable_development_goals": [
+        {
+          "id": "https://metadata.un.org/sdg/7",
+          "score": 0.75,
+          "display_name": "Affordable and clean energy"
+        }
+      ],
+      "sustainable_development_goals_aurora": [
+        {
+          "id": "https://metadata.un.org/sdg/7",
+          "score": 0.4699999988079071,
+          "display_name": "Affordable and clean energy"
+        }
+      ],
+      "study_designs": [],
+      "awards": [
+        {
+          "id": "https://openalex.org/G1113938213",
+          "display_name": "Challenge 1: Assessing and Monitoring the UK Shale Gas Landscape (UKSGL)",
+          "funder_award_id": "NE/R017492/1",
+          "funder_id": "https://openalex.org/F4320334631",
+          "funder_display_name": "Natural Environment Research Council"
+        },
+        {
+          "id": "https://openalex.org/G1575776092",
+          "display_name": null,
+          "funder_award_id": "NE/R018146/1",
+          "funder_id": "https://openalex.org/F4320334631",
+          "funder_display_name": "Natural Environment Research Council"
+        },
+        {
+          "id": "https://openalex.org/G1713533579",
+          "display_name": null,
+          "funder_award_id": "NE/R018138/1",
+          "funder_id": "https://openalex.org/F4320334631",
+          "funder_display_name": "Natural Environment Research Council"
+        },
+        {
+          "id": "https://openalex.org/G1719345476",
+          "display_name": null,
+          "funder_award_id": "NE/R017492/1",
+          "funder_id": "https://openalex.org/F4320334631",
+          "funder_display_name": "Natural Environment Research Council"
+        },
+        {
+          "id": "https://openalex.org/G1790998526",
+          "display_name": null,
+          "funder_award_id": "NE/R017492/1",
+          "funder_id": "https://openalex.org/F4320320022",
+          "funder_display_name": "Sight Research UK"
+        },
+        {
+          "id": "https://openalex.org/G2287243295",
+          "display_name": null,
+          "funder_award_id": "NE/R018138/1",
+          "funder_id": "https://openalex.org/F4320334630",
+          "funder_display_name": "Economic and Social Research Council"
+        },
+        {
+          "id": "https://openalex.org/G2966167100",
+          "display_name": null,
+          "funder_award_id": "NE/R017727/1",
+          "funder_id": "https://openalex.org/F4320334630",
+          "funder_display_name": "Economic and Social Research Council"
+        },
+        {
+          "id": "https://openalex.org/G4031257298",
+          "display_name": null,
+          "funder_award_id": "NE/R018138/1",
+          "funder_id": "https://openalex.org/F4320320022",
+          "funder_display_name": "Sight Research UK"
+        },
+        {
+          "id": "https://openalex.org/G4565789252",
+          "display_name": null,
+          "funder_award_id": "NER018146/1",
+          "funder_id": "https://openalex.org/F4320334630",
+          "funder_display_name": "Economic and Social Research Council"
+        },
+        {
+          "id": "https://openalex.org/G4788829818",
+          "display_name": null,
+          "funder_award_id": "NE/R018146/1",
+          "funder_id": "https://openalex.org/F4320320022",
+          "funder_display_name": "Sight Research UK"
+        },
+        {
+          "id": "https://openalex.org/G6081175876",
+          "display_name": "Understanding the spatial and temporal dynamics of public attitudes and community responses to shale gas: an integrated approach",
+          "funder_award_id": "NE/R017727/1",
+          "funder_id": "https://openalex.org/F4320334631",
+          "funder_display_name": "Natural Environment Research Council"
+        },
+        {
+          "id": "https://openalex.org/G6521223744",
+          "display_name": null,
+          "funder_award_id": "NE/R017727/1",
+          "funder_id": "https://openalex.org/F4320334631",
+          "funder_display_name": "Natural Environment Research Council"
+        },
+        {
+          "id": "https://openalex.org/G6754393058",
+          "display_name": null,
+          "funder_award_id": "EP/S029575/1",
+          "funder_id": "https://openalex.org/F4320334627",
+          "funder_display_name": "Engineering and Physical Sciences Research Council"
+        },
+        {
+          "id": "https://openalex.org/G7269410429",
+          "display_name": null,
+          "funder_award_id": "NE/R017492/1",
+          "funder_id": "https://openalex.org/F4320334630",
+          "funder_display_name": "Economic and Social Research Council"
+        },
+        {
+          "id": "https://openalex.org/G8354184180",
+          "display_name": null,
+          "funder_award_id": "NE/R017727/1",
+          "funder_id": "https://openalex.org/F4320320022",
+          "funder_display_name": "Sight Research UK"
+        }
+      ],
+      "funders": [
+        {
+          "id": "https://openalex.org/F4320306076",
+          "display_name": "National Science Foundation",
+          "ror": "https://ror.org/021nxhr62"
+        },
+        {
+          "id": "https://openalex.org/F4320320022",
+          "display_name": "Sight Research UK",
+          "ror": "https://ror.org/03z2py885"
+        },
+        {
+          "id": "https://openalex.org/F4320330889",
+          "display_name": "Neurosciences Foundation",
+          "ror": "https://ror.org/01fy9e204"
+        },
+        {
+          "id": "https://openalex.org/F4320334627",
+          "display_name": "Engineering and Physical Sciences Research Council",
+          "ror": "https://ror.org/0439y7842"
+        },
+        {
+          "id": "https://openalex.org/F4320334630",
+          "display_name": "Economic and Social Research Council",
+          "ror": "https://ror.org/03n0ht308"
+        },
+        {
+          "id": "https://openalex.org/F4320334631",
+          "display_name": "Natural Environment Research Council",
+          "ror": "https://ror.org/02b5d8509"
+        }
+      ],
+      "has_content": {
+        "grobid_xml": true,
+        "pdf": true
+      },
+      "content_urls": {
+        "pdf": "https://content.openalex.org/works/W4284691873.pdf",
+        "grobid_xml": "https://content.openalex.org/works/W4284691873.grobid-xml"
+      },
+      "referenced_works_count": 61,
+      "referenced_works": [
+        "https://openalex.org/W1594320318",
+        "https://openalex.org/W1601843412",
+        "https://openalex.org/W1605499720",
+        "https://openalex.org/W1676656705",
+        "https://openalex.org/W1866736083",
+        "https://openalex.org/W2050765165",
+        "https://openalex.org/W2051878072",
+        "https://openalex.org/W2079300606",
+        "https://openalex.org/W2098623203",
+        "https://openalex.org/W2134310663",
+        "https://openalex.org/W2137750561",
+        "https://openalex.org/W2161863405",
+        "https://openalex.org/W2182376601",
+        "https://openalex.org/W2315170395",
+        "https://openalex.org/W2404723180",
+        "https://openalex.org/W2466284593",
+        "https://openalex.org/W2523542120",
+        "https://openalex.org/W2550311955",
+        "https://openalex.org/W2553523573",
+        "https://openalex.org/W2556489476",
+        "https://openalex.org/W2570067137",
+        "https://openalex.org/W2576107807",
+        "https://openalex.org/W2595508708",
+        "https://openalex.org/W2596370884",
+        "https://openalex.org/W2606047552",
+        "https://openalex.org/W2606459577",
+        "https://openalex.org/W2617304503",
+        "https://openalex.org/W2624249612",
+        "https://openalex.org/W2752432379",
+        "https://openalex.org/W2763954569",
+        "https://openalex.org/W2777259942",
+        "https://openalex.org/W2788490329",
+        "https://openalex.org/W2894519865",
+        "https://openalex.org/W2904155749",
+        "https://openalex.org/W2909157134",
+        "https://openalex.org/W2911464365",
+        "https://openalex.org/W2918827948",
+        "https://openalex.org/W2952984147",
+        "https://openalex.org/W2963789222",
+        "https://openalex.org/W2976619977",
+        "https://openalex.org/W3013932360",
+        "https://openalex.org/W3042453422",
+        "https://openalex.org/W3108835796",
+        "https://openalex.org/W3112594776",
+        "https://openalex.org/W3121856978",
+        "https://openalex.org/W3135439490",
+        "https://openalex.org/W3141253321",
+        "https://openalex.org/W3146658796",
+        "https://openalex.org/W3196189469",
+        "https://openalex.org/W3201916564",
+        "https://openalex.org/W4200030193",
+        "https://openalex.org/W4254027994",
+        "https://openalex.org/W6729895568",
+        "https://openalex.org/W6754849369",
+        "https://openalex.org/W6757555247",
+        "https://openalex.org/W6767913969",
+        "https://openalex.org/W6775396636",
+        "https://openalex.org/W6779108025",
+        "https://openalex.org/W6789376575",
+        "https://openalex.org/W6791783667",
+        "https://openalex.org/W7006741658"
+      ],
+      "related_works": [
+        "https://openalex.org/W4391375266",
+        "https://openalex.org/W1973284405",
+        "https://openalex.org/W4389099478",
+        "https://openalex.org/W2793936937",
+        "https://openalex.org/W4392871453",
+        "https://openalex.org/W2394283296",
+        "https://openalex.org/W2371650572",
+        "https://openalex.org/W2384677625",
+        "https://openalex.org/W2780259318",
+        "https://openalex.org/W4312233553"
+      ],
+      "abstract_inverted_index": {
+        "In": [
+          0,
+          19
+        ],
+        "January": [
+          1
+        ],
+        "2014,": [
+          2
+        ],
+        "then": [
+          3,
+          111
+        ],
+        "British": [
+          4
+        ],
+        "Prime": [
+          5,
+          26
+        ],
+        "Minister": [
+          6,
+          27
+        ],
+        "David": [
+          7
+        ],
+        "Cameron": [
+          8
+        ],
+        "declared": [
+          9
+        ],
+        "that": [
+          10
+        ],
+        "his": [
+          11
+        ],
+        "government": [
+          12
+        ],
+        "was": [
+          13
+        ],
+        "\u2018Going": [
+          14
+        ],
+        "all": [
+          15
+        ],
+        "out": [
+          16
+        ],
+        "for": [
+          17,
+          143,
+          212,
+          216
+        ],
+        "Shale.\u2019": [
+          18
+        ],
+        "November": [
+          20
+        ],
+        "2019,": [
+          21
+        ],
+        "during": [
+          22
+        ],
+        "an": [
+          23
+        ],
+        "election": [
+          24
+        ],
+        "campaign,": [
+          25
+        ],
+        "Boris": [
+          28
+        ],
+        "Johnson's": [
+          29
+        ],
+        "Conservative": [
+          30
+        ],
+        "Government": [
+          31
+        ],
+        "imposed": [
+          32
+        ],
+        "a": [
+          33,
+          40,
+          59,
+          65,
+          74,
+          83,
+          92,
+          217
+        ],
+        "moratorium": [
+          34
+        ],
+        "on": [
+          35,
+          107
+        ],
+        "hydraulic": [
+          36
+        ],
+        "fracturing": [
+          37
+        ],
+        "bringing": [
+          38
+        ],
+        "to": [
+          39,
+          179,
+          205
+        ],
+        "halt": [
+          41
+        ],
+        "industry": [
+          42
+        ],
+        "hopes": [
+          43
+        ],
+        "of": [
+          44,
+          67,
+          76,
+          86,
+          95,
+          131,
+          164
+        ],
+        "developing": [
+          45
+        ],
+        "shale": [
+          46,
+          97,
+          133,
+          154,
+          170,
+          184,
+          207
+        ],
+        "gas": [
+          47,
+          98,
+          134,
+          155,
+          171,
+          185,
+          208
+        ],
+        "in": [
+          48,
+          100,
+          119,
+          136,
+          203
+        ],
+        "the": [
+          49,
+          68,
+          96,
+          101,
+          108,
+          113,
+          129,
+          132,
+          137,
+          141,
+          159,
+          165,
+          181,
+          193,
+          197
+        ],
+        "UK.": [
+          50
+        ],
+        "This": [
+          51
+        ],
+        "paper": [
+          52,
+          189
+        ],
+        "explores": [
+          53
+        ],
+        "what": [
+          54
+        ],
+        "happened,": [
+          55
+        ],
+        "integrating": [
+          56
+        ],
+        "research": [
+          57,
+          62,
+          106
+        ],
+        "employing": [
+          58
+        ],
+        "mixed": [
+          60
+        ],
+        "methods": [
+          61
+        ],
+        "design": [
+          63
+        ],
+        "including": [
+          64
+        ],
+        "review": [
+          66
+        ],
+        "literature,": [
+          69
+        ],
+        "expert": [
+          70
+        ],
+        "interviews,": [
+          71,
+          73
+        ],
+        "household": [
+          72
+        ],
+        "series": [
+          75
+        ],
+        "nationally": [
+          77
+        ],
+        "representative": [
+          78
+        ],
+        "and": [
+          79,
+          82,
+          103,
+          118,
+          144,
+          151,
+          157,
+          161
+        ],
+        "local": [
+          80
+        ],
+        "surveys,": [
+          81
+        ],
+        "content": [
+          84
+        ],
+        "analysis": [
+          85
+        ],
+        "political": [
+          87
+        ],
+        "testimony.": [
+          88
+        ],
+        "It": [
+          89,
+          110
+        ],
+        "starts": [
+          90
+        ],
+        "with": [
+          91
+        ],
+        "brief": [
+          93
+        ],
+        "history": [
+          94
+        ],
+        "debate": [
+          99,
+          135
+        ],
+        "UK": [
+          102,
+          182
+        ],
+        "social": [
+          104
+        ],
+        "science": [
+          105
+        ],
+        "issue.": [
+          109
+        ],
+        "examines": [
+          112
+        ],
+        "UK's": [
+          114
+        ],
+        "Shale": [
+          115
+        ],
+        "Gas": [
+          116
+        ],
+        "landscape,": [
+          117
+        ],
+        "particular": [
+          120
+        ],
+        "energy": [
+          121,
+          220
+        ],
+        "policy": [
+          122,
+          200
+        ],
+        "failure,": [
+          123,
+          201
+        ],
+        "by": [
+          124,
+          169,
+          191
+        ],
+        "considering": [
+          125
+        ],
+        "three": [
+          126,
+          175
+        ],
+        "issues:": [
+          127
+        ],
+        "first,": [
+          128
+        ],
+        "framing": [
+          130
+        ],
+        "national": [
+          138
+        ],
+        "Parliament,": [
+          139
+        ],
+        "exploring": [
+          140
+        ],
+        "arguments": [
+          142
+        ],
+        "against": [
+          145
+        ],
+        "it;": [
+          146
+        ],
+        "second,": [
+          147
+        ],
+        "changing": [
+          148
+        ],
+        "public": [
+          149
+        ],
+        "perceptions": [
+          150
+        ],
+        "attitudes": [
+          152,
+          160
+        ],
+        "towards": [
+          153
+        ],
+        "development;": [
+          156
+        ],
+        "third,": [
+          158
+        ],
+        "lived": [
+          162
+        ],
+        "experiences": [
+          163
+        ],
+        "communities": [
+          166
+        ],
+        "most": [
+          167
+        ],
+        "affected": [
+          168
+        ],
+        "exploration": [
+          172
+        ],
+        "activities.": [
+          173
+        ],
+        "These": [
+          174
+        ],
+        "dimensions": [
+          176
+        ],
+        "are": [
+          177
+        ],
+        "combined": [
+          178
+        ],
+        "explain": [
+          180
+        ],
+        "Government's": [
+          183,
+          198
+        ],
+        "failure": [
+          186
+        ],
+        "to-date.": [
+          187
+        ],
+        "The": [
+          188
+        ],
+        "concludes": [
+          190
+        ],
+        "identifying": [
+          192
+        ],
+        "lessons": [
+          194
+        ],
+        "learnt": [
+          195
+        ],
+        "from": [
+          196
+        ],
+        "initial": [
+          199
+        ],
+        "both": [
+          202
+        ],
+        "relation": [
+          204
+        ],
+        "further": [
+          206
+        ],
+        "exploration,": [
+          209
+        ],
+        "but": [
+          210
+        ],
+        "also": [
+          211
+        ],
+        "other": [
+          213
+        ],
+        "technologies": [
+          214
+        ],
+        "required": [
+          215
+        ],
+        "future": [
+          218
+        ],
+        "Net-Zero": [
+          219
+        ],
+        "system.": [
+          221
+        ]
+      },
+      "counts_by_year": [
+        {
+          "year": 2026,
+          "cited_by_count": 2
+        },
+        {
+          "year": 2025,
+          "cited_by_count": 2
+        },
+        {
+          "year": 2024,
+          "cited_by_count": 12
+        },
+        {
+          "year": 2023,
+          "cited_by_count": 1
+        }
+      ],
+      "updated_date": "2026-09-29T14:09:16.559479",
+      "created_date": "2025-10-10T00:00:00"
+    }
+  }
+}

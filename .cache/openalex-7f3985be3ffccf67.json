@@ -1,0 +1,1059 @@
+{
+  "parts": {
+    "api": "openalex-work",
+    "doi": "10.1016/j.erss.2024.103475",
+    "shape": 1
+  },
+  "value": {
+    "found": true,
+    "work": {
+      "id": "https://openalex.org/W4392134712",
+      "doi": "https://doi.org/10.1016/j.erss.2024.103475",
+      "title": "Performing energy justice futures: How visions of just futures shape discourses and practices in the United Kingdom's community energy sector",
+      "display_name": "Performing energy justice futures: How visions of just futures shape discourses and practices in the United Kingdom's community energy sector",
+      "publication_year": 2024,
+      "publication_date": "2024-02-24",
+      "ids": {
+        "openalex": "https://openalex.org/W4392134712",
+        "doi": "https://doi.org/10.1016/j.erss.2024.103475"
+      },
+      "language": "en",
+      "primary_location": {
+        "id": "doi:10.1016/j.erss.2024.103475",
+        "is_oa": true,
+        "landing_page_url": "https://doi.org/10.1016/j.erss.2024.103475",
+        "pdf_url": null,
+        "source": {
+          "id": "https://openalex.org/S2764593084",
+          "display_name": "Energy Research & Social Science",
+          "issn_l": "2214-6296",
+          "issn": [
+            "2214-6296",
+            "2214-6326"
+          ],
+          "is_oa": false,
+          "is_in_doaj": false,
+          "is_core": true,
+          "listed_in": [
+            "cwts-core",
+            "jufo-2",
+            "ki-jl-1",
+            "norway-1"
+          ],
+          "host_organization": "https://openalex.org/P4310320990",
+          "host_organization_name": "Elsevier BV",
+          "host_organization_lineage": [
+            "https://openalex.org/P4310320990"
+          ],
+          "host_organization_lineage_names": [
+            "Elsevier BV"
+          ],
+          "type": "journal"
+        },
+        "license": "cc-by",
+        "license_id": "https://openalex.org/licenses/cc-by",
+        "version": "publishedVersion",
+        "is_accepted": true,
+        "is_published": true,
+        "raw_source_name": "Energy Research &amp; Social Science",
+        "raw_type": "journal-article"
+      },
+      "type": "article",
+      "indexed_in": [
+        "crossref"
+      ],
+      "open_access": {
+        "is_oa": true,
+        "oa_status": "hybrid",
+        "oa_url": "https://doi.org/10.1016/j.erss.2024.103475",
+        "any_repository_has_fulltext": true
+      },
+      "authorships": [
+        {
+          "author_position": "first",
+          "author": {
+            "id": "https://openalex.org/A5101617464",
+            "display_name": "Nayim Patel",
+            "orcid": "https://orcid.org/0000-0001-9379-6500",
+            "observed_orcids": [
+              "https://orcid.org/0000-0001-9379-6500"
+            ]
+          },
+          "institutions": [
+            {
+              "id": "https://openalex.org/I45129253",
+              "display_name": "University College London",
+              "ror": "https://ror.org/02jx3x895",
+              "country_code": "GB",
+              "type": "education",
+              "lineage": [
+                "https://openalex.org/I124357947",
+                "https://openalex.org/I45129253"
+              ]
+            }
+          ],
+          "countries": [
+            "GB"
+          ],
+          "is_corresponding": true,
+          "raw_author_name": "Nayim Patel",
+          "raw_affiliation_strings": [
+            "UCL Institute for Sustainable Resources, University College London, UK"
+          ],
+          "raw_orcid": null,
+          "affiliations": [
+            {
+              "raw_affiliation_string": "UCL Institute for Sustainable Resources, University College London, UK",
+              "institution_ids": [
+                "https://openalex.org/I45129253"
+              ]
+            }
+          ]
+        }
+      ],
+      "institutions": [],
+      "countries_distinct_count": 1,
+      "institutions_distinct_count": 1,
+      "corresponding_author_ids": [
+        "https://openalex.org/A5101617464"
+      ],
+      "corresponding_institution_ids": [
+        "https://openalex.org/I45129253"
+      ],
+      "apc_list": {
+        "value": 3300,
+        "currency": "USD",
+        "value_usd": 3300
+      },
+      "apc_paid": {
+        "value": 3300,
+        "currency": "USD",
+        "value_usd": 3300
+      },
+      "fwci": 1.7323,
+      "has_fulltext": true,
+      "cited_by_count": 9,
+      "citation_normalized_percentile": {
+        "value": 0.82547541,
+        "is_in_top_1_percent": false,
+        "is_in_top_10_percent": false
+      },
+      "cited_by_percentile_year": {
+        "min": 96,
+        "max": 97
+      },
+      "biblio": {
+        "volume": "111",
+        "issue": null,
+        "first_page": "103475",
+        "last_page": "103475"
+      },
+      "is_retracted": false,
+      "is_paratext": false,
+      "is_xpac": false,
+      "primary_topic": {
+        "id": "https://openalex.org/T10119",
+        "display_name": "Sustainability and Climate Change Governance",
+        "score": 0.5839999914169312,
+        "subfield": {
+          "id": "https://openalex.org/subfields/2306",
+          "display_name": "Global and Planetary Change"
+        },
+        "field": {
+          "id": "https://openalex.org/fields/23",
+          "display_name": "Environmental Science"
+        },
+        "domain": {
+          "id": "https://openalex.org/domains/3",
+          "display_name": "Physical Sciences"
+        }
+      },
+      "topics": [
+        {
+          "id": "https://openalex.org/T10119",
+          "display_name": "Sustainability and Climate Change Governance",
+          "score": 0.5839999914169312,
+          "subfield": {
+            "id": "https://openalex.org/subfields/2306",
+            "display_name": "Global and Planetary Change"
+          },
+          "field": {
+            "id": "https://openalex.org/fields/23",
+            "display_name": "Environmental Science"
+          },
+          "domain": {
+            "id": "https://openalex.org/domains/3",
+            "display_name": "Physical Sciences"
+          }
+        },
+        {
+          "id": "https://openalex.org/T12503",
+          "display_name": "Social Acceptance of Renewable Energy",
+          "score": 0.30809998512268066,
+          "subfield": {
+            "id": "https://openalex.org/subfields/3312",
+            "display_name": "Sociology and Political Science"
+          },
+          "field": {
+            "id": "https://openalex.org/fields/33",
+            "display_name": "Social Sciences"
+          },
+          "domain": {
+            "id": "https://openalex.org/domains/2",
+            "display_name": "Social Sciences"
+          }
+        },
+        {
+          "id": "https://openalex.org/T13893",
+          "display_name": "Sustainable Development and Policies",
+          "score": 0.039799999445676804,
+          "subfield": {
+            "id": "https://openalex.org/subfields/2308",
+            "display_name": "Management, Monitoring, Policy and Law"
+          },
+          "field": {
+            "id": "https://openalex.org/fields/23",
+            "display_name": "Environmental Science"
+          },
+          "domain": {
+            "id": "https://openalex.org/domains/3",
+            "display_name": "Physical Sciences"
+          }
+        }
+      ],
+      "keywords": [
+        {
+          "id": "https://openalex.org/keywords/energy-justice",
+          "display_name": "energy justice",
+          "score": 0.9710000157356262
+        },
+        {
+          "id": "https://openalex.org/keywords/community-energy",
+          "display_name": "community energy",
+          "score": 0.9480000138282776
+        },
+        {
+          "id": "https://openalex.org/keywords/sociotechnical-imaginaries",
+          "display_name": "sociotechnical imaginaries",
+          "score": 0.8740000128746033
+        },
+        {
+          "id": "https://openalex.org/keywords/just-transition",
+          "display_name": "just transition",
+          "score": 0.6629999876022339
+        },
+        {
+          "id": "https://openalex.org/keywords/alternative-economy",
+          "display_name": "alternative economy",
+          "score": 0.9240000247955322
+        },
+        {
+          "id": "https://openalex.org/keywords/fuel-poverty",
+          "display_name": "fuel poverty",
+          "score": 0.6859999895095825
+        },
+        {
+          "id": "https://openalex.org/keywords/decarbonization",
+          "display_name": "decarbonization",
+          "score": 0.9490000009536743
+        },
+        {
+          "id": "https://openalex.org/keywords/low-income-households",
+          "display_name": "low-income households",
+          "score": 0.6190000176429749
+        },
+        {
+          "id": "https://openalex.org/keywords/renewable-energy-projects",
+          "display_name": "renewable energy projects",
+          "score": 0.6119999885559082
+        },
+        {
+          "id": "https://openalex.org/keywords/policy-advocacy",
+          "display_name": "policy advocacy",
+          "score": 0.5649999976158142
+        },
+        {
+          "id": "https://openalex.org/keywords/united-kingdom",
+          "display_name": "United Kingdom",
+          "score": 0.6470000147819519
+        }
+      ],
+      "concepts": [
+        {
+          "id": "https://openalex.org/C106306483",
+          "wikidata": "https://www.wikidata.org/wiki/Q183984",
+          "display_name": "Futures contract",
+          "level": 2,
+          "score": 0.9486832022666931
+        },
+        {
+          "id": "https://openalex.org/C133979268",
+          "wikidata": "https://www.wikidata.org/wiki/Q1682108",
+          "display_name": "Vision",
+          "level": 2,
+          "score": 0.9340269565582275
+        },
+        {
+          "id": "https://openalex.org/C186370098",
+          "wikidata": "https://www.wikidata.org/wiki/Q442787",
+          "display_name": "Energy (signal processing)",
+          "level": 2,
+          "score": 0.6052242517471313
+        },
+        {
+          "id": "https://openalex.org/C139621336",
+          "wikidata": "https://www.wikidata.org/wiki/Q3190382",
+          "display_name": "Economic Justice",
+          "level": 2,
+          "score": 0.5138614177703857
+        },
+        {
+          "id": "https://openalex.org/C2985347565",
+          "wikidata": "https://www.wikidata.org/wiki/Q2151621",
+          "display_name": "Energy sector",
+          "level": 2,
+          "score": 0.4860542118549347
+        },
+        {
+          "id": "https://openalex.org/C144024400",
+          "wikidata": "https://www.wikidata.org/wiki/Q21201",
+          "display_name": "Sociology",
+          "level": 0,
+          "score": 0.43472984433174133
+        },
+        {
+          "id": "https://openalex.org/C17744445",
+          "wikidata": "https://www.wikidata.org/wiki/Q36442",
+          "display_name": "Political science",
+          "level": 0,
+          "score": 0.2978445887565613
+        },
+        {
+          "id": "https://openalex.org/C162324750",
+          "wikidata": "https://www.wikidata.org/wiki/Q8134",
+          "display_name": "Economics",
+          "level": 0,
+          "score": 0.2585211992263794
+        },
+        {
+          "id": "https://openalex.org/C199539241",
+          "wikidata": "https://www.wikidata.org/wiki/Q7748",
+          "display_name": "Law",
+          "level": 1,
+          "score": 0.17538630962371826
+        },
+        {
+          "id": "https://openalex.org/C74363100",
+          "wikidata": "https://www.wikidata.org/wiki/Q273005",
+          "display_name": "Economic system",
+          "level": 1,
+          "score": 0.1507469117641449
+        },
+        {
+          "id": "https://openalex.org/C106159729",
+          "wikidata": "https://www.wikidata.org/wiki/Q2294553",
+          "display_name": "Financial economics",
+          "level": 1,
+          "score": 0.09934335947036743
+        },
+        {
+          "id": "https://openalex.org/C19165224",
+          "wikidata": "https://www.wikidata.org/wiki/Q23404",
+          "display_name": "Anthropology",
+          "level": 1,
+          "score": 0.05970612168312073
+        },
+        {
+          "id": "https://openalex.org/C105795698",
+          "wikidata": "https://www.wikidata.org/wiki/Q12483",
+          "display_name": "Statistics",
+          "level": 1,
+          "score": 0.0
+        },
+        {
+          "id": "https://openalex.org/C33923547",
+          "wikidata": "https://www.wikidata.org/wiki/Q395",
+          "display_name": "Mathematics",
+          "level": 0,
+          "score": 0.0
+        }
+      ],
+      "mesh": [],
+      "locations_count": 2,
+      "locations": [
+        {
+          "id": "doi:10.1016/j.erss.2024.103475",
+          "is_oa": true,
+          "landing_page_url": "https://doi.org/10.1016/j.erss.2024.103475",
+          "pdf_url": null,
+          "source": {
+            "id": "https://openalex.org/S2764593084",
+            "display_name": "Energy Research & Social Science",
+            "issn_l": "2214-6296",
+            "issn": [
+              "2214-6296",
+              "2214-6326"
+            ],
+            "is_oa": false,
+            "is_in_doaj": false,
+            "is_core": true,
+            "listed_in": [
+              "cwts-core",
+              "jufo-2",
+              "ki-jl-1",
+              "norway-1"
+            ],
+            "host_organization": "https://openalex.org/P4310320990",
+            "host_organization_name": "Elsevier BV",
+            "host_organization_lineage": [
+              "https://openalex.org/P4310320990"
+            ],
+            "host_organization_lineage_names": [
+              "Elsevier BV"
+            ],
+            "type": "journal"
+          },
+          "license": "cc-by",
+          "license_id": "https://openalex.org/licenses/cc-by",
+          "version": "publishedVersion",
+          "is_accepted": true,
+          "is_published": true,
+          "raw_source_name": "Energy Research &amp; Social Science",
+          "raw_type": "journal-article"
+        },
+        {
+          "id": "pmh:oai:eprints.ucl.ac.uk.OAI2:10188400",
+          "is_oa": true,
+          "landing_page_url": "https://discovery.ucl.ac.uk/id/eprint/10188400/",
+          "pdf_url": "https://discovery.ucl.ac.uk/id/eprint/10188400/1/1-s2.0-S2214629624000665-main.pdf",
+          "source": {
+            "id": "https://openalex.org/S4306400024",
+            "display_name": "UCL Discovery (University College London)",
+            "issn_l": null,
+            "issn": null,
+            "is_oa": false,
+            "is_in_doaj": false,
+            "is_core": false,
+            "listed_in": [],
+            "host_organization": "https://openalex.org/I45129253",
+            "host_organization_name": "University College London",
+            "host_organization_lineage": [
+              "https://openalex.org/I45129253"
+            ],
+            "host_organization_lineage_names": [],
+            "type": "repository"
+          },
+          "license": "cc-by",
+          "license_id": "https://openalex.org/licenses/cc-by",
+          "version": "submittedVersion",
+          "is_accepted": false,
+          "is_published": false,
+          "raw_source_name": "Energy Research &amp;amp; Social Science , 111 , Article 103475. (2024)",
+          "raw_type": "Article"
+        }
+      ],
+      "best_oa_location": {
+        "id": "doi:10.1016/j.erss.2024.103475",
+        "is_oa": true,
+        "landing_page_url": "https://doi.org/10.1016/j.erss.2024.103475",
+        "pdf_url": null,
+        "source": {
+          "id": "https://openalex.org/S2764593084",
+          "display_name": "Energy Research & Social Science",
+          "issn_l": "2214-6296",
+          "issn": [
+            "2214-6296",
+            "2214-6326"
+          ],
+          "is_oa": false,
+          "is_in_doaj": false,
+          "is_core": true,
+          "listed_in": [
+            "cwts-core",
+            "jufo-2",
+            "ki-jl-1",
+            "norway-1"
+          ],
+          "host_organization": "https://openalex.org/P4310320990",
+          "host_organization_name": "Elsevier BV",
+          "host_organization_lineage": [
+            "https://openalex.org/P4310320990"
+          ],
+          "host_organization_lineage_names": [
+            "Elsevier BV"
+          ],
+          "type": "journal"
+        },
+        "license": "cc-by",
+        "license_id": "https://openalex.org/licenses/cc-by",
+        "version": "publishedVersion",
+        "is_accepted": true,
+        "is_published": true,
+        "raw_source_name": "Energy Research &amp; Social Science",
+        "raw_type": "journal-article"
+      },
+      "sustainable_development_goals": [
+        {
+          "display_name": "Affordable and clean energy",
+          "score": 0.9090999960899353,
+          "id": "https://metadata.un.org/sdg/7"
+        },
+        {
+          "display_name": "Reduced inequalities",
+          "score": 0.7578999996185303,
+          "id": "https://metadata.un.org/sdg/10"
+        },
+        {
+          "display_name": "Climate action",
+          "score": 0.5351999998092651,
+          "id": "https://metadata.un.org/sdg/13"
+        },
+        {
+          "display_name": "Peace, justice, and strong institutions",
+          "score": 0.47620001435279846,
+          "id": "https://metadata.un.org/sdg/16"
+        }
+      ],
+      "sustainable_development_goals_aurora": [
+        {
+          "display_name": "Reduced inequalities",
+          "score": 0.46000000834465027,
+          "id": "https://metadata.un.org/sdg/10"
+        }
+      ],
+      "study_designs": [],
+      "awards": [],
+      "funders": [],
+      "has_content": {
+        "pdf": false,
+        "grobid_xml": false
+      },
+      "content_urls": null,
+      "referenced_works_count": 32,
+      "referenced_works": [
+        "https://openalex.org/W1545216771",
+        "https://openalex.org/W2037478464",
+        "https://openalex.org/W2117236107",
+        "https://openalex.org/W2147139681",
+        "https://openalex.org/W2162236984",
+        "https://openalex.org/W2167446480",
+        "https://openalex.org/W2267793125",
+        "https://openalex.org/W2329452841",
+        "https://openalex.org/W2505701133",
+        "https://openalex.org/W2596370884",
+        "https://openalex.org/W2613274828",
+        "https://openalex.org/W2768206687",
+        "https://openalex.org/W2769465662",
+        "https://openalex.org/W2806877697",
+        "https://openalex.org/W2915180177",
+        "https://openalex.org/W2925244116",
+        "https://openalex.org/W2950014323",
+        "https://openalex.org/W2969675151",
+        "https://openalex.org/W2970118594",
+        "https://openalex.org/W2970911013",
+        "https://openalex.org/W2979301149",
+        "https://openalex.org/W3027344768",
+        "https://openalex.org/W3080189944",
+        "https://openalex.org/W3116265776",
+        "https://openalex.org/W3135573933",
+        "https://openalex.org/W3157499921",
+        "https://openalex.org/W3187097624",
+        "https://openalex.org/W4200439634",
+        "https://openalex.org/W4280609221",
+        "https://openalex.org/W4289732091",
+        "https://openalex.org/W4318244970",
+        "https://openalex.org/W6632502917"
+      ],
+      "related_works": [
+        "https://openalex.org/W1548557026",
+        "https://openalex.org/W1975110180",
+        "https://openalex.org/W2117786814",
+        "https://openalex.org/W4377008908",
+        "https://openalex.org/W1989187808",
+        "https://openalex.org/W2332333067",
+        "https://openalex.org/W4288993906",
+        "https://openalex.org/W2079187076",
+        "https://openalex.org/W3200232677",
+        "https://openalex.org/W2617969253"
+      ],
+      "abstract_inverted_index": {
+        "The": [
+          0
+        ],
+        "UK's": [
+          1
+        ],
+        "Community": [
+          2
+        ],
+        "Energy": [
+          3
+        ],
+        "sector": [
+          4,
+          63,
+          94
+        ],
+        "is": [
+          5,
+          84,
+          154,
+          189
+        ],
+        "a": [
+          6,
+          143,
+          164
+        ],
+        "grassroots-led": [
+          7
+        ],
+        "movement": [
+          8
+        ],
+        "that": [
+          9,
+          32,
+          71,
+          153,
+          168
+        ],
+        "tackles": [
+          10
+        ],
+        "the": [
+          11,
+          52,
+          62,
+          93,
+          100,
+          113,
+          140,
+          170,
+          180
+        ],
+        "country's": [
+          12
+        ],
+        "decarbonisation": [
+          13
+        ],
+        "and": [
+          14,
+          23,
+          39,
+          46,
+          64,
+          69,
+          90,
+          106,
+          116,
+          125,
+          135,
+          163,
+          185,
+          195
+        ],
+        "fuel": [
+          15
+        ],
+        "poverty": [
+          16
+        ],
+        "challenges": [
+          17,
+          169
+        ],
+        "by": [
+          18,
+          159
+        ],
+        "building": [
+          19
+        ],
+        "community-scale": [
+          20
+        ],
+        "renewable": [
+          21
+        ],
+        "projects": [
+          22
+        ],
+        "directing": [
+          24
+        ],
+        "funds": [
+          25
+        ],
+        "towards": [
+          26
+        ],
+        "low-income": [
+          27
+        ],
+        "households.": [
+          28
+        ],
+        "Comparative": [
+          29
+        ],
+        "studies": [
+          30
+        ],
+        "indicate": [
+          31
+        ],
+        "community": [
+          33,
+          55,
+          88,
+          122,
+          132,
+          137
+        ],
+        "energy": [
+          34,
+          56,
+          79,
+          96,
+          119,
+          123,
+          133,
+          138
+        ],
+        "initiatives": [
+          35
+        ],
+        "are": [
+          36
+        ],
+        "more": [
+          37,
+          42
+        ],
+        "durable": [
+          38
+        ],
+        "engage": [
+          40
+        ],
+        "citizens": [
+          41
+        ],
+        "deeply": [
+          43
+        ],
+        "than": [
+          44
+        ],
+        "public": [
+          45,
+          193
+        ],
+        "private": [
+          47
+        ],
+        "counterparts.": [
+          48
+        ],
+        "Some": [
+          49
+        ],
+        "scholars": [
+          50
+        ],
+        "emphasise": [
+          51
+        ],
+        "importance": [
+          53
+        ],
+        "of": [
+          54,
+          103,
+          118
+        ],
+        "intermediaries": [
+          57,
+          73,
+          91,
+          160
+        ],
+        "in": [
+          58,
+          66
+        ],
+        "aggregating": [
+          59
+        ],
+        "knowledge": [
+          60
+        ],
+        "across": [
+          61,
+          92
+        ],
+        "engaging": [
+          65
+        ],
+        "policy": [
+          67,
+          194
+        ],
+        "advocacy": [
+          68
+        ],
+        "argue": [
+          70
+        ],
+        "these": [
+          72,
+          183
+        ],
+        "should": [
+          74
+        ],
+        "be": [
+          75
+        ],
+        "strengthened": [
+          76
+        ],
+        "to": [
+          77,
+          173
+        ],
+        "support": [
+          78
+        ],
+        "justice": [
+          80,
+          120
+        ],
+        "practices.": [
+          81
+        ],
+        "However,": [
+          82
+        ],
+        "less": [
+          83
+        ],
+        "known": [
+          85
+        ],
+        "about": [
+          86
+        ],
+        "how": [
+          87
+        ],
+        "groups": [
+          89,
+          124,
+          134
+        ],
+        "understand": [
+          95
+        ],
+        "justice.": [
+          97
+        ],
+        "Drawing": [
+          98
+        ],
+        "on": [
+          99
+        ],
+        "conceptual": [
+          101
+        ],
+        "lenses": [
+          102
+        ],
+        "sociotechnical": [
+          104
+        ],
+        "imaginaries": [
+          105
+        ],
+        "critical": [
+          107,
+          165
+        ],
+        "niche": [
+          108,
+          166
+        ],
+        "perspectives,": [
+          109
+        ],
+        "this": [
+          110
+        ],
+        "paper": [
+          111,
+          141
+        ],
+        "investigates": [
+          112
+        ],
+        "contending": [
+          114
+        ],
+        "visions": [
+          115,
+          184
+        ],
+        "practices": [
+          117
+        ],
+        "amongst": [
+          121
+        ],
+        "intermediaries.": [
+          126
+        ],
+        "Through": [
+          127
+        ],
+        "qualitative": [
+          128
+        ],
+        "interviews": [
+          129
+        ],
+        "with": [
+          130
+        ],
+        "15": [
+          131
+        ],
+        "5": [
+          136
+        ],
+        "intermediaries,": [
+          139
+        ],
+        "finds": [
+          142
+        ],
+        "core": [
+          144
+        ],
+        "institutionally": [
+          145,
+          157
+        ],
+        "stabilised": [
+          146
+        ],
+        "imaginary": [
+          147,
+          152
+        ],
+        "(Alternative": [
+          148
+        ],
+        "Economy),": [
+          149
+        ],
+        "an": [
+          150
+        ],
+        "emerging": [
+          151
+        ],
+        "not": [
+          155
+        ],
+        "yet": [
+          156
+        ],
+        "supported": [
+          158
+        ],
+        "(Just": [
+          161
+        ],
+        "Transition),": [
+          162
+        ],
+        "perspective": [
+          167
+        ],
+        "sector's": [
+          171
+        ],
+        "claims": [
+          172
+        ],
+        "represent": [
+          174
+        ],
+        "diverse": [
+          175
+        ],
+        "communities": [
+          176
+        ],
+        "(Beyond": [
+          177
+        ],
+        "Inclusion).": [
+          178
+        ],
+        "Understanding": [
+          179
+        ],
+        "differences": [
+          181
+        ],
+        "between": [
+          182
+        ],
+        "their": [
+          186
+        ],
+        "supporting": [
+          187
+        ],
+        "coalitions": [
+          188
+        ],
+        "crucial": [
+          190
+        ],
+        "for": [
+          191
+        ],
+        "effective": [
+          192
+        ],
+        "sectoral": [
+          196
+        ],
+        "strategy.": [
+          197
+        ]
+      },
+      "counts_by_year": [
+        {
+          "year": 2026,
+          "cited_by_count": 2
+        },
+        {
+          "year": 2025,
+          "cited_by_count": 3
+        },
+        {
+          "year": 2024,
+          "cited_by_count": 4
+        }
+      ],
+      "updated_date": "2026-08-28T12:50:07.497085",
+      "created_date": "2025-10-10T00:00:00"
+    }
+  }
+}

@@ -1,0 +1,1191 @@
+{
+  "parts": {
+    "api": "openalex-work",
+    "doi": "10.67887/pd2601208004",
+    "shape": 1
+  },
+  "value": {
+    "found": true,
+    "work": {
+      "id": "https://openalex.org/W7213561366",
+      "doi": "https://doi.org/10.67887/pd2601208004",
+      "title": "A Comparative Evaluation of Statistical, Hybrid, and Deep Learning Models for Short-Term Electricity Demand Forecasting in The United Kingdom",
+      "display_name": "A Comparative Evaluation of Statistical, Hybrid, and Deep Learning Models for Short-Term Electricity Demand Forecasting in The United Kingdom",
+      "publication_year": 2026,
+      "publication_date": "2026-07-25",
+      "ids": {
+        "openalex": "https://openalex.org/W7213561366",
+        "doi": "https://doi.org/10.67887/pd2601208004"
+      },
+      "language": null,
+      "primary_location": {
+        "id": "doi:10.67887/pd2601208004",
+        "is_oa": true,
+        "landing_page_url": "https://doi.org/10.67887/pd2601208004",
+        "pdf_url": "https://pdpublishers.com/wp-content/uploads/2026/07/PD2601208004-Ali-Algarni.pdf",
+        "source": {
+          "id": "https://openalex.org/S7407065049",
+          "display_name": "Precision Journal of Applied Mathematics and Statistics",
+          "issn_l": "3153-7316",
+          "issn": [
+            "3153-7316"
+          ],
+          "is_oa": false,
+          "is_in_doaj": false,
+          "is_core": false,
+          "listed_in": [],
+          "host_organization": null,
+          "host_organization_name": null,
+          "host_organization_lineage": [],
+          "host_organization_lineage_names": [],
+          "type": "journal"
+        },
+        "license": "cc-by",
+        "license_id": "https://openalex.org/licenses/cc-by",
+        "version": "publishedVersion",
+        "is_accepted": true,
+        "is_published": true,
+        "raw_source_name": "Precision Journal of Applied Mathematics and Statistics",
+        "raw_type": "journal-article"
+      },
+      "type": "article",
+      "indexed_in": [
+        "crossref"
+      ],
+      "open_access": {
+        "is_oa": true,
+        "oa_status": "hybrid",
+        "oa_url": "https://pdpublishers.com/wp-content/uploads/2026/07/PD2601208004-Ali-Algarni.pdf",
+        "any_repository_has_fulltext": false
+      },
+      "authorships": [
+        {
+          "author_position": "first",
+          "author": {
+            "id": "https://openalex.org/A5133630479",
+            "display_name": "Ali Algarni",
+            "orcid": null,
+            "observed_orcids": []
+          },
+          "institutions": [
+            {
+              "id": "https://openalex.org/I185163786",
+              "display_name": "King Abdulaziz University",
+              "ror": "https://ror.org/02ma4wv74",
+              "country_code": "SA",
+              "type": "education",
+              "lineage": [
+                "https://openalex.org/I185163786"
+              ]
+            }
+          ],
+          "countries": [
+            "SA"
+          ],
+          "is_corresponding": true,
+          "raw_author_name": "Ali Algarni",
+          "raw_affiliation_strings": [
+            "Department of Statistics , King Abdulaziz University , Jeddah , Saudi Arabia",
+            "Department of Statistics , King Abdulaziz University , Jeddah , Saudi Arabia;"
+          ],
+          "raw_orcid": null,
+          "affiliations": [
+            {
+              "raw_affiliation_string": "Department of Statistics , King Abdulaziz University , Jeddah , Saudi Arabia",
+              "institution_ids": [
+                "https://openalex.org/I185163786"
+              ]
+            },
+            {
+              "raw_affiliation_string": "Department of Statistics , King Abdulaziz University , Jeddah , Saudi Arabia;",
+              "institution_ids": [
+                "https://openalex.org/I185163786"
+              ]
+            }
+          ]
+        }
+      ],
+      "institutions": [],
+      "countries_distinct_count": 1,
+      "institutions_distinct_count": 1,
+      "corresponding_author_ids": [
+        "https://openalex.org/A5133630479"
+      ],
+      "corresponding_institution_ids": [
+        "https://openalex.org/I185163786"
+      ],
+      "apc_list": null,
+      "apc_paid": null,
+      "fwci": 0.0,
+      "has_fulltext": true,
+      "cited_by_count": 0,
+      "citation_normalized_percentile": {
+        "value": 0.71822274,
+        "is_in_top_1_percent": false,
+        "is_in_top_10_percent": false
+      },
+      "cited_by_percentile_year": null,
+      "biblio": {
+        "volume": "1",
+        "issue": null,
+        "first_page": "1",
+        "last_page": "1"
+      },
+      "is_retracted": false,
+      "is_paratext": false,
+      "is_xpac": false,
+      "primary_topic": {
+        "id": "https://openalex.org/T11052",
+        "display_name": "Energy Load and Power Forecasting",
+        "score": 0.9990000128746033,
+        "subfield": {
+          "id": "https://openalex.org/subfields/2208",
+          "display_name": "Electrical and Electronic Engineering"
+        },
+        "field": {
+          "id": "https://openalex.org/fields/22",
+          "display_name": "Engineering"
+        },
+        "domain": {
+          "id": "https://openalex.org/domains/3",
+          "display_name": "Physical Sciences"
+        }
+      },
+      "topics": [
+        {
+          "id": "https://openalex.org/T11052",
+          "display_name": "Energy Load and Power Forecasting",
+          "score": 0.9990000128746033,
+          "subfield": {
+            "id": "https://openalex.org/subfields/2208",
+            "display_name": "Electrical and Electronic Engineering"
+          },
+          "field": {
+            "id": "https://openalex.org/fields/22",
+            "display_name": "Engineering"
+          },
+          "domain": {
+            "id": "https://openalex.org/domains/3",
+            "display_name": "Physical Sciences"
+          }
+        },
+        {
+          "id": "https://openalex.org/T11326",
+          "display_name": "Stock Market Forecasting Methods",
+          "score": 0.00019999999494757503,
+          "subfield": {
+            "id": "https://openalex.org/subfields/1803",
+            "display_name": "Management Science and Operations Research"
+          },
+          "field": {
+            "id": "https://openalex.org/fields/18",
+            "display_name": "Decision Sciences"
+          },
+          "domain": {
+            "id": "https://openalex.org/domains/2",
+            "display_name": "Social Sciences"
+          }
+        },
+        {
+          "id": "https://openalex.org/T11918",
+          "display_name": "Forecasting Techniques and Applications",
+          "score": 0.00019999999494757503,
+          "subfield": {
+            "id": "https://openalex.org/subfields/1803",
+            "display_name": "Management Science and Operations Research"
+          },
+          "field": {
+            "id": "https://openalex.org/fields/18",
+            "display_name": "Decision Sciences"
+          },
+          "domain": {
+            "id": "https://openalex.org/domains/2",
+            "display_name": "Social Sciences"
+          }
+        }
+      ],
+      "keywords": [
+        {
+          "id": "https://openalex.org/keywords/short-term-load-forecasting",
+          "display_name": "short-term load forecasting",
+          "score": 0.9980000257492065
+        },
+        {
+          "id": "https://openalex.org/keywords/recurrent-neural-networks",
+          "display_name": "recurrent neural networks",
+          "score": 0.7860000133514404
+        },
+        {
+          "id": "https://openalex.org/keywords/long-short-term-memory",
+          "display_name": "long short-term memory",
+          "score": 0.796999990940094
+        },
+        {
+          "id": "https://openalex.org/keywords/gated-recurrent-unit",
+          "display_name": "gated recurrent unit",
+          "score": 0.9700000286102295
+        },
+        {
+          "id": "https://openalex.org/keywords/cnn-lstm",
+          "display_name": "CNN-LSTM",
+          "score": 0.9539999961853027
+        },
+        {
+          "id": "https://openalex.org/keywords/seasonal-arima-model",
+          "display_name": "seasonal ARIMA",
+          "score": 0.628000020980835
+        },
+        {
+          "id": "https://openalex.org/keywords/holt-winters",
+          "display_name": "Holt-Winters",
+          "score": 0.8820000290870667
+        },
+        {
+          "id": "https://openalex.org/keywords/model-benchmarking",
+          "display_name": "model benchmarking",
+          "score": 0.5680000185966492
+        },
+        {
+          "id": "https://openalex.org/keywords/smart-grid",
+          "display_name": "smart grid",
+          "score": 0.41200000047683716
+        },
+        {
+          "id": "https://openalex.org/keywords/temporal-leakage",
+          "display_name": "temporal leakage",
+          "score": 0.45899999141693115
+        }
+      ],
+      "concepts": [
+        {
+          "id": "https://openalex.org/C155512373",
+          "wikidata": "https://www.wikidata.org/wiki/Q287450",
+          "display_name": "Residual",
+          "level": 2,
+          "score": 0.7617999911308289
+        },
+        {
+          "id": "https://openalex.org/C185798385",
+          "wikidata": "https://www.wikidata.org/wiki/Q1161707",
+          "display_name": "Benchmark (surveying)",
+          "level": 2,
+          "score": 0.6582000255584717
+        },
+        {
+          "id": "https://openalex.org/C24338571",
+          "wikidata": "https://www.wikidata.org/wiki/Q2566298",
+          "display_name": "Autoregressive integrated moving average",
+          "level": 3,
+          "score": 0.6110000014305115
+        },
+        {
+          "id": "https://openalex.org/C139945424",
+          "wikidata": "https://www.wikidata.org/wiki/Q1940696",
+          "display_name": "Mean squared error",
+          "level": 2,
+          "score": 0.5580999851226807
+        },
+        {
+          "id": "https://openalex.org/C193809577",
+          "wikidata": "https://www.wikidata.org/wiki/Q3409300",
+          "display_name": "Demand forecasting",
+          "level": 2,
+          "score": 0.5070000290870667
+        },
+        {
+          "id": "https://openalex.org/C150217764",
+          "wikidata": "https://www.wikidata.org/wiki/Q6803607",
+          "display_name": "Mean absolute percentage error",
+          "level": 3,
+          "score": 0.4936000108718872
+        },
+        {
+          "id": "https://openalex.org/C108583219",
+          "wikidata": "https://www.wikidata.org/wiki/Q197536",
+          "display_name": "Deep learning",
+          "level": 2,
+          "score": 0.483599990606308
+        },
+        {
+          "id": "https://openalex.org/C149782125",
+          "wikidata": "https://www.wikidata.org/wiki/Q160039",
+          "display_name": "Econometrics",
+          "level": 1,
+          "score": 0.4796999990940094
+        },
+        {
+          "id": "https://openalex.org/C41008148",
+          "wikidata": "https://www.wikidata.org/wiki/Q21198",
+          "display_name": "Computer science",
+          "level": 0,
+          "score": 0.4749000072479248
+        },
+        {
+          "id": "https://openalex.org/C12725497",
+          "wikidata": "https://www.wikidata.org/wiki/Q810247",
+          "display_name": "Baseline (sea)",
+          "level": 2,
+          "score": 0.4343999922275543
+        },
+        {
+          "id": "https://openalex.org/C154945302",
+          "wikidata": "https://www.wikidata.org/wiki/Q11660",
+          "display_name": "Artificial intelligence",
+          "level": 1,
+          "score": 0.42399999499320984
+        },
+        {
+          "id": "https://openalex.org/C105795698",
+          "wikidata": "https://www.wikidata.org/wiki/Q12483",
+          "display_name": "Statistics",
+          "level": 1,
+          "score": 0.3968000113964081
+        },
+        {
+          "id": "https://openalex.org/C119857082",
+          "wikidata": "https://www.wikidata.org/wiki/Q2539",
+          "display_name": "Machine learning",
+          "level": 1,
+          "score": 0.35249999165534973
+        },
+        {
+          "id": "https://openalex.org/C151406439",
+          "wikidata": "https://www.wikidata.org/wiki/Q186588",
+          "display_name": "Time series",
+          "level": 2,
+          "score": 0.3100999891757965
+        },
+        {
+          "id": "https://openalex.org/C206658404",
+          "wikidata": "https://www.wikidata.org/wiki/Q12725",
+          "display_name": "Electricity",
+          "level": 2,
+          "score": 0.3059999942779541
+        },
+        {
+          "id": "https://openalex.org/C167085575",
+          "wikidata": "https://www.wikidata.org/wiki/Q6803654",
+          "display_name": "Mean squared prediction error",
+          "level": 2,
+          "score": 0.3018999993801117
+        },
+        {
+          "id": "https://openalex.org/C2778755073",
+          "wikidata": "https://www.wikidata.org/wiki/Q10858537",
+          "display_name": "Scale (ratio)",
+          "level": 2,
+          "score": 0.29330000281333923
+        },
+        {
+          "id": "https://openalex.org/C122282355",
+          "wikidata": "https://www.wikidata.org/wiki/Q7246855",
+          "display_name": "Probabilistic forecasting",
+          "level": 3,
+          "score": 0.27649998664855957
+        },
+        {
+          "id": "https://openalex.org/C2988649059",
+          "wikidata": "https://www.wikidata.org/wiki/Q1853339",
+          "display_name": "Electricity demand",
+          "level": 4,
+          "score": 0.2687999904155731
+        },
+        {
+          "id": "https://openalex.org/C50644808",
+          "wikidata": "https://www.wikidata.org/wiki/Q192776",
+          "display_name": "Artificial neural network",
+          "level": 2,
+          "score": 0.25450000166893005
+        },
+        {
+          "id": "https://openalex.org/C119898033",
+          "wikidata": "https://www.wikidata.org/wiki/Q3433888",
+          "display_name": "Ensemble forecasting",
+          "level": 2,
+          "score": 0.2535000145435333
+        }
+      ],
+      "mesh": [],
+      "locations_count": 1,
+      "locations": [
+        {
+          "id": "doi:10.67887/pd2601208004",
+          "is_oa": true,
+          "landing_page_url": "https://doi.org/10.67887/pd2601208004",
+          "pdf_url": "https://pdpublishers.com/wp-content/uploads/2026/07/PD2601208004-Ali-Algarni.pdf",
+          "source": {
+            "id": "https://openalex.org/S7407065049",
+            "display_name": "Precision Journal of Applied Mathematics and Statistics",
+            "issn_l": "3153-7316",
+            "issn": [
+              "3153-7316"
+            ],
+            "is_oa": false,
+            "is_in_doaj": false,
+            "is_core": false,
+            "listed_in": [],
+            "host_organization": null,
+            "host_organization_name": null,
+            "host_organization_lineage": [],
+            "host_organization_lineage_names": [],
+            "type": "journal"
+          },
+          "license": "cc-by",
+          "license_id": "https://openalex.org/licenses/cc-by",
+          "version": "publishedVersion",
+          "is_accepted": true,
+          "is_published": true,
+          "raw_source_name": "Precision Journal of Applied Mathematics and Statistics",
+          "raw_type": "journal-article"
+        }
+      ],
+      "best_oa_location": {
+        "id": "doi:10.67887/pd2601208004",
+        "is_oa": true,
+        "landing_page_url": "https://doi.org/10.67887/pd2601208004",
+        "pdf_url": "https://pdpublishers.com/wp-content/uploads/2026/07/PD2601208004-Ali-Algarni.pdf",
+        "source": {
+          "id": "https://openalex.org/S7407065049",
+          "display_name": "Precision Journal of Applied Mathematics and Statistics",
+          "issn_l": "3153-7316",
+          "issn": [
+            "3153-7316"
+          ],
+          "is_oa": false,
+          "is_in_doaj": false,
+          "is_core": false,
+          "listed_in": [],
+          "host_organization": null,
+          "host_organization_name": null,
+          "host_organization_lineage": [],
+          "host_organization_lineage_names": [],
+          "type": "journal"
+        },
+        "license": "cc-by",
+        "license_id": "https://openalex.org/licenses/cc-by",
+        "version": "publishedVersion",
+        "is_accepted": true,
+        "is_published": true,
+        "raw_source_name": "Precision Journal of Applied Mathematics and Statistics",
+        "raw_type": "journal-article"
+      },
+      "sustainable_development_goals": [
+        {
+          "score": 0.8485000133514404,
+          "id": "https://metadata.un.org/sdg/7",
+          "display_name": "Affordable and clean energy"
+        },
+        {
+          "score": 0.685699999332428,
+          "id": "https://metadata.un.org/sdg/13",
+          "display_name": "Climate action"
+        }
+      ],
+      "sustainable_development_goals_aurora": [
+        {
+          "score": 0.7526507377624512,
+          "id": "https://metadata.un.org/sdg/7",
+          "display_name": "Affordable and clean energy"
+        }
+      ],
+      "study_designs": [],
+      "awards": [],
+      "funders": [],
+      "has_content": {
+        "pdf": true,
+        "grobid_xml": true
+      },
+      "content_urls": {
+        "pdf": "https://content.openalex.org/works/W7213561366.pdf",
+        "grobid_xml": "https://content.openalex.org/works/W7213561366.grobid-xml"
+      },
+      "referenced_works_count": 0,
+      "referenced_works": [],
+      "related_works": [],
+      "abstract_inverted_index": {
+        "Introduction:": [
+          0
+        ],
+        "Accurate": [
+          1
+        ],
+        "short-term": [
+          2,
+          36
+        ],
+        "electricity": [
+          3
+        ],
+        "demand": [
+          4
+        ],
+        "forecasting": [
+          5,
+          38,
+          159,
+          175,
+          279
+        ],
+        "is": [
+          6,
+          267
+        ],
+        "essential": [
+          7
+        ],
+        "for": [
+          8,
+          35,
+          87,
+          90,
+          94,
+          277
+        ],
+        "power-system": [
+          9
+        ],
+        "reliability,": [
+          10
+        ],
+        "generation": [
+          11
+        ],
+        "scheduling,": [
+          12
+        ],
+        "reserve": [
+          13
+        ],
+        "planning,": [
+          14
+        ],
+        "and": [
+          15,
+          31,
+          70,
+          92,
+          105,
+          152,
+          187,
+          211,
+          223,
+          280
+        ],
+        "renewable-energy": [
+          16
+        ],
+        "integration.": [
+          17
+        ],
+        "This": [
+          18
+        ],
+        "study": [
+          19,
+          266
+        ],
+        "presents": [
+          20
+        ],
+        "a": [
+          21,
+          44,
+          108,
+          149,
+          157,
+          268
+        ],
+        "controlled": [
+          22
+        ],
+        "comparative": [
+          23
+        ],
+        "evaluation": [
+          24
+        ],
+        "of": [
+          25,
+          264
+        ],
+        "statistical,": [
+          26
+        ],
+        "recurrent": [
+          27,
+          204,
+          258
+        ],
+        "deep": [
+          28
+        ],
+        "learning,": [
+          29
+        ],
+        "convolutional-recurrent,": [
+          30
+        ],
+        "residual": [
+          32,
+          240
+        ],
+        "hybrid": [
+          33
+        ],
+        "models": [
+          34,
+          54
+        ],
+        "electricity-demand": [
+          37,
+          48,
+          278
+        ],
+        "in": [
+          39
+        ],
+        "the": [
+          40,
+          139,
+          162,
+          168,
+          172,
+          202
+        ],
+        "United": [
+          41
+        ],
+        "Kingdom": [
+          42
+        ],
+        "using": [
+          43,
+          101
+        ],
+        "publicly": [
+          45
+        ],
+        "available": [
+          46
+        ],
+        "UK/England-Wales": [
+          47
+        ],
+        "dataset": [
+          49
+        ],
+        "covering": [
+          50
+        ],
+        "2009\u20132022.": [
+          51
+        ],
+        "The": [
+          52,
+          122,
+          261
+        ],
+        "evaluated": [
+          53
+        ],
+        "include": [
+          55
+        ],
+        "Na\u00efve": [
+          56,
+          128
+        ],
+        "Persistence,": [
+          57
+        ],
+        "Seasonal": [
+          58
+        ],
+        "Na\u00efve,": [
+          59
+        ],
+        "Holt-Winters,": [
+          60
+        ],
+        "ARIMA,": [
+          61
+        ],
+        "SARIMA,": [
+          62,
+          212
+        ],
+        "Long": [
+          63
+        ],
+        "Short-Term": [
+          64
+        ],
+        "Memory,": [
+          65
+        ],
+        "Gated": [
+          66
+        ],
+        "Recurrent": [
+          67
+        ],
+        "Unit,": [
+          68
+        ],
+        "CNN-LSTM,": [
+          69
+        ],
+        "Hybrid": [
+          71,
+          206
+        ],
+        "ARIMA-LSTM.": [
+          72
+        ],
+        "Methodology:": [
+          73
+        ],
+        "A": [
+          74
+        ],
+        "chronological": [
+          75
+        ],
+        "validation": [
+          76
+        ],
+        "strategy": [
+          77
+        ],
+        "was": [
+          78,
+          99,
+          145,
+          153
+        ],
+        "adopted": [
+          79
+        ],
+        "to": [
+          80,
+          253,
+          256
+        ],
+        "prevent": [
+          81
+        ],
+        "temporal": [
+          82
+        ],
+        "leakage,": [
+          83
+        ],
+        "with": [
+          84,
+          177
+        ],
+        "2009\u20132019": [
+          85
+        ],
+        "used": [
+          86
+        ],
+        "training,": [
+          88
+        ],
+        "2020\u20132021": [
+          89
+        ],
+        "validation,": [
+          91
+        ],
+        "2022": [
+          93
+        ],
+        "out-of-sample": [
+          95
+        ],
+        "testing.": [
+          96
+        ],
+        "Model": [
+          97
+        ],
+        "performance": [
+          98,
+          170
+        ],
+        "assessed": [
+          100
+        ],
+        "RMSE,": [
+          102
+        ],
+        "MAE,": [
+          103
+        ],
+        "MAPE,": [
+          104
+        ],
+        "sMAPE": [
+          106,
+          188,
+          224
+        ],
+        "on": [
+          107
+        ],
+        "consistent": [
+          109
+        ],
+        "normalised": [
+          110
+        ],
+        "test-set": [
+          111
+        ],
+        "scale": [
+          112
+        ],
+        "only": [
+          113,
+          147
+        ],
+        "as": [
+          114,
+          148,
+          156
+        ],
+        "secondary": [
+          115
+        ],
+        "operational": [
+          116
+        ],
+        "interpretations": [
+          117
+        ],
+        "where": [
+          118
+        ],
+        "explicitly": [
+          119
+        ],
+        "stated.": [
+          120
+        ],
+        "Results:": [
+          121
+        ],
+        "diagnostic": [
+          123
+        ],
+        "baseline": [
+          124
+        ],
+        "results": [
+          125
+        ],
+        "showed": [
+          126
+        ],
+        "that": [
+          127,
+          239,
+          273
+        ],
+        "Persistence": [
+          129
+        ],
+        "achieved": [
+          130,
+          167
+        ],
+        "low": [
+          131
+        ],
+        "numerical": [
+          132
+        ],
+        "error": [
+          133
+        ],
+        "because": [
+          134
+        ],
+        "it": [
+          135,
+          144,
+          228,
+          248
+        ],
+        "simply": [
+          136
+        ],
+        "carried": [
+          137
+        ],
+        "forward": [
+          138
+        ],
+        "most": [
+          140
+        ],
+        "recent": [
+          141
+        ],
+        "observation;": [
+          142
+        ],
+        "however,": [
+          143
+        ],
+        "retained": [
+          146
+        ],
+        "persistence": [
+          150
+        ],
+        "benchmark": [
+          151
+        ],
+        "not": [
+          154,
+          200,
+          230,
+          250
+        ],
+        "ranked": [
+          155
+        ],
+        "trainable": [
+          158,
+          164,
+          174
+        ],
+        "architecture.": [
+          160
+        ],
+        "Among": [
+          161
+        ],
+        "implemented": [
+          163,
+          173
+        ],
+        "models,": [
+          165
+        ],
+        "GRU": [
+          166,
+          232
+        ],
+        "strongest": [
+          169
+        ],
+        "among": [
+          171
+        ],
+        "architectures": [
+          176
+        ],
+        "RMSE": [
+          178,
+          214
+        ],
+        "=": [
+          179,
+          182,
+          185,
+          189,
+          215,
+          218,
+          221,
+          225
+        ],
+        "0.027,": [
+          180
+        ],
+        "MAE": [
+          181,
+          217
+        ],
+        "0.021,": [
+          183
+        ],
+        "MAPE": [
+          184,
+          220
+        ],
+        "0.053,": [
+          186
+        ],
+        "5.23%,": [
+          190
+        ],
+        "followed": [
+          191
+        ],
+        "closely": [
+          192
+        ],
+        "by": [
+          193
+        ],
+        "LSTM.": [
+          194,
+          234
+        ],
+        "CNN-LSTM": [
+          195
+        ],
+        "remained": [
+          196
+        ],
+        "competitive": [
+          197
+        ],
+        "but": [
+          198,
+          227,
+          247
+        ],
+        "did": [
+          199,
+          229
+        ],
+        "outperform": [
+          201,
+          231
+        ],
+        "pure": [
+          203
+        ],
+        "models.": [
+          205
+        ],
+        "ARIMA-LSTM": [
+          207
+        ],
+        "improved": [
+          208
+        ],
+        "over": [
+          209
+        ],
+        "ARIMA": [
+          210
+        ],
+        "achieving": [
+          213
+        ],
+        "0.046,": [
+          216
+        ],
+        "0.038,": [
+          219
+        ],
+        "0.099,": [
+          222
+        ],
+        "9.54%,": [
+          226
+        ],
+        "or": [
+          233
+        ],
+        "Conclusion:": [
+          235
+        ],
+        "These": [
+          236
+        ],
+        "findings": [
+          237
+        ],
+        "show": [
+          238
+        ],
+        "hybridisation": [
+          241
+        ],
+        "can": [
+          242
+        ],
+        "improve": [
+          243
+        ],
+        "classical": [
+          244
+        ],
+        "statistical": [
+          245
+        ],
+        "baselines,": [
+          246
+        ],
+        "should": [
+          249
+        ],
+        "be": [
+          251,
+          254
+        ],
+        "assumed": [
+          252
+        ],
+        "superior": [
+          255
+        ],
+        "well-tuned": [
+          257
+        ],
+        "neural": [
+          259
+        ],
+        "networks.": [
+          260
+        ],
+        "main": [
+          262
+        ],
+        "contribution": [
+          263
+        ],
+        "this": [
+          265
+        ],
+        "reproducible": [
+          269
+        ],
+        "UK-focused": [
+          270
+        ],
+        "benchmarking": [
+          271
+        ],
+        "framework": [
+          272
+        ],
+        "clarifies": [
+          274
+        ],
+        "model-selection": [
+          275
+        ],
+        "trade-offs": [
+          276
+        ],
+        "smart-grid": [
+          281
+        ],
+        "analytics.": [
+          282
+        ]
+      },
+      "counts_by_year": [],
+      "updated_date": "2026-09-24T07:57:37.273135",
+      "created_date": "2026-09-18T00:00:00"
+    }
+  }
+}

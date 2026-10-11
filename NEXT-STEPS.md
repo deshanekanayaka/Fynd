@@ -1,6 +1,6 @@
 # Next steps
 
-Updated: 2026-10-08, day 3. Target ship date: 2026-10-26.
+Updated: 2026-10-09, day 4. Target ship date: 2026-10-26.
 The ship date is a target and not a constraint. The design phase takes the time it needs, because Deshan must be able to explain every part of this project.
 Read [PRD.md](./PRD.md) for the product and [CONTEXT.md](./CONTEXT.md) for the vocabulary.
 
@@ -24,10 +24,14 @@ Written today:
 - [docs/stages-and-prerequisites.md](./docs/stages-and-prerequisites.md) lists the Stages and the subjects behind each one.
 - [docs/database-design.md](./docs/database-design.md) holds the seven tables for stage 1 to stage 3.
 
-Code that runs today:
+Code that runs today, as `uv run python -m fynd.cli <command>`:
 
-- `uv run python -m fynd.cli` searches Semantic Scholar for one Topic and prints the Papers with the open copy count. The run needs `SEMANTIC_SCHOLAR_API_KEY` in a `.env` file.
-- Every response is cached on disk, a 429 answer is retried once and never cached, and 9 tests pass with ruff clean.
+- `stage1` and `stage2` run one Stage each.
+- `resolve-open-copy` asks OpenAlex about one Paper, and `fetch-open-copy` fetches one link.
+- `extract` turns one file into a Source text.
+- `measure-open-copies` runs the whole Open copy pipeline over 20 Papers and writes the published table.
+- A run needs `SEMANTIC_SCHOLAR_API_KEY`, `ANTHROPIC_API_KEY` and `FYND_CONTACT_EMAIL` in a `.env` file. The command names the missing one.
+- Every external answer is cached on disk, including a refusal. 133 tests pass with ruff clean, and no test reaches the network or spends a token.
 
 ## How we work
 
@@ -170,6 +174,61 @@ A code review of the branch found nine problems, and all nine are fixed in the s
 
 The 5 to 8 question is also settled by reading both documents. Fynd asks the model for 10 Topics and shows 5 to 8, so the extra two cover the items the shape check drops.
 
+## Settled on day 4: the Open copy pipeline
+
+The design round for step 3 is closed. Four rounds of questions, and the answers are below. Nine issues hold the work, numbered 5 to 13 on GitHub, with the blocking edges set.
+
+The pipeline:
+
+- One fixed pool. The Seeded Topic query is `United Kingdom household energy forecasting`, the limit is 20, and the Evidence window applies. The day 1 pool in ADR 0007 carried no window, and the measurement file says why its numbers differ.
+- A Paper with a digital object identifier goes to OpenAlex. Fynd takes the best open location unless it is the publisher, and then the first repository location. A Paper with no identifier or no record falls back to the Semantic Scholar link.
+- The fetch rules are the rules in ADR 0007. `FYND_CONTACT_EMAIL` has no default, because a hard coded address in a public repository is a scraped address.
+- pdfplumber returns the text plus the page spans. trafilatura returns the text with an empty structure. A section finder is the handover's problem, and nothing before it reads a section label.
+- Usable text starts at 3,000 characters and 80 percent letters and ordinary punctuation. The section word check waits for the first measurement, because a threshold tuned on no data drops a good file in silence.
+- One result class holds the location, the text, and a reason from eight fixed strings. Eight classes buy nothing, because the only reader is a table that counts reasons.
+- Step 3 ends at the Source text. Normalization, dehyphenation, and chunking arrive in step 4, against a real chunk size and a real prompt.
+
+The cache and git:
+
+- The cache holds bytes in a sidecar file beside the JSON file that holds the parts. A 20 megabyte file is not a JSON value.
+- A refusal is cached with its status and its content type, because the measurement counts the hosts that return no file. A timeout and a 429 are never cached.
+- Three keys. OpenAlex keys on the identifier. The fetch keys on the link with its limits. The extraction keys on the hash of the bytes with the extractor name and version. A new library version then misses the extraction cache and hits the fetch cache.
+- Git holds the extracted texts, the OpenAlex answers, and the refusals. Git holds neither the fetched bytes nor the Semantic Scholar replies. See [ADR 0011](./docs/adr/0011-the-public-repository-holds-the-text-and-not-the-files.md).
+- The labelled set of 10 Sources comes from Sources with an open license, because that text is the text continuous integration replays.
+
+The files, and one correction:
+
+- `openalex.py` and `fetcher.py` take an `httpx.Client`, as `semantic_scholar.py` does. `open_copy.py` joins resolve, fetch, extract, and check, and takes all four as plain function arguments. Stage 4 calls that file, and its test performs no HTTP.
+- `extract.py` holds the two extractors, and `source_text.py` holds the checks.
+- ADR 0007 said an extractor returns an offset map. ADR 0005 says an offset cannot point into PDF bytes. ADR 0005 wins, and ADR 0007 carries a dated note.
+
+Usable text is now its own entry in `CONTEXT.md`, because three code paths read it.
+
+The one open item is a number and not a preference. The two thresholds and the section word check are set by the first measurement, which is issue 13.
+
+## Measured on day 4: the first real number
+
+`uv run python -m fynd.cli measure-open-copies` ran live on 2026-10-09. The table is [docs/measurements/open-copy-hosts.md](./docs/measurements/open-copy-hosts.md).
+
+5 of 20 Papers reached Usable text, which is 25 percent. The 15 that did not split like this.
+
+- 10 Papers have no repository location at all. OpenAlex holds a record for each one, and every location it names is a publisher or a doi.org address.
+- 3 fetches were refused with a 403. Two of them are doaj.org, which is an index and not a file host, and one is a university repository that refuses a program.
+- 2 links gave a web page and not a PDF, from pmc.ncbi.nlm.nih.gov and from www.research.ed.ac.uk.
+- 0 Papers failed a usable text check. Every file that arrived gave between 60,363 and 91,205 characters.
+
+Three findings follow from that run.
+
+The stage 2 threshold of 3 Papers with an Open copy holds for this Topic, but the margin is thin. 5 files is above the stage 4 guard of 2, and a Topic one step narrower returns fewer.
+
+The search is not precise. 3 of the 20 Papers are about ultra-processed food, which is what the labelled set of day 7 exists to measure.
+
+A doi.org address arrived from OpenAlex as a repository location, and the first run fetched it. ADR 0007 forbids that, so the guard now covers every location and not only the Semantic Scholar fallback. One test holds it.
+
+The three thresholds are now measured, which closes the last open item of day 4. The character count stays at 3,000. The smallest real text is 60,363, and the two pages that gave nothing are 1,898 and 631. The ordinary share moves from 0.80 to 0.95. Every real text scored between 0.9968 and 0.9991, and 0.80 passed a text that was one fifth rubbish. The section word check ships for a Paper and not for a web page. All 5 Papers hold the words method, results and references. A gov.uk release page holds no section word at all. A ninth reason, `no_section_word`, joins the eight, because the reason table exists to tell failures apart.
+
+The licence finding changed what git holds. 2 of the 5 Papers that gave Usable text state no licence at all. So the extracted texts stay out of git. A text enters git with the labelled set, where the licence of each Source is read one at a time. See the note of 2026-10-09 in [ADR 0011](./docs/adr/0011-the-public-repository-holds-the-text-and-not-the-files.md).
+
 ## Open items that need a decision from Deshan
 
 None.
@@ -182,11 +241,30 @@ Backend first, with no frontend.
 
 1. Done. The Python project runs with pytest, type hints, and ruff.
 2. Done. Stage 1, stage 2, the versioned prompt, the replayable cache, and the search with the Evidence window.
-3. Resolve the Open copy with OpenAlex, fetch it, and extract the Source text. Unblocked by ADR 0007.
+3. Done, and then measured. Resolve the Open copy with OpenAlex, fetch it, and extract the Source text. The measurement found that the location rule loses half the free files, and issues 14 to 19 fix it.
 4. Extract Claims with Claude Haiku 4.5, one call per chunk, and pass each Claim through the tiered verifier. A Claim that no tier can place in the Source text is dropped.
 5. Produce 3 candidate Problems with their early evidence, as a command line run.
 
 Make sure that step 5 runs end to end from the command line before any FastAPI endpoint or any React component exists.
+
+## The task for day 5
+
+The coverage of the Open copy comes first, because every later number rests on it. Six issues hold the work, numbered 14 to 19 on GitHub, and three of them can start now.
+
+The finding, from the cached records of the run of 2026-10-09 over the same 20 Papers. 6 Papers are closed, with no free copy anywhere. 14 are open. 10 of the 14 carry a direct PDF link on a host Fynd is allowed to fetch. The pipeline reached 5.
+
+So the gate walls cost 6 Papers, and our own rule costs 5 more. The rule accepts a location whose OpenAlex source is a repository, and nothing else. It refuses a `cc-by` file at a journal. ADR 0012, in issue 14, records the reversal: an open file is a licence question and not a host question.
+
+Four changes follow, with a number predicted for each one.
+
+- Accept every open location with a PDF link, rank a repository first and a journal second, and try up to 3. Predicted 10 of 20, against 5 today. Issue 15.
+- Read `citation_pdf_url` from a landing page and follow it once. Pure, EPrints and DSpace all emit that tag, and Zotero and Unpaywall both read it. Predicted up to 4 more. Issue 16.
+- Read and obey robots.txt, under RFC 9309. Fynd reads none today, and it fetches from 9 university hosts. Issue 17.
+- Count the open locations for the stage 2 gate. Semantic Scholar said 12 of 20, and 5 gave text, so a student can pass stage 2 and collapse at stage 4. Issue 18.
+
+Issue 19 measures again and publishes the gain. Europe PMC and CORE stay on the shelf until that number says they are worth a day.
+
+One more finding waits for day 7. 3 of the 20 Papers are about ultra-processed food, so the search is not precise. The retrieval labelled set is where that gets a number.
 
 ## Do not do yet
 

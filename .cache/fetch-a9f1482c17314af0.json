@@ -1,0 +1,15 @@
+{
+  "parts": {
+    "api": "open-copy-fetch",
+    "url": "https://www.research.ed.ac.uk/en/publications/124d2336-7220-4a1b-a88d-b12af72bfce3",
+    "redirects": 3,
+    "max_bytes": 20971520,
+    "shape": 1
+  },
+  "value": {
+    "kind": "refusal",
+    "status": 200,
+    "content_type": "text/html;charset=UTF-8",
+    "reason": "not_a_pdf"
+  }
+}

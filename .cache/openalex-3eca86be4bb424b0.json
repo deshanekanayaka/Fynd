@@ -1,0 +1,1502 @@
+{
+  "parts": {
+    "api": "openalex-work",
+    "doi": "10.38124/ijisrt/26apr1661",
+    "shape": 1
+  },
+  "value": {
+    "found": true,
+    "work": {
+      "id": "https://openalex.org/W7161268581",
+      "doi": "https://doi.org/10.38124/ijisrt/26apr1661",
+      "title": "Artificial Intelligence Governance and Cybersecurity Trust: A Comparative Study of Public Infrastructure Systems in India, Singapore, and the United Kingdom",
+      "display_name": "Artificial Intelligence Governance and Cybersecurity Trust: A Comparative Study of Public Infrastructure Systems in India, Singapore, and the United Kingdom",
+      "publication_year": 2026,
+      "publication_date": "2026-05-14",
+      "ids": {
+        "openalex": "https://openalex.org/W7161268581",
+        "doi": "https://doi.org/10.38124/ijisrt/26apr1661"
+      },
+      "language": null,
+      "primary_location": {
+        "id": "doi:10.38124/ijisrt/26apr1661",
+        "is_oa": true,
+        "landing_page_url": "https://doi.org/10.38124/ijisrt/26apr1661",
+        "pdf_url": null,
+        "source": {
+          "id": "https://openalex.org/S4210189963",
+          "display_name": "International Journal of Innovative Science and Research Technology (IJISRT)",
+          "issn_l": "2456-2165",
+          "issn": [
+            "2456-2165"
+          ],
+          "is_oa": true,
+          "is_in_doaj": false,
+          "is_core": false,
+          "listed_in": [],
+          "host_organization": null,
+          "host_organization_name": null,
+          "host_organization_lineage": [],
+          "host_organization_lineage_names": [],
+          "type": "journal"
+        },
+        "license": null,
+        "license_id": null,
+        "version": "publishedVersion",
+        "is_accepted": true,
+        "is_published": true,
+        "raw_source_name": "International Journal of Innovative Science and Research Technology",
+        "raw_type": "journal-article"
+      },
+      "type": "article",
+      "indexed_in": [
+        "crossref"
+      ],
+      "open_access": {
+        "is_oa": true,
+        "oa_status": "diamond",
+        "oa_url": "https://doi.org/10.38124/ijisrt/26apr1661",
+        "any_repository_has_fulltext": false
+      },
+      "authorships": [
+        {
+          "author_position": "first",
+          "author": {
+            "id": "https://openalex.org/A5136255809",
+            "display_name": "A. K. M. Fazlur Rahman",
+            "orcid": null,
+            "observed_orcids": []
+          },
+          "institutions": [],
+          "countries": [],
+          "is_corresponding": false,
+          "raw_author_name": "A. K. M. Fazlur Rahman",
+          "raw_affiliation_strings": [],
+          "raw_orcid": null,
+          "affiliations": []
+        },
+        {
+          "author_position": "last",
+          "author": {
+            "id": "https://openalex.org/A5136263867",
+            "display_name": "Dulari A. Rajput",
+            "orcid": null,
+            "observed_orcids": []
+          },
+          "institutions": [],
+          "countries": [],
+          "is_corresponding": false,
+          "raw_author_name": "Dulari A. Rajput",
+          "raw_affiliation_strings": [],
+          "raw_orcid": null,
+          "affiliations": []
+        }
+      ],
+      "institutions": [],
+      "countries_distinct_count": 0,
+      "institutions_distinct_count": 0,
+      "corresponding_author_ids": [],
+      "corresponding_institution_ids": [],
+      "apc_list": null,
+      "apc_paid": null,
+      "fwci": 0.0,
+      "has_fulltext": false,
+      "cited_by_count": 0,
+      "citation_normalized_percentile": {
+        "value": 0.34367114,
+        "is_in_top_1_percent": false,
+        "is_in_top_10_percent": false
+      },
+      "cited_by_percentile_year": null,
+      "biblio": {
+        "volume": null,
+        "issue": null,
+        "first_page": "4497",
+        "last_page": "4497"
+      },
+      "is_retracted": false,
+      "is_paratext": false,
+      "is_xpac": false,
+      "primary_topic": {
+        "id": "https://openalex.org/T13364",
+        "display_name": "Digitalization, Law, and Regulation",
+        "score": 0.8734999895095825,
+        "subfield": {
+          "id": "https://openalex.org/subfields/3308",
+          "display_name": "Law"
+        },
+        "field": {
+          "id": "https://openalex.org/fields/33",
+          "display_name": "Social Sciences"
+        },
+        "domain": {
+          "id": "https://openalex.org/domains/2",
+          "display_name": "Social Sciences"
+        }
+      },
+      "topics": [
+        {
+          "id": "https://openalex.org/T13364",
+          "display_name": "Digitalization, Law, and Regulation",
+          "score": 0.8734999895095825,
+          "subfield": {
+            "id": "https://openalex.org/subfields/3308",
+            "display_name": "Law"
+          },
+          "field": {
+            "id": "https://openalex.org/fields/33",
+            "display_name": "Social Sciences"
+          },
+          "domain": {
+            "id": "https://openalex.org/domains/2",
+            "display_name": "Social Sciences"
+          }
+        },
+        {
+          "id": "https://openalex.org/T12221",
+          "display_name": "Cybersecurity and Cyber Warfare Studies",
+          "score": 0.037700001150369644,
+          "subfield": {
+            "id": "https://openalex.org/subfields/3320",
+            "display_name": "Political Science and International Relations"
+          },
+          "field": {
+            "id": "https://openalex.org/fields/33",
+            "display_name": "Social Sciences"
+          },
+          "domain": {
+            "id": "https://openalex.org/domains/2",
+            "display_name": "Social Sciences"
+          }
+        },
+        {
+          "id": "https://openalex.org/T10883",
+          "display_name": "Ethics and Social Impacts of AI",
+          "score": 0.031199999153614044,
+          "subfield": {
+            "id": "https://openalex.org/subfields/3311",
+            "display_name": "Safety Research"
+          },
+          "field": {
+            "id": "https://openalex.org/fields/33",
+            "display_name": "Social Sciences"
+          },
+          "domain": {
+            "id": "https://openalex.org/domains/2",
+            "display_name": "Social Sciences"
+          }
+        }
+      ],
+      "keywords": [
+        {
+          "id": "https://openalex.org/keywords/ai-governance",
+          "display_name": "AI governance",
+          "score": 0.8519999980926514
+        },
+        {
+          "id": "https://openalex.org/keywords/nist-ai-risk-management-framework",
+          "display_name": "NIST AI Risk Management Framework",
+          "score": 0.9200000166893005
+        },
+        {
+          "id": "https://openalex.org/keywords/algorithmic-impact-assessment",
+          "display_name": "algorithmic impact assessment",
+          "score": 0.8489999771118164
+        },
+        {
+          "id": "https://openalex.org/keywords/trust-asymmetry",
+          "display_name": "trust asymmetry",
+          "score": 0.6240000128746033
+        },
+        {
+          "id": "https://openalex.org/keywords/ai-risk-management",
+          "display_name": "AI risk management",
+          "score": 0.3580000102519989
+        },
+        {
+          "id": "https://openalex.org/keywords/india",
+          "display_name": "India",
+          "score": 0.4320000112056732
+        },
+        {
+          "id": "https://openalex.org/keywords/singapore",
+          "display_name": "Singapore",
+          "score": 1.0
+        },
+        {
+          "id": "https://openalex.org/keywords/united-kingdom",
+          "display_name": "United Kingdom",
+          "score": 0.9980000257492065
+        }
+      ],
+      "concepts": [
+        {
+          "id": "https://openalex.org/C39389867",
+          "wikidata": "https://www.wikidata.org/wiki/Q380767",
+          "display_name": "Corporate governance",
+          "level": 2,
+          "score": 0.7347999811172485
+        },
+        {
+          "id": "https://openalex.org/C2779585090",
+          "wikidata": "https://www.wikidata.org/wiki/Q3457762",
+          "display_name": "Resilience (materials science)",
+          "level": 2,
+          "score": 0.6672000288963318
+        },
+        {
+          "id": "https://openalex.org/C29852176",
+          "wikidata": "https://www.wikidata.org/wiki/Q373338",
+          "display_name": "Critical infrastructure",
+          "level": 2,
+          "score": 0.5383999943733215
+        },
+        {
+          "id": "https://openalex.org/C105339364",
+          "wikidata": "https://www.wikidata.org/wiki/Q2297740",
+          "display_name": "Software deployment",
+          "level": 2,
+          "score": 0.5060999989509583
+        },
+        {
+          "id": "https://openalex.org/C38652104",
+          "wikidata": "https://www.wikidata.org/wiki/Q3510521",
+          "display_name": "Computer security",
+          "level": 1,
+          "score": 0.49149999022483826
+        },
+        {
+          "id": "https://openalex.org/C196879817",
+          "wikidata": "https://www.wikidata.org/wiki/Q872685",
+          "display_name": "Data governance",
+          "level": 4,
+          "score": 0.4528000056743622
+        },
+        {
+          "id": "https://openalex.org/C144133560",
+          "wikidata": "https://www.wikidata.org/wiki/Q4830453",
+          "display_name": "Business",
+          "level": 0,
+          "score": 0.4458000063896179
+        },
+        {
+          "id": "https://openalex.org/C75684735",
+          "wikidata": "https://www.wikidata.org/wiki/Q858810",
+          "display_name": "Big data",
+          "level": 2,
+          "score": 0.4392000138759613
+        },
+        {
+          "id": "https://openalex.org/C148609458",
+          "wikidata": "https://www.wikidata.org/wiki/Q7021281",
+          "display_name": "Nexus (standard)",
+          "level": 2,
+          "score": 0.4226999878883362
+        },
+        {
+          "id": "https://openalex.org/C72648740",
+          "wikidata": "https://www.wikidata.org/wiki/Q658476",
+          "display_name": "Public key infrastructure",
+          "level": 4,
+          "score": 0.3926999866962433
+        },
+        {
+          "id": "https://openalex.org/C2778137410",
+          "wikidata": "https://www.wikidata.org/wiki/Q2732820",
+          "display_name": "Government (linguistics)",
+          "level": 2,
+          "score": 0.39250001311302185
+        },
+        {
+          "id": "https://openalex.org/C3116431",
+          "wikidata": "https://www.wikidata.org/wiki/Q31728",
+          "display_name": "Public administration",
+          "level": 1,
+          "score": 0.3750999867916107
+        },
+        {
+          "id": "https://openalex.org/C69360830",
+          "wikidata": "https://www.wikidata.org/wiki/Q1172237",
+          "display_name": "Data Protection Act 1998",
+          "level": 2,
+          "score": 0.35530000925064087
+        },
+        {
+          "id": "https://openalex.org/C74196892",
+          "wikidata": "https://www.wikidata.org/wiki/Q7781188",
+          "display_name": "Thematic analysis",
+          "level": 3,
+          "score": 0.3407999873161316
+        },
+        {
+          "id": "https://openalex.org/C37736160",
+          "wikidata": "https://www.wikidata.org/wiki/Q1801315",
+          "display_name": "Adversarial system",
+          "level": 2,
+          "score": 0.3330000042915344
+        },
+        {
+          "id": "https://openalex.org/C165609540",
+          "wikidata": "https://www.wikidata.org/wiki/Q1172486",
+          "display_name": "Data breach",
+          "level": 2,
+          "score": 0.3303999900817871
+        },
+        {
+          "id": "https://openalex.org/C14224292",
+          "wikidata": "https://www.wikidata.org/wiki/Q13600188",
+          "display_name": "Conceptual framework",
+          "level": 2,
+          "score": 0.3292999863624573
+        },
+        {
+          "id": "https://openalex.org/C39549134",
+          "wikidata": "https://www.wikidata.org/wiki/Q133080",
+          "display_name": "Public relations",
+          "level": 1,
+          "score": 0.30219998955726624
+        },
+        {
+          "id": "https://openalex.org/C2779033394",
+          "wikidata": "https://www.wikidata.org/wiki/Q5186733",
+          "display_name": "Critical infrastructure protection",
+          "level": 3,
+          "score": 0.2921999990940094
+        },
+        {
+          "id": "https://openalex.org/C51575053",
+          "wikidata": "https://www.wikidata.org/wiki/Q72468",
+          "display_name": "Bureaucracy",
+          "level": 3,
+          "score": 0.28040000796318054
+        },
+        {
+          "id": "https://openalex.org/C22607594",
+          "wikidata": "https://www.wikidata.org/wiki/Q5375150",
+          "display_name": "Enabling",
+          "level": 2,
+          "score": 0.27889999747276306
+        },
+        {
+          "id": "https://openalex.org/C189922023",
+          "wikidata": "https://www.wikidata.org/wiki/Q17056348",
+          "display_name": "Information governance",
+          "level": 4,
+          "score": 0.2750000059604645
+        },
+        {
+          "id": "https://openalex.org/C33676613",
+          "wikidata": "https://www.wikidata.org/wiki/Q13415176",
+          "display_name": "Dimension (graph theory)",
+          "level": 2,
+          "score": 0.27489998936653137
+        },
+        {
+          "id": "https://openalex.org/C53619493",
+          "wikidata": "https://www.wikidata.org/wiki/Q4787093",
+          "display_name": "Architecture framework",
+          "level": 3,
+          "score": 0.27300000190734863
+        },
+        {
+          "id": "https://openalex.org/C2777825026",
+          "wikidata": "https://www.wikidata.org/wiki/Q3410431",
+          "display_name": "Public trust",
+          "level": 2,
+          "score": 0.2526000142097473
+        },
+        {
+          "id": "https://openalex.org/C109986646",
+          "wikidata": "https://www.wikidata.org/wiki/Q546113",
+          "display_name": "Public policy",
+          "level": 2,
+          "score": 0.25029999017715454
+        }
+      ],
+      "mesh": [],
+      "locations_count": 1,
+      "locations": [
+        {
+          "id": "doi:10.38124/ijisrt/26apr1661",
+          "is_oa": true,
+          "landing_page_url": "https://doi.org/10.38124/ijisrt/26apr1661",
+          "pdf_url": null,
+          "source": {
+            "id": "https://openalex.org/S4210189963",
+            "display_name": "International Journal of Innovative Science and Research Technology (IJISRT)",
+            "issn_l": "2456-2165",
+            "issn": [
+              "2456-2165"
+            ],
+            "is_oa": true,
+            "is_in_doaj": false,
+            "is_core": false,
+            "listed_in": [],
+            "host_organization": null,
+            "host_organization_name": null,
+            "host_organization_lineage": [],
+            "host_organization_lineage_names": [],
+            "type": "journal"
+          },
+          "license": null,
+          "license_id": null,
+          "version": "publishedVersion",
+          "is_accepted": true,
+          "is_published": true,
+          "raw_source_name": "International Journal of Innovative Science and Research Technology",
+          "raw_type": "journal-article"
+        }
+      ],
+      "best_oa_location": {
+        "id": "doi:10.38124/ijisrt/26apr1661",
+        "is_oa": true,
+        "landing_page_url": "https://doi.org/10.38124/ijisrt/26apr1661",
+        "pdf_url": null,
+        "source": {
+          "id": "https://openalex.org/S4210189963",
+          "display_name": "International Journal of Innovative Science and Research Technology (IJISRT)",
+          "issn_l": "2456-2165",
+          "issn": [
+            "2456-2165"
+          ],
+          "is_oa": true,
+          "is_in_doaj": false,
+          "is_core": false,
+          "listed_in": [],
+          "host_organization": null,
+          "host_organization_name": null,
+          "host_organization_lineage": [],
+          "host_organization_lineage_names": [],
+          "type": "journal"
+        },
+        "license": null,
+        "license_id": null,
+        "version": "publishedVersion",
+        "is_accepted": true,
+        "is_published": true,
+        "raw_source_name": "International Journal of Innovative Science and Research Technology",
+        "raw_type": "journal-article"
+      },
+      "sustainable_development_goals": [
+        {
+          "id": "https://metadata.un.org/sdg/9",
+          "display_name": "Industry, innovation and infrastructure",
+          "score": 1.0
+        },
+        {
+          "id": "https://metadata.un.org/sdg/16",
+          "display_name": "Peace, justice, and strong institutions",
+          "score": 0.9595999717712402
+        }
+      ],
+      "sustainable_development_goals_aurora": [
+        {
+          "id": "https://metadata.un.org/sdg/9",
+          "display_name": "Industry, innovation and infrastructure",
+          "score": 0.5284385085105896
+        }
+      ],
+      "study_designs": [],
+      "awards": [],
+      "funders": [],
+      "has_content": {
+        "grobid_xml": false,
+        "pdf": false
+      },
+      "content_urls": null,
+      "referenced_works_count": 0,
+      "referenced_works": [],
+      "related_works": [],
+      "abstract_inverted_index": {
+        "The": [
+          0,
+          227,
+          331
+        ],
+        "increasing": [
+          1
+        ],
+        "integration": [
+          2
+        ],
+        "of": [
+          3,
+          37,
+          341,
+          354
+        ],
+        "Artificial": [
+          4
+        ],
+        "Intelligence": [
+          5
+        ],
+        "(AI)": [
+          6
+        ],
+        "into": [
+          7
+        ],
+        "critical": [
+          8
+        ],
+        "public": [
+          9,
+          74,
+          88,
+          242
+        ],
+        "infrastructure": [
+          10,
+          75,
+          89,
+          127,
+          222
+        ],
+        "systems": [
+          11,
+          165,
+          280
+        ],
+        "(e.g.,": [
+          12,
+          232,
+          267
+        ],
+        "energy,": [
+          13
+        ],
+        "transport,": [
+          14
+        ],
+        "water,": [
+          15
+        ],
+        "digital": [
+          16
+        ],
+        "identity)": [
+          17
+        ],
+        "introduces": [
+          18
+        ],
+        "both": [
+          19
+        ],
+        "operational": [
+          20
+        ],
+        "efficiencies": [
+          21
+        ],
+        "and": [
+          22,
+          34,
+          46,
+          65,
+          104,
+          126,
+          130,
+          154,
+          244,
+          271,
+          366,
+          386
+        ],
+        "unprecedented": [
+          23
+        ],
+        "cybersecurity": [
+          24,
+          38,
+          70,
+          125,
+          305
+        ],
+        "vulnerabilities.": [
+          25
+        ],
+        "However,": [
+          26
+        ],
+        "the": [
+          27,
+          35,
+          52,
+          66,
+          105,
+          148,
+          339,
+          380,
+          389
+        ],
+        "relationship": [
+          28
+        ],
+        "between": [
+          29
+        ],
+        "national": [
+          30
+        ],
+        "AI": [
+          31,
+          59,
+          109,
+          150,
+          187,
+          209,
+          285,
+          329,
+          355
+        ],
+        "governance": [
+          32,
+          60,
+          128,
+          169,
+          179,
+          301
+        ],
+        "frameworks": [
+          33
+        ],
+        "cultivation": [
+          36
+        ],
+        "trust": [
+          39,
+          71,
+          146,
+          283,
+          317,
+          374
+        ],
+        "remains": [
+          40
+        ],
+        "underexplored,": [
+          41
+        ],
+        "particularly": [
+          42
+        ],
+        "across": [
+          43
+        ],
+        "divergent": [
+          44
+        ],
+        "socio-technical": [
+          45
+        ],
+        "regulatory": [
+          47
+        ],
+        "contexts.": [
+          48
+        ],
+        "This": [
+          49
+        ],
+        "paper": [
+          50
+        ],
+        "addresses": [
+          51
+        ],
+        "central": [
+          53
+        ],
+        "research": [
+          54
+        ],
+        "question:": [
+          55
+        ],
+        "How": [
+          56
+        ],
+        "do": [
+          57
+        ],
+        "different": [
+          58
+        ],
+        "models": [
+          61
+        ],
+        "in": [
+          62,
+          73,
+          201
+        ],
+        "India,": [
+          63
+        ],
+        "Singapore,": [
+          64
+        ],
+        "United": [
+          67
+        ],
+        "Kingdom": [
+          68
+        ],
+        "influence": [
+          69
+        ],
+        "outcomes": [
+          72
+        ],
+        "systems?": [
+          76
+        ],
+        "A": [
+          77,
+          135
+        ],
+        "comparative": [
+          78
+        ],
+        "multiple-case": [
+          79
+        ],
+        "study": [
+          80
+        ],
+        "design": [
+          81,
+          166
+        ],
+        "was": [
+          82,
+          138
+        ],
+        "employed,": [
+          83
+        ],
+        "selecting": [
+          84
+        ],
+        "one": [
+          85
+        ],
+        "major": [
+          86
+        ],
+        "AI-enabled": [
+          87
+        ],
+        "system": [
+          90,
+          356
+        ],
+        "per": [
+          91
+        ],
+        "country:": [
+          92
+        ],
+        "India\u2019s": [
+          93,
+          177,
+          307
+        ],
+        "DigiYatra": [
+          94
+        ],
+        "(biometric": [
+          95
+        ],
+        "air": [
+          96
+        ],
+        "travel),": [
+          97
+        ],
+        "Singapore\u2019s": [
+          98,
+          204,
+          319
+        ],
+        "Smart": [
+          99
+        ],
+        "Water": [
+          100
+        ],
+        "Assessment": [
+          101
+        ],
+        "Network": [
+          102
+        ],
+        "(SWAN),": [
+          103
+        ],
+        "UK\u2019s": [
+          106,
+          228,
+          332
+        ],
+        "National": [
+          107
+        ],
+        "Grid": [
+          108
+        ],
+        "Demand": [
+          110
+        ],
+        "Forecasting": [
+          111
+        ],
+        "System.": [
+          112
+        ],
+        "Data": [
+          113
+        ],
+        "were": [
+          114
+        ],
+        "collected": [
+          115
+        ],
+        "from": [
+          116,
+          369
+        ],
+        "policy": [
+          117
+        ],
+        "document": [
+          118
+        ],
+        "analysis": [
+          119,
+          137
+        ],
+        "(2019\u20132024),": [
+          120
+        ],
+        "semi-structured": [
+          121
+        ],
+        "interviews": [
+          122
+        ],
+        "with": [
+          123,
+          193,
+          220,
+          282
+        ],
+        "45": [
+          124
+        ],
+        "experts,": [
+          129
+        ],
+        "publicly": [
+          131
+        ],
+        "available": [
+          132
+        ],
+        "incident": [
+          133,
+          364
+        ],
+        "reports.": [
+          134
+        ],
+        "thematic": [
+          136
+        ],
+        "guided": [
+          139
+        ],
+        "by": [
+          140,
+          240
+        ],
+        "a": [
+          141,
+          163
+        ],
+        "conceptual": [
+          142
+        ],
+        "framework": [
+          143
+        ],
+        "integrating": [
+          144
+        ],
+        "institutional": [
+          145,
+          199
+        ],
+        "theory,": [
+          147
+        ],
+        "NIST": [
+          149
+        ],
+        "Risk": [
+          151
+        ],
+        "Management": [
+          152
+        ],
+        "Framework,": [
+          153,
+          211
+        ],
+        "GDPR/UK": [
+          155
+        ],
+        "GDPR": [
+          156
+        ],
+        "data": [
+          157
+        ],
+        "protection": [
+          158
+        ],
+        "principles.": [
+          159
+        ],
+        "Cross-case": [
+          160
+        ],
+        "comparison": [
+          161,
+          381
+        ],
+        "used": [
+          162
+        ],
+        "most-different": [
+          164
+        ],
+        "to": [
+          167,
+          250,
+          372,
+          382
+        ],
+        "isolate": [
+          168
+        ],
+        "effects.": [
+          170
+        ],
+        "Results": [
+          171
+        ],
+        "reveal": [
+          172
+        ],
+        "three": [
+          173,
+          279
+        ],
+        "distinct": [
+          174
+        ],
+        "governance-trust": [
+          175
+        ],
+        "configurations.": [
+          176
+        ],
+        "hybrid": [
+          178
+        ],
+        "(non-binding": [
+          180
+        ],
+        "guidelines": [
+          181
+        ],
+        "plus": [
+          182
+        ],
+        "sectoral": [
+          183
+        ],
+        "mandates)": [
+          184
+        ],
+        "fosters": [
+          185
+        ],
+        "rapid": [
+          186
+        ],
+        "deployment": [
+          188
+        ],
+        "but": [
+          189,
+          218,
+          247,
+          312,
+          324,
+          337
+        ],
+        "produces": [
+          190
+        ],
+        "fragmented": [
+          191
+        ],
+        "trust,": [
+          192,
+          238
+        ],
+        "high": [
+          194
+        ],
+        "citizen": [
+          195
+        ],
+        "usage": [
+          196
+        ],
+        "alongside": [
+          197
+        ],
+        "low": [
+          198
+        ],
+        "confidence": [
+          200
+        ],
+        "breach": [
+          202
+        ],
+        "response.": [
+          203
+        ],
+        "centralized,": [
+          205
+        ],
+        "risk-based": [
+          206
+        ],
+        "model": [
+          207,
+          302,
+          334
+        ],
+        "(Model": [
+          208
+        ],
+        "Governance": [
+          210
+        ],
+        "amended": [
+          212
+        ],
+        "Cybersecurity": [
+          213
+        ],
+        "Act)": [
+          214
+        ],
+        "generates": [
+          215
+        ],
+        "managed": [
+          216
+        ],
+        "trust\u2014predictable": [
+          217
+        ],
+        "brittle,": [
+          219
+        ],
+        "private": [
+          221
+        ],
+        "partners": [
+          223
+        ],
+        "exhibiting": [
+          224
+        ],
+        "compliance": [
+          225,
+          371
+        ],
+        "fatigue.": [
+          226
+        ],
+        "principles-based,": [
+          229
+        ],
+        "cross-sectoral": [
+          230
+        ],
+        "approach": [
+          231
+        ],
+        "CDEI,": [
+          233
+        ],
+        "NCSC": [
+          234
+        ],
+        "guidance)": [
+          235
+        ],
+        "yields": [
+          236
+        ],
+        "negotiated": [
+          237
+        ],
+        "characterized": [
+          239
+        ],
+        "active": [
+          241
+        ],
+        "contestation": [
+          243
+        ],
+        "slower": [
+          245
+        ],
+        "adoption": [
+          246
+        ],
+        "higher": [
+          248
+        ],
+        "resilience": [
+          249
+        ],
+        "adversarial": [
+          251
+        ],
+        "attacks.": [
+          252,
+          330
+        ],
+        "Cross-cutting": [
+          253
+        ],
+        "findings": [
+          254
+        ],
+        "show": [
+          255
+        ],
+        "that": [
+          256,
+          298
+        ],
+        "technical": [
+          257
+        ],
+        "robustness": [
+          258
+        ],
+        "alone": [
+          259
+        ],
+        "does": [
+          260
+        ],
+        "not": [
+          261
+        ],
+        "predict": [
+          262
+        ],
+        "trust;": [
+          263
+        ],
+        "instead,": [
+          264
+        ],
+        "transparency": [
+          265
+        ],
+        "mechanisms": [
+          266,
+          362
+        ],
+        "algorithmic": [
+          268
+        ],
+        "impact": [
+          269
+        ],
+        "assessments)": [
+          270
+        ],
+        "redress": [
+          272
+        ],
+        "pathways": [
+          273
+        ],
+        "are": [
+          274
+        ],
+        "stronger": [
+          275
+        ],
+        "determinants.": [
+          276
+        ],
+        "Notably,": [
+          277
+        ],
+        "all": [
+          278
+        ],
+        "struggle": [
+          281
+        ],
+        "asymmetries:": [
+          284
+        ],
+        "operators": [
+          286
+        ],
+        "over-trust": [
+          287
+        ],
+        "automated": [
+          288
+        ],
+        "defenses": [
+          289
+        ],
+        "while": [
+          290
+        ],
+        "citizens": [
+          291
+        ],
+        "under-trust": [
+          292
+        ],
+        "anomaly": [
+          293
+        ],
+        "detection": [
+          294
+        ],
+        "systems.": [
+          295
+        ],
+        "We": [
+          296
+        ],
+        "conclude": [
+          297
+        ],
+        "no": [
+          299
+        ],
+        "single": [
+          300
+        ],
+        "universally": [
+          303
+        ],
+        "optimizes": [
+          304
+        ],
+        "trust.": [
+          306
+        ],
+        "agility": [
+          308
+        ],
+        "suits": [
+          309
+        ],
+        "resourceconstrained": [
+          310
+        ],
+        "scaling": [
+          311
+        ],
+        "requires": [
+          313
+        ],
+        "independent": [
+          314
+        ],
+        "oversight": [
+          315
+        ],
+        "for": [
+          316,
+          363
+        ],
+        "repair.": [
+          318
+        ],
+        "precision": [
+          320
+        ],
+        "reduces": [
+          321
+        ],
+        "known": [
+          322
+        ],
+        "risks": [
+          323
+        ],
+        "may": [
+          325
+        ],
+        "fail": [
+          326
+        ],
+        "against": [
+          327
+        ],
+        "novel": [
+          328
+        ],
+        "deliberative": [
+          333
+        ],
+        "builds": [
+          335
+        ],
+        "legitimacy": [
+          336
+        ],
+        "at": [
+          338
+        ],
+        "cost": [
+          340
+        ],
+        "speed.": [
+          342
+        ],
+        "For": [
+          343
+        ],
+        "policymakers,": [
+          344
+        ],
+        "we": [
+          345
+        ],
+        "recommend": [
+          346
+        ],
+        "(1)": [
+          347
+        ],
+        "embedding": [
+          348
+        ],
+        "\u2018trust": [
+          349
+        ],
+        "audits\u2019": [
+          350
+        ],
+        "as": [
+          351
+        ],
+        "mandatory": [
+          352
+        ],
+        "components": [
+          353
+        ],
+        "certifications,": [
+          357
+        ],
+        "(2)": [
+          358
+        ],
+        "establishing": [
+          359
+        ],
+        "crossjurisdictional": [
+          360
+        ],
+        "learning": [
+          361
+        ],
+        "response,": [
+          365
+        ],
+        "(3)": [
+          367
+        ],
+        "moving": [
+          368
+        ],
+        "static": [
+          370
+        ],
+        "dynamic": [
+          373
+        ],
+        "calibration.": [
+          375
+        ],
+        "Future": [
+          376
+        ],
+        "work": [
+          377
+        ],
+        "should": [
+          378
+        ],
+        "extend": [
+          379
+        ],
+        "Global": [
+          383
+        ],
+        "South": [
+          384
+        ],
+        "contexts": [
+          385
+        ],
+        "empirically": [
+          387
+        ],
+        "test": [
+          388
+        ],
+        "proposed": [
+          390
+        ],
+        "trust-governance": [
+          391
+        ],
+        "typology.": [
+          392
+        ]
+      },
+      "counts_by_year": [],
+      "updated_date": "2026-05-21T06:26:12.895304",
+      "created_date": "2026-05-16T00:00:00"
+    }
+  }
+}

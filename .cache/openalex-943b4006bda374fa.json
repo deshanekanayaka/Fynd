@@ -1,0 +1,2187 @@
+{
+  "parts": {
+    "api": "openalex-work",
+    "doi": "10.1186/s44263-026-00263-0",
+    "shape": 1
+  },
+  "value": {
+    "found": true,
+    "work": {
+      "id": "https://openalex.org/W7154467597",
+      "doi": "https://doi.org/10.1186/s44263-026-00263-0",
+      "title": "Understandings of ultra-processed foods among adults with responsibility for household food activities in the United Kingdom: a qualitative study",
+      "display_name": "Understandings of ultra-processed foods among adults with responsibility for household food activities in the United Kingdom: a qualitative study",
+      "publication_year": 2026,
+      "publication_date": "2026-04-15",
+      "ids": {
+        "openalex": "https://openalex.org/W7154467597",
+        "doi": "https://doi.org/10.1186/s44263-026-00263-0",
+        "pmid": "https://pubmed.ncbi.nlm.nih.gov/41987266"
+      },
+      "language": "en",
+      "primary_location": {
+        "id": "doi:10.1186/s44263-026-00263-0",
+        "is_oa": true,
+        "landing_page_url": "https://doi.org/10.1186/s44263-026-00263-0",
+        "pdf_url": null,
+        "source": {
+          "id": "https://openalex.org/S4387291525",
+          "display_name": "BMC Global and Public Health",
+          "issn_l": "2731-913X",
+          "issn": [
+            "2731-913X"
+          ],
+          "is_oa": true,
+          "is_in_doaj": true,
+          "is_core": true,
+          "listed_in": [
+            "cwts-core",
+            "doaj",
+            "jufo-1",
+            "ki-jl-1",
+            "norway-1"
+          ],
+          "host_organization": null,
+          "host_organization_name": null,
+          "host_organization_lineage": [],
+          "host_organization_lineage_names": [],
+          "type": "journal"
+        },
+        "license": "cc-by",
+        "license_id": "https://openalex.org/licenses/cc-by",
+        "version": "publishedVersion",
+        "is_accepted": true,
+        "is_published": true,
+        "raw_source_name": "BMC Global and Public Health",
+        "raw_type": "journal-article"
+      },
+      "type": "article",
+      "indexed_in": [
+        "crossref",
+        "doaj",
+        "pubmed"
+      ],
+      "open_access": {
+        "is_oa": true,
+        "oa_status": "gold",
+        "oa_url": "https://doi.org/10.1186/s44263-026-00263-0",
+        "any_repository_has_fulltext": true
+      },
+      "authorships": [
+        {
+          "author_position": "first",
+          "author": {
+            "id": "https://openalex.org/A5002766572",
+            "display_name": "Michael Essman",
+            "orcid": "https://orcid.org/0000-0001-5017-3880",
+            "observed_orcids": [
+              "https://orcid.org/0000-0001-5017-3880"
+            ]
+          },
+          "institutions": [
+            {
+              "id": "https://openalex.org/I170897317",
+              "display_name": "Duke University",
+              "ror": "https://ror.org/00py81415",
+              "country_code": "US",
+              "type": "education",
+              "lineage": [
+                "https://openalex.org/I170897317"
+              ]
+            },
+            {
+              "id": "https://openalex.org/I241749",
+              "display_name": "University of Cambridge",
+              "ror": "https://ror.org/013meh722",
+              "country_code": "GB",
+              "type": "education",
+              "lineage": [
+                "https://openalex.org/I241749"
+              ]
+            },
+            {
+              "id": "https://openalex.org/I4210158597",
+              "display_name": "MRC Epidemiology Unit",
+              "ror": "https://ror.org/052578691",
+              "country_code": "GB",
+              "type": "facility",
+              "lineage": [
+                "https://openalex.org/I241749",
+                "https://openalex.org/I4210087105",
+                "https://openalex.org/I4210158597",
+                "https://openalex.org/I90344618"
+              ]
+            },
+            {
+              "id": "https://openalex.org/I90344618",
+              "display_name": "Medical Research Council",
+              "ror": "https://ror.org/03x94j517",
+              "country_code": "GB",
+              "type": "government",
+              "lineage": [
+                "https://openalex.org/I4210087105",
+                "https://openalex.org/I90344618"
+              ]
+            }
+          ],
+          "countries": [
+            "GB",
+            "US"
+          ],
+          "is_corresponding": true,
+          "raw_author_name": "Michael Essman",
+          "raw_affiliation_strings": [
+            "Medical Research Council Epidemiology Unit, University of Cambridge, Cambridge, UK. mike.essman@mrc-epid.cam.ac.uk",
+            "World Food Policy Center, Sanford School of Public Policy, Duke University, Durham, NC, USA. mike.essman@mrc-epid.cam.ac.uk"
+          ],
+          "raw_orcid": null,
+          "affiliations": [
+            {
+              "raw_affiliation_string": "Medical Research Council Epidemiology Unit, University of Cambridge, Cambridge, UK. mike.essman@mrc-epid.cam.ac.uk",
+              "institution_ids": [
+                "https://openalex.org/I241749",
+                "https://openalex.org/I4210158597",
+                "https://openalex.org/I90344618"
+              ]
+            },
+            {
+              "raw_affiliation_string": "World Food Policy Center, Sanford School of Public Policy, Duke University, Durham, NC, USA. mike.essman@mrc-epid.cam.ac.uk",
+              "institution_ids": [
+                "https://openalex.org/I170897317"
+              ]
+            }
+          ]
+        },
+        {
+          "author_position": "middle",
+          "author": {
+            "id": "https://openalex.org/A5042894737",
+            "display_name": "Jennie C Parnham",
+            "orcid": "https://orcid.org/0000-0002-4385-2153",
+            "observed_orcids": [
+              "https://orcid.org/0000-0002-4385-2153"
+            ]
+          },
+          "institutions": [
+            {
+              "id": "https://openalex.org/I47508984",
+              "display_name": "Imperial College London",
+              "ror": "https://ror.org/041kmwe10",
+              "country_code": "GB",
+              "type": "education",
+              "lineage": [
+                "https://openalex.org/I47508984"
+              ]
+            }
+          ],
+          "countries": [
+            "GB"
+          ],
+          "is_corresponding": false,
+          "raw_author_name": "Jennie C. Parnham",
+          "raw_affiliation_strings": [
+            "Public Health Policy Evaluation Unit, School of Public Health, Imperial College London, London, UK"
+          ],
+          "raw_orcid": null,
+          "affiliations": [
+            {
+              "raw_affiliation_string": "Public Health Policy Evaluation Unit, School of Public Health, Imperial College London, London, UK",
+              "institution_ids": [
+                "https://openalex.org/I47508984"
+              ]
+            }
+          ]
+        },
+        {
+          "author_position": "middle",
+          "author": {
+            "id": "https://openalex.org/A5027253376",
+            "display_name": "Kiara Chang",
+            "orcid": "https://orcid.org/0000-0001-6716-3400",
+            "observed_orcids": [
+              "https://orcid.org/0000-0001-6716-3400"
+            ]
+          },
+          "institutions": [
+            {
+              "id": "https://openalex.org/I47508984",
+              "display_name": "Imperial College London",
+              "ror": "https://ror.org/041kmwe10",
+              "country_code": "GB",
+              "type": "education",
+              "lineage": [
+                "https://openalex.org/I47508984"
+              ]
+            }
+          ],
+          "countries": [
+            "GB"
+          ],
+          "is_corresponding": false,
+          "raw_author_name": "Kiara Chang",
+          "raw_affiliation_strings": [
+            "Public Health Policy Evaluation Unit, School of Public Health, Imperial College London, London, UK"
+          ],
+          "raw_orcid": null,
+          "affiliations": [
+            {
+              "raw_affiliation_string": "Public Health Policy Evaluation Unit, School of Public Health, Imperial College London, London, UK",
+              "institution_ids": [
+                "https://openalex.org/I47508984"
+              ]
+            }
+          ]
+        },
+        {
+          "author_position": "middle",
+          "author": {
+            "id": "https://openalex.org/A5081112853",
+            "display_name": "Mike Etkind",
+            "orcid": null,
+            "observed_orcids": []
+          },
+          "institutions": [],
+          "countries": [],
+          "is_corresponding": false,
+          "raw_author_name": "Mike Etkind",
+          "raw_affiliation_strings": [
+            ", London, UK"
+          ],
+          "raw_orcid": null,
+          "affiliations": [
+            {
+              "raw_affiliation_string": ", London, UK",
+              "institution_ids": []
+            }
+          ]
+        },
+        {
+          "author_position": "middle",
+          "author": {
+            "id": "https://openalex.org/A5007675795",
+            "display_name": "Prisha Shah",
+            "orcid": "https://orcid.org/0000-0002-7169-1799",
+            "observed_orcids": [
+              "https://orcid.org/0000-0002-7169-1799"
+            ]
+          },
+          "institutions": [],
+          "countries": [],
+          "is_corresponding": false,
+          "raw_author_name": "Prisha Shah",
+          "raw_affiliation_strings": [
+            ", London, UK"
+          ],
+          "raw_orcid": null,
+          "affiliations": [
+            {
+              "raw_affiliation_string": ", London, UK",
+              "institution_ids": []
+            }
+          ]
+        },
+        {
+          "author_position": "middle",
+          "author": {
+            "id": "https://openalex.org/A5017575566",
+            "display_name": "Deb Smith",
+            "orcid": null,
+            "observed_orcids": []
+          },
+          "institutions": [],
+          "countries": [],
+          "is_corresponding": false,
+          "raw_author_name": "Deb Smith",
+          "raw_affiliation_strings": [
+            ", London, UK"
+          ],
+          "raw_orcid": null,
+          "affiliations": [
+            {
+              "raw_affiliation_string": ", London, UK",
+              "institution_ids": []
+            }
+          ]
+        },
+        {
+          "author_position": "middle",
+          "author": {
+            "id": "https://openalex.org/A5074812404",
+            "display_name": "Milica Vasiljevic",
+            "orcid": "https://orcid.org/0000-0001-7454-7744",
+            "observed_orcids": [
+              "https://orcid.org/0000-0001-7454-7744"
+            ]
+          },
+          "institutions": [
+            {
+              "id": "https://openalex.org/I190082696",
+              "display_name": "Durham University",
+              "ror": "https://ror.org/01v29qb04",
+              "country_code": "GB",
+              "type": "education",
+              "lineage": [
+                "https://openalex.org/I190082696"
+              ]
+            }
+          ],
+          "countries": [
+            "GB"
+          ],
+          "is_corresponding": false,
+          "raw_author_name": "Milica Vasiljevic",
+          "raw_affiliation_strings": [
+            "Department of Psychology, Durham University, Durham, UK"
+          ],
+          "raw_orcid": null,
+          "affiliations": [
+            {
+              "raw_affiliation_string": "Department of Psychology, Durham University, Durham, UK",
+              "institution_ids": [
+                "https://openalex.org/I190082696"
+              ]
+            }
+          ]
+        },
+        {
+          "author_position": "middle",
+          "author": {
+            "id": "https://openalex.org/A5026288456",
+            "display_name": "Emma Jane Boyland",
+            "orcid": "https://orcid.org/0000-0001-8384-4994",
+            "observed_orcids": [
+              "https://orcid.org/0000-0001-8384-4994"
+            ]
+          },
+          "institutions": [
+            {
+              "id": "https://openalex.org/I146655781",
+              "display_name": "University of Liverpool",
+              "ror": "https://ror.org/04xs57h96",
+              "country_code": "GB",
+              "type": "education",
+              "lineage": [
+                "https://openalex.org/I146655781"
+              ]
+            }
+          ],
+          "countries": [
+            "GB"
+          ],
+          "is_corresponding": false,
+          "raw_author_name": "Emma Boyland",
+          "raw_affiliation_strings": [
+            "Department of Psychology, University of Liverpool, Liverpool, UK"
+          ],
+          "raw_orcid": null,
+          "affiliations": [
+            {
+              "raw_affiliation_string": "Department of Psychology, University of Liverpool, Liverpool, UK",
+              "institution_ids": [
+                "https://openalex.org/I146655781"
+              ]
+            }
+          ]
+        },
+        {
+          "author_position": "middle",
+          "author": {
+            "id": "https://openalex.org/A5051233142",
+            "display_name": "Steven Cummins",
+            "orcid": "https://orcid.org/0000-0002-3957-4357",
+            "observed_orcids": [
+              "https://orcid.org/0000-0002-3957-4357"
+            ]
+          },
+          "institutions": [
+            {
+              "id": "https://openalex.org/I4210089966",
+              "display_name": "London School of Hygiene & Tropical Medicine",
+              "ror": "https://ror.org/00a0jsq62",
+              "country_code": "GB",
+              "type": "education",
+              "lineage": [
+                "https://openalex.org/I124357947",
+                "https://openalex.org/I4210089966"
+              ]
+            }
+          ],
+          "countries": [
+            "GB"
+          ],
+          "is_corresponding": false,
+          "raw_author_name": "Steven Cummins",
+          "raw_affiliation_strings": [
+            "Department of Public Health, Environments & Society, London School of Hygiene & Tropical Medicine, London, UK"
+          ],
+          "raw_orcid": null,
+          "affiliations": [
+            {
+              "raw_affiliation_string": "Department of Public Health, Environments & Society, London School of Hygiene & Tropical Medicine, London, UK",
+              "institution_ids": [
+                "https://openalex.org/I4210089966"
+              ]
+            }
+          ]
+        },
+        {
+          "author_position": "middle",
+          "author": {
+            "id": "https://openalex.org/A5029150267",
+            "display_name": "Eszter Panna Vamos",
+            "orcid": "https://orcid.org/0000-0003-4221-1861",
+            "observed_orcids": [
+              "https://orcid.org/0000-0003-4221-1861"
+            ]
+          },
+          "institutions": [
+            {
+              "id": "https://openalex.org/I47508984",
+              "display_name": "Imperial College London",
+              "ror": "https://ror.org/041kmwe10",
+              "country_code": "GB",
+              "type": "education",
+              "lineage": [
+                "https://openalex.org/I47508984"
+              ]
+            }
+          ],
+          "countries": [
+            "GB"
+          ],
+          "is_corresponding": false,
+          "raw_author_name": "Eszter P. Vamos",
+          "raw_affiliation_strings": [
+            "Public Health Policy Evaluation Unit, School of Public Health, Imperial College London, London, UK"
+          ],
+          "raw_orcid": null,
+          "affiliations": [
+            {
+              "raw_affiliation_string": "Public Health Policy Evaluation Unit, School of Public Health, Imperial College London, London, UK",
+              "institution_ids": [
+                "https://openalex.org/I47508984"
+              ]
+            }
+          ]
+        },
+        {
+          "author_position": "middle",
+          "author": {
+            "id": "https://openalex.org/A5133662762",
+            "display_name": "Martin White",
+            "orcid": null,
+            "observed_orcids": []
+          },
+          "institutions": [
+            {
+              "id": "https://openalex.org/I241749",
+              "display_name": "University of Cambridge",
+              "ror": "https://ror.org/013meh722",
+              "country_code": "GB",
+              "type": "education",
+              "lineage": [
+                "https://openalex.org/I241749"
+              ]
+            },
+            {
+              "id": "https://openalex.org/I4210158597",
+              "display_name": "MRC Epidemiology Unit",
+              "ror": "https://ror.org/052578691",
+              "country_code": "GB",
+              "type": "facility",
+              "lineage": [
+                "https://openalex.org/I241749",
+                "https://openalex.org/I4210087105",
+                "https://openalex.org/I4210158597",
+                "https://openalex.org/I90344618"
+              ]
+            },
+            {
+              "id": "https://openalex.org/I90344618",
+              "display_name": "Medical Research Council",
+              "ror": "https://ror.org/03x94j517",
+              "country_code": "GB",
+              "type": "government",
+              "lineage": [
+                "https://openalex.org/I4210087105",
+                "https://openalex.org/I90344618"
+              ]
+            }
+          ],
+          "countries": [
+            "GB"
+          ],
+          "is_corresponding": false,
+          "raw_author_name": "Martin White",
+          "raw_affiliation_strings": [
+            "Medical Research Council Epidemiology Unit, University of Cambridge, Cambridge, UK"
+          ],
+          "raw_orcid": null,
+          "affiliations": [
+            {
+              "raw_affiliation_string": "Medical Research Council Epidemiology Unit, University of Cambridge, Cambridge, UK",
+              "institution_ids": [
+                "https://openalex.org/I241749",
+                "https://openalex.org/I4210158597",
+                "https://openalex.org/I90344618"
+              ]
+            }
+          ]
+        },
+        {
+          "author_position": "last",
+          "author": {
+            "id": "https://openalex.org/A5037757315",
+            "display_name": "Jean M Adams",
+            "orcid": "https://orcid.org/0000-0002-5733-7830",
+            "observed_orcids": [
+              "https://orcid.org/0000-0002-5733-7830"
+            ]
+          },
+          "institutions": [
+            {
+              "id": "https://openalex.org/I241749",
+              "display_name": "University of Cambridge",
+              "ror": "https://ror.org/013meh722",
+              "country_code": "GB",
+              "type": "education",
+              "lineage": [
+                "https://openalex.org/I241749"
+              ]
+            },
+            {
+              "id": "https://openalex.org/I4210158597",
+              "display_name": "MRC Epidemiology Unit",
+              "ror": "https://ror.org/052578691",
+              "country_code": "GB",
+              "type": "facility",
+              "lineage": [
+                "https://openalex.org/I241749",
+                "https://openalex.org/I4210087105",
+                "https://openalex.org/I4210158597",
+                "https://openalex.org/I90344618"
+              ]
+            },
+            {
+              "id": "https://openalex.org/I90344618",
+              "display_name": "Medical Research Council",
+              "ror": "https://ror.org/03x94j517",
+              "country_code": "GB",
+              "type": "government",
+              "lineage": [
+                "https://openalex.org/I4210087105",
+                "https://openalex.org/I90344618"
+              ]
+            }
+          ],
+          "countries": [
+            "GB"
+          ],
+          "is_corresponding": false,
+          "raw_author_name": "Jean Adams",
+          "raw_affiliation_strings": [
+            "Medical Research Council Epidemiology Unit, University of Cambridge, Cambridge, UK"
+          ],
+          "raw_orcid": null,
+          "affiliations": [
+            {
+              "raw_affiliation_string": "Medical Research Council Epidemiology Unit, University of Cambridge, Cambridge, UK",
+              "institution_ids": [
+                "https://openalex.org/I241749",
+                "https://openalex.org/I4210158597",
+                "https://openalex.org/I90344618"
+              ]
+            }
+          ]
+        }
+      ],
+      "institutions": [],
+      "countries_distinct_count": 2,
+      "institutions_distinct_count": 8,
+      "corresponding_author_ids": [
+        "https://openalex.org/A5002766572"
+      ],
+      "corresponding_institution_ids": [
+        "https://openalex.org/I170897317",
+        "https://openalex.org/I241749",
+        "https://openalex.org/I4210158597",
+        "https://openalex.org/I90344618"
+      ],
+      "apc_list": {
+        "value": 2490,
+        "currency": "USD",
+        "value_usd": 2490
+      },
+      "apc_paid": {
+        "value": 2490,
+        "currency": "USD",
+        "value_usd": 2490
+      },
+      "fwci": 49.5202,
+      "has_fulltext": true,
+      "cited_by_count": 7,
+      "citation_normalized_percentile": {
+        "value": 0.99886401,
+        "is_in_top_1_percent": true,
+        "is_in_top_10_percent": true
+      },
+      "cited_by_percentile_year": {
+        "min": 98,
+        "max": 99
+      },
+      "biblio": {
+        "volume": "4",
+        "issue": "1",
+        "first_page": null,
+        "last_page": null
+      },
+      "is_retracted": false,
+      "is_paratext": false,
+      "is_xpac": false,
+      "primary_topic": {
+        "id": "https://openalex.org/T12057",
+        "display_name": "Consumer Attitudes and Food Labeling",
+        "score": 1.0,
+        "subfield": {
+          "id": "https://openalex.org/subfields/2739",
+          "display_name": "Public Health, Environmental and Occupational Health"
+        },
+        "field": {
+          "id": "https://openalex.org/fields/27",
+          "display_name": "Medicine"
+        },
+        "domain": {
+          "id": "https://openalex.org/domains/4",
+          "display_name": "Health Sciences"
+        }
+      },
+      "topics": [
+        {
+          "id": "https://openalex.org/T12057",
+          "display_name": "Consumer Attitudes and Food Labeling",
+          "score": 1.0,
+          "subfield": {
+            "id": "https://openalex.org/subfields/2739",
+            "display_name": "Public Health, Environmental and Occupational Health"
+          },
+          "field": {
+            "id": "https://openalex.org/fields/27",
+            "display_name": "Medicine"
+          },
+          "domain": {
+            "id": "https://openalex.org/domains/4",
+            "display_name": "Health Sciences"
+          }
+        },
+        {
+          "id": "https://openalex.org/T12816",
+          "display_name": "Global Public Health Policies and Epidemiology",
+          "score": 0.0,
+          "subfield": {
+            "id": "https://openalex.org/subfields/1407",
+            "display_name": "Organizational Behavior and Human Resource Management"
+          },
+          "field": {
+            "id": "https://openalex.org/fields/14",
+            "display_name": "Business, Management and Accounting"
+          },
+          "domain": {
+            "id": "https://openalex.org/domains/2",
+            "display_name": "Social Sciences"
+          }
+        },
+        {
+          "id": "https://openalex.org/T12873",
+          "display_name": "Nutrition, Health and Food Behavior",
+          "score": 0.0,
+          "subfield": {
+            "id": "https://openalex.org/subfields/2916",
+            "display_name": "Nutrition and Dietetics"
+          },
+          "field": {
+            "id": "https://openalex.org/fields/29",
+            "display_name": "Nursing"
+          },
+          "domain": {
+            "id": "https://openalex.org/domains/4",
+            "display_name": "Health Sciences"
+          }
+        }
+      ],
+      "keywords": [
+        {
+          "id": "https://openalex.org/keywords/ultra-processed-foods",
+          "display_name": "ultra-processed foods",
+          "score": 1.0
+        },
+        {
+          "id": "https://openalex.org/keywords/food-information-sources",
+          "display_name": "food information sources",
+          "score": 0.7250000238418579
+        },
+        {
+          "id": "https://openalex.org/keywords/social-media-influencers",
+          "display_name": "social media influencers",
+          "score": 0.8619999885559082
+        },
+        {
+          "id": "https://openalex.org/keywords/food-environment-policy",
+          "display_name": "food environment policy",
+          "score": 0.6600000262260437
+        },
+        {
+          "id": "https://openalex.org/keywords/fiscal-policy",
+          "display_name": "fiscal policy",
+          "score": 0.6179999709129333
+        },
+        {
+          "id": "https://openalex.org/keywords/nutrition-education",
+          "display_name": "nutrition education",
+          "score": 0.6140000224113464
+        },
+        {
+          "id": "https://openalex.org/keywords/non-communicable-diseases",
+          "display_name": "non-communicable diseases",
+          "score": 0.7519999742507935
+        }
+      ],
+      "concepts": [
+        {
+          "id": "https://openalex.org/C74196892",
+          "wikidata": "https://www.wikidata.org/wiki/Q7781188",
+          "display_name": "Thematic analysis",
+          "level": 3,
+          "score": 0.6570000052452087
+        },
+        {
+          "id": "https://openalex.org/C190248442",
+          "wikidata": "https://www.wikidata.org/wiki/Q839486",
+          "display_name": "Qualitative research",
+          "level": 2,
+          "score": 0.631600022315979
+        },
+        {
+          "id": "https://openalex.org/C26760741",
+          "wikidata": "https://www.wikidata.org/wiki/Q160402",
+          "display_name": "Perception",
+          "level": 2,
+          "score": 0.5830000042915344
+        },
+        {
+          "id": "https://openalex.org/C26011011",
+          "wikidata": "https://www.wikidata.org/wiki/Q6030243",
+          "display_name": "Influencer marketing",
+          "level": 4,
+          "score": 0.5145999789237976
+        },
+        {
+          "id": "https://openalex.org/C2778813691",
+          "wikidata": "https://www.wikidata.org/wiki/Q1369832",
+          "display_name": "Purchasing",
+          "level": 2,
+          "score": 0.49309998750686646
+        },
+        {
+          "id": "https://openalex.org/C15744967",
+          "wikidata": "https://www.wikidata.org/wiki/Q9418",
+          "display_name": "Psychology",
+          "level": 0,
+          "score": 0.46869999170303345
+        },
+        {
+          "id": "https://openalex.org/C116190364",
+          "wikidata": "https://www.wikidata.org/wiki/Q167918",
+          "display_name": "Grandparent",
+          "level": 2,
+          "score": 0.46560001373291016
+        },
+        {
+          "id": "https://openalex.org/C77805123",
+          "wikidata": "https://www.wikidata.org/wiki/Q161272",
+          "display_name": "Social psychology",
+          "level": 1,
+          "score": 0.4456000030040741
+        },
+        {
+          "id": "https://openalex.org/C13200473",
+          "wikidata": "https://www.wikidata.org/wiki/Q2747831",
+          "display_name": "Reflexivity",
+          "level": 2,
+          "score": 0.400299996137619
+        },
+        {
+          "id": "https://openalex.org/C518677369",
+          "wikidata": "https://www.wikidata.org/wiki/Q202833",
+          "display_name": "Social media",
+          "level": 2,
+          "score": 0.39100000262260437
+        },
+        {
+          "id": "https://openalex.org/C39549134",
+          "wikidata": "https://www.wikidata.org/wiki/Q133080",
+          "display_name": "Public relations",
+          "level": 1,
+          "score": 0.38850000500679016
+        },
+        {
+          "id": "https://openalex.org/C87156501",
+          "wikidata": "https://www.wikidata.org/wiki/Q7268708",
+          "display_name": "Qualitative property",
+          "level": 2,
+          "score": 0.37860000133514404
+        },
+        {
+          "id": "https://openalex.org/C2781140086",
+          "wikidata": "https://www.wikidata.org/wiki/Q557945",
+          "display_name": "Confusion",
+          "level": 2,
+          "score": 0.33320000767707825
+        },
+        {
+          "id": "https://openalex.org/C144024400",
+          "wikidata": "https://www.wikidata.org/wiki/Q21201",
+          "display_name": "Sociology",
+          "level": 0,
+          "score": 0.32420000433921814
+        },
+        {
+          "id": "https://openalex.org/C74909509",
+          "wikidata": "https://www.wikidata.org/wiki/Q10387",
+          "display_name": "Gerontology",
+          "level": 1,
+          "score": 0.32249999046325684
+        },
+        {
+          "id": "https://openalex.org/C2779713723",
+          "wikidata": "https://www.wikidata.org/wiki/Q17088139",
+          "display_name": "Photo elicitation",
+          "level": 2,
+          "score": 0.32199999690055847
+        },
+        {
+          "id": "https://openalex.org/C56995899",
+          "wikidata": "https://www.wikidata.org/wiki/Q1126687",
+          "display_name": "Focus group",
+          "level": 2,
+          "score": 0.3043999969959259
+        },
+        {
+          "id": "https://openalex.org/C162127614",
+          "wikidata": "https://www.wikidata.org/wiki/Q5928045",
+          "display_name": "Ambivalence",
+          "level": 2,
+          "score": 0.29980000853538513
+        },
+        {
+          "id": "https://openalex.org/C26869875",
+          "wikidata": "https://www.wikidata.org/wiki/Q2596417",
+          "display_name": "Beneficiary",
+          "level": 2,
+          "score": 0.2922999858856201
+        },
+        {
+          "id": "https://openalex.org/C162853370",
+          "wikidata": "https://www.wikidata.org/wiki/Q39809",
+          "display_name": "Marketing",
+          "level": 1,
+          "score": 0.2874999940395355
+        },
+        {
+          "id": "https://openalex.org/C80245801",
+          "wikidata": "https://www.wikidata.org/wiki/Q1477475",
+          "display_name": "Semi-structured interview",
+          "level": 3,
+          "score": 0.28459998965263367
+        },
+        {
+          "id": "https://openalex.org/C27415008",
+          "wikidata": "https://www.wikidata.org/wiki/Q7256382",
+          "display_name": "Psychological intervention",
+          "level": 2,
+          "score": 0.28110000491142273
+        },
+        {
+          "id": "https://openalex.org/C2777754422",
+          "wikidata": "https://www.wikidata.org/wiki/Q17081927",
+          "display_name": "Social marketing",
+          "level": 2,
+          "score": 0.28110000491142273
+        },
+        {
+          "id": "https://openalex.org/C3018587665",
+          "wikidata": "https://www.wikidata.org/wiki/Q7268696",
+          "display_name": "Qualitative analysis",
+          "level": 3,
+          "score": 0.28110000491142273
+        },
+        {
+          "id": "https://openalex.org/C162446236",
+          "wikidata": "https://www.wikidata.org/wiki/Q653137",
+          "display_name": "Content analysis",
+          "level": 2,
+          "score": 0.26930001378059387
+        },
+        {
+          "id": "https://openalex.org/C3020707900",
+          "wikidata": "https://www.wikidata.org/wiki/Q25099819",
+          "display_name": "Healthy food",
+          "level": 2,
+          "score": 0.260699987411499
+        },
+        {
+          "id": "https://openalex.org/C2776636917",
+          "wikidata": "https://www.wikidata.org/wiki/Q3772297",
+          "display_name": "Information seeking",
+          "level": 2,
+          "score": 0.2574000060558319
+        },
+        {
+          "id": "https://openalex.org/C133462117",
+          "wikidata": "https://www.wikidata.org/wiki/Q4929239",
+          "display_name": "Data collection",
+          "level": 2,
+          "score": 0.25540000200271606
+        },
+        {
+          "id": "https://openalex.org/C138816342",
+          "wikidata": "https://www.wikidata.org/wiki/Q189603",
+          "display_name": "Public health",
+          "level": 2,
+          "score": 0.25519999861717224
+        },
+        {
+          "id": "https://openalex.org/C112698675",
+          "wikidata": "https://www.wikidata.org/wiki/Q37038",
+          "display_name": "Advertising",
+          "level": 1,
+          "score": 0.2547000050544739
+        },
+        {
+          "id": "https://openalex.org/C58033187",
+          "wikidata": "https://www.wikidata.org/wiki/Q386147",
+          "display_name": "Point of sale",
+          "level": 2,
+          "score": 0.2524999976158142
+        }
+      ],
+      "mesh": [],
+      "locations_count": 8,
+      "locations": [
+        {
+          "id": "doi:10.1186/s44263-026-00263-0",
+          "is_oa": true,
+          "landing_page_url": "https://doi.org/10.1186/s44263-026-00263-0",
+          "pdf_url": null,
+          "source": {
+            "id": "https://openalex.org/S4387291525",
+            "display_name": "BMC Global and Public Health",
+            "issn_l": "2731-913X",
+            "issn": [
+              "2731-913X"
+            ],
+            "is_oa": true,
+            "is_in_doaj": true,
+            "is_core": true,
+            "listed_in": [
+              "cwts-core",
+              "doaj",
+              "jufo-1",
+              "ki-jl-1",
+              "norway-1"
+            ],
+            "host_organization": null,
+            "host_organization_name": null,
+            "host_organization_lineage": [],
+            "host_organization_lineage_names": [],
+            "type": "journal"
+          },
+          "license": "cc-by",
+          "license_id": "https://openalex.org/licenses/cc-by",
+          "version": "publishedVersion",
+          "is_accepted": true,
+          "is_published": true,
+          "raw_source_name": "BMC Global and Public Health",
+          "raw_type": "journal-article"
+        },
+        {
+          "id": "pmid:41987266",
+          "is_oa": false,
+          "landing_page_url": "https://pubmed.ncbi.nlm.nih.gov/41987266",
+          "pdf_url": null,
+          "source": {
+            "id": "https://openalex.org/S4306525036",
+            "display_name": "PubMed",
+            "issn_l": null,
+            "issn": null,
+            "is_oa": false,
+            "is_in_doaj": false,
+            "is_core": false,
+            "listed_in": [],
+            "host_organization": "https://openalex.org/I1299303238",
+            "host_organization_name": "National Institutes of Health",
+            "host_organization_lineage": [
+              "https://openalex.org/I1299303238"
+            ],
+            "host_organization_lineage_names": [],
+            "type": "repository"
+          },
+          "license": null,
+          "license_id": null,
+          "version": "publishedVersion",
+          "is_accepted": true,
+          "is_published": true,
+          "raw_source_name": "BMC global and public health",
+          "raw_type": "Journal Article"
+        },
+        {
+          "id": "pmh:oai:researchonline.lshtm.ac.uk:4682070",
+          "is_oa": true,
+          "landing_page_url": "https://orcid.org/0000-0002-3957-4357>;",
+          "pdf_url": "https://researchonline.lshtm.ac.uk/id/eprint/4682070/1/Essman-etal-2026-Understandings-of-ultra-processed-foods.pdf",
+          "source": {
+            "id": "https://openalex.org/S4306402527",
+            "display_name": "LSHTM Research Online (London School of Hygiene and Tropical Medicine)",
+            "issn_l": null,
+            "issn": null,
+            "is_oa": false,
+            "is_in_doaj": false,
+            "is_core": false,
+            "listed_in": [],
+            "host_organization": "https://openalex.org/I4210089966",
+            "host_organization_name": "London School of Hygiene & Tropical Medicine",
+            "host_organization_lineage": [
+              "https://openalex.org/I4210089966"
+            ],
+            "host_organization_lineage_names": [],
+            "type": "repository"
+          },
+          "license": null,
+          "license_id": null,
+          "version": "acceptedVersion",
+          "is_accepted": true,
+          "is_published": false,
+          "raw_source_name": null,
+          "raw_type": "Article"
+        },
+        {
+          "id": "pmh:oai:durham-repository.worktribe.com:5285137",
+          "is_oa": true,
+          "landing_page_url": "https://durham-repository.worktribe.com/output/5285137",
+          "pdf_url": "https://durham-repository.worktribe.com/file/5285137/1/Published%20Journal%20Article",
+          "source": {
+            "id": "https://openalex.org/S4306400188",
+            "display_name": "Durham Research Online (Durham University)",
+            "issn_l": null,
+            "issn": null,
+            "is_oa": false,
+            "is_in_doaj": false,
+            "is_core": false,
+            "listed_in": [],
+            "host_organization": "https://openalex.org/I190082696",
+            "host_organization_name": "Durham University",
+            "host_organization_lineage": [
+              "https://openalex.org/I190082696"
+            ],
+            "host_organization_lineage_names": [],
+            "type": "repository"
+          },
+          "license": "cc-by",
+          "license_id": "https://openalex.org/licenses/cc-by",
+          "version": "submittedVersion",
+          "is_accepted": false,
+          "is_published": false,
+          "raw_source_name": null,
+          "raw_type": "Journal Article"
+        },
+        {
+          "id": "pmh:oai:pubmedcentral.nih.gov:13085418",
+          "is_oa": true,
+          "landing_page_url": "https://pubmed.ncbi.nlm.nih.gov/41987266/",
+          "pdf_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13085418/pdf/44263_2026_Article_263.pdf",
+          "source": {
+            "id": "https://openalex.org/S2764455111",
+            "display_name": "PubMed Central",
+            "issn_l": null,
+            "issn": null,
+            "is_oa": true,
+            "is_in_doaj": false,
+            "is_core": false,
+            "listed_in": [],
+            "host_organization": "https://openalex.org/I1299303238",
+            "host_organization_name": "National Institutes of Health",
+            "host_organization_lineage": [
+              "https://openalex.org/I1299303238"
+            ],
+            "host_organization_lineage_names": [],
+            "type": "repository"
+          },
+          "license": "cc-by",
+          "license_id": "https://openalex.org/licenses/cc-by",
+          "version": "submittedVersion",
+          "is_accepted": false,
+          "is_published": false,
+          "raw_source_name": "BMC Glob Public Health",
+          "raw_type": "Text"
+        },
+        {
+          "id": "pmh:oai:www.repository.cam.ac.uk:1810/401777",
+          "is_oa": true,
+          "landing_page_url": "https://www.repository.cam.ac.uk/handle/1810/401777",
+          "pdf_url": "https://www.repository.cam.ac.uk/bitstreams/f8b5c6f1-15af-41a4-ac16-79ef45b5716e/download",
+          "source": {
+            "id": "https://openalex.org/S4306401777",
+            "display_name": "Apollo (University of Cambridge)",
+            "issn_l": null,
+            "issn": null,
+            "is_oa": false,
+            "is_in_doaj": false,
+            "is_core": false,
+            "listed_in": [],
+            "host_organization": "https://openalex.org/I241749",
+            "host_organization_name": "University of Cambridge",
+            "host_organization_lineage": [
+              "https://openalex.org/I241749"
+            ],
+            "host_organization_lineage_names": [],
+            "type": "repository"
+          },
+          "license": "cc-by",
+          "license_id": "https://openalex.org/licenses/cc-by",
+          "version": "submittedVersion",
+          "is_accepted": false,
+          "is_published": false,
+          "raw_source_name": null,
+          "raw_type": "Article"
+        },
+        {
+          "id": "pmh:oai:doaj.org/article:1c38775dc644413b97df2765e2a9ff06",
+          "is_oa": true,
+          "landing_page_url": "https://doaj.org/article/1c38775dc644413b97df2765e2a9ff06",
+          "pdf_url": null,
+          "source": {
+            "id": "https://openalex.org/S4306401280",
+            "display_name": "DOAJ (DOAJ: Directory of Open Access Journals)",
+            "issn_l": null,
+            "issn": null,
+            "is_oa": false,
+            "is_in_doaj": false,
+            "is_core": false,
+            "listed_in": [],
+            "host_organization": null,
+            "host_organization_name": null,
+            "host_organization_lineage": [],
+            "host_organization_lineage_names": [],
+            "type": "repository"
+          },
+          "license": "cc-by-sa",
+          "license_id": "https://openalex.org/licenses/cc-by-sa",
+          "version": "submittedVersion",
+          "is_accepted": false,
+          "is_published": false,
+          "raw_source_name": "BMC Global and Public Health, Vol 4, Iss 1 (2026)",
+          "raw_type": "article"
+        },
+        {
+          "id": "pmh:oai:spiral.imperial.ac.uk:10044/1/131368",
+          "is_oa": true,
+          "landing_page_url": "https://www.ncbi.nlm.nih.gov/pubmed/41987266",
+          "pdf_url": null,
+          "source": {
+            "id": "https://openalex.org/S4306401396",
+            "display_name": "Spiral (Imperial College London)",
+            "issn_l": null,
+            "issn": null,
+            "is_oa": false,
+            "is_in_doaj": false,
+            "is_core": false,
+            "listed_in": [],
+            "host_organization": "https://openalex.org/I47508984",
+            "host_organization_name": "Imperial College London",
+            "host_organization_lineage": [
+              "https://openalex.org/I47508984"
+            ],
+            "host_organization_lineage_names": [],
+            "type": "repository"
+          },
+          "license": "cc-by",
+          "license_id": "https://openalex.org/licenses/cc-by",
+          "version": "submittedVersion",
+          "is_accepted": false,
+          "is_published": false,
+          "raw_source_name": null,
+          "raw_type": "Journal Article"
+        }
+      ],
+      "best_oa_location": {
+        "id": "doi:10.1186/s44263-026-00263-0",
+        "is_oa": true,
+        "landing_page_url": "https://doi.org/10.1186/s44263-026-00263-0",
+        "pdf_url": null,
+        "source": {
+          "id": "https://openalex.org/S4387291525",
+          "display_name": "BMC Global and Public Health",
+          "issn_l": "2731-913X",
+          "issn": [
+            "2731-913X"
+          ],
+          "is_oa": true,
+          "is_in_doaj": true,
+          "is_core": true,
+          "listed_in": [
+            "cwts-core",
+            "doaj",
+            "jufo-1",
+            "ki-jl-1",
+            "norway-1"
+          ],
+          "host_organization": null,
+          "host_organization_name": null,
+          "host_organization_lineage": [],
+          "host_organization_lineage_names": [],
+          "type": "journal"
+        },
+        "license": "cc-by",
+        "license_id": "https://openalex.org/licenses/cc-by",
+        "version": "publishedVersion",
+        "is_accepted": true,
+        "is_published": true,
+        "raw_source_name": "BMC Global and Public Health",
+        "raw_type": "journal-article"
+      },
+      "sustainable_development_goals": [
+        {
+          "id": "https://metadata.un.org/sdg/3",
+          "display_name": "Good health and well-being",
+          "score": 0.8048999905586243
+        },
+        {
+          "id": "https://metadata.un.org/sdg/2",
+          "display_name": "Zero hunger",
+          "score": 0.40450000762939453
+        }
+      ],
+      "sustainable_development_goals_aurora": [
+        {
+          "id": "https://metadata.un.org/sdg/2",
+          "display_name": "Zero hunger",
+          "score": 0.5060137510299683
+        }
+      ],
+      "study_designs": [],
+      "awards": [
+        {
+          "id": "https://openalex.org/G1973973516",
+          "display_name": null,
+          "funder_award_id": "MC/UU/00006/7",
+          "funder_id": "https://openalex.org/F4320319990",
+          "funder_display_name": "National Institute for Health and Care Research"
+        },
+        {
+          "id": "https://openalex.org/G2145130673",
+          "display_name": null,
+          "funder_award_id": "NIHR 204000",
+          "funder_id": "https://openalex.org/F4320319990",
+          "funder_display_name": "National Institute for Health and Care Research"
+        },
+        {
+          "id": "https://openalex.org/G2525916338",
+          "display_name": null,
+          "funder_award_id": "204000",
+          "funder_id": "https://openalex.org/F4320335836",
+          "funder_display_name": "School for Public Health Research"
+        },
+        {
+          "id": "https://openalex.org/G3505007512",
+          "display_name": null,
+          "funder_award_id": "MC/ UU /00006/7",
+          "funder_id": "https://openalex.org/F4320334626",
+          "funder_display_name": "Medical Research Council"
+        },
+        {
+          "id": "https://openalex.org/G5309775136",
+          "display_name": null,
+          "funder_award_id": "NIHR204000",
+          "funder_id": "https://openalex.org/F4320335836",
+          "funder_display_name": "School for Public Health Research"
+        },
+        {
+          "id": "https://openalex.org/G7236867882",
+          "display_name": null,
+          "funder_award_id": "MC_UU_00006/7",
+          "funder_id": "https://openalex.org/F4320319994",
+          "funder_display_name": "Department of Health and Social Care"
+        }
+      ],
+      "funders": [
+        {
+          "id": "https://openalex.org/F4320319990",
+          "display_name": "National Institute for Health and Care Research",
+          "ror": "https://ror.org/0187kwz08"
+        },
+        {
+          "id": "https://openalex.org/F4320319994",
+          "display_name": "Department of Health and Social Care",
+          "ror": "https://ror.org/03sbpja79"
+        },
+        {
+          "id": "https://openalex.org/F4320334626",
+          "display_name": "Medical Research Council",
+          "ror": "https://ror.org/03x94j517"
+        },
+        {
+          "id": "https://openalex.org/F4320335836",
+          "display_name": "School for Public Health Research",
+          "ror": "https://ror.org/05c9p6d02"
+        }
+      ],
+      "has_content": {
+        "pdf": false,
+        "grobid_xml": false
+      },
+      "content_urls": null,
+      "referenced_works_count": 50,
+      "referenced_works": [
+        "https://openalex.org/W1502898407",
+        "https://openalex.org/W1990637701",
+        "https://openalex.org/W2021420848",
+        "https://openalex.org/W2067813815",
+        "https://openalex.org/W2082131453",
+        "https://openalex.org/W2105099865",
+        "https://openalex.org/W2121719057",
+        "https://openalex.org/W2138664283",
+        "https://openalex.org/W2325559971",
+        "https://openalex.org/W2626114625",
+        "https://openalex.org/W2887855474",
+        "https://openalex.org/W2892333205",
+        "https://openalex.org/W2911640446",
+        "https://openalex.org/W2913101148",
+        "https://openalex.org/W2919031944",
+        "https://openalex.org/W2947904584",
+        "https://openalex.org/W3012297787",
+        "https://openalex.org/W3023742764",
+        "https://openalex.org/W3043903232",
+        "https://openalex.org/W3093262577",
+        "https://openalex.org/W3097590906",
+        "https://openalex.org/W3109813552",
+        "https://openalex.org/W3110440322",
+        "https://openalex.org/W3118292371",
+        "https://openalex.org/W3122367007",
+        "https://openalex.org/W3130720714",
+        "https://openalex.org/W3134157024",
+        "https://openalex.org/W3167314090",
+        "https://openalex.org/W3199239817",
+        "https://openalex.org/W3208519666",
+        "https://openalex.org/W4200099280",
+        "https://openalex.org/W4220907499",
+        "https://openalex.org/W4297687935",
+        "https://openalex.org/W4312056376",
+        "https://openalex.org/W4313214586",
+        "https://openalex.org/W4316672587",
+        "https://openalex.org/W4318678064",
+        "https://openalex.org/W4323308389",
+        "https://openalex.org/W4360603423",
+        "https://openalex.org/W4378908332",
+        "https://openalex.org/W4385276460",
+        "https://openalex.org/W4389328814",
+        "https://openalex.org/W4392600894",
+        "https://openalex.org/W4399368527",
+        "https://openalex.org/W4400747465",
+        "https://openalex.org/W4400949703",
+        "https://openalex.org/W4400974965",
+        "https://openalex.org/W4407730835",
+        "https://openalex.org/W4413363147",
+        "https://openalex.org/W4416347057"
+      ],
+      "related_works": [],
+      "abstract_inverted_index": {
+        "BACKGROUND:": [
+          0
+        ],
+        "There": [
+          1,
+          31,
+          187
+        ],
+        "is": [
+          2,
+          32
+        ],
+        "accumulating": [
+          3
+        ],
+        "evidence": [
+          4,
+          34
+        ],
+        "that": [
+          5,
+          272,
+          299,
+          312
+        ],
+        "ultra-processed": [
+          6,
+          197
+        ],
+        "foods": [
+          7
+        ],
+        "(UPFs)": [
+          8
+        ],
+        "are": [
+          9,
+          64,
+          304
+        ],
+        "associated": [
+          10
+        ],
+        "with": [
+          11,
+          90,
+          101,
+          218,
+          324
+        ],
+        "many": [
+          12
+        ],
+        "non-communicable": [
+          13
+        ],
+        "diseases.": [
+          14
+        ],
+        "In": [
+          15,
+          46
+        ],
+        "the": [
+          16,
+          94,
+          119,
+          192,
+          220,
+          273,
+          301
+        ],
+        "United": [
+          17
+        ],
+        "Kingdom": [
+          18
+        ],
+        "(UK),": [
+          19
+        ],
+        "UPFs": [
+          20,
+          41,
+          56,
+          236,
+          293
+        ],
+        "account": [
+          21
+        ],
+        "for": [
+          22,
+          79,
+          104,
+          322
+        ],
+        "more": [
+          23,
+          176,
+          254,
+          289,
+          317
+        ],
+        "than": [
+          24,
+          184
+        ],
+        "half": [
+          25
+        ],
+        "of": [
+          26,
+          40,
+          55,
+          129,
+          150,
+          223,
+          235
+        ],
+        "mean": [
+          27
+        ],
+        "daily": [
+          28,
+          44
+        ],
+        "energy": [
+          29
+        ],
+        "intake.": [
+          30
+        ],
+        "limited": [
+          33,
+          325
+        ],
+        "describing": [
+          35
+        ],
+        "how": [
+          36,
+          62
+        ],
+        "individuals": [
+          37
+        ],
+        "make": [
+          38,
+          313
+        ],
+        "sense": [
+          39,
+          177
+        ],
+        "in": [
+          42,
+          93,
+          279
+        ],
+        "their": [
+          43,
+          58,
+          239
+        ],
+        "lives.": [
+          45
+        ],
+        "this": [
+          47
+        ],
+        "study,": [
+          48
+        ],
+        "we": [
+          49
+        ],
+        "aim": [
+          50
+        ],
+        "to": [
+          51,
+          60,
+          164,
+          178,
+          257,
+          265,
+          307
+        ],
+        "explore": [
+          52
+        ],
+        "public": [
+          53,
+          274
+        ],
+        "perceptions": [
+          54,
+          71,
+          234
+        ],
+        "and": [
+          57,
+          74,
+          76,
+          133,
+          162,
+          168,
+          196,
+          207,
+          241,
+          247,
+          288,
+          294,
+          320
+        ],
+        "relationship": [
+          59
+        ],
+        "health;": [
+          61
+        ],
+        "these": [
+          63
+        ],
+        "shaped": [
+          65
+        ],
+        "by": [
+          66
+        ],
+        "different": [
+          67
+        ],
+        "information": [
+          68,
+          204,
+          215,
+          284
+        ],
+        "sources;": [
+          69
+        ],
+        "whether": [
+          70
+        ],
+        "influence": [
+          72
+        ],
+        "purchasing": [
+          73,
+          240
+        ],
+        "consumption;": [
+          75
+        ],
+        "proposed": [
+          77,
+          170
+        ],
+        "solutions": [
+          78
+        ],
+        "reducing": [
+          80,
+          165
+        ],
+        "UPF": [
+          81,
+          166,
+          260
+        ],
+        "consumption.": [
+          82,
+          242
+        ],
+        "METHODS:": [
+          83
+        ],
+        "We": [
+          84
+        ],
+        "undertook": [
+          85
+        ],
+        "30": [
+          86
+        ],
+        "qualitative,": [
+          87
+        ],
+        "one-to-one": [
+          88
+        ],
+        "interviews": [
+          89
+        ],
+        "people": [
+          91,
+          323
+        ],
+        "living": [
+          92
+        ],
+        "UK,": [
+          95
+        ],
+        "aged": [
+          96
+        ],
+        "18": [
+          97
+        ],
+        "years": [
+          98
+        ],
+        "or": [
+          99,
+          231,
+          253
+        ],
+        "older,": [
+          100
+        ],
+        "household": [
+          102
+        ],
+        "responsibility": [
+          103
+        ],
+        "food": [
+          105,
+          283,
+          302
+        ],
+        "activities": [
+          106
+        ],
+        "recruited": [
+          107
+        ],
+        "using": [
+          108,
+          124
+        ],
+        "social": [
+          109,
+          224
+        ],
+        "media": [
+          110,
+          225
+        ],
+        "advertisements.": [
+          111
+        ],
+        "Interviews": [
+          112
+        ],
+        "followed": [
+          113
+        ],
+        "a": [
+          114,
+          130,
+          181,
+          281
+        ],
+        "semi-structured": [
+          115
+        ],
+        "topic": [
+          116
+        ],
+        "guide": [
+          117
+        ],
+        "reflecting": [
+          118
+        ],
+        "aims.": [
+          120
+        ],
+        "Data": [
+          121
+        ],
+        "were": [
+          122,
+          227,
+          250
+        ],
+        "analysed": [
+          123
+        ],
+        "reflexive": [
+          125
+        ],
+        "thematic": [
+          126,
+          142
+        ],
+        "analysis.": [
+          127
+        ],
+        "Members": [
+          128
+        ],
+        "Public": [
+          131
+        ],
+        "Involvement": [
+          132
+        ],
+        "Engagement": [
+          134
+        ],
+        "group": [
+          135
+        ],
+        "helped": [
+          136
+        ],
+        "interpret": [
+          137
+        ],
+        "emergent": [
+          138
+        ],
+        "findings.": [
+          139
+        ],
+        "RESULTS:": [
+          140
+        ],
+        "Reflexive": [
+          141
+        ],
+        "analysis": [
+          143
+        ],
+        "identified": [
+          144
+        ],
+        "five": [
+          145
+        ],
+        "interconnected": [
+          146
+        ],
+        "themes:": [
+          147
+        ],
+        "(1)": [
+          148
+        ],
+        "understanding": [
+          149
+        ],
+        "UPFs,": [
+          151,
+          159
+        ],
+        "(2)": [
+          152
+        ],
+        "influences": [
+          153
+        ],
+        "on": [
+          154
+        ],
+        "understanding,": [
+          155
+        ],
+        "(3)": [
+          156
+        ],
+        "decision-making": [
+          157
+        ],
+        "around": [
+          158
+        ],
+        "(4)": [
+          160
+        ],
+        "barriers": [
+          161
+        ],
+        "enablers": [
+          163
+        ],
+        "consumption,": [
+          167
+        ],
+        "(5)": [
+          169
+        ],
+        "solutions.": [
+          171
+        ],
+        "Food": [
+          172
+        ],
+        "processing": [
+          173
+        ],
+        "often": [
+          174,
+          251
+        ],
+        "made": [
+          175
+        ],
+        "participants": [
+          179
+        ],
+        "as": [
+          180,
+          229,
+          252
+        ],
+        "continuum": [
+          182
+        ],
+        "rather": [
+          183
+        ],
+        "ordinal": [
+          185
+        ],
+        "categories.": [
+          186
+        ],
+        "was": [
+          188,
+          210,
+          216
+        ],
+        "particular": [
+          189
+        ],
+        "confusion": [
+          190
+        ],
+        "regarding": [
+          191
+        ],
+        "boundary": [
+          193
+        ],
+        "between": [
+          194
+        ],
+        "processed": [
+          195,
+          315
+        ],
+        "food.": [
+          198
+        ],
+        "Participants": [
+          199
+        ],
+        "described": [
+          200
+        ],
+        "an": [
+          201
+        ],
+        "overwhelming": [
+          202
+        ],
+        "food-related": [
+          203
+        ],
+        "environment.": [
+          205
+        ],
+        "Personal": [
+          206
+        ],
+        "anecdotal": [
+          208
+        ],
+        "experience": [
+          209
+        ],
+        "particularly": [
+          211,
+          310
+        ],
+        "powerful.": [
+          212
+        ],
+        "While": [
+          213
+        ],
+        "industry-sponsored": [
+          214
+        ],
+        "met": [
+          217
+        ],
+        "scepticism,": [
+          219
+        ],
+        "personal": [
+          221
+        ],
+        "testimonies": [
+          222
+        ],
+        "influencers": [
+          226
+        ],
+        "seen": [
+          228
+        ],
+        "relatable": [
+          230
+        ],
+        "helpful.": [
+          232
+        ],
+        "Participants'": [
+          233
+        ],
+        "sometimes": [
+          237
+        ],
+        "influenced": [
+          238
+        ],
+        "However,": [
+          243
+        ],
+        "cost,": [
+          244
+        ],
+        "convenience,": [
+          245
+        ],
+        "taste,": [
+          246
+        ],
+        "family": [
+          248
+        ],
+        "practices": [
+          249
+        ],
+        "important.": [
+          255
+        ],
+        "Suggestions": [
+          256
+        ],
+        "help": [
+          258
+        ],
+        "reduce": [
+          259
+        ],
+        "consumption": [
+          261
+        ],
+        "ranged": [
+          262
+        ],
+        "from": [
+          263,
+          277
+        ],
+        "education": [
+          264
+        ],
+        "fiscal": [
+          266
+        ],
+        "policies.": [
+          267
+        ],
+        "CONCLUSIONS:": [
+          268
+        ],
+        "These": [
+          269
+        ],
+        "findings": [
+          270
+        ],
+        "suggest": [
+          271
+        ],
+        "may": [
+          275
+        ],
+        "benefit": [
+          276
+        ],
+        "support": [
+          278
+        ],
+        "navigating": [
+          280
+        ],
+        "complex": [
+          282
+        ],
+        "landscape,": [
+          285
+        ],
+        "including": [
+          286
+        ],
+        "clearer": [
+          287
+        ],
+        "actionable": [
+          290
+        ],
+        "communication": [
+          291
+        ],
+        "about": [
+          292
+        ],
+        "related": [
+          295
+        ],
+        "topics.": [
+          296
+        ],
+        "Policy": [
+          297
+        ],
+        "approaches": [
+          298
+        ],
+        "modify": [
+          300
+        ],
+        "environment": [
+          303
+        ],
+        "also": [
+          305
+        ],
+        "likely": [
+          306
+        ],
+        "be": [
+          308
+        ],
+        "useful,": [
+          309
+        ],
+        "those": [
+          311
+        ],
+        "less": [
+          314
+        ],
+        "options": [
+          316
+        ],
+        "affordable,": [
+          318
+        ],
+        "available,": [
+          319
+        ],
+        "convenient": [
+          321
+        ],
+        "time.": [
+          326
+        ]
+      },
+      "counts_by_year": [
+        {
+          "year": 2026,
+          "cited_by_count": 7
+        }
+      ],
+      "updated_date": "2026-10-01T08:54:57.152042",
+      "created_date": "2026-04-16T00:00:00"
+    }
+  }
+}

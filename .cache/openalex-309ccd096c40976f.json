@@ -1,0 +1,2090 @@
+{
+  "parts": {
+    "api": "openalex-work",
+    "doi": "10.3310/SOSO8851",
+    "shape": 1
+  },
+  "value": {
+    "found": true,
+    "work": {
+      "id": "https://openalex.org/W4414035439",
+      "doi": "https://doi.org/10.3310/soso8851",
+      "title": "Gathering baseline data to assess household energy interventions\u2019 impact on indoor air quality, occupant health, and wellbeing: In2Air a non-randomized experiment",
+      "display_name": "Gathering baseline data to assess household energy interventions\u2019 impact on indoor air quality, occupant health, and wellbeing: In2Air a non-randomized experiment",
+      "publication_year": 2025,
+      "publication_date": "2025-02-06",
+      "ids": {
+        "openalex": "https://openalex.org/W4414035439",
+        "doi": "https://doi.org/10.3310/soso8851",
+        "pmid": "https://pubmed.ncbi.nlm.nih.gov/40908841"
+      },
+      "language": "en",
+      "primary_location": {
+        "id": "doi:10.3310/soso8851",
+        "is_oa": true,
+        "landing_page_url": "https://doi.org/10.3310/soso8851",
+        "pdf_url": null,
+        "source": {
+          "id": "https://openalex.org/S4210192240",
+          "display_name": "Public Health Research",
+          "issn_l": "2050-4381",
+          "issn": [
+            "2050-4381",
+            "2050-439X"
+          ],
+          "is_oa": true,
+          "is_in_doaj": true,
+          "is_core": true,
+          "listed_in": [
+            "cwts-core",
+            "doaj",
+            "medline"
+          ],
+          "host_organization": "https://openalex.org/P4310311817",
+          "host_organization_name": "NIHR Journals Library",
+          "host_organization_lineage": [
+            "https://openalex.org/P4310311817"
+          ],
+          "host_organization_lineage_names": [
+            "NIHR Journals Library"
+          ],
+          "type": "journal"
+        },
+        "license": "cc-by",
+        "license_id": "https://openalex.org/licenses/cc-by",
+        "version": "publishedVersion",
+        "is_accepted": true,
+        "is_published": true,
+        "raw_source_name": "Public Health Research",
+        "raw_type": "journal-article"
+      },
+      "type": "article",
+      "indexed_in": [
+        "crossref",
+        "doaj",
+        "pubmed"
+      ],
+      "open_access": {
+        "is_oa": true,
+        "oa_status": "diamond",
+        "oa_url": "https://doi.org/10.3310/soso8851",
+        "any_repository_has_fulltext": true
+      },
+      "authorships": [
+        {
+          "author_position": "first",
+          "author": {
+            "id": "https://openalex.org/A5055451047",
+            "display_name": "Jane  A. Entwistle",
+            "orcid": "https://orcid.org/0000-0002-4375-4502",
+            "observed_orcids": [
+              "https://orcid.org/0000-0002-4375-4502"
+            ]
+          },
+          "institutions": [
+            {
+              "id": "https://openalex.org/I32394136",
+              "display_name": "Northumbria University",
+              "ror": "https://ror.org/049e6bc10",
+              "country_code": "GB",
+              "type": "education",
+              "lineage": [
+                "https://openalex.org/I32394136"
+              ]
+            }
+          ],
+          "countries": [
+            "GB"
+          ],
+          "is_corresponding": false,
+          "raw_author_name": "Jane Entwistle",
+          "raw_affiliation_strings": [
+            "Department of Geography and Environmental Sciences, Engineering and Environment, Northumbria University, Newcastle upon Tyne, UK"
+          ],
+          "raw_orcid": "https://orcid.org/0000-0002-4375-4502",
+          "affiliations": [
+            {
+              "raw_affiliation_string": "Department of Geography and Environmental Sciences, Engineering and Environment, Northumbria University, Newcastle upon Tyne, UK",
+              "institution_ids": [
+                "https://openalex.org/I32394136"
+              ]
+            }
+          ]
+        },
+        {
+          "author_position": "middle",
+          "author": {
+            "id": "https://openalex.org/A5058958192",
+            "display_name": "Tarek M.F. Ahmed",
+            "orcid": "https://orcid.org/0000-0001-8576-2693",
+            "observed_orcids": [
+              "https://orcid.org/0000-0001-8576-2693"
+            ]
+          },
+          "institutions": [
+            {
+              "id": "https://openalex.org/I32394136",
+              "display_name": "Northumbria University",
+              "ror": "https://ror.org/049e6bc10",
+              "country_code": "GB",
+              "type": "education",
+              "lineage": [
+                "https://openalex.org/I32394136"
+              ]
+            }
+          ],
+          "countries": [
+            "GB"
+          ],
+          "is_corresponding": false,
+          "raw_author_name": "Tarek Ahmed",
+          "raw_affiliation_strings": [
+            "Department of Architecture and Built Environment, Engineering and Environment, Northumbria University, Newcastle upon Tyne, UK"
+          ],
+          "raw_orcid": "https://orcid.org/0000-0001-8576-2693",
+          "affiliations": [
+            {
+              "raw_affiliation_string": "Department of Architecture and Built Environment, Engineering and Environment, Northumbria University, Newcastle upon Tyne, UK",
+              "institution_ids": [
+                "https://openalex.org/I32394136"
+              ]
+            }
+          ]
+        },
+        {
+          "author_position": "middle",
+          "author": {
+            "id": "https://openalex.org/A5082095286",
+            "display_name": "Lindsay Bramwell",
+            "orcid": "https://orcid.org/0000-0003-1795-8736",
+            "observed_orcids": [
+              "https://orcid.org/0000-0003-1795-8736"
+            ]
+          },
+          "institutions": [
+            {
+              "id": "https://openalex.org/I32394136",
+              "display_name": "Northumbria University",
+              "ror": "https://ror.org/049e6bc10",
+              "country_code": "GB",
+              "type": "education",
+              "lineage": [
+                "https://openalex.org/I32394136"
+              ]
+            }
+          ],
+          "countries": [
+            "GB"
+          ],
+          "is_corresponding": false,
+          "raw_author_name": "Lindsay Bramwell",
+          "raw_affiliation_strings": [
+            "Department of Geography and Environmental Sciences, Engineering and Environment, Northumbria University, Newcastle upon Tyne, UK"
+          ],
+          "raw_orcid": "https://orcid.org/0000-0003-1795-8736",
+          "affiliations": [
+            {
+              "raw_affiliation_string": "Department of Geography and Environmental Sciences, Engineering and Environment, Northumbria University, Newcastle upon Tyne, UK",
+              "institution_ids": [
+                "https://openalex.org/I32394136"
+              ]
+            }
+          ]
+        },
+        {
+          "author_position": "middle",
+          "author": {
+            "id": "https://openalex.org/A5059188409",
+            "display_name": "Graham Coulby",
+            "orcid": "https://orcid.org/0000-0002-5970-864X",
+            "observed_orcids": [
+              "https://orcid.org/0000-0002-5970-864X"
+            ]
+          },
+          "institutions": [
+            {
+              "id": "https://openalex.org/I32394136",
+              "display_name": "Northumbria University",
+              "ror": "https://ror.org/049e6bc10",
+              "country_code": "GB",
+              "type": "education",
+              "lineage": [
+                "https://openalex.org/I32394136"
+              ]
+            }
+          ],
+          "countries": [
+            "GB"
+          ],
+          "is_corresponding": false,
+          "raw_author_name": "Graham Coulby",
+          "raw_affiliation_strings": [
+            "Department of Computer Information Sciences, Engineering and Environment, Northumbria University, Newcastle upon Tyne, UK"
+          ],
+          "raw_orcid": null,
+          "affiliations": [
+            {
+              "raw_affiliation_string": "Department of Computer Information Sciences, Engineering and Environment, Northumbria University, Newcastle upon Tyne, UK",
+              "institution_ids": [
+                "https://openalex.org/I32394136"
+              ]
+            }
+          ]
+        },
+        {
+          "author_position": "middle",
+          "author": {
+            "id": "https://openalex.org/A5048346530",
+            "display_name": "Michael E. Deary",
+            "orcid": "https://orcid.org/0000-0002-2370-1243",
+            "observed_orcids": [
+              "https://orcid.org/0000-0002-2370-1243"
+            ]
+          },
+          "institutions": [
+            {
+              "id": "https://openalex.org/I32394136",
+              "display_name": "Northumbria University",
+              "ror": "https://ror.org/049e6bc10",
+              "country_code": "GB",
+              "type": "education",
+              "lineage": [
+                "https://openalex.org/I32394136"
+              ]
+            }
+          ],
+          "countries": [
+            "GB"
+          ],
+          "is_corresponding": false,
+          "raw_author_name": "Michael E Deary",
+          "raw_affiliation_strings": [
+            "Department of Geography and Environmental Sciences, Engineering and Environment, Northumbria University, Newcastle upon Tyne, UK"
+          ],
+          "raw_orcid": "https://orcid.org/0000-0002-2370-1243",
+          "affiliations": [
+            {
+              "raw_affiliation_string": "Department of Geography and Environmental Sciences, Engineering and Environment, Northumbria University, Newcastle upon Tyne, UK",
+              "institution_ids": [
+                "https://openalex.org/I32394136"
+              ]
+            }
+          ]
+        },
+        {
+          "author_position": "middle",
+          "author": {
+            "id": "https://openalex.org/A5119556963",
+            "display_name": "Olivia Mansell",
+            "orcid": null,
+            "observed_orcids": []
+          },
+          "institutions": [
+            {
+              "id": "https://openalex.org/I32394136",
+              "display_name": "Northumbria University",
+              "ror": "https://ror.org/049e6bc10",
+              "country_code": "GB",
+              "type": "education",
+              "lineage": [
+                "https://openalex.org/I32394136"
+              ]
+            }
+          ],
+          "countries": [
+            "GB"
+          ],
+          "is_corresponding": false,
+          "raw_author_name": "Olivia Mansell",
+          "raw_affiliation_strings": [
+            "Department of Geography and Environmental Sciences, Engineering and Environment, Northumbria University, Newcastle upon Tyne, UK"
+          ],
+          "raw_orcid": null,
+          "affiliations": [
+            {
+              "raw_affiliation_string": "Department of Geography and Environmental Sciences, Engineering and Environment, Northumbria University, Newcastle upon Tyne, UK",
+              "institution_ids": [
+                "https://openalex.org/I32394136"
+              ]
+            }
+          ]
+        },
+        {
+          "author_position": "middle",
+          "author": {
+            "id": "https://openalex.org/A5003647423",
+            "display_name": "Anil Kumar Namdeo",
+            "orcid": "https://orcid.org/0000-0002-0982-9590",
+            "observed_orcids": [
+              "https://orcid.org/0000-0002-0982-9590"
+            ]
+          },
+          "institutions": [
+            {
+              "id": "https://openalex.org/I32394136",
+              "display_name": "Northumbria University",
+              "ror": "https://ror.org/049e6bc10",
+              "country_code": "GB",
+              "type": "education",
+              "lineage": [
+                "https://openalex.org/I32394136"
+              ]
+            }
+          ],
+          "countries": [
+            "GB"
+          ],
+          "is_corresponding": false,
+          "raw_author_name": "Anil Namdeo",
+          "raw_affiliation_strings": [
+            "Department of Geography and Environmental Sciences, Engineering and Environment, Northumbria University, Newcastle upon Tyne, UK"
+          ],
+          "raw_orcid": "https://orcid.org/0000-0002-0982-9590",
+          "affiliations": [
+            {
+              "raw_affiliation_string": "Department of Geography and Environmental Sciences, Engineering and Environment, Northumbria University, Newcastle upon Tyne, UK",
+              "institution_ids": [
+                "https://openalex.org/I32394136"
+              ]
+            }
+          ]
+        },
+        {
+          "author_position": "middle",
+          "author": {
+            "id": "https://openalex.org/A5021511462",
+            "display_name": "Richard McNally",
+            "orcid": "https://orcid.org/0000-0001-6685-6467",
+            "observed_orcids": [
+              "https://orcid.org/0000-0001-6685-6467"
+            ]
+          },
+          "institutions": [
+            {
+              "id": "https://openalex.org/I84884186",
+              "display_name": "Newcastle University",
+              "ror": "https://ror.org/01kj2bm70",
+              "country_code": "GB",
+              "type": "education",
+              "lineage": [
+                "https://openalex.org/I84884186"
+              ]
+            }
+          ],
+          "countries": [
+            "GB"
+          ],
+          "is_corresponding": false,
+          "raw_author_name": "Richard McNally",
+          "raw_affiliation_strings": [
+            "Population Health Sciences Institute, Faculty of Medical Sciences, Newcastle University, Newcastle upon Tyne, UK"
+          ],
+          "raw_orcid": "https://orcid.org/0000-0001-6685-6467",
+          "affiliations": [
+            {
+              "raw_affiliation_string": "Population Health Sciences Institute, Faculty of Medical Sciences, Newcastle University, Newcastle upon Tyne, UK",
+              "institution_ids": [
+                "https://openalex.org/I84884186"
+              ]
+            }
+          ]
+        },
+        {
+          "author_position": "middle",
+          "author": {
+            "id": "https://openalex.org/A5000940073",
+            "display_name": "Luke David Vale",
+            "orcid": "https://orcid.org/0000-0001-8574-8429",
+            "observed_orcids": [
+              "https://orcid.org/0000-0001-8574-8429"
+            ]
+          },
+          "institutions": [
+            {
+              "id": "https://openalex.org/I84884186",
+              "display_name": "Newcastle University",
+              "ror": "https://ror.org/01kj2bm70",
+              "country_code": "GB",
+              "type": "education",
+              "lineage": [
+                "https://openalex.org/I84884186"
+              ]
+            }
+          ],
+          "countries": [
+            "GB"
+          ],
+          "is_corresponding": false,
+          "raw_author_name": "Luke Vale",
+          "raw_affiliation_strings": [
+            "Population Health Sciences Institute, Faculty of Medical Sciences, Newcastle University, Newcastle upon Tyne, UK"
+          ],
+          "raw_orcid": "https://orcid.org/0000-0001-8574-8429",
+          "affiliations": [
+            {
+              "raw_affiliation_string": "Population Health Sciences Institute, Faculty of Medical Sciences, Newcastle University, Newcastle upon Tyne, UK",
+              "institution_ids": [
+                "https://openalex.org/I84884186"
+              ]
+            }
+          ]
+        },
+        {
+          "author_position": "middle",
+          "author": {
+            "id": null,
+            "display_name": "Adam Vaughan",
+            "orcid": null,
+            "observed_orcids": []
+          },
+          "institutions": [],
+          "countries": [],
+          "is_corresponding": false,
+          "raw_author_name": "Adam Vaughan",
+          "raw_affiliation_strings": [
+            "JDDK Architects, Milmount, Newcastle upon Tyne, UK"
+          ],
+          "raw_orcid": null,
+          "affiliations": [
+            {
+              "raw_affiliation_string": "JDDK Architects, Milmount, Newcastle upon Tyne, UK",
+              "institution_ids": []
+            }
+          ]
+        },
+        {
+          "author_position": "last",
+          "author": {
+            "id": null,
+            "display_name": "Colin White",
+            "orcid": null,
+            "observed_orcids": []
+          },
+          "institutions": [
+            {
+              "id": "https://openalex.org/I2800228927",
+              "display_name": "Newcastle City Council",
+              "ror": "https://ror.org/00ftam505",
+              "country_code": "GB",
+              "type": "government",
+              "lineage": [
+                "https://openalex.org/I2800228927"
+              ]
+            }
+          ],
+          "countries": [
+            "GB"
+          ],
+          "is_corresponding": false,
+          "raw_author_name": "Colin White",
+          "raw_affiliation_strings": [
+            "Senior Housing Renewal Officer, Fairer Housing Unit, Civic Centre, Newcastle upon Tyne, UK"
+          ],
+          "raw_orcid": null,
+          "affiliations": [
+            {
+              "raw_affiliation_string": "Senior Housing Renewal Officer, Fairer Housing Unit, Civic Centre, Newcastle upon Tyne, UK",
+              "institution_ids": [
+                "https://openalex.org/I2800228927"
+              ]
+            }
+          ]
+        }
+      ],
+      "institutions": [],
+      "countries_distinct_count": 1,
+      "institutions_distinct_count": 3,
+      "corresponding_author_ids": [],
+      "corresponding_institution_ids": [],
+      "apc_list": null,
+      "apc_paid": null,
+      "fwci": 0.0,
+      "has_fulltext": false,
+      "cited_by_count": 0,
+      "citation_normalized_percentile": {
+        "value": 0.1492565,
+        "is_in_top_1_percent": false,
+        "is_in_top_10_percent": false
+      },
+      "cited_by_percentile_year": null,
+      "biblio": {
+        "volume": "14",
+        "issue": "21",
+        "first_page": "1",
+        "last_page": "49"
+      },
+      "is_retracted": false,
+      "is_paratext": false,
+      "is_xpac": false,
+      "primary_topic": {
+        "id": "https://openalex.org/T11002",
+        "display_name": "Indoor Air Quality and Microbial Exposure",
+        "score": 0.9452999830245972,
+        "subfield": {
+          "id": "https://openalex.org/subfields/2307",
+          "display_name": "Health, Toxicology and Mutagenesis"
+        },
+        "field": {
+          "id": "https://openalex.org/fields/23",
+          "display_name": "Environmental Science"
+        },
+        "domain": {
+          "id": "https://openalex.org/domains/3",
+          "display_name": "Physical Sciences"
+        }
+      },
+      "topics": [
+        {
+          "id": "https://openalex.org/T11002",
+          "display_name": "Indoor Air Quality and Microbial Exposure",
+          "score": 0.9452999830245972,
+          "subfield": {
+            "id": "https://openalex.org/subfields/2307",
+            "display_name": "Health, Toxicology and Mutagenesis"
+          },
+          "field": {
+            "id": "https://openalex.org/fields/23",
+            "display_name": "Environmental Science"
+          },
+          "domain": {
+            "id": "https://openalex.org/domains/3",
+            "display_name": "Physical Sciences"
+          }
+        },
+        {
+          "id": "https://openalex.org/T11336",
+          "display_name": "Energy and Environment Impacts",
+          "score": 0.039900001138448715,
+          "subfield": {
+            "id": "https://openalex.org/subfields/2310",
+            "display_name": "Pollution"
+          },
+          "field": {
+            "id": "https://openalex.org/fields/23",
+            "display_name": "Environmental Science"
+          },
+          "domain": {
+            "id": "https://openalex.org/domains/3",
+            "display_name": "Physical Sciences"
+          }
+        },
+        {
+          "id": "https://openalex.org/T10121",
+          "display_name": "Building Energy and Comfort Optimization",
+          "score": 0.006599999964237213,
+          "subfield": {
+            "id": "https://openalex.org/subfields/2215",
+            "display_name": "Building and Construction"
+          },
+          "field": {
+            "id": "https://openalex.org/fields/22",
+            "display_name": "Engineering"
+          },
+          "domain": {
+            "id": "https://openalex.org/domains/3",
+            "display_name": "Physical Sciences"
+          }
+        }
+      ],
+      "keywords": [
+        {
+          "id": "https://openalex.org/keywords/indoor-air-quality",
+          "display_name": "indoor air quality",
+          "score": 0.9819999933242798
+        },
+        {
+          "id": "https://openalex.org/keywords/energy-retrofit",
+          "display_name": "energy retrofit",
+          "score": 0.7850000262260437
+        },
+        {
+          "id": "https://openalex.org/keywords/social-housing",
+          "display_name": "social housing",
+          "score": 0.8899999856948853
+        },
+        {
+          "id": "https://openalex.org/keywords/carbon-dioxide",
+          "display_name": "carbon dioxide",
+          "score": 0.7450000047683716
+        },
+        {
+          "id": "https://openalex.org/keywords/particulate-matter",
+          "display_name": "particulate matter",
+          "score": 0.9919999837875366
+        },
+        {
+          "id": "https://openalex.org/keywords/indoor-humidity",
+          "display_name": "indoor humidity",
+          "score": 0.7149999737739563
+        },
+        {
+          "id": "https://openalex.org/keywords/ventilation",
+          "display_name": "ventilation",
+          "score": 0.574999988079071
+        },
+        {
+          "id": "https://openalex.org/keywords/occupant-health",
+          "display_name": "occupant health",
+          "score": 0.7929999828338623
+        },
+        {
+          "id": "https://openalex.org/keywords/well-being",
+          "display_name": "well-being",
+          "score": 0.6880000233650208
+        },
+        {
+          "id": "https://openalex.org/keywords/mental-health",
+          "display_name": "mental health",
+          "score": 0.6209999918937683
+        },
+        {
+          "id": "https://openalex.org/keywords/physical-health",
+          "display_name": "physical health",
+          "score": 0.824999988079071
+        },
+        {
+          "id": "https://openalex.org/keywords/energy-consumption",
+          "display_name": "energy consumption",
+          "score": 0.597000002861023
+        },
+        {
+          "id": "https://openalex.org/keywords/building-envelope",
+          "display_name": "building envelope",
+          "score": 0.5809999704360962
+        },
+        {
+          "id": "https://openalex.org/keywords/decarbonization",
+          "display_name": "decarbonization",
+          "score": 0.6549999713897705
+        },
+        {
+          "id": "https://openalex.org/keywords/low-cost-air-quality-sensors",
+          "display_name": "low-cost air quality sensors",
+          "score": 0.6919999718666077
+        },
+        {
+          "id": "https://openalex.org/keywords/baseline-data-collection",
+          "display_name": "baseline data collection",
+          "score": 0.49300000071525574
+        },
+        {
+          "id": "https://openalex.org/keywords/community-belonging",
+          "display_name": "community belonging",
+          "score": 0.4729999899864197
+        },
+        {
+          "id": "https://openalex.org/keywords/capability-assessment",
+          "display_name": "capability assessment",
+          "score": 0.4169999957084656
+        }
+      ],
+      "concepts": [
+        {
+          "id": "https://openalex.org/C12725497",
+          "wikidata": "https://www.wikidata.org/wiki/Q810247",
+          "display_name": "Baseline (sea)",
+          "level": 2,
+          "score": 0.7591955661773682
+        },
+        {
+          "id": "https://openalex.org/C65469",
+          "wikidata": "https://www.wikidata.org/wiki/Q905504",
+          "display_name": "Indoor air quality",
+          "level": 2,
+          "score": 0.6410926580429077
+        },
+        {
+          "id": "https://openalex.org/C27415008",
+          "wikidata": "https://www.wikidata.org/wiki/Q7256382",
+          "display_name": "Psychological intervention",
+          "level": 2,
+          "score": 0.622822105884552
+        },
+        {
+          "id": "https://openalex.org/C99454951",
+          "wikidata": "https://www.wikidata.org/wiki/Q932068",
+          "display_name": "Environmental health",
+          "level": 1,
+          "score": 0.5281950235366821
+        },
+        {
+          "id": "https://openalex.org/C39432304",
+          "wikidata": "https://www.wikidata.org/wiki/Q188847",
+          "display_name": "Environmental science",
+          "level": 0,
+          "score": 0.4758864641189575
+        },
+        {
+          "id": "https://openalex.org/C126314574",
+          "wikidata": "https://www.wikidata.org/wiki/Q2364111",
+          "display_name": "Air quality index",
+          "level": 2,
+          "score": 0.44388407468795776
+        },
+        {
+          "id": "https://openalex.org/C74909509",
+          "wikidata": "https://www.wikidata.org/wiki/Q10387",
+          "display_name": "Gerontology",
+          "level": 1,
+          "score": 0.3319753408432007
+        },
+        {
+          "id": "https://openalex.org/C71924100",
+          "wikidata": "https://www.wikidata.org/wiki/Q11190",
+          "display_name": "Medicine",
+          "level": 0,
+          "score": 0.3230723738670349
+        },
+        {
+          "id": "https://openalex.org/C205649164",
+          "wikidata": "https://www.wikidata.org/wiki/Q1071",
+          "display_name": "Geography",
+          "level": 0,
+          "score": 0.20476040244102478
+        },
+        {
+          "id": "https://openalex.org/C87717796",
+          "wikidata": "https://www.wikidata.org/wiki/Q146326",
+          "display_name": "Environmental engineering",
+          "level": 1,
+          "score": 0.14891716837882996
+        },
+        {
+          "id": "https://openalex.org/C153294291",
+          "wikidata": "https://www.wikidata.org/wiki/Q25261",
+          "display_name": "Meteorology",
+          "level": 1,
+          "score": 0.10349756479263306
+        },
+        {
+          "id": "https://openalex.org/C86803240",
+          "wikidata": "https://www.wikidata.org/wiki/Q420",
+          "display_name": "Biology",
+          "level": 0,
+          "score": 0.07155090570449829
+        },
+        {
+          "id": "https://openalex.org/C505870484",
+          "wikidata": "https://www.wikidata.org/wiki/Q180538",
+          "display_name": "Fishery",
+          "level": 1,
+          "score": 0.0
+        },
+        {
+          "id": "https://openalex.org/C118552586",
+          "wikidata": "https://www.wikidata.org/wiki/Q7867",
+          "display_name": "Psychiatry",
+          "level": 1,
+          "score": 0.0
+        }
+      ],
+      "mesh": [
+        {
+          "descriptor_ui": "D004784",
+          "descriptor_name": "Environmental Monitoring",
+          "qualifier_ui": null,
+          "qualifier_name": null,
+          "is_major_topic": false
+        },
+        {
+          "descriptor_ui": "D004784",
+          "descriptor_name": "Environmental Monitoring",
+          "qualifier_ui": null,
+          "qualifier_name": null,
+          "is_major_topic": false
+        },
+        {
+          "descriptor_ui": "D004784",
+          "descriptor_name": "Environmental Monitoring",
+          "qualifier_ui": null,
+          "qualifier_name": null,
+          "is_major_topic": false
+        },
+        {
+          "descriptor_ui": "D006113",
+          "descriptor_name": "United Kingdom",
+          "qualifier_ui": null,
+          "qualifier_name": null,
+          "is_major_topic": false
+        },
+        {
+          "descriptor_ui": "D006113",
+          "descriptor_name": "United Kingdom",
+          "qualifier_ui": null,
+          "qualifier_name": null,
+          "is_major_topic": false
+        },
+        {
+          "descriptor_ui": "D006113",
+          "descriptor_name": "United Kingdom",
+          "qualifier_ui": null,
+          "qualifier_name": null,
+          "is_major_topic": false
+        },
+        {
+          "descriptor_ui": "D006798",
+          "descriptor_name": "Housing",
+          "qualifier_ui": "Q000592",
+          "qualifier_name": "standards",
+          "is_major_topic": true
+        },
+        {
+          "descriptor_ui": "D006798",
+          "descriptor_name": "Housing",
+          "qualifier_ui": "Q000592",
+          "qualifier_name": "standards",
+          "is_major_topic": true
+        },
+        {
+          "descriptor_ui": "D006798",
+          "descriptor_name": "Housing",
+          "qualifier_ui": "Q000592",
+          "qualifier_name": "standards",
+          "is_major_topic": true
+        },
+        {
+          "descriptor_ui": "D006801",
+          "descriptor_name": "Humans",
+          "qualifier_ui": null,
+          "qualifier_name": null,
+          "is_major_topic": false
+        },
+        {
+          "descriptor_ui": "D006801",
+          "descriptor_name": "Humans",
+          "qualifier_ui": null,
+          "qualifier_name": null,
+          "is_major_topic": false
+        },
+        {
+          "descriptor_ui": "D006801",
+          "descriptor_name": "Humans",
+          "qualifier_ui": null,
+          "qualifier_name": null,
+          "is_major_topic": false
+        },
+        {
+          "descriptor_ui": "D014691",
+          "descriptor_name": "Ventilation",
+          "qualifier_ui": null,
+          "qualifier_name": null,
+          "is_major_topic": false
+        },
+        {
+          "descriptor_ui": "D014691",
+          "descriptor_name": "Ventilation",
+          "qualifier_ui": null,
+          "qualifier_name": null,
+          "is_major_topic": false
+        },
+        {
+          "descriptor_ui": "D014691",
+          "descriptor_name": "Ventilation",
+          "qualifier_ui": null,
+          "qualifier_name": null,
+          "is_major_topic": false
+        },
+        {
+          "descriptor_ui": "D016902",
+          "descriptor_name": "Air Pollution, Indoor",
+          "qualifier_ui": "Q000032",
+          "qualifier_name": "analysis",
+          "is_major_topic": true
+        },
+        {
+          "descriptor_ui": "D016902",
+          "descriptor_name": "Air Pollution, Indoor",
+          "qualifier_ui": "Q000032",
+          "qualifier_name": "analysis",
+          "is_major_topic": true
+        },
+        {
+          "descriptor_ui": "D016902",
+          "descriptor_name": "Air Pollution, Indoor",
+          "qualifier_ui": "Q000032",
+          "qualifier_name": "analysis",
+          "is_major_topic": true
+        },
+        {
+          "descriptor_ui": "D016902",
+          "descriptor_name": "Air Pollution, Indoor",
+          "qualifier_ui": "Q000517",
+          "qualifier_name": "prevention & control",
+          "is_major_topic": true
+        },
+        {
+          "descriptor_ui": "D016902",
+          "descriptor_name": "Air Pollution, Indoor",
+          "qualifier_ui": "Q000517",
+          "qualifier_name": "prevention & control",
+          "is_major_topic": true
+        },
+        {
+          "descriptor_ui": "D016902",
+          "descriptor_name": "Air Pollution, Indoor",
+          "qualifier_ui": "Q000517",
+          "qualifier_name": "prevention & control",
+          "is_major_topic": true
+        },
+        {
+          "descriptor_ui": "D052638",
+          "descriptor_name": "Particulate Matter",
+          "qualifier_ui": "Q000032",
+          "qualifier_name": "analysis",
+          "is_major_topic": false
+        },
+        {
+          "descriptor_ui": "D052638",
+          "descriptor_name": "Particulate Matter",
+          "qualifier_ui": "Q000032",
+          "qualifier_name": "analysis",
+          "is_major_topic": false
+        },
+        {
+          "descriptor_ui": "D052638",
+          "descriptor_name": "Particulate Matter",
+          "qualifier_ui": "Q000032",
+          "qualifier_name": "analysis",
+          "is_major_topic": false
+        }
+      ],
+      "locations_count": 3,
+      "locations": [
+        {
+          "id": "doi:10.3310/soso8851",
+          "is_oa": true,
+          "landing_page_url": "https://doi.org/10.3310/soso8851",
+          "pdf_url": null,
+          "source": {
+            "id": "https://openalex.org/S4210192240",
+            "display_name": "Public Health Research",
+            "issn_l": "2050-4381",
+            "issn": [
+              "2050-4381",
+              "2050-439X"
+            ],
+            "is_oa": true,
+            "is_in_doaj": true,
+            "is_core": true,
+            "listed_in": [
+              "cwts-core",
+              "doaj",
+              "medline"
+            ],
+            "host_organization": "https://openalex.org/P4310311817",
+            "host_organization_name": "NIHR Journals Library",
+            "host_organization_lineage": [
+              "https://openalex.org/P4310311817"
+            ],
+            "host_organization_lineage_names": [
+              "NIHR Journals Library"
+            ],
+            "type": "journal"
+          },
+          "license": "cc-by",
+          "license_id": "https://openalex.org/licenses/cc-by",
+          "version": "publishedVersion",
+          "is_accepted": true,
+          "is_published": true,
+          "raw_source_name": "Public Health Research",
+          "raw_type": "journal-article"
+        },
+        {
+          "id": "pmid:40908841",
+          "is_oa": false,
+          "landing_page_url": "https://pubmed.ncbi.nlm.nih.gov/40908841",
+          "pdf_url": null,
+          "source": {
+            "id": "https://openalex.org/S4306525036",
+            "display_name": "PubMed",
+            "issn_l": null,
+            "issn": null,
+            "is_oa": false,
+            "is_in_doaj": false,
+            "is_core": false,
+            "listed_in": [],
+            "host_organization": "https://openalex.org/I1299303238",
+            "host_organization_name": "National Institutes of Health",
+            "host_organization_lineage": [
+              "https://openalex.org/I1299303238"
+            ],
+            "host_organization_lineage_names": [],
+            "type": "repository"
+          },
+          "license": null,
+          "license_id": null,
+          "version": "publishedVersion",
+          "is_accepted": true,
+          "is_published": true,
+          "raw_source_name": "Public health research (Southampton, England)",
+          "raw_type": "Journal Article"
+        },
+        {
+          "id": "pmh:oai:doaj.org/article:d0251aff8bcb4bb5b8c64f7b2ba4e2c4",
+          "is_oa": true,
+          "landing_page_url": "https://doaj.org/article/d0251aff8bcb4bb5b8c64f7b2ba4e2c4",
+          "pdf_url": null,
+          "source": {
+            "id": "https://openalex.org/S4306401280",
+            "display_name": "DOAJ (DOAJ: Directory of Open Access Journals)",
+            "issn_l": null,
+            "issn": null,
+            "is_oa": false,
+            "is_in_doaj": false,
+            "is_core": false,
+            "listed_in": [],
+            "host_organization": null,
+            "host_organization_name": null,
+            "host_organization_lineage": [],
+            "host_organization_lineage_names": [],
+            "type": "repository"
+          },
+          "license": "cc-by-sa",
+          "license_id": "https://openalex.org/licenses/cc-by-sa",
+          "version": "submittedVersion",
+          "is_accepted": false,
+          "is_published": false,
+          "raw_source_name": "Public Health Research, Vol 14, Iss 21 (2025)",
+          "raw_type": "article"
+        }
+      ],
+      "best_oa_location": {
+        "id": "doi:10.3310/soso8851",
+        "is_oa": true,
+        "landing_page_url": "https://doi.org/10.3310/soso8851",
+        "pdf_url": null,
+        "source": {
+          "id": "https://openalex.org/S4210192240",
+          "display_name": "Public Health Research",
+          "issn_l": "2050-4381",
+          "issn": [
+            "2050-4381",
+            "2050-439X"
+          ],
+          "is_oa": true,
+          "is_in_doaj": true,
+          "is_core": true,
+          "listed_in": [
+            "cwts-core",
+            "doaj",
+            "medline"
+          ],
+          "host_organization": "https://openalex.org/P4310311817",
+          "host_organization_name": "NIHR Journals Library",
+          "host_organization_lineage": [
+            "https://openalex.org/P4310311817"
+          ],
+          "host_organization_lineage_names": [
+            "NIHR Journals Library"
+          ],
+          "type": "journal"
+        },
+        "license": "cc-by",
+        "license_id": "https://openalex.org/licenses/cc-by",
+        "version": "publishedVersion",
+        "is_accepted": true,
+        "is_published": true,
+        "raw_source_name": "Public Health Research",
+        "raw_type": "journal-article"
+      },
+      "sustainable_development_goals": [
+        {
+          "id": "https://metadata.un.org/sdg/3",
+          "display_name": "Good health and well-being",
+          "score": 0.979200005531311
+        },
+        {
+          "id": "https://metadata.un.org/sdg/11",
+          "display_name": "Sustainable cities and communities",
+          "score": 0.5142999887466431
+        },
+        {
+          "id": "https://metadata.un.org/sdg/13",
+          "display_name": "Climate action",
+          "score": 0.46149998903274536
+        }
+      ],
+      "sustainable_development_goals_aurora": [],
+      "study_designs": [],
+      "awards": [
+        {
+          "id": "https://openalex.org/G2997554280",
+          "display_name": null,
+          "funder_award_id": "NIHR153617",
+          "funder_id": "https://openalex.org/F4320334782",
+          "funder_display_name": "Public Health Research Programme"
+        }
+      ],
+      "funders": [
+        {
+          "id": "https://openalex.org/F4320334782",
+          "display_name": "Public Health Research Programme",
+          "ror": "https://ror.org/0187kwz08"
+        }
+      ],
+      "has_content": {
+        "grobid_xml": false,
+        "pdf": false
+      },
+      "content_urls": null,
+      "referenced_works_count": 41,
+      "referenced_works": [
+        "https://openalex.org/W1194800799",
+        "https://openalex.org/W1859455957",
+        "https://openalex.org/W1978098093",
+        "https://openalex.org/W1979198272",
+        "https://openalex.org/W1986732425",
+        "https://openalex.org/W2007813766",
+        "https://openalex.org/W2012479964",
+        "https://openalex.org/W2020766450",
+        "https://openalex.org/W2072543753",
+        "https://openalex.org/W2084287561",
+        "https://openalex.org/W2086295893",
+        "https://openalex.org/W2120199739",
+        "https://openalex.org/W2130689588",
+        "https://openalex.org/W2274928552",
+        "https://openalex.org/W2322501625",
+        "https://openalex.org/W2766318212",
+        "https://openalex.org/W2797612288",
+        "https://openalex.org/W2900549631",
+        "https://openalex.org/W2912192788",
+        "https://openalex.org/W2921073139",
+        "https://openalex.org/W3001049522",
+        "https://openalex.org/W3043264105",
+        "https://openalex.org/W3092718471",
+        "https://openalex.org/W3108960196",
+        "https://openalex.org/W3109809477",
+        "https://openalex.org/W3121660083",
+        "https://openalex.org/W3136365454",
+        "https://openalex.org/W3175667390",
+        "https://openalex.org/W3197880916",
+        "https://openalex.org/W3199775394",
+        "https://openalex.org/W3207879740",
+        "https://openalex.org/W3211239373",
+        "https://openalex.org/W3213600548",
+        "https://openalex.org/W3213962715",
+        "https://openalex.org/W3216082287",
+        "https://openalex.org/W4210813723",
+        "https://openalex.org/W4387520507",
+        "https://openalex.org/W4388491729",
+        "https://openalex.org/W4400391916",
+        "https://openalex.org/W4401227432",
+        "https://openalex.org/W4405643797"
+      ],
+      "related_works": [
+        "https://openalex.org/W4298119743",
+        "https://openalex.org/W3213217974",
+        "https://openalex.org/W3041989168",
+        "https://openalex.org/W2528532537",
+        "https://openalex.org/W2915250610",
+        "https://openalex.org/W608226940",
+        "https://openalex.org/W4319016010",
+        "https://openalex.org/W3133911088",
+        "https://openalex.org/W1863944408",
+        "https://openalex.org/W2582570941"
+      ],
+      "abstract_inverted_index": {
+        "Background:": [
+          0
+        ],
+        "Tackling": [
+          1
+        ],
+        "climate": [
+          2
+        ],
+        "change,": [
+          3
+        ],
+        "together": [
+          4
+        ],
+        "with": [
+          5,
+          41,
+          179,
+          251,
+          371
+        ],
+        "improving": [
+          6
+        ],
+        "indoor": [
+          7,
+          89,
+          119,
+          152,
+          302
+        ],
+        "air": [
+          8,
+          92,
+          153,
+          310
+        ],
+        "quality,": [
+          9
+        ],
+        "offers": [
+          10
+        ],
+        "a": [
+          11,
+          55,
+          86,
+          211,
+          258,
+          269,
+          288
+        ],
+        "significant": [
+          12
+        ],
+        "opportunity": [
+          13
+        ],
+        "to": [
+          14,
+          25,
+          145,
+          149,
+          188,
+          196,
+          283,
+          329,
+          358
+        ],
+        "improve": [
+          15
+        ],
+        "residents'": [
+          16
+        ],
+        "health": [
+          17,
+          109,
+          191,
+          213,
+          233
+        ],
+        "and": [
+          18,
+          45,
+          53,
+          61,
+          71,
+          90,
+          104,
+          110,
+          136,
+          161,
+          177,
+          192,
+          294,
+          296,
+          303,
+          314,
+          331,
+          351,
+          360,
+          389
+        ],
+        "well-being.": [
+          19,
+          111
+        ],
+        "This": [
+          20,
+          377
+        ],
+        "requires": [
+          21
+        ],
+        "the": [
+          22,
+          42,
+          46,
+          126,
+          140,
+          170,
+          189,
+          197,
+          216,
+          221,
+          227,
+          231,
+          245,
+          249,
+          275,
+          284,
+          325,
+          333,
+          352,
+          356,
+          368,
+          384
+        ],
+        "evidence": [
+          23
+        ],
+        "base": [
+          24
+        ],
+        "inform": [
+          26,
+          330,
+          361
+        ],
+        "an": [
+          27
+        ],
+        "energy-efficient": [
+          28,
+          37,
+          336
+        ],
+        "retrofit": [
+          29,
+          365
+        ],
+        "design.": [
+          30
+        ],
+        "Objectives:": [
+          31
+        ],
+        "=": [
+          32
+        ],
+        "30": [
+          33,
+          58
+        ],
+        "homes": [
+          34,
+          84,
+          164,
+          182
+        ],
+        "ahead": [
+          35
+        ],
+        "of": [
+          36,
+          121,
+          131,
+          157,
+          226,
+          248,
+          261,
+          272,
+          291,
+          335,
+          345,
+          363
+        ],
+        "retrofitting.": [
+          38
+        ],
+        "Methods:": [
+          39
+        ],
+        "Working": [
+          40
+        ],
+        "local": [
+          43
+        ],
+        "council": [
+          44,
+          364
+        ],
+        "community,": [
+          47
+        ],
+        "this": [
+          48,
+          184,
+          202,
+          322,
+          339
+        ],
+        "baseline": [
+          49,
+          190,
+          318
+        ],
+        "study": [
+          50,
+          127,
+          279,
+          353
+        ],
+        "(In2Air)": [
+          51
+        ],
+        "developed": [
+          52,
+          349
+        ],
+        "deployed": [
+          54
+        ],
+        "protocol": [
+          56,
+          350
+        ],
+        "across": [
+          57,
+          124,
+          274,
+          287,
+          338,
+          367
+        ],
+        "single-storey": [
+          59
+        ],
+        "one-": [
+          60
+        ],
+        "two-bedroom": [
+          62
+        ],
+        "properties": [
+          63
+        ],
+        "owned": [
+          64
+        ],
+        "by": [
+          65,
+          73,
+          118,
+          383
+        ],
+        "Newcastle": [
+          66
+        ],
+        "City": [
+          67
+        ],
+        "Council,": [
+          68
+        ],
+        "United": [
+          69,
+          369
+        ],
+        "Kingdom,": [
+          70
+        ],
+        "occupied": [
+          72
+        ],
+        "tenants": [
+          74
+        ],
+        "(>": [
+          75,
+          223
+        ],
+        "55": [
+          76,
+          224
+        ],
+        "years).": [
+          77
+        ],
+        "The": [
+          78,
+          129,
+          263,
+          317,
+          348
+        ],
+        "following": [
+          79
+        ],
+        "data": [
+          80,
+          200
+        ],
+        "were": [
+          81
+        ],
+        "collected": [
+          82
+        ],
+        "before": [
+          83
+        ],
+        "underwent": [
+          85
+        ],
+        "fabric-first": [
+          87
+        ],
+        "intervention:": [
+          88
+        ],
+        "outdoor": [
+          91,
+          304
+        ],
+        "quality": [
+          93,
+          154,
+          311
+        ],
+        "(for": [
+          94,
+          99
+        ],
+        "~3": [
+          95
+        ],
+        "weeks);": [
+          96
+        ],
+        "energy": [
+          97
+        ],
+        "consumption": [
+          98
+        ],
+        "~12": [
+          100
+        ],
+        "months);": [
+          101
+        ],
+        "occupant": [
+          102
+        ],
+        "behaviour": [
+          103
+        ],
+        "home-specific": [
+          105
+        ],
+        "details;": [
+          106
+        ],
+        "self-reported": [
+          107
+        ],
+        "general": [
+          108
+        ],
+        "Results:": [
+          112
+        ],
+        ".": [
+          113
+        ],
+        "Moderate-to-good": [
+          114
+        ],
+        "ventilation": [
+          115
+        ],
+        "was": [
+          116,
+          239
+        ],
+        "suggested": [
+          117
+        ],
+        "concentrations": [
+          120
+        ],
+        "carbon": [
+          122,
+          134,
+          158
+        ],
+        "dioxide": [
+          123,
+          135
+        ],
+        "all": [
+          125
+        ],
+        "homes.": [
+          128
+        ],
+        "lack": [
+          130
+        ],
+        "correlation": [
+          132
+        ],
+        "between": [
+          133,
+          175
+        ],
+        "particulate": [
+          137,
+          147
+        ],
+        "matter": [
+          138,
+          148
+        ],
+        "highlights": [
+          139
+        ],
+        "need": [
+          141
+        ],
+        "for": [
+          142,
+          201,
+          235,
+          387
+        ],
+        "housing": [
+          143,
+          341
+        ],
+        "professionals": [
+          144
+        ],
+        "add": [
+          146
+        ],
+        "their": [
+          150,
+          372
+        ],
+        "usual": [
+          151
+        ],
+        "assessment": [
+          155
+        ],
+        "suite": [
+          156
+        ],
+        "dioxide,": [
+          159
+        ],
+        "temperature": [
+          160
+        ],
+        "humidity.": [
+          162
+        ],
+        "Most": [
+          163
+        ],
+        "had": [
+          165,
+          210
+        ],
+        "mean": [
+          166
+        ],
+        "humidity": [
+          167
+        ],
+        "levels": [
+          168
+        ],
+        "within": [
+          169
+        ],
+        "range": [
+          171
+        ],
+        "considered": [
+          172
+        ],
+        "healthy": [
+          173
+        ],
+        "(i.e.": [
+          174
+        ],
+        "40%": [
+          176
+        ],
+        "60%),": [
+          178
+        ],
+        "only": [
+          180
+        ],
+        "three": [
+          181
+        ],
+        "above": [
+          183,
+          242
+        ],
+        "range.": [
+          185
+        ],
+        "With": [
+          186
+        ],
+        "respect": [
+          187
+        ],
+        "well-being": [
+          193
+        ],
+        "scores,": [
+          194
+        ],
+        "compared": [
+          195
+        ],
+        "comparison": [
+          198
+        ],
+        "population,": [
+          199
+        ],
+        "initial": [
+          203
+        ],
+        "time": [
+          204
+        ],
+        "point": [
+          205
+        ],
+        "indicated": [
+          206
+        ],
+        "most": [
+          207,
+          236
+        ],
+        "participants": [
+          208,
+          237
+        ],
+        "(83%)": [
+          209
+        ],
+        "physical": [
+          212,
+          246
+        ],
+        "score": [
+          214,
+          234,
+          267
+        ],
+        "below": [
+          215
+        ],
+        "norm,": [
+          217
+        ],
+        "which": [
+          218,
+          328
+        ],
+        "likely": [
+          219
+        ],
+        "reflects": [
+          220
+        ],
+        "age": [
+          222
+        ],
+        "years)": [
+          225
+        ],
+        "cohort.": [
+          228,
+          276
+        ],
+        "In": [
+          229
+        ],
+        "comparison,": [
+          230
+        ],
+        "mental": [
+          232
+        ],
+        "(74%)": [
+          238
+        ],
+        "at": [
+          240,
+          301
+        ],
+        "or": [
+          241
+        ],
+        "average.": [
+          243
+        ],
+        "Here,": [
+          244
+        ],
+        "layout": [
+          247
+        ],
+        "estate": [
+          250
+        ],
+        "communal": [
+          252
+        ],
+        "amenities": [
+          253
+        ],
+        "may": [
+          254
+        ],
+        "well": [
+          255
+        ],
+        "be": [
+          256
+        ],
+        "engendering": [
+          257
+        ],
+        "positive": [
+          259
+        ],
+        "sense": [
+          260
+        ],
+        "belonging.": [
+          262
+        ],
+        "mean/median": [
+          264
+        ],
+        "ICEpop": [
+          265
+        ],
+        "CAPability": [
+          266
+        ],
+        "suggests": [
+          268
+        ],
+        "high": [
+          270
+        ],
+        "level": [
+          271
+        ],
+        "capability": [
+          273
+        ],
+        "Limitations:": [
+          277
+        ],
+        "Our": [
+          278
+        ],
+        "focused": [
+          280
+        ],
+        "on": [
+          281,
+          327
+        ],
+        "changes": [
+          282
+        ],
+        "building": [
+          285,
+          292
+        ],
+        "envelope": [
+          286
+        ],
+        "limited": [
+          289
+        ],
+        "number": [
+          290,
+          399
+        ],
+        "types": [
+          293
+        ],
+        "parameters": [
+          295
+        ],
+        "utilised": [
+          297
+        ],
+        "fixed,": [
+          298
+        ],
+        "low-cost": [
+          299
+        ],
+        "sensors": [
+          300
+        ],
+        "monitoring": [
+          305
+        ],
+        "locations": [
+          306
+        ],
+        "rather": [
+          307
+        ],
+        "than": [
+          308
+        ],
+        "personal": [
+          309
+        ],
+        "monitors.": [
+          312
+        ],
+        "Conclusions": [
+          313
+        ],
+        "future": [
+          315,
+          346
+        ],
+        "work:": [
+          316
+        ],
+        "conditions": [
+          319
+        ],
+        "reported": [
+          320
+        ],
+        "in": [
+          321
+        ],
+        "article": [
+          323,
+          378
+        ],
+        "provide": [
+          324
+        ],
+        "basis": [
+          326
+        ],
+        "evaluate": [
+          332
+        ],
+        "effects": [
+          334
+        ],
+        "refurbishment": [
+          337
+        ],
+        "social": [
+          340
+        ],
+        "stock": [
+          342
+        ],
+        "as": [
+          343,
+          397
+        ],
+        "part": [
+          344
+        ],
+        "research.": [
+          347
+        ],
+        "findings": [
+          354
+        ],
+        "offer": [
+          355
+        ],
+        "potential": [
+          357
+        ],
+        "support": [
+          359
+        ],
+        "decision-making": [
+          362
+        ],
+        "teams": [
+          366
+        ],
+        "Kingdom": [
+          370
+        ],
+        "ongoing": [
+          373
+        ],
+        "decarbonisation": [
+          374
+        ],
+        "plans.": [
+          375
+        ],
+        "Funding:": [
+          376
+        ],
+        "presents": [
+          379
+        ],
+        "independent": [
+          380
+        ],
+        "research": [
+          381
+        ],
+        "funded": [
+          382
+        ],
+        "National": [
+          385
+        ],
+        "Institute": [
+          386
+        ],
+        "Health": [
+          388,
+          394
+        ],
+        "Care": [
+          390
+        ],
+        "Research": [
+          391,
+          395
+        ],
+        "(NIHR)": [
+          392
+        ],
+        "Public": [
+          393
+        ],
+        "programme": [
+          396
+        ],
+        "award": [
+          398
+        ],
+        "NIHR153617.": [
+          400
+        ]
+      },
+      "counts_by_year": [],
+      "updated_date": "2026-10-09T09:14:12.587421",
+      "created_date": "2025-10-10T00:00:00"
+    }
+  }
+}

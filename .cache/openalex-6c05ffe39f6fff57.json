@@ -1,0 +1,1146 @@
+{
+  "parts": {
+    "api": "openalex-work",
+    "doi": "10.1177/0958305X221140569",
+    "shape": 1
+  },
+  "value": {
+    "found": true,
+    "work": {
+      "id": "https://openalex.org/W4311060966",
+      "doi": "https://doi.org/10.1177/0958305x221140569",
+      "title": "Forecasting United Kingdom's energy consumption using machine learning and hybrid approaches",
+      "display_name": "Forecasting United Kingdom's energy consumption using machine learning and hybrid approaches",
+      "publication_year": 2022,
+      "publication_date": "2022-11-30",
+      "ids": {
+        "openalex": "https://openalex.org/W4311060966",
+        "doi": "https://doi.org/10.1177/0958305x221140569"
+      },
+      "language": "en",
+      "primary_location": {
+        "id": "doi:10.1177/0958305x221140569",
+        "is_oa": false,
+        "landing_page_url": "https://doi.org/10.1177/0958305x221140569",
+        "pdf_url": null,
+        "source": {
+          "id": "https://openalex.org/S184363771",
+          "display_name": "Energy & Environment",
+          "issn_l": "0958-305X",
+          "issn": [
+            "0958-305X",
+            "2048-4070"
+          ],
+          "is_oa": false,
+          "is_in_doaj": false,
+          "is_core": true,
+          "listed_in": [
+            "abdc-c",
+            "cwts-core",
+            "jufo-1",
+            "norway-1"
+          ],
+          "host_organization": "https://openalex.org/P4310320017",
+          "host_organization_name": "SAGE Publishing",
+          "host_organization_lineage": [
+            "https://openalex.org/P4310320017"
+          ],
+          "host_organization_lineage_names": [
+            "SAGE Publishing"
+          ],
+          "type": "journal"
+        },
+        "license": null,
+        "license_id": null,
+        "version": "publishedVersion",
+        "is_accepted": true,
+        "is_published": true,
+        "raw_source_name": "Energy &amp; Environment",
+        "raw_type": "journal-article"
+      },
+      "type": "article",
+      "indexed_in": [
+        "crossref"
+      ],
+      "open_access": {
+        "is_oa": false,
+        "oa_status": "closed",
+        "oa_url": null,
+        "any_repository_has_fulltext": false
+      },
+      "authorships": [
+        {
+          "author_position": "first",
+          "author": {
+            "id": "https://openalex.org/A5112005808",
+            "display_name": "DAHIRU ABDULLAHI BALA",
+            "orcid": "https://orcid.org/0000-0003-1802-9955",
+            "observed_orcids": [
+              "https://orcid.org/0000-0003-1802-9955"
+            ]
+          },
+          "institutions": [],
+          "countries": [],
+          "is_corresponding": false,
+          "raw_author_name": "Dahiru A Bala",
+          "raw_affiliation_strings": [
+            "Intelligence, Strategic Data Mining and Analysis Department, Federal Inland Revenue Service, Abuja, Nigeria"
+          ],
+          "raw_orcid": null,
+          "affiliations": [
+            {
+              "raw_affiliation_string": "Intelligence, Strategic Data Mining and Analysis Department, Federal Inland Revenue Service, Abuja, Nigeria",
+              "institution_ids": []
+            }
+          ]
+        },
+        {
+          "author_position": "last",
+          "author": {
+            "id": "https://openalex.org/A5002673745",
+            "display_name": "Mohammed Shuaibu",
+            "orcid": "https://orcid.org/0000-0001-7684-753X",
+            "observed_orcids": [
+              "https://orcid.org/0000-0001-7684-753X"
+            ]
+          },
+          "institutions": [
+            {
+              "id": "https://openalex.org/I8033065",
+              "display_name": "University of Abuja",
+              "ror": "https://ror.org/007e69832",
+              "country_code": "NG",
+              "type": "education",
+              "lineage": [
+                "https://openalex.org/I8033065"
+              ]
+            }
+          ],
+          "countries": [
+            "NG"
+          ],
+          "is_corresponding": true,
+          "raw_author_name": "Mohammed Shuaibu",
+          "raw_affiliation_strings": [
+            "Department of Economics, Faculty of Social Sciences, University of Abuja, Abuja, Nigeria"
+          ],
+          "raw_orcid": "https://orcid.org/0000-0001-7684-753X",
+          "affiliations": [
+            {
+              "raw_affiliation_string": "Department of Economics, Faculty of Social Sciences, University of Abuja, Abuja, Nigeria",
+              "institution_ids": [
+                "https://openalex.org/I8033065"
+              ]
+            }
+          ]
+        }
+      ],
+      "institutions": [],
+      "countries_distinct_count": 1,
+      "institutions_distinct_count": 1,
+      "corresponding_author_ids": [
+        "https://openalex.org/A5002673745"
+      ],
+      "corresponding_institution_ids": [
+        "https://openalex.org/I8033065"
+      ],
+      "apc_list": {
+        "value": 3250,
+        "currency": "USD",
+        "value_usd": 3250
+      },
+      "apc_paid": null,
+      "fwci": 0.6788,
+      "has_fulltext": false,
+      "cited_by_count": 11,
+      "citation_normalized_percentile": {
+        "value": 0.63326426,
+        "is_in_top_1_percent": false,
+        "is_in_top_10_percent": false
+      },
+      "cited_by_percentile_year": {
+        "min": 89,
+        "max": 99
+      },
+      "biblio": {
+        "volume": "35",
+        "issue": "3",
+        "first_page": "1493",
+        "last_page": "1531"
+      },
+      "is_retracted": false,
+      "is_paratext": false,
+      "is_xpac": false,
+      "primary_topic": {
+        "id": "https://openalex.org/T11052",
+        "display_name": "Energy Load and Power Forecasting",
+        "score": 0.7339000105857849,
+        "subfield": {
+          "id": "https://openalex.org/subfields/2208",
+          "display_name": "Electrical and Electronic Engineering"
+        },
+        "field": {
+          "id": "https://openalex.org/fields/22",
+          "display_name": "Engineering"
+        },
+        "domain": {
+          "id": "https://openalex.org/domains/3",
+          "display_name": "Physical Sciences"
+        }
+      },
+      "topics": [
+        {
+          "id": "https://openalex.org/T11052",
+          "display_name": "Energy Load and Power Forecasting",
+          "score": 0.7339000105857849,
+          "subfield": {
+            "id": "https://openalex.org/subfields/2208",
+            "display_name": "Electrical and Electronic Engineering"
+          },
+          "field": {
+            "id": "https://openalex.org/fields/22",
+            "display_name": "Engineering"
+          },
+          "domain": {
+            "id": "https://openalex.org/domains/3",
+            "display_name": "Physical Sciences"
+          }
+        },
+        {
+          "id": "https://openalex.org/T11918",
+          "display_name": "Forecasting Techniques and Applications",
+          "score": 0.2378000020980835,
+          "subfield": {
+            "id": "https://openalex.org/subfields/1803",
+            "display_name": "Management Science and Operations Research"
+          },
+          "field": {
+            "id": "https://openalex.org/fields/18",
+            "display_name": "Decision Sciences"
+          },
+          "domain": {
+            "id": "https://openalex.org/domains/2",
+            "display_name": "Social Sciences"
+          }
+        },
+        {
+          "id": "https://openalex.org/T12368",
+          "display_name": "Grey System Theory Applications",
+          "score": 0.007600000128149986,
+          "subfield": {
+            "id": "https://openalex.org/subfields/1803",
+            "display_name": "Management Science and Operations Research"
+          },
+          "field": {
+            "id": "https://openalex.org/fields/18",
+            "display_name": "Decision Sciences"
+          },
+          "domain": {
+            "id": "https://openalex.org/domains/2",
+            "display_name": "Social Sciences"
+          }
+        }
+      ],
+      "keywords": [
+        {
+          "id": "https://openalex.org/keywords/load-forecasting",
+          "display_name": "load forecasting",
+          "score": 0.9980000257492065
+        },
+        {
+          "id": "https://openalex.org/keywords/electricity-consumption",
+          "display_name": "electricity consumption",
+          "score": 0.8799999952316284
+        },
+        {
+          "id": "https://openalex.org/keywords/gas-consumption",
+          "display_name": "gas consumption",
+          "score": 0.9419999718666077
+        },
+        {
+          "id": "https://openalex.org/keywords/hybrid-forecasting-model",
+          "display_name": "hybrid forecasting model",
+          "score": 0.796999990940094
+        },
+        {
+          "id": "https://openalex.org/keywords/seasonal-arima-model",
+          "display_name": "seasonal ARIMA",
+          "score": 0.9079999923706055
+        },
+        {
+          "id": "https://openalex.org/keywords/tbats",
+          "display_name": "TBATS",
+          "score": 0.9710000157356262
+        },
+        {
+          "id": "https://openalex.org/keywords/forecast-combination",
+          "display_name": "forecast combination",
+          "score": 0.656000018119812
+        },
+        {
+          "id": "https://openalex.org/keywords/neural-network",
+          "display_name": "artificial neural networks",
+          "score": 0.671999990940094
+        },
+        {
+          "id": "https://openalex.org/keywords/support-vector-regression",
+          "display_name": "support vector regression",
+          "score": 1.0
+        },
+        {
+          "id": "https://openalex.org/keywords/dynamic-regression-models",
+          "display_name": "dynamic regression",
+          "score": 0.7419999837875366
+        },
+        {
+          "id": "https://openalex.org/keywords/energy-policy",
+          "display_name": "energy policy",
+          "score": 0.4690000116825104
+        }
+      ],
+      "concepts": [
+        {
+          "id": "https://openalex.org/C24338571",
+          "wikidata": "https://www.wikidata.org/wiki/Q2566298",
+          "display_name": "Autoregressive integrated moving average",
+          "level": 3,
+          "score": 0.778261661529541
+        },
+        {
+          "id": "https://openalex.org/C30772137",
+          "wikidata": "https://www.wikidata.org/wiki/Q5164762",
+          "display_name": "Consumption (sociology)",
+          "level": 2,
+          "score": 0.6831449866294861
+        },
+        {
+          "id": "https://openalex.org/C206658404",
+          "wikidata": "https://www.wikidata.org/wiki/Q12725",
+          "display_name": "Electricity",
+          "level": 2,
+          "score": 0.5693204998970032
+        },
+        {
+          "id": "https://openalex.org/C149782125",
+          "wikidata": "https://www.wikidata.org/wiki/Q160039",
+          "display_name": "Econometrics",
+          "level": 1,
+          "score": 0.5245419144630432
+        },
+        {
+          "id": "https://openalex.org/C2780165032",
+          "wikidata": "https://www.wikidata.org/wiki/Q16869822",
+          "display_name": "Energy consumption",
+          "level": 2,
+          "score": 0.4920172393321991
+        },
+        {
+          "id": "https://openalex.org/C50644808",
+          "wikidata": "https://www.wikidata.org/wiki/Q192776",
+          "display_name": "Artificial neural network",
+          "level": 2,
+          "score": 0.46731632947921753
+        },
+        {
+          "id": "https://openalex.org/C151406439",
+          "wikidata": "https://www.wikidata.org/wiki/Q186588",
+          "display_name": "Time series",
+          "level": 2,
+          "score": 0.45106059312820435
+        },
+        {
+          "id": "https://openalex.org/C152877465",
+          "wikidata": "https://www.wikidata.org/wiki/Q208042",
+          "display_name": "Regression analysis",
+          "level": 2,
+          "score": 0.4357125163078308
+        },
+        {
+          "id": "https://openalex.org/C41008148",
+          "wikidata": "https://www.wikidata.org/wiki/Q21198",
+          "display_name": "Computer science",
+          "level": 0,
+          "score": 0.3829765021800995
+        },
+        {
+          "id": "https://openalex.org/C162324750",
+          "wikidata": "https://www.wikidata.org/wiki/Q8134",
+          "display_name": "Economics",
+          "level": 0,
+          "score": 0.37366175651550293
+        },
+        {
+          "id": "https://openalex.org/C119857082",
+          "wikidata": "https://www.wikidata.org/wiki/Q2539",
+          "display_name": "Machine learning",
+          "level": 1,
+          "score": 0.28930819034576416
+        },
+        {
+          "id": "https://openalex.org/C127413603",
+          "wikidata": "https://www.wikidata.org/wiki/Q11023",
+          "display_name": "Engineering",
+          "level": 0,
+          "score": 0.17111530900001526
+        },
+        {
+          "id": "https://openalex.org/C119599485",
+          "wikidata": "https://www.wikidata.org/wiki/Q43035",
+          "display_name": "Electrical engineering",
+          "level": 1,
+          "score": 0.0
+        },
+        {
+          "id": "https://openalex.org/C144024400",
+          "wikidata": "https://www.wikidata.org/wiki/Q21201",
+          "display_name": "Sociology",
+          "level": 0,
+          "score": 0.0
+        },
+        {
+          "id": "https://openalex.org/C36289849",
+          "wikidata": "https://www.wikidata.org/wiki/Q34749",
+          "display_name": "Social science",
+          "level": 1,
+          "score": 0.0
+        }
+      ],
+      "mesh": [],
+      "locations_count": 2,
+      "locations": [
+        {
+          "id": "doi:10.1177/0958305x221140569",
+          "is_oa": false,
+          "landing_page_url": "https://doi.org/10.1177/0958305x221140569",
+          "pdf_url": null,
+          "source": {
+            "id": "https://openalex.org/S184363771",
+            "display_name": "Energy & Environment",
+            "issn_l": "0958-305X",
+            "issn": [
+              "0958-305X",
+              "2048-4070"
+            ],
+            "is_oa": false,
+            "is_in_doaj": false,
+            "is_core": true,
+            "listed_in": [
+              "abdc-c",
+              "cwts-core",
+              "jufo-1",
+              "norway-1"
+            ],
+            "host_organization": "https://openalex.org/P4310320017",
+            "host_organization_name": "SAGE Publishing",
+            "host_organization_lineage": [
+              "https://openalex.org/P4310320017"
+            ],
+            "host_organization_lineage_names": [
+              "SAGE Publishing"
+            ],
+            "type": "journal"
+          },
+          "license": null,
+          "license_id": null,
+          "version": "publishedVersion",
+          "is_accepted": true,
+          "is_published": true,
+          "raw_source_name": "Energy &amp; Environment",
+          "raw_type": "journal-article"
+        },
+        {
+          "id": "pmh:oai:RePEc:sae:engenv:v:35:y:2024:i:3:p:1493-1531",
+          "is_oa": false,
+          "landing_page_url": "https://journals.sagepub.com/doi/10.1177/0958305X221140569",
+          "pdf_url": null,
+          "source": {
+            "id": "https://openalex.org/S4306401271",
+            "display_name": "RePEc: Research Papers in Economics",
+            "issn_l": null,
+            "issn": null,
+            "is_oa": false,
+            "is_in_doaj": false,
+            "is_core": false,
+            "listed_in": [],
+            "host_organization": "https://openalex.org/I77793887",
+            "host_organization_name": "Federal Reserve Bank of St. Louis",
+            "host_organization_lineage": [
+              "https://openalex.org/I77793887"
+            ],
+            "host_organization_lineage_names": [],
+            "type": "repository"
+          },
+          "license": null,
+          "license_id": null,
+          "version": "submittedVersion",
+          "is_accepted": false,
+          "is_published": false,
+          "raw_source_name": null,
+          "raw_type": "article"
+        }
+      ],
+      "best_oa_location": null,
+      "sustainable_development_goals": [
+        {
+          "score": 0.878000020980835,
+          "display_name": "Affordable and clean energy",
+          "id": "https://metadata.un.org/sdg/7"
+        },
+        {
+          "score": 0.7936000227928162,
+          "display_name": "Climate action",
+          "id": "https://metadata.un.org/sdg/13"
+        }
+      ],
+      "sustainable_development_goals_aurora": [
+        {
+          "score": 0.8999999761581421,
+          "display_name": "Affordable and clean energy",
+          "id": "https://metadata.un.org/sdg/7"
+        }
+      ],
+      "study_designs": [],
+      "awards": [],
+      "funders": [],
+      "has_content": {
+        "grobid_xml": false,
+        "pdf": false
+      },
+      "content_urls": null,
+      "referenced_works_count": 37,
+      "referenced_works": [
+        "https://openalex.org/W241231893",
+        "https://openalex.org/W1601795611",
+        "https://openalex.org/W1974961444",
+        "https://openalex.org/W1998230236",
+        "https://openalex.org/W2003752338",
+        "https://openalex.org/W2006846066",
+        "https://openalex.org/W2006913962",
+        "https://openalex.org/W2014484342",
+        "https://openalex.org/W2015427029",
+        "https://openalex.org/W2016210396",
+        "https://openalex.org/W2020607720",
+        "https://openalex.org/W2023645751",
+        "https://openalex.org/W2056583509",
+        "https://openalex.org/W2057156516",
+        "https://openalex.org/W2067754509",
+        "https://openalex.org/W2103504194",
+        "https://openalex.org/W2105119576",
+        "https://openalex.org/W2109316012",
+        "https://openalex.org/W2122966123",
+        "https://openalex.org/W2135651192",
+        "https://openalex.org/W2149905014",
+        "https://openalex.org/W2156909104",
+        "https://openalex.org/W2188605683",
+        "https://openalex.org/W2485670667",
+        "https://openalex.org/W2584298461",
+        "https://openalex.org/W2599428927",
+        "https://openalex.org/W2811507150",
+        "https://openalex.org/W2894891763",
+        "https://openalex.org/W2921748836",
+        "https://openalex.org/W2921882556",
+        "https://openalex.org/W2982252459",
+        "https://openalex.org/W2998944925",
+        "https://openalex.org/W3002218407",
+        "https://openalex.org/W3139392347",
+        "https://openalex.org/W4200317315",
+        "https://openalex.org/W4210868560",
+        "https://openalex.org/W4292713895"
+      ],
+      "related_works": [
+        "https://openalex.org/W3175321409",
+        "https://openalex.org/W4312561791",
+        "https://openalex.org/W2389894046",
+        "https://openalex.org/W2215717369",
+        "https://openalex.org/W2974356760",
+        "https://openalex.org/W4312309719",
+        "https://openalex.org/W4313123484",
+        "https://openalex.org/W2146461990",
+        "https://openalex.org/W4200142652",
+        "https://openalex.org/W1527014014"
+      ],
+      "abstract_inverted_index": {
+        "Investigating": [
+          0
+        ],
+        "the": [
+          1,
+          14,
+          21,
+          37,
+          55,
+          63,
+          69,
+          76,
+          101,
+          106,
+          113,
+          124,
+          134,
+          154,
+          167,
+          180,
+          208,
+          213,
+          225,
+          249
+        ],
+        "current": [
+          2,
+          162
+        ],
+        "and": [
+          3,
+          35,
+          47,
+          58,
+          72,
+          92,
+          116,
+          183,
+          204,
+          212
+        ],
+        "future": [
+          4
+        ],
+        "dynamics": [
+          5
+        ],
+        "of": [
+          6,
+          40,
+          186,
+          221
+        ],
+        "energy": [
+          7,
+          23,
+          190,
+          197,
+          222,
+          240,
+          250
+        ],
+        "consumption": [
+          8,
+          24,
+          127,
+          146,
+          158,
+          191,
+          223
+        ],
+        "in": [
+          9,
+          67,
+          189,
+          224,
+          227,
+          236,
+          248
+        ],
+        "modern": [
+          10
+        ],
+        "economies": [
+          11
+        ],
+        "such": [
+          12,
+          88
+        ],
+        "as": [
+          13,
+          89,
+          242,
+          244
+        ],
+        "UK": [
+          15,
+          226
+        ],
+        "is": [
+          16
+        ],
+        "crucial.": [
+          17
+        ],
+        "This": [
+          18
+        ],
+        "paper": [
+          19
+        ],
+        "predicts": [
+          20
+        ],
+        "UK's": [
+          22,
+          70,
+          125
+        ],
+        "using": [
+          25
+        ],
+        "data": [
+          26
+        ],
+        "spanning": [
+          27
+        ],
+        "January": [
+          28
+        ],
+        "1995": [
+          29
+        ],
+        "to": [
+          30,
+          82,
+          100,
+          147,
+          201,
+          207,
+          217,
+          234
+        ],
+        "March": [
+          31
+        ],
+        "2022": [
+          32
+        ],
+        "by": [
+          33
+        ],
+        "comparing": [
+          34
+        ],
+        "evaluating": [
+          36
+        ],
+        "forecast": [
+          38,
+          65,
+          135,
+          168
+        ],
+        "performance": [
+          39
+        ],
+        "machine": [
+          41,
+          85,
+          114
+        ],
+        "learning,": [
+          42
+        ],
+        "dynamic": [
+          43,
+          102
+        ],
+        "regression,": [
+          44
+        ],
+        "time": [
+          45,
+          117
+        ],
+        "series": [
+          46,
+          118
+        ],
+        "combination": [
+          48,
+          77,
+          174
+        ],
+        "modelling": [
+          49
+        ],
+        "techniques.": [
+          50
+        ],
+        "The": [
+          51,
+          120
+        ],
+        "analysis": [
+          52
+        ],
+        "reveals": [
+          53
+        ],
+        "that": [
+          54,
+          123,
+          138,
+          157,
+          173
+        ],
+        "seasonal": [
+          56,
+          107,
+          195
+        ],
+        "ARIMA": [
+          57
+        ],
+        "TBATS": [
+          59
+        ],
+        "hybrid": [
+          60,
+          108
+        ],
+        "models": [
+          61
+        ],
+        "yield": [
+          62
+        ],
+        "lowest": [
+          64
+        ],
+        "errors": [
+          66
+        ],
+        "predicting": [
+          68
+        ],
+        "electricity": [
+          71,
+          126,
+          145
+        ],
+        "gas": [
+          73,
+          152
+        ],
+        "consumption.": [
+          74
+        ],
+        "Although": [
+          75
+        ],
+        "forecasts": [
+          78,
+          175
+        ],
+        "performed": [
+          79,
+          110
+        ],
+        "poorly": [
+          80
+        ],
+        "relative": [
+          81
+        ],
+        "other": [
+          83
+        ],
+        "models,": [
+          84,
+          104
+        ],
+        "learning": [
+          86,
+          115
+        ],
+        "techniques": [
+          87
+        ],
+        "neural": [
+          90
+        ],
+        "network": [
+          91
+        ],
+        "support": [
+          93
+        ],
+        "vector": [
+          94
+        ],
+        "regression": [
+          95,
+          103
+        ],
+        "produced": [
+          96
+        ],
+        "better": [
+          97,
+          111
+        ],
+        "results": [
+          98,
+          121,
+          155
+        ],
+        "compared": [
+          99
+        ],
+        "whereas": [
+          105
+        ],
+        "model": [
+          109
+        ],
+        "than": [
+          112
+        ],
+        "models.": [
+          119
+        ],
+        "indicate": [
+          122,
+          156
+        ],
+        "would": [
+          128,
+          159
+        ],
+        "either": [
+          129,
+          160
+        ],
+        "stabilise": [
+          130
+        ],
+        "or": [
+          131,
+          164
+        ],
+        "decline": [
+          132
+        ],
+        "over": [
+          133,
+          166
+        ],
+        "horizon,": [
+          136
+        ],
+        "suggesting": [
+          137
+        ],
+        "it": [
+          139
+        ],
+        "will": [
+          140
+        ],
+        "take": [
+          141
+        ],
+        "some": [
+          142
+        ],
+        "years": [
+          143
+        ],
+        "for": [
+          144
+        ],
+        "attain": [
+          148
+        ],
+        "pre-2019": [
+          149
+        ],
+        "levels.": [
+          150
+        ],
+        "For": [
+          151
+        ],
+        "consumption,": [
+          153
+        ],
+        "maintain": [
+          161
+        ],
+        "levels": [
+          163
+        ],
+        "increase": [
+          165
+        ],
+        "period.": [
+          169
+        ],
+        "We": [
+          170
+        ],
+        "also": [
+          171
+        ],
+        "show": [
+          172
+        ],
+        "do": [
+          176
+        ],
+        "not": [
+          177
+        ],
+        "often": [
+          178
+        ],
+        "generate": [
+          179
+        ],
+        "best": [
+          181
+        ],
+        "predictions,": [
+          182
+        ],
+        "therefore,": [
+          184
+        ],
+        "choice": [
+          185
+        ],
+        "methodology": [
+          187
+        ],
+        "matters": [
+          188
+        ],
+        "forecasting.": [
+          192
+        ],
+        "Overall,": [
+          193
+        ],
+        "changing": [
+          194
+        ],
+        "patterns,": [
+          196
+        ],
+        "efficiency": [
+          198
+        ],
+        "improvements,": [
+          199
+        ],
+        "shift": [
+          200
+        ],
+        "renewable": [
+          202
+        ],
+        "sources": [
+          203
+        ],
+        "uncertainties": [
+          205
+        ],
+        "due": [
+          206
+        ],
+        "COVID-19": [
+          209
+        ],
+        "pandemic,": [
+          210
+        ],
+        "Brexit,": [
+          211
+        ],
+        "Russia\u2013Ukraine": [
+          214
+        ],
+        "crisis": [
+          215
+        ],
+        "appear": [
+          216
+        ],
+        "be": [
+          218
+        ],
+        "significant": [
+          219
+        ],
+        "drivers": [
+          220
+        ],
+        "recent": [
+          228
+        ],
+        "times.": [
+          229
+        ],
+        "These": [
+          230
+        ],
+        "findings": [
+          231
+        ],
+        "are": [
+          232
+        ],
+        "expected": [
+          233
+        ],
+        "help": [
+          235
+        ],
+        "designing": [
+          237
+        ],
+        "more": [
+          238
+        ],
+        "effective": [
+          239
+        ],
+        "policies": [
+          241
+        ],
+        "well": [
+          243
+        ],
+        "guide": [
+          245
+        ],
+        "investor": [
+          246
+        ],
+        "decisions": [
+          247
+        ],
+        "sector.": [
+          251
+        ]
+      },
+      "counts_by_year": [
+        {
+          "year": 2026,
+          "cited_by_count": 1
+        },
+        {
+          "year": 2025,
+          "cited_by_count": 6
+        },
+        {
+          "year": 2024,
+          "cited_by_count": 1
+        },
+        {
+          "year": 2023,
+          "cited_by_count": 3
+        }
+      ],
+      "updated_date": "2026-09-25T08:18:29.962427",
+      "created_date": "2025-10-10T00:00:00"
+    }
+  }
+}

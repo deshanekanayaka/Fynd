@@ -1,0 +1,15 @@
+{
+  "parts": {
+    "api": "open-copy-fetch",
+    "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11750086/pdf/pone.0307840.pdf",
+    "redirects": 3,
+    "max_bytes": 20971520,
+    "shape": 1
+  },
+  "value": {
+    "kind": "refusal",
+    "status": 200,
+    "content_type": "text/html; charset=utf-8",
+    "reason": "not_a_pdf"
+  }
+}

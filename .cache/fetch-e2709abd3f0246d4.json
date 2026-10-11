@@ -1,0 +1,15 @@
+{
+  "parts": {
+    "api": "open-copy-fetch",
+    "url": "https://eprints.whiterose.ac.uk/194270/1/1-s2.0-S0921800922003470-main.pdf",
+    "redirects": 3,
+    "max_bytes": 20971520,
+    "shape": 1
+  },
+  "value": {
+    "kind": "bytes",
+    "content_type": "application/pdf",
+    "byte_count": 3492774,
+    "file": "fetch-e2709abd3f0246d4.bin"
+  }
+}

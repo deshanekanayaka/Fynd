@@ -17,7 +17,7 @@ A bachelor's student in week 1 to week 4 of project selection, with no research 
 
 Fynd succeeds if all four hold at ship date.
 
-1. Grounding: on a hand-labelled set of 10 Sources, Fynd extracts 90 percent or more of the true Claims and invents none. This gate runs in continuous integration.
+1. Grounding: on a hand-labelled set of 10 Sources, Fynd extracts 90 percent or more of the true Claims and invents none. This gate runs in continuous integration. The 10 Sources carry an open license, because their text is committed and continuous integration replays it. See [ADR 0011](./docs/adr/0011-the-public-repository-holds-the-text-and-not-the-files.md).
 2. Quality: 4 of 5 complete Projects pass a human rubric with 3 questions. Is the Problem real. Is the Gap supported. Can a bachelor's student build the Technical core in one year. The author grades, which the README states as a limit, and the 5 handovers ship in the repository so a reader regrades them.
 3. Reliability: every stage returns in under 3 minutes, and a Project resumes correctly after the container restarts.
 4. Accessibility: WCAG 2.2 AA is the target, axe-core passes in continuous integration, and one keyboard-only pass and one screen reader pass are written up.

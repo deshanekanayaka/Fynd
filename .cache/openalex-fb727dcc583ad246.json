@@ -1,0 +1,1058 @@
+{
+  "parts": {
+    "api": "openalex-work",
+    "doi": "10.1016/j.jand.2025.156261",
+    "shape": 1
+  },
+  "value": {
+    "found": true,
+    "work": {
+      "id": "https://openalex.org/W4417291145",
+      "doi": "https://doi.org/10.1016/j.jand.2025.156261",
+      "title": "Timing of Energy Intake and Ultra-Processed Food Consumption Are Associated With Obesity in Adults in the United Kingdom: A Pooled Cross-Sectional Analysis of the National Diet and Nutrition Survey (2008-2019)",
+      "display_name": "Timing of Energy Intake and Ultra-Processed Food Consumption Are Associated With Obesity in Adults in the United Kingdom: A Pooled Cross-Sectional Analysis of the National Diet and Nutrition Survey (2008-2019)",
+      "publication_year": 2025,
+      "publication_date": "2025-12-13",
+      "ids": {
+        "openalex": "https://openalex.org/W4417291145",
+        "doi": "https://doi.org/10.1016/j.jand.2025.156261",
+        "pmid": "https://pubmed.ncbi.nlm.nih.gov/41391603"
+      },
+      "language": "en",
+      "primary_location": {
+        "id": "doi:10.1016/j.jand.2025.156261",
+        "is_oa": false,
+        "landing_page_url": "https://doi.org/10.1016/j.jand.2025.156261",
+        "pdf_url": null,
+        "source": {
+          "id": "https://openalex.org/S18733340",
+          "display_name": "Journal of the Academy of Nutrition and Dietetics",
+          "issn_l": "2212-2672",
+          "issn": [
+            "2212-2672",
+            "2212-2680"
+          ],
+          "is_oa": false,
+          "is_in_doaj": false,
+          "is_core": true,
+          "listed_in": [
+            "cwts-core",
+            "doyens",
+            "jufo-1",
+            "ki-jl-1",
+            "medline",
+            "norway-1"
+          ],
+          "host_organization": "https://openalex.org/P4310320990",
+          "host_organization_name": "Elsevier BV",
+          "host_organization_lineage": [
+            "https://openalex.org/P4310320990"
+          ],
+          "host_organization_lineage_names": [
+            "Elsevier BV"
+          ],
+          "type": "journal"
+        },
+        "license": null,
+        "license_id": null,
+        "version": "publishedVersion",
+        "is_accepted": true,
+        "is_published": true,
+        "raw_source_name": "Journal of the Academy of Nutrition and Dietetics",
+        "raw_type": "journal-article"
+      },
+      "type": "article",
+      "indexed_in": [
+        "crossref",
+        "pubmed"
+      ],
+      "open_access": {
+        "is_oa": false,
+        "oa_status": "closed",
+        "oa_url": null,
+        "any_repository_has_fulltext": false
+      },
+      "authorships": [
+        {
+          "author_position": "first",
+          "author": {
+            "id": "https://openalex.org/A5055552550",
+            "display_name": "Patr\u00edcia de Fragas Hinnig",
+            "orcid": "https://orcid.org/0000-0002-9348-8513",
+            "observed_orcids": [
+              "https://orcid.org/0000-0002-9348-8513"
+            ]
+          },
+          "institutions": [
+            {
+              "id": "https://openalex.org/I4104125",
+              "display_name": "Universidade Federal de Santa Catarina",
+              "ror": "https://ror.org/041akq887",
+              "country_code": "BR",
+              "type": "education",
+              "lineage": [
+                "https://openalex.org/I4104125"
+              ]
+            }
+          ],
+          "countries": [
+            "BR"
+          ],
+          "is_corresponding": true,
+          "raw_author_name": "Patr\u00edcia de Fragas Hinnig",
+          "raw_affiliation_strings": [
+            "Post-Graduation Program in Nutrition, Health Sciences Center, Federal University of Santa Catarina, Florian\u00f3polis, Brazil. Electronic address: phinnig@yahoo.com.br",
+            "Post-Graduation Program in Nutrition, Health Sciences Center, Federal University of Santa Catarina, Florian\u00f3polis 88040-900, Brazil. Electronic address: phinnig@yahoo.com.br"
+          ],
+          "raw_orcid": "https://orcid.org/0000-0002-9348-8513",
+          "affiliations": [
+            {
+              "raw_affiliation_string": "Post-Graduation Program in Nutrition, Health Sciences Center, Federal University of Santa Catarina, Florian\u00f3polis, Brazil. Electronic address: phinnig@yahoo.com.br",
+              "institution_ids": [
+                "https://openalex.org/I4104125"
+              ]
+            },
+            {
+              "raw_affiliation_string": "Post-Graduation Program in Nutrition, Health Sciences Center, Federal University of Santa Catarina, Florian\u00f3polis 88040-900, Brazil. Electronic address: phinnig@yahoo.com.br",
+              "institution_ids": [
+                "https://openalex.org/I4104125"
+              ]
+            }
+          ]
+        },
+        {
+          "author_position": "middle",
+          "author": {
+            "id": "https://openalex.org/A5071183177",
+            "display_name": "Fernanda Rauber",
+            "orcid": "https://orcid.org/0000-0001-9693-7954",
+            "observed_orcids": [
+              "https://orcid.org/0000-0001-9693-7954"
+            ]
+          },
+          "institutions": [
+            {
+              "id": "https://openalex.org/I17974374",
+              "display_name": "Universidade de S\u00e3o Paulo",
+              "ror": "https://ror.org/036rp1748",
+              "country_code": "BR",
+              "type": "education",
+              "lineage": [
+                "https://openalex.org/I17974374"
+              ]
+            }
+          ],
+          "countries": [
+            "BR"
+          ],
+          "is_corresponding": true,
+          "raw_author_name": "Fernanda Rauber",
+          "raw_affiliation_strings": [
+            "Department of Preventive Medicine, School of Medicine, University of S\u00e3o Paulo, S\u00e3o Paulo, Brazil; Center for Epidemiological Research in Nutrition and Health, University of S\u00e3o Paulo, S\u00e3o Paulo, Brazil",
+            "Department of Preventive Medicine, School of Medicine, University of S\u00e3o Paulo, S\u00e3o Paulo 01246-903, Brazil; Center for Epidemiological Research in Nutrition and Health, University of S\u00e3o Paulo, S\u00e3o Paulo 01246-904, Brazil. Electronic address: rauber@usp.br"
+          ],
+          "raw_orcid": null,
+          "affiliations": [
+            {
+              "raw_affiliation_string": "Department of Preventive Medicine, School of Medicine, University of S\u00e3o Paulo, S\u00e3o Paulo, Brazil; Center for Epidemiological Research in Nutrition and Health, University of S\u00e3o Paulo, S\u00e3o Paulo, Brazil",
+              "institution_ids": [
+                "https://openalex.org/I17974374"
+              ]
+            },
+            {
+              "raw_affiliation_string": "Department of Preventive Medicine, School of Medicine, University of S\u00e3o Paulo, S\u00e3o Paulo 01246-903, Brazil; Center for Epidemiological Research in Nutrition and Health, University of S\u00e3o Paulo, S\u00e3o Paulo 01246-904, Brazil. Electronic address: rauber@usp.br",
+              "institution_ids": [
+                "https://openalex.org/I17974374"
+              ]
+            }
+          ]
+        },
+        {
+          "author_position": "middle",
+          "author": {
+            "id": "https://openalex.org/A5027253376",
+            "display_name": "Kiara Chang",
+            "orcid": "https://orcid.org/0000-0001-6716-3400",
+            "observed_orcids": [
+              "https://orcid.org/0000-0001-6716-3400"
+            ]
+          },
+          "institutions": [
+            {
+              "id": "https://openalex.org/I47508984",
+              "display_name": "Imperial College London",
+              "ror": "https://ror.org/041kmwe10",
+              "country_code": "GB",
+              "type": "education",
+              "lineage": [
+                "https://openalex.org/I47508984"
+              ]
+            }
+          ],
+          "countries": [
+            "GB"
+          ],
+          "is_corresponding": false,
+          "raw_author_name": "Kiara Chang",
+          "raw_affiliation_strings": [
+            "Public Health Policy Evaluation Unit, School of Public Health, Imperial College London, London, UK",
+            "Public Health Policy Evaluation Unit, School of Public Health, Imperial College London, London W12 0BZ, UK. Electronic address: chu-mei.chang@imperial.ac.uk"
+          ],
+          "raw_orcid": null,
+          "affiliations": [
+            {
+              "raw_affiliation_string": "Public Health Policy Evaluation Unit, School of Public Health, Imperial College London, London, UK",
+              "institution_ids": [
+                "https://openalex.org/I47508984"
+              ]
+            },
+            {
+              "raw_affiliation_string": "Public Health Policy Evaluation Unit, School of Public Health, Imperial College London, London W12 0BZ, UK. Electronic address: chu-mei.chang@imperial.ac.uk",
+              "institution_ids": [
+                "https://openalex.org/I47508984"
+              ]
+            }
+          ]
+        },
+        {
+          "author_position": "middle",
+          "author": {
+            "id": "https://openalex.org/A5029150267",
+            "display_name": "Eszter Panna Vamos",
+            "orcid": "https://orcid.org/0000-0003-4221-1861",
+            "observed_orcids": [
+              "https://orcid.org/0000-0003-4221-1861"
+            ]
+          },
+          "institutions": [
+            {
+              "id": "https://openalex.org/I47508984",
+              "display_name": "Imperial College London",
+              "ror": "https://ror.org/041kmwe10",
+              "country_code": "GB",
+              "type": "education",
+              "lineage": [
+                "https://openalex.org/I47508984"
+              ]
+            }
+          ],
+          "countries": [
+            "GB"
+          ],
+          "is_corresponding": true,
+          "raw_author_name": "Eszter P. Vamos",
+          "raw_affiliation_strings": [
+            "Public Health Policy Evaluation Unit, School of Public Health, Imperial College London, London, UK",
+            "Public Health Policy Evaluation Unit, School of Public Health, Imperial College London, London W12 0BZ, UK. Electronic address: e.vamos@imperial.ac.uk"
+          ],
+          "raw_orcid": "https://orcid.org/0000-0003-4221-1861",
+          "affiliations": [
+            {
+              "raw_affiliation_string": "Public Health Policy Evaluation Unit, School of Public Health, Imperial College London, London, UK",
+              "institution_ids": [
+                "https://openalex.org/I47508984"
+              ]
+            },
+            {
+              "raw_affiliation_string": "Public Health Policy Evaluation Unit, School of Public Health, Imperial College London, London W12 0BZ, UK. Electronic address: e.vamos@imperial.ac.uk",
+              "institution_ids": [
+                "https://openalex.org/I47508984"
+              ]
+            }
+          ]
+        },
+        {
+          "author_position": "last",
+          "author": {
+            "id": "https://openalex.org/A5059937532",
+            "display_name": "Renata Bertazzi Levy",
+            "orcid": "https://orcid.org/0000-0001-5388-7002",
+            "observed_orcids": [
+              "https://orcid.org/0000-0001-5388-7002"
+            ]
+          },
+          "institutions": [
+            {
+              "id": "https://openalex.org/I17974374",
+              "display_name": "Universidade de S\u00e3o Paulo",
+              "ror": "https://ror.org/036rp1748",
+              "country_code": "BR",
+              "type": "education",
+              "lineage": [
+                "https://openalex.org/I17974374"
+              ]
+            },
+            {
+              "id": "https://openalex.org/I184999862",
+              "display_name": "Universidad de Salamanca",
+              "ror": "https://ror.org/02f40zc51",
+              "country_code": "ES",
+              "type": "education",
+              "lineage": [
+                "https://openalex.org/I184999862"
+              ]
+            },
+            {
+              "id": "https://openalex.org/I4210134045",
+              "display_name": "Instituto de Investigaci\u00f3n Biom\u00e9dica de Salamanca",
+              "ror": "https://ror.org/03em6xj44",
+              "country_code": "ES",
+              "type": "facility",
+              "lineage": [
+                "https://openalex.org/I184999862",
+                "https://openalex.org/I4210099034",
+                "https://openalex.org/I4210134045"
+              ]
+            }
+          ],
+          "countries": [
+            "BR",
+            "ES"
+          ],
+          "is_corresponding": true,
+          "raw_author_name": "Renata Bertazzi Levy",
+          "raw_affiliation_strings": [
+            "Department of Preventive Medicine, School of Medicine, University of S\u00e3o Paulo, S\u00e3o Paulo, Brazil; Center for Epidemiological Research in Nutrition and Health, University of S\u00e3o Paulo, S\u00e3o Paulo, Brazil; Institute of Biomedical Research of Salamanca, University of Salamanca, Salamanca, Spain",
+            "Department of Preventive Medicine, School of Medicine, University of S\u00e3o Paulo, S\u00e3o Paulo 01246-903, Brazil; Center for Epidemiological Research in Nutrition and Health, University of S\u00e3o Paulo, S\u00e3o Paulo 01246-904, Brazil; University of Salamanca, Institute of Biomedical Research of Salamanca (IBSAL), Salamanca, Spain. Electronic address: rlevy@usp.br"
+          ],
+          "raw_orcid": null,
+          "affiliations": [
+            {
+              "raw_affiliation_string": "Department of Preventive Medicine, School of Medicine, University of S\u00e3o Paulo, S\u00e3o Paulo, Brazil; Center for Epidemiological Research in Nutrition and Health, University of S\u00e3o Paulo, S\u00e3o Paulo, Brazil; Institute of Biomedical Research of Salamanca, University of Salamanca, Salamanca, Spain",
+              "institution_ids": [
+                "https://openalex.org/I17974374",
+                "https://openalex.org/I184999862",
+                "https://openalex.org/I4210134045"
+              ]
+            },
+            {
+              "raw_affiliation_string": "Department of Preventive Medicine, School of Medicine, University of S\u00e3o Paulo, S\u00e3o Paulo 01246-903, Brazil; Center for Epidemiological Research in Nutrition and Health, University of S\u00e3o Paulo, S\u00e3o Paulo 01246-904, Brazil; University of Salamanca, Institute of Biomedical Research of Salamanca (IBSAL), Salamanca, Spain. Electronic address: rlevy@usp.br",
+              "institution_ids": [
+                "https://openalex.org/I17974374",
+                "https://openalex.org/I184999862",
+                "https://openalex.org/I4210134045"
+              ]
+            }
+          ]
+        }
+      ],
+      "institutions": [],
+      "countries_distinct_count": 3,
+      "institutions_distinct_count": 5,
+      "corresponding_author_ids": [
+        "https://openalex.org/A5029150267",
+        "https://openalex.org/A5055552550",
+        "https://openalex.org/A5059937532",
+        "https://openalex.org/A5071183177"
+      ],
+      "corresponding_institution_ids": [
+        "https://openalex.org/I17974374",
+        "https://openalex.org/I184999862",
+        "https://openalex.org/I4104125",
+        "https://openalex.org/I4210134045",
+        "https://openalex.org/I47508984"
+      ],
+      "apc_list": {
+        "value": 3740,
+        "currency": "USD",
+        "value_usd": 3740
+      },
+      "apc_paid": null,
+      "fwci": 1.6988,
+      "has_fulltext": false,
+      "cited_by_count": 2,
+      "citation_normalized_percentile": {
+        "value": 0.86547606,
+        "is_in_top_1_percent": false,
+        "is_in_top_10_percent": false
+      },
+      "cited_by_percentile_year": {
+        "min": 96,
+        "max": 97
+      },
+      "biblio": {
+        "volume": "126",
+        "issue": "3",
+        "first_page": "156261",
+        "last_page": "156261"
+      },
+      "is_retracted": false,
+      "is_paratext": false,
+      "is_xpac": false,
+      "primary_topic": {
+        "id": "https://openalex.org/T12057",
+        "display_name": "Consumer Attitudes and Food Labeling",
+        "score": 0.426800012588501,
+        "subfield": {
+          "id": "https://openalex.org/subfields/2739",
+          "display_name": "Public Health, Environmental and Occupational Health"
+        },
+        "field": {
+          "id": "https://openalex.org/fields/27",
+          "display_name": "Medicine"
+        },
+        "domain": {
+          "id": "https://openalex.org/domains/4",
+          "display_name": "Health Sciences"
+        }
+      },
+      "topics": [
+        {
+          "id": "https://openalex.org/T12057",
+          "display_name": "Consumer Attitudes and Food Labeling",
+          "score": 0.426800012588501,
+          "subfield": {
+            "id": "https://openalex.org/subfields/2739",
+            "display_name": "Public Health, Environmental and Occupational Health"
+          },
+          "field": {
+            "id": "https://openalex.org/fields/27",
+            "display_name": "Medicine"
+          },
+          "domain": {
+            "id": "https://openalex.org/domains/4",
+            "display_name": "Health Sciences"
+          }
+        },
+        {
+          "id": "https://openalex.org/T10010",
+          "display_name": "Obesity, Physical Activity, Diet",
+          "score": 0.2312999963760376,
+          "subfield": {
+            "id": "https://openalex.org/subfields/2739",
+            "display_name": "Public Health, Environmental and Occupational Health"
+          },
+          "field": {
+            "id": "https://openalex.org/fields/27",
+            "display_name": "Medicine"
+          },
+          "domain": {
+            "id": "https://openalex.org/domains/4",
+            "display_name": "Health Sciences"
+          }
+        },
+        {
+          "id": "https://openalex.org/T12873",
+          "display_name": "Nutrition, Health and Food Behavior",
+          "score": 0.2207999974489212,
+          "subfield": {
+            "id": "https://openalex.org/subfields/2916",
+            "display_name": "Nutrition and Dietetics"
+          },
+          "field": {
+            "id": "https://openalex.org/fields/29",
+            "display_name": "Nursing"
+          },
+          "domain": {
+            "id": "https://openalex.org/domains/4",
+            "display_name": "Health Sciences"
+          }
+        }
+      ],
+      "keywords": [
+        {
+          "id": "https://openalex.org/keywords/ultra-processed-foods",
+          "display_name": "ultra-processed foods",
+          "score": 0.8259999752044678
+        },
+        {
+          "id": "https://openalex.org/keywords/meal-timing",
+          "display_name": "meal timing",
+          "score": 0.6230000257492065
+        },
+        {
+          "id": "https://openalex.org/keywords/obesity",
+          "display_name": "obesity",
+          "score": 0.9300000071525574
+        },
+        {
+          "id": "https://openalex.org/keywords/overweight",
+          "display_name": "overweight",
+          "score": 0.9399999976158142
+        },
+        {
+          "id": "https://openalex.org/keywords/abdominal-obesity",
+          "display_name": "abdominal obesity",
+          "score": 0.9850000143051147
+        },
+        {
+          "id": "https://openalex.org/keywords/waist-circumference",
+          "display_name": "waist circumference",
+          "score": 0.7559999823570251
+        },
+        {
+          "id": "https://openalex.org/keywords/nova-classification",
+          "display_name": "NOVA classification",
+          "score": 0.9480000138282776
+        },
+        {
+          "id": "https://openalex.org/keywords/food-diary",
+          "display_name": "food diary",
+          "score": 0.5839999914169312
+        },
+        {
+          "id": "https://openalex.org/keywords/national-diet-and-nutrition-survey",
+          "display_name": "National Diet and Nutrition Survey",
+          "score": 0.7149999737739563
+        },
+        {
+          "id": "https://openalex.org/keywords/adults",
+          "display_name": "adults",
+          "score": 0.43700000643730164
+        },
+        {
+          "id": "https://openalex.org/keywords/diet-and-health",
+          "display_name": "diet and health",
+          "score": 0.30399999022483826
+        }
+      ],
+      "concepts": [
+        {
+          "id": "https://openalex.org/C99454951",
+          "wikidata": "https://www.wikidata.org/wiki/Q932068",
+          "display_name": "Environmental health",
+          "level": 1,
+          "score": 0.7587000131607056
+        },
+        {
+          "id": "https://openalex.org/C511355011",
+          "wikidata": "https://www.wikidata.org/wiki/Q12174",
+          "display_name": "Obesity",
+          "level": 2,
+          "score": 0.7422000169754028
+        },
+        {
+          "id": "https://openalex.org/C71924100",
+          "wikidata": "https://www.wikidata.org/wiki/Q11190",
+          "display_name": "Medicine",
+          "level": 0,
+          "score": 0.737500011920929
+        },
+        {
+          "id": "https://openalex.org/C2776476923",
+          "wikidata": "https://www.wikidata.org/wiki/Q7725",
+          "display_name": "Evening",
+          "level": 2,
+          "score": 0.6916000247001648
+        },
+        {
+          "id": "https://openalex.org/C19720800",
+          "wikidata": "https://www.wikidata.org/wiki/Q7722",
+          "display_name": "Morning",
+          "level": 2,
+          "score": 0.5651000142097473
+        },
+        {
+          "id": "https://openalex.org/C30772137",
+          "wikidata": "https://www.wikidata.org/wiki/Q5164762",
+          "display_name": "Consumption (sociology)",
+          "level": 2,
+          "score": 0.5562999844551086
+        },
+        {
+          "id": "https://openalex.org/C3018685816",
+          "wikidata": "https://www.wikidata.org/wiki/Q213449",
+          "display_name": "Food intake",
+          "level": 2,
+          "score": 0.541100025177002
+        },
+        {
+          "id": "https://openalex.org/C2987526018",
+          "wikidata": "https://www.wikidata.org/wiki/Q213449",
+          "display_name": "Food consumption",
+          "level": 2,
+          "score": 0.49399998784065247
+        },
+        {
+          "id": "https://openalex.org/C2779874844",
+          "wikidata": "https://www.wikidata.org/wiki/Q1967281",
+          "display_name": "National Health and Nutrition Examination Survey",
+          "level": 3,
+          "score": 0.4487000107765198
+        },
+        {
+          "id": "https://openalex.org/C129230472",
+          "wikidata": "https://www.wikidata.org/wiki/Q767036",
+          "display_name": "Food group",
+          "level": 2,
+          "score": 0.34940001368522644
+        },
+        {
+          "id": "https://openalex.org/C3020065929",
+          "wikidata": "https://www.wikidata.org/wiki/Q11379",
+          "display_name": "Total energy",
+          "level": 3,
+          "score": 0.34619998931884766
+        },
+        {
+          "id": "https://openalex.org/C149923435",
+          "wikidata": "https://www.wikidata.org/wiki/Q37732",
+          "display_name": "Demography",
+          "level": 1,
+          "score": 0.30640000104904175
+        },
+        {
+          "id": "https://openalex.org/C2780165032",
+          "wikidata": "https://www.wikidata.org/wiki/Q16869822",
+          "display_name": "Energy consumption",
+          "level": 2,
+          "score": 0.27559998631477356
+        },
+        {
+          "id": "https://openalex.org/C2781030367",
+          "wikidata": "https://www.wikidata.org/wiki/Q5465443",
+          "display_name": "Food away from home",
+          "level": 3,
+          "score": 0.273499995470047
+        },
+        {
+          "id": "https://openalex.org/C116019233",
+          "wikidata": "https://www.wikidata.org/wiki/Q186205",
+          "display_name": "Food energy",
+          "level": 2,
+          "score": 0.2721000015735626
+        },
+        {
+          "id": "https://openalex.org/C142853389",
+          "wikidata": "https://www.wikidata.org/wiki/Q744778",
+          "display_name": "Association (psychology)",
+          "level": 2,
+          "score": 0.2612000107765198
+        }
+      ],
+      "mesh": [
+        {
+          "descriptor_ui": "D000092965",
+          "descriptor_name": "Food, Processed",
+          "qualifier_ui": null,
+          "qualifier_name": null,
+          "is_major_topic": false
+        },
+        {
+          "descriptor_ui": "D000092965",
+          "descriptor_name": "Food, Processed",
+          "qualifier_ui": null,
+          "qualifier_name": null,
+          "is_major_topic": false
+        },
+        {
+          "descriptor_ui": "D000328",
+          "descriptor_name": "Adult",
+          "qualifier_ui": null,
+          "qualifier_name": null,
+          "is_major_topic": false
+        },
+        {
+          "descriptor_ui": "D000328",
+          "descriptor_name": "Adult",
+          "qualifier_ui": null,
+          "qualifier_name": null,
+          "is_major_topic": false
+        },
+        {
+          "descriptor_ui": "D002149",
+          "descriptor_name": "Energy Intake",
+          "qualifier_ui": null,
+          "qualifier_name": null,
+          "is_major_topic": true
+        },
+        {
+          "descriptor_ui": "D002149",
+          "descriptor_name": "Energy Intake",
+          "qualifier_ui": null,
+          "qualifier_name": null,
+          "is_major_topic": true
+        },
+        {
+          "descriptor_ui": "D003430",
+          "descriptor_name": "Cross-Sectional Studies",
+          "qualifier_ui": null,
+          "qualifier_name": null,
+          "is_major_topic": false
+        },
+        {
+          "descriptor_ui": "D003430",
+          "descriptor_name": "Cross-Sectional Studies",
+          "qualifier_ui": null,
+          "qualifier_name": null,
+          "is_major_topic": false
+        },
+        {
+          "descriptor_ui": "D004032",
+          "descriptor_name": "Diet",
+          "qualifier_ui": "Q000706",
+          "qualifier_name": "statistics & numerical data",
+          "is_major_topic": true
+        },
+        {
+          "descriptor_ui": "D004032",
+          "descriptor_name": "Diet",
+          "qualifier_ui": "Q000706",
+          "qualifier_name": "statistics & numerical data",
+          "is_major_topic": true
+        },
+        {
+          "descriptor_ui": "D005260",
+          "descriptor_name": "Female",
+          "qualifier_ui": null,
+          "qualifier_name": null,
+          "is_major_topic": false
+        },
+        {
+          "descriptor_ui": "D005260",
+          "descriptor_name": "Female",
+          "qualifier_ui": null,
+          "qualifier_name": null,
+          "is_major_topic": false
+        },
+        {
+          "descriptor_ui": "D006113",
+          "descriptor_name": "United Kingdom",
+          "qualifier_ui": "Q000453",
+          "qualifier_name": "epidemiology",
+          "is_major_topic": false
+        },
+        {
+          "descriptor_ui": "D006113",
+          "descriptor_name": "United Kingdom",
+          "qualifier_ui": "Q000453",
+          "qualifier_name": "epidemiology",
+          "is_major_topic": false
+        },
+        {
+          "descriptor_ui": "D006801",
+          "descriptor_name": "Humans",
+          "qualifier_ui": null,
+          "qualifier_name": null,
+          "is_major_topic": false
+        },
+        {
+          "descriptor_ui": "D006801",
+          "descriptor_name": "Humans",
+          "qualifier_ui": null,
+          "qualifier_name": null,
+          "is_major_topic": false
+        },
+        {
+          "descriptor_ui": "D008297",
+          "descriptor_name": "Male",
+          "qualifier_ui": null,
+          "qualifier_name": null,
+          "is_major_topic": false
+        },
+        {
+          "descriptor_ui": "D008297",
+          "descriptor_name": "Male",
+          "qualifier_ui": null,
+          "qualifier_name": null,
+          "is_major_topic": false
+        },
+        {
+          "descriptor_ui": "D008875",
+          "descriptor_name": "Middle Aged",
+          "qualifier_ui": null,
+          "qualifier_name": null,
+          "is_major_topic": false
+        },
+        {
+          "descriptor_ui": "D008875",
+          "descriptor_name": "Middle Aged",
+          "qualifier_ui": null,
+          "qualifier_name": null,
+          "is_major_topic": false
+        },
+        {
+          "descriptor_ui": "D009749",
+          "descriptor_name": "Nutrition Surveys",
+          "qualifier_ui": null,
+          "qualifier_name": null,
+          "is_major_topic": false
+        },
+        {
+          "descriptor_ui": "D009749",
+          "descriptor_name": "Nutrition Surveys",
+          "qualifier_ui": null,
+          "qualifier_name": null,
+          "is_major_topic": false
+        },
+        {
+          "descriptor_ui": "D009765",
+          "descriptor_name": "Obesity",
+          "qualifier_ui": "Q000209",
+          "qualifier_name": "etiology",
+          "is_major_topic": true
+        },
+        {
+          "descriptor_ui": "D009765",
+          "descriptor_name": "Obesity",
+          "qualifier_ui": "Q000209",
+          "qualifier_name": "etiology",
+          "is_major_topic": true
+        },
+        {
+          "descriptor_ui": "D009765",
+          "descriptor_name": "Obesity",
+          "qualifier_ui": "Q000453",
+          "qualifier_name": "epidemiology",
+          "is_major_topic": true
+        },
+        {
+          "descriptor_ui": "D009765",
+          "descriptor_name": "Obesity",
+          "qualifier_ui": "Q000453",
+          "qualifier_name": "epidemiology",
+          "is_major_topic": true
+        },
+        {
+          "descriptor_ui": "D013997",
+          "descriptor_name": "Time Factors",
+          "qualifier_ui": null,
+          "qualifier_name": null,
+          "is_major_topic": false
+        },
+        {
+          "descriptor_ui": "D013997",
+          "descriptor_name": "Time Factors",
+          "qualifier_ui": null,
+          "qualifier_name": null,
+          "is_major_topic": false
+        },
+        {
+          "descriptor_ui": "D015930",
+          "descriptor_name": "Diet Records",
+          "qualifier_ui": null,
+          "qualifier_name": null,
+          "is_major_topic": false
+        },
+        {
+          "descriptor_ui": "D015930",
+          "descriptor_name": "Diet Records",
+          "qualifier_ui": null,
+          "qualifier_name": null,
+          "is_major_topic": false
+        },
+        {
+          "descriptor_ui": "D015992",
+          "descriptor_name": "Body Mass Index",
+          "qualifier_ui": null,
+          "qualifier_name": null,
+          "is_major_topic": false
+        },
+        {
+          "descriptor_ui": "D015992",
+          "descriptor_name": "Body Mass Index",
+          "qualifier_ui": null,
+          "qualifier_name": null,
+          "is_major_topic": false
+        },
+        {
+          "descriptor_ui": "D050177",
+          "descriptor_name": "Overweight",
+          "qualifier_ui": "Q000453",
+          "qualifier_name": "epidemiology",
+          "is_major_topic": false
+        },
+        {
+          "descriptor_ui": "D050177",
+          "descriptor_name": "Overweight",
+          "qualifier_ui": "Q000453",
+          "qualifier_name": "epidemiology",
+          "is_major_topic": false
+        },
+        {
+          "descriptor_ui": "D055815",
+          "descriptor_name": "Young Adult",
+          "qualifier_ui": null,
+          "qualifier_name": null,
+          "is_major_topic": false
+        },
+        {
+          "descriptor_ui": "D055815",
+          "descriptor_name": "Young Adult",
+          "qualifier_ui": null,
+          "qualifier_name": null,
+          "is_major_topic": false
+        },
+        {
+          "descriptor_ui": "D057140",
+          "descriptor_name": "Fast Foods",
+          "qualifier_ui": "Q000706",
+          "qualifier_name": "statistics & numerical data",
+          "is_major_topic": true
+        },
+        {
+          "descriptor_ui": "D057140",
+          "descriptor_name": "Fast Foods",
+          "qualifier_ui": "Q000706",
+          "qualifier_name": "statistics & numerical data",
+          "is_major_topic": true
+        }
+      ],
+      "locations_count": 2,
+      "locations": [
+        {
+          "id": "doi:10.1016/j.jand.2025.156261",
+          "is_oa": false,
+          "landing_page_url": "https://doi.org/10.1016/j.jand.2025.156261",
+          "pdf_url": null,
+          "source": {
+            "id": "https://openalex.org/S18733340",
+            "display_name": "Journal of the Academy of Nutrition and Dietetics",
+            "issn_l": "2212-2672",
+            "issn": [
+              "2212-2672",
+              "2212-2680"
+            ],
+            "is_oa": false,
+            "is_in_doaj": false,
+            "is_core": true,
+            "listed_in": [
+              "cwts-core",
+              "doyens",
+              "jufo-1",
+              "ki-jl-1",
+              "medline",
+              "norway-1"
+            ],
+            "host_organization": "https://openalex.org/P4310320990",
+            "host_organization_name": "Elsevier BV",
+            "host_organization_lineage": [
+              "https://openalex.org/P4310320990"
+            ],
+            "host_organization_lineage_names": [
+              "Elsevier BV"
+            ],
+            "type": "journal"
+          },
+          "license": null,
+          "license_id": null,
+          "version": "publishedVersion",
+          "is_accepted": true,
+          "is_published": true,
+          "raw_source_name": "Journal of the Academy of Nutrition and Dietetics",
+          "raw_type": "journal-article"
+        },
+        {
+          "id": "pmid:41391603",
+          "is_oa": false,
+          "landing_page_url": "https://pubmed.ncbi.nlm.nih.gov/41391603",
+          "pdf_url": null,
+          "source": {
+            "id": "https://openalex.org/S4306525036",
+            "display_name": "PubMed",
+            "issn_l": null,
+            "issn": null,
+            "is_oa": false,
+            "is_in_doaj": false,
+            "is_core": false,
+            "listed_in": [],
+            "host_organization": "https://openalex.org/I1299303238",
+            "host_organization_name": "National Institutes of Health",
+            "host_organization_lineage": [
+              "https://openalex.org/I1299303238"
+            ],
+            "host_organization_lineage_names": [],
+            "type": "repository"
+          },
+          "license": null,
+          "license_id": null,
+          "version": "publishedVersion",
+          "is_accepted": true,
+          "is_published": true,
+          "raw_source_name": "Journal of the Academy of Nutrition and Dietetics",
+          "raw_type": "Journal Article"
+        }
+      ],
+      "best_oa_location": null,
+      "sustainable_development_goals": [
+        {
+          "display_name": "Good health and well-being",
+          "id": "https://metadata.un.org/sdg/3",
+          "score": 0.98580002784729
+        },
+        {
+          "display_name": "Zero hunger",
+          "id": "https://metadata.un.org/sdg/2",
+          "score": 0.5365999937057495
+        }
+      ],
+      "sustainable_development_goals_aurora": [],
+      "study_designs": [],
+      "awards": [],
+      "funders": [],
+      "has_content": {
+        "pdf": false,
+        "grobid_xml": false
+      },
+      "content_urls": null,
+      "referenced_works_count": 55,
+      "referenced_works": [
+        "https://openalex.org/W934641992",
+        "https://openalex.org/W1951893152",
+        "https://openalex.org/W1965013935",
+        "https://openalex.org/W2019031697",
+        "https://openalex.org/W2020885061",
+        "https://openalex.org/W2023461487",
+        "https://openalex.org/W2025050665",
+        "https://openalex.org/W2029036505",
+        "https://openalex.org/W2036790146",
+        "https://openalex.org/W2037576830",
+        "https://openalex.org/W2041830601",
+        "https://openalex.org/W2051931704",
+        "https://openalex.org/W2072762256",
+        "https://openalex.org/W2085416412",
+        "https://openalex.org/W2105472095",
+        "https://openalex.org/W2111133148",
+        "https://openalex.org/W2130357926",
+        "https://openalex.org/W2134843796",
+        "https://openalex.org/W2147610494",
+        "https://openalex.org/W2150347280",
+        "https://openalex.org/W2152073875",
+        "https://openalex.org/W2154352437",
+        "https://openalex.org/W2170615859",
+        "https://openalex.org/W2342768847",
+        "https://openalex.org/W2522023399",
+        "https://openalex.org/W2734898792",
+        "https://openalex.org/W2734975732",
+        "https://openalex.org/W2755630489",
+        "https://openalex.org/W2763286314",
+        "https://openalex.org/W2799455061",
+        "https://openalex.org/W2801361433",
+        "https://openalex.org/W2911640446",
+        "https://openalex.org/W2911801274",
+        "https://openalex.org/W2978826000",
+        "https://openalex.org/W2978856507",
+        "https://openalex.org/W2979707214",
+        "https://openalex.org/W2980788348",
+        "https://openalex.org/W2982324203",
+        "https://openalex.org/W3023742764",
+        "https://openalex.org/W3046243323",
+        "https://openalex.org/W3049022684",
+        "https://openalex.org/W3154717121",
+        "https://openalex.org/W3176817348",
+        "https://openalex.org/W3199233460",
+        "https://openalex.org/W4220750305",
+        "https://openalex.org/W4223492290",
+        "https://openalex.org/W4225349698",
+        "https://openalex.org/W4237112983",
+        "https://openalex.org/W4283733928",
+        "https://openalex.org/W4308592619",
+        "https://openalex.org/W4311927088",
+        "https://openalex.org/W4328121682",
+        "https://openalex.org/W4328135728",
+        "https://openalex.org/W4366596395",
+        "https://openalex.org/W4379055320"
+      ],
+      "related_works": [],
+      "abstract_inverted_index": null,
+      "counts_by_year": [
+        {
+          "year": 2026,
+          "cited_by_count": 2
+        }
+      ],
+      "updated_date": "2026-10-09T09:14:12.587421",
+      "created_date": "2025-12-13T00:00:00"
+    }
+  }
+}

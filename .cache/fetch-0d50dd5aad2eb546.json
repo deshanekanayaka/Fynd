@@ -1,0 +1,15 @@
+{
+  "parts": {
+    "api": "open-copy-fetch",
+    "url": "https://pdpublishers.com/wp-content/uploads/2026/07/PD2601208004-Ali-Algarni.pdf",
+    "redirects": 3,
+    "max_bytes": 20971520,
+    "shape": 1
+  },
+  "value": {
+    "kind": "bytes",
+    "content_type": "application/pdf",
+    "byte_count": 2556849,
+    "file": "fetch-0d50dd5aad2eb546.bin"
+  }
+}
