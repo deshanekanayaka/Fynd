@@ -1,4 +1,4 @@
-"""The pipeline has to reach all eight reasons, and reach them with no HTTP."""
+"""The pipeline has to reach every reason, and reach them with no HTTP."""
 
 from fynd import reasons
 from fynd.extract import Extracted
@@ -15,6 +15,9 @@ from fynd.source_text import (
 A_LONG_TEXT = "Results. The household energy demand of England rose again. " * 200
 REPOSITORY_COPY = OpenCopy(
     url="https://dro.dur.ac.uk/aaa.pdf", host="dro.dur.ac.uk", license="cc-by"
+)
+JOURNAL_COPY = OpenCopy(
+    url="https://www.mdpi.com/aaa.pdf", host="www.mdpi.com", license="cc-by"
 )
 
 
@@ -53,7 +56,7 @@ def pdf_bytes() -> Fetched:
 def test_a_paper_that_reaches_usable_text() -> None:
     result = read_open_copy(
         paper(),
-        resolve_to(Resolution(found=True, open_copy=REPOSITORY_COPY)),
+        resolve_to(Resolution(found=True, candidates=(REPOSITORY_COPY,))),
         fetch_to(pdf_bytes()),
         extract_to(A_LONG_TEXT),
         reason_against_paper_text,
@@ -61,6 +64,7 @@ def test_a_paper_that_reaches_usable_text() -> None:
 
     assert result.reason == reasons.USABLE
     assert result.is_usable is True
+    assert result.attempts == 1
     assert result.open_copy == REPOSITORY_COPY
     assert result.extracted is not None
     assert result.extracted.text == A_LONG_TEXT
@@ -69,7 +73,7 @@ def test_a_paper_that_reaches_usable_text() -> None:
 def test_a_paper_with_no_identifier_and_no_link() -> None:
     result = read_open_copy(
         paper(doi=""),
-        resolve_to(Resolution(found=False, open_copy=None)),
+        resolve_to(Resolution(found=False, reason=reasons.NO_OPENALEX_RECORD)),
         fetch_to(pdf_bytes()),
         extract_to(A_LONG_TEXT),
         reason_against_paper_text,
@@ -80,7 +84,7 @@ def test_a_paper_with_no_identifier_and_no_link() -> None:
 def test_a_paper_openalex_never_heard_of() -> None:
     result = read_open_copy(
         paper(),
-        resolve_to(Resolution(found=False, open_copy=None)),
+        resolve_to(Resolution(found=False, reason=reasons.NO_OPENALEX_RECORD)),
         fetch_to(pdf_bytes()),
         extract_to(A_LONG_TEXT),
         reason_against_paper_text,
@@ -91,18 +95,18 @@ def test_a_paper_openalex_never_heard_of() -> None:
 def test_a_paper_with_only_a_publisher_location() -> None:
     result = read_open_copy(
         paper(),
-        resolve_to(Resolution(found=True, open_copy=None)),
+        resolve_to(Resolution(found=True, reason=reasons.NO_OPEN_LOCATION)),
         fetch_to(pdf_bytes()),
         extract_to(A_LONG_TEXT),
         reason_against_paper_text,
     )
-    assert result.reason == reasons.NO_REPOSITORY_LOCATION
+    assert result.reason == reasons.NO_OPEN_LOCATION
 
 
-def test_the_semantic_scholar_link_is_the_second_chance() -> None:
+def test_the_semantic_scholar_link_is_the_last_resort() -> None:
     result = read_open_copy(
         paper(open_copy_url="https://www.mdpi.com/aaa.pdf"),
-        resolve_to(Resolution(found=True, open_copy=None)),
+        resolve_to(Resolution(found=True, reason=reasons.NO_OPEN_LOCATION)),
         fetch_to(pdf_bytes()),
         extract_to(A_LONG_TEXT),
         reason_against_paper_text,
@@ -119,19 +123,19 @@ def test_a_doi_org_link_is_never_a_fetch_target() -> None:
     # redirect to a publisher page, and ADR 0007 fetches no publisher.
     result = read_open_copy(
         paper(open_copy_url="https://doi.org/10.1000/aaa"),
-        resolve_to(Resolution(found=True, open_copy=None)),
+        resolve_to(Resolution(found=True, reason=reasons.NO_OPEN_LOCATION)),
         fetch_to(pdf_bytes()),
         extract_to(A_LONG_TEXT),
         reason_against_paper_text,
     )
-    assert result.reason == reasons.NO_REPOSITORY_LOCATION
+    assert result.reason == reasons.NO_OPEN_LOCATION
 
 
 def test_a_refused_fetch_keeps_its_reason() -> None:
     refused = Refused(status=403, content_type="text/html", reason=reasons.FETCH_REFUSED)
     result = read_open_copy(
         paper(),
-        resolve_to(Resolution(found=True, open_copy=REPOSITORY_COPY)),
+        resolve_to(Resolution(found=True, candidates=(REPOSITORY_COPY,))),
         fetch_to(refused),
         extract_to(A_LONG_TEXT),
         reason_against_paper_text,
@@ -146,7 +150,7 @@ def test_a_page_that_is_not_a_pdf_keeps_its_reason() -> None:
     refused = Refused(status=200, content_type="text/html", reason=reasons.NOT_A_PDF)
     result = read_open_copy(
         paper(),
-        resolve_to(Resolution(found=True, open_copy=REPOSITORY_COPY)),
+        resolve_to(Resolution(found=True, candidates=(REPOSITORY_COPY,))),
         fetch_to(refused),
         extract_to(A_LONG_TEXT),
         reason_against_paper_text,
@@ -157,7 +161,7 @@ def test_a_page_that_is_not_a_pdf_keeps_its_reason() -> None:
 def test_a_short_text_is_not_usable() -> None:
     result = read_open_copy(
         paper(),
-        resolve_to(Resolution(found=True, open_copy=REPOSITORY_COPY)),
+        resolve_to(Resolution(found=True, candidates=(REPOSITORY_COPY,))),
         fetch_to(pdf_bytes()),
         extract_to("Please accept our cookies to continue."),
         reason_against_paper_text,
@@ -171,7 +175,7 @@ def test_a_text_of_rubbish_is_not_usable() -> None:
     rubbish = (chr(1) + chr(2) + chr(0xE000) + chr(0xE001)) * 2000
     result = read_open_copy(
         paper(),
-        resolve_to(Resolution(found=True, open_copy=REPOSITORY_COPY)),
+        resolve_to(Resolution(found=True, candidates=(REPOSITORY_COPY,))),
         fetch_to(pdf_bytes()),
         extract_to(rubbish),
         reason_against_paper_text,
@@ -184,7 +188,7 @@ def test_the_resolve_is_skipped_when_a_paper_has_no_identifier() -> None:
 
     def resolve(doi: str) -> Resolution:
         asked.append(doi)
-        return Resolution(found=False, open_copy=None)
+        return Resolution(found=False, reason=reasons.NO_OPENALEX_RECORD)
 
     read_open_copy(
         paper(doi="", open_copy_url="https://www.mdpi.com/aaa.pdf"),
@@ -196,21 +200,25 @@ def test_the_resolve_is_skipped_when_a_paper_has_no_identifier() -> None:
     assert asked == []
 
 
-def test_every_reason_is_one_of_the_eight() -> None:
+def test_every_reason_is_a_name_the_table_prints() -> None:
     # The reason table counts these strings, so a typo must fail a test and not
     # a table.
     for reason in (
         reasons.USABLE,
         reasons.NO_DOI,
         reasons.NO_OPENALEX_RECORD,
-        reasons.NO_REPOSITORY_LOCATION,
+        reasons.NO_OPEN_LOCATION,
+        reasons.NO_PDF_LINK,
+        reasons.BLOCKLISTED_ONLY,
         reasons.FETCH_REFUSED,
         reasons.NOT_A_PDF,
         reasons.TEXT_TOO_SHORT,
         reasons.TEXT_NOT_TEXTUAL,
+        reasons.NO_SECTION_WORD,
     ):
         assert reason in reasons.ALL
-    assert len(reasons.ALL) == 9
+    assert len(reasons.ALL) == 11
+    assert not hasattr(reasons, "NO_REPOSITORY_LOCATION")
 
 
 def test_a_text_at_the_length_threshold() -> None:
@@ -238,24 +246,138 @@ def test_a_text_at_the_ordinary_share_boundary() -> None:
     )
 
 
-def test_an_openalex_location_on_doi_org_is_never_fetched() -> None:
-    # The live run of 2026-10-09 found a work whose repository location was a
-    # doi.org address. ADR 0007 fetches no publisher, and that host redirects
-    # to one, so the guard belongs on every location and not on the fallback.
+def test_the_semantic_scholar_link_is_not_used_when_openalex_names_one() -> None:
+    # The fallback produced none of the 5 usable files of 2026-10-09 and cost
+    # 3 refused fetches, so it runs only when OpenAlex names no candidate.
     asked: list = []
 
     def fetch(url: str):
         asked.append(url)
         return pdf_bytes()
 
-    lookup_only = OpenCopy(url="https://doi.org/10.1000/aaa", host="doi.org", license="cc-by")
-    result = read_open_copy(
-        paper(),
-        resolve_to(Resolution(found=True, open_copy=lookup_only)),
+    read_open_copy(
+        paper(open_copy_url="https://doaj.org/article/aaa"),
+        resolve_to(Resolution(found=True, candidates=(REPOSITORY_COPY,))),
         fetch,
         extract_to(A_LONG_TEXT),
         reason_against_paper_text,
     )
 
-    assert result.reason == reasons.NO_REPOSITORY_LOCATION
+    assert asked == [REPOSITORY_COPY.url]
+
+
+def test_a_second_candidate_is_tried_after_a_refusal() -> None:
+    # 10 Papers of the measured pool carry a free file, and the old rule
+    # reached 5, because it offered one location and stopped.
+    asked: list = []
+
+    def fetch(url: str):
+        asked.append(url)
+        if url == REPOSITORY_COPY.url:
+            return Refused(status=403, content_type="text/html", reason=reasons.FETCH_REFUSED)
+        return pdf_bytes()
+
+    result = read_open_copy(
+        paper(),
+        resolve_to(Resolution(found=True, candidates=(REPOSITORY_COPY, JOURNAL_COPY))),
+        fetch,
+        extract_to(A_LONG_TEXT),
+        reason_against_paper_text,
+    )
+
+    assert asked == [REPOSITORY_COPY.url, JOURNAL_COPY.url]
+    assert result.reason == reasons.USABLE
+    assert result.open_copy == JOURNAL_COPY
+    assert result.attempts == 2
+
+
+def test_the_first_file_stops_the_attempts() -> None:
+    asked: list = []
+
+    def fetch(url: str):
+        asked.append(url)
+        return pdf_bytes()
+
+    result = read_open_copy(
+        paper(),
+        resolve_to(Resolution(found=True, candidates=(REPOSITORY_COPY, JOURNAL_COPY))),
+        fetch,
+        extract_to(A_LONG_TEXT),
+        reason_against_paper_text,
+    )
+
+    assert asked == [REPOSITORY_COPY.url]
+    assert result.attempts == 1
+
+
+def test_a_text_that_fails_a_check_stops_the_attempts() -> None:
+    # A file arrived, so the Paper has its answer. A second candidate of the
+    # same Paper is the same article, and the reason table counts the failure.
+    asked: list = []
+
+    def fetch(url: str):
+        asked.append(url)
+        return pdf_bytes()
+
+    result = read_open_copy(
+        paper(),
+        resolve_to(Resolution(found=True, candidates=(REPOSITORY_COPY, JOURNAL_COPY))),
+        fetch,
+        extract_to("Please accept our cookies to continue."),
+        reason_against_paper_text,
+    )
+
+    assert asked == [REPOSITORY_COPY.url]
+    assert result.reason == reasons.TEXT_TOO_SHORT
+
+
+def test_the_last_refusal_is_the_reason_when_every_candidate_fails() -> None:
+    def fetch(url: str):
+        if url == REPOSITORY_COPY.url:
+            return Refused(status=403, content_type="text/html", reason=reasons.FETCH_REFUSED)
+        return Refused(status=200, content_type="text/html", reason=reasons.NOT_A_PDF)
+
+    result = read_open_copy(
+        paper(),
+        resolve_to(Resolution(found=True, candidates=(REPOSITORY_COPY, JOURNAL_COPY))),
+        fetch,
+        extract_to(A_LONG_TEXT),
+        reason_against_paper_text,
+    )
+
+    assert result.reason == reasons.NOT_A_PDF
+    assert result.open_copy == JOURNAL_COPY
+    assert result.attempts == 2
+
+
+def test_a_fallback_link_that_holds_no_file_is_never_fetched() -> None:
+    # 6 of the 12 Semantic Scholar links of the day 1 pool were doi.org
+    # addresses. doi.org is a lookup key and never a fetch target.
+    asked: list = []
+
+    def fetch(url: str):
+        asked.append(url)
+        return pdf_bytes()
+
+    result = read_open_copy(
+        paper(open_copy_url="https://doi.org/10.1000/aaa"),
+        resolve_to(Resolution(found=True, reason=reasons.BLOCKLISTED_ONLY)),
+        fetch,
+        extract_to(A_LONG_TEXT),
+        reason_against_paper_text,
+    )
+
+    assert result.reason == reasons.BLOCKLISTED_ONLY
+    assert result.attempts == 0
     assert asked == []
+
+
+def test_a_landing_page_only_paper_keeps_its_reason() -> None:
+    result = read_open_copy(
+        paper(),
+        resolve_to(Resolution(found=True, reason=reasons.NO_PDF_LINK)),
+        fetch_to(pdf_bytes()),
+        extract_to(A_LONG_TEXT),
+        reason_against_paper_text,
+    )
+    assert result.reason == reasons.NO_PDF_LINK

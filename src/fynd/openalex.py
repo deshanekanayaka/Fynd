@@ -1,9 +1,13 @@
 """Resolve the Open copy of a Paper a second time, with OpenAlex.
 
 Semantic Scholar hands Fynd one link, and 6 of the 12 links in the first live
-run point at doi.org, which redirects to a publisher page Fynd never fetches.
-OpenAlex takes the digital object identifier and names every location that
-holds the file. See ADR 0007.
+run point at doi.org, which holds no file. OpenAlex takes the digital object
+identifier and names every location that holds one.
+
+An open file is a licence question. Every open location with a PDF link is a
+candidate, a repository ranks first and a journal second, and the only host
+rule left is a blocklist of hosts that hold no file. See ADR 0012, which
+supersedes the repository rule of ADR 0007.
 """
 
 from dataclasses import dataclass
@@ -12,18 +16,31 @@ from urllib.parse import quote, urlparse
 
 import httpx
 
-from fynd import cache
+from fynd import cache, reasons
 from fynd.contact import contact_email, user_agent
 from fynd.models import OpenCopy
 
 WORK_URL: Final = "https://api.openalex.org/works/doi:"
 
-# The source type OpenAlex gives a repository. Every other type is a publisher,
-# a conference, or a book series, and Fynd fetches none of them.
+# The source type OpenAlex gives a repository. A repository ranks first,
+# because it serves a program and a journal often does not. Every other type
+# ranks second, and no type is refused. See ADR 0012.
 REPOSITORY_TYPE: Final = "repository"
 
-# The shape this file turns a reply into. The cache key carries it, so a change
-# to the rules below does not serve an answer parsed by the old ones.
+# The hosts that hold no file by design. This is the only host rule left.
+# doi.org and dx.doi.org redirect to a publisher page, and doaj.org is an
+# index of journals that answered 2 fetches with a 403 on 2026-10-09.
+NO_FILE_HOSTS: Final = ("doi.org", "dx.doi.org", "doaj.org")
+
+# At most this many candidates are offered for one Paper. 19 of the 20 Papers
+# of the measured pool hold 3 or fewer, so the cap binds once, and the
+# attempts column of the next measurement says whether a fourth would pay.
+MAX_CANDIDATES: Final = 3
+
+# The shape of the stored value, which is the raw reply plus a found flag. The
+# cache key carries it. The rules above read that raw reply at every call, so
+# ADR 0012 changed what a candidate is and left this number alone: the 20
+# records in git replay under the new rules with no lookup.
 REPLY_SHAPE_VERSION: Final = 1
 
 
@@ -35,12 +52,14 @@ class WorkNotRead(Exception):
 class Resolution:
     """What OpenAlex knows about one digital object identifier.
 
-    Three answers are possible, and the reason table counts them apart. No
-    record at all, a record with no repository file, and a record with one.
+    `candidates` holds the open files Fynd may fetch, already ranked and
+    already capped. `reason` says why the list is empty, and it is an empty
+    string when the list is not.
     """
 
     found: bool
-    open_copy: OpenCopy | None
+    candidates: tuple[OpenCopy, ...] = ()
+    reason: str = ""
 
 
 def host_of(url: str) -> str:
@@ -49,36 +68,68 @@ def host_of(url: str) -> str:
 
 
 def is_repository(location: dict[str, Any]) -> bool:
-    """Says whether one location sits in a repository and not at a publisher."""
+    """Says whether one location sits in a repository and not at a journal."""
     source = location.get("source") or {}
     return source.get("type") == REPOSITORY_TYPE
 
 
-def open_copy_from(location: dict[str, Any]) -> OpenCopy | None:
-    """Turns one repository location into an Open copy, or returns None."""
-    # The PDF link is what the fetcher wants. A repository that gives only a
-    # landing page is still worth the attempt, because the fetcher then refuses
-    # it and the reason table says "not a PDF", which is a measured fact.
-    url = location.get("pdf_url") or location.get("landing_page_url") or ""
-    if not url:
-        return None
-    return OpenCopy(url=url, host=host_of(url), license=location.get("license") or "")
+def holds_no_file(url: str) -> bool:
+    """Says whether this host holds no file by design."""
+    return host_of(url) in NO_FILE_HOSTS
 
 
-def open_copy_in(work: dict[str, Any]) -> OpenCopy | None:
-    """Returns the location Fynd fetches for one work, or None when it has none."""
+def open_locations(work: dict[str, Any]) -> list[dict[str, Any]]:
+    """Returns every open location of one work, best first and once each.
+
+    `best_oa_location` repeats one entry of `locations`, and two attempts at
+    one link would spend the cap on it.
+    """
+    found: list[dict[str, Any]] = []
+    seen: set[str] = set()
     best = work.get("best_oa_location") or {}
-    if best and is_repository(best):
-        return open_copy_from(best)
-
-    for location in work.get("locations") or []:
-        if not isinstance(location, dict):
+    for location in [best, *(work.get("locations") or [])]:
+        if not isinstance(location, dict) or not location.get("is_oa"):
             continue
-        if location.get("is_oa") and is_repository(location):
-            found = open_copy_from(location)
-            if found is not None:
-                return found
-    return None
+        # A location with no PDF link is still counted here, because the reason
+        # below tells a closed Paper apart from one with a landing page only.
+        mark = str(location.get("pdf_url") or location.get("landing_page_url") or "")
+        if not mark or mark in seen:
+            continue
+        seen.add(mark)
+        found.append(location)
+    return found
+
+
+def open_candidates(work: dict[str, Any]) -> list[OpenCopy]:
+    """Returns the open files Fynd may fetch for one work, in the order to try.
+
+    A candidate is an open location with a PDF link on a host that holds a
+    file. A repository ranks first and a journal second, and inside one rank
+    the OpenAlex order stays. The stage 2 gate counts this list, and the
+    pipeline fetches it, so neither can count what the other would not try.
+    """
+    repositories: list[OpenCopy] = []
+    others: list[OpenCopy] = []
+    for location in open_locations(work):
+        url = str(location.get("pdf_url") or "")
+        if not url or holds_no_file(url):
+            continue
+        copy = OpenCopy(url=url, host=host_of(url), license=location.get("license") or "")
+        if is_repository(location):
+            repositories.append(copy)
+        else:
+            others.append(copy)
+    return [*repositories, *others][:MAX_CANDIDATES]
+
+
+def reason_for_no_candidate(work: dict[str, Any]) -> str:
+    """Returns the reason one work offers no candidate, checked in three steps."""
+    locations = open_locations(work)
+    if not locations:
+        return reasons.NO_OPEN_LOCATION
+    if not any(location.get("pdf_url") for location in locations):
+        return reasons.NO_PDF_LINK
+    return reasons.BLOCKLISTED_ONLY
 
 
 class OpenAlex:
@@ -107,9 +158,12 @@ class OpenAlex:
             cache.write(key, parts, stored)
 
         if not stored.get("found"):
-            return Resolution(found=False, open_copy=None)
+            return Resolution(found=False, reason=reasons.NO_OPENALEX_RECORD)
         work = stored.get("work") or {}
-        return Resolution(found=True, open_copy=open_copy_in(work))
+        candidates = open_candidates(work)
+        if not candidates:
+            return Resolution(found=True, reason=reason_for_no_candidate(work))
+        return Resolution(found=True, candidates=tuple(candidates))
 
     def fetch_work(self, doi: str) -> dict[str, Any]:
         """Calls the works endpoint. The only method here that uses the network."""
