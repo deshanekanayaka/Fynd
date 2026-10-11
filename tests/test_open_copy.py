@@ -1,8 +1,10 @@
 """The pipeline has to reach every reason, and reach them with no HTTP."""
 
+import pytest
+
 from fynd import reasons
 from fynd.extract import Extracted
-from fynd.fetcher import Fetched, Refused
+from fynd.fetcher import Fetched, FetchFailed, Refused
 from fynd.models import OpenCopy, Paper
 from fynd.open_copy import read_open_copy
 from fynd.openalex import Resolution
@@ -381,3 +383,74 @@ def test_a_landing_page_only_paper_keeps_its_reason() -> None:
         reason_against_paper_text,
     )
     assert result.reason == reasons.NO_PDF_LINK
+
+
+def test_a_host_that_times_out_does_not_lose_the_other_candidates() -> None:
+    # A timeout raises, and the old loop let it out, so a slow repository
+    # cost the Paper a file that sat at the second candidate.
+    asked: list = []
+
+    def fetch(url: str):
+        asked.append(url)
+        if url == REPOSITORY_COPY.url:
+            raise FetchFailed("dro.dur.ac.uk did not answer twice in a row.")
+        return pdf_bytes()
+
+    result = read_open_copy(
+        paper(),
+        resolve_to(Resolution(found=True, candidates=(REPOSITORY_COPY, JOURNAL_COPY))),
+        fetch,
+        extract_to(A_LONG_TEXT),
+        reason_against_paper_text,
+    )
+
+    assert asked == [REPOSITORY_COPY.url, JOURNAL_COPY.url]
+    assert result.reason == reasons.USABLE
+    assert result.tried_hosts == ("dro.dur.ac.uk", "www.mdpi.com")
+
+
+def test_a_paper_whose_every_candidate_times_out_still_breaks() -> None:
+    # A failure is not an answer. Nothing of it is cached, and the command
+    # counts the Paper as dropped instead of printing a reason it never got.
+    def fetch(url: str):
+        raise FetchFailed("Neither host answered twice in a row.")
+
+    with pytest.raises(FetchFailed):
+        read_open_copy(
+            paper(),
+            resolve_to(Resolution(found=True, candidates=(REPOSITORY_COPY, JOURNAL_COPY))),
+            fetch,
+            extract_to(A_LONG_TEXT),
+            reason_against_paper_text,
+        )
+
+
+def test_a_refusal_wins_over_a_timeout_as_the_reason() -> None:
+    # One host refused with an answer and one failed to answer. The table
+    # counts the answer, because a refusal is a fact about a host.
+    def fetch(url: str):
+        if url == REPOSITORY_COPY.url:
+            raise FetchFailed("dro.dur.ac.uk did not answer twice in a row.")
+        return Refused(status=403, content_type="text/html", reason=reasons.FETCH_REFUSED)
+
+    result = read_open_copy(
+        paper(),
+        resolve_to(Resolution(found=True, candidates=(REPOSITORY_COPY, JOURNAL_COPY))),
+        fetch,
+        extract_to(A_LONG_TEXT),
+        reason_against_paper_text,
+    )
+
+    assert result.reason == reasons.FETCH_REFUSED
+    assert result.attempts == 2
+
+
+def test_a_resolver_that_names_no_reason_still_lands_in_the_table() -> None:
+    result = read_open_copy(
+        paper(),
+        resolve_to(Resolution(found=True)),
+        fetch_to(pdf_bytes()),
+        extract_to(A_LONG_TEXT),
+        reason_against_paper_text,
+    )
+    assert result.reason in reasons.ALL

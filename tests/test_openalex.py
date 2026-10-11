@@ -5,7 +5,13 @@ import pytest
 
 from fynd import reasons
 from fynd.contact import ContactEmailMissing
-from fynd.openalex import OpenAlex, WorkNotRead
+from fynd.openalex import (
+    OpenAlex,
+    WorkNotRead,
+    holds_no_file,
+    open_candidates,
+    reason_for_no_candidate,
+)
 
 # One recorded reply, trimmed to the fields Fynd reads. A real work carries a
 # journal location and a repository location, and both are candidates now.
@@ -362,3 +368,24 @@ def test_an_identifier_with_a_hash_is_escaped(tmp_path, monkeypatch) -> None:
     asked = str(calls[0].url)
     assert "10.1000%2Fa%23b%3Fc%3D1" in asked
     assert asked.count("#") == 0
+
+
+def test_the_blocklist_reads_a_host_in_any_spelling() -> None:
+    # doaj.org answered 2 fetches with a 403 on 2026-10-09. The same index
+    # under `www.` is the same index.
+    assert holds_no_file("https://doaj.org/article/aaa.pdf") is True
+    assert holds_no_file("https://www.doaj.org/article/aaa.pdf") is True
+    assert holds_no_file("https://DOI.org/10.1000/aaa") is True
+    assert holds_no_file("https://discovery.ucl.ac.uk/aaa.pdf") is False
+
+
+def test_an_open_location_with_no_link_at_all_is_still_open() -> None:
+    # OpenAlex calls this location open, so the Paper is not closed. The
+    # reason table must not read it as a Paper with no open copy anywhere.
+    work = {
+        "best_oa_location": None,
+        "locations": [{"is_oa": True, "source": {"type": "repository"}}],
+    }
+
+    assert open_candidates(work) == []
+    assert reason_for_no_candidate(work) == reasons.NO_PDF_LINK

@@ -14,7 +14,7 @@ from typing import Protocol
 
 from fynd import reasons
 from fynd.extract import Extracted
-from fynd.fetcher import FetchAnswer, Fetched
+from fynd.fetcher import FetchAnswer, Fetched, FetchFailed
 from fynd.models import OpenCopy, Paper
 from fynd.openalex import Resolution, holds_no_file, host_of
 
@@ -47,21 +47,26 @@ class Check(Protocol):
 class OpenCopyResult:
     """What one Paper gave, and the reason it gave no more than that.
 
-    `attempts` counts the links fetched for this Paper, and `reason` is the
-    reason of the last attempt. One count and one reason, because the only
-    reader is a table that counts reasons. See ADR 0012.
+    `tried_hosts` names every host this Paper cost a fetch, in order, because
+    the host table counts links tried and a Paper now tries up to 3. `reason`
+    is the reason of the last attempt. See ADR 0012.
     """
 
     paper: Paper
     reason: str
     open_copy: OpenCopy | None = None
     extracted: Extracted | None = None
-    attempts: int = 0
+    tried_hosts: tuple[str, ...] = ()
 
     @property
     def is_usable(self) -> bool:
         """Says whether this Paper reached Usable text."""
         return self.reason == reasons.USABLE
+
+    @property
+    def attempts(self) -> int:
+        """Counts the links this Paper cost."""
+        return len(self.tried_hosts)
 
 
 def fallback_open_copy(paper: Paper) -> OpenCopy | None:
@@ -95,7 +100,9 @@ def candidates_for(paper: Paper, resolve: Resolve) -> tuple[list[OpenCopy], str]
     found = fallback_open_copy(paper)
     if found is not None:
         return [found], ""
-    return [], answer.reason
+    # A resolver that names no reason would leave a Paper out of the reason
+    # table, and that table must sum to the pool.
+    return [], answer.reason or reasons.NO_OPEN_LOCATION
 
 
 def read_open_copy(
@@ -110,18 +117,28 @@ def read_open_copy(
     Each candidate is fetched in turn, and the first file ends the attempts,
     whether or not its text passes the checks. A second candidate of one Paper
     is the same article, so a failed check is the Paper's answer.
+
+    A host that refuses never stops the run, and neither does one that times
+    out. A timeout is a failure and not an answer, so when no candidate gave a
+    file the failure is raised and the caller counts the Paper as dropped.
     """
     candidates, reason = candidates_for(paper, resolve)
     if not candidates:
         return OpenCopyResult(paper=paper, reason=reason)
 
-    attempts = 0
+    tried: list[str] = []
     last: OpenCopy | None = None
     last_reason = ""
+    failure: FetchFailed | None = None
     for open_copy in candidates:
-        attempts += 1
+        tried.append(open_copy.host)
         last = open_copy
-        answer = fetch(open_copy.url)
+        try:
+            answer = fetch(open_copy.url)
+        except FetchFailed as error:
+            # The next candidate is another host, and it may hold the file.
+            failure = error
+            continue
         if isinstance(answer, Fetched):
             extracted = extract(answer.data)
             against = check(extracted.text)
@@ -130,12 +147,17 @@ def read_open_copy(
                 reason=against or reasons.USABLE,
                 open_copy=open_copy,
                 extracted=extracted,
-                attempts=attempts,
+                tried_hosts=tuple(tried),
             )
         last_reason = answer.reason
 
+    if not last_reason and failure is not None:
+        # Every candidate failed, and a failure is not an answer. Nothing of it
+        # is cached, so the same links are tried again when you ask again.
+        raise failure
+
     # Every candidate refused. The reason of the last one is the Paper's
-    # reason, and the attempts say how many links it cost.
+    # reason, and the hosts say how many links it cost.
     return OpenCopyResult(
-        paper=paper, reason=last_reason, open_copy=last, attempts=attempts
+        paper=paper, reason=last_reason, open_copy=last, tried_hosts=tuple(tried)
     )

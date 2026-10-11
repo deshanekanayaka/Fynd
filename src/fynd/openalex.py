@@ -74,8 +74,14 @@ def is_repository(location: dict[str, Any]) -> bool:
 
 
 def holds_no_file(url: str) -> bool:
-    """Says whether this host holds no file by design."""
-    return host_of(url) in NO_FILE_HOSTS
+    """Says whether this host holds no file by design.
+
+    The host is lowercased, and a leading `www.` is dropped, because
+    `https://www.doaj.org/article/x` is the same index as `https://doaj.org`.
+    """
+    host = host_of(url).lower()
+    bare = host[4:] if host.startswith("www.") else host
+    return bare in NO_FILE_HOSTS
 
 
 def open_locations(work: dict[str, Any]) -> list[dict[str, Any]]:
@@ -87,13 +93,15 @@ def open_locations(work: dict[str, Any]) -> list[dict[str, Any]]:
     found: list[dict[str, Any]] = []
     seen: set[str] = set()
     best = work.get("best_oa_location") or {}
-    for location in [best, *(work.get("locations") or [])]:
+    for number, location in enumerate([best, *(work.get("locations") or [])]):
         if not isinstance(location, dict) or not location.get("is_oa"):
             continue
         # A location with no PDF link is still counted here, because the reason
         # below tells a closed Paper apart from one with a landing page only.
-        mark = str(location.get("pdf_url") or location.get("landing_page_url") or "")
-        if not mark or mark in seen:
+        # A location with no link at all keeps its place in the count under its
+        # position, because OpenAlex still calls that location open.
+        mark = str(location.get("pdf_url") or location.get("landing_page_url") or f"#{number}")
+        if mark in seen:
             continue
         seen.add(mark)
         found.append(location)
