@@ -1,6 +1,6 @@
 # Next steps
 
-Updated: 2026-10-11, day 5. Target ship date: 2026-10-26.
+Updated: 2026-10-11, end of day 5. Target ship date: 2026-10-26.
 The ship date is a target and not a constraint. The design phase takes the time it needs, because Deshan must be able to explain every part of this project.
 Read [PRD.md](./PRD.md) for the product and [CONTEXT.md](./CONTEXT.md) for the vocabulary.
 
@@ -274,6 +274,32 @@ The reason vocabulary after day 5. `no_repository_location` is gone. `no_open_lo
 The blocklist holds hosts that hold no file by design, which is doi.org, dx.doi.org and doaj.org. A host that refused once is not listed, because the fetch cache holds its status and the table counts it.
 
 One finding still waits for day 7. 3 of the 20 Papers are about ultra-processed food, so the search is not precise. The retrieval labelled set is where that gets a number.
+
+## Built on day 5: the coverage work, and where it ended
+
+Three of the six issues are merged, one is closed without code, and two remain.
+
+- Issue 14, pull request 21. ADR 0012, with the pointer in ADR 0007 and the dated note in ADR 0002. The Open copy entry in `CONTEXT.md` is a licence rule now.
+- Issue 15, pull request 22. `open_candidates` in `openalex.py` returns the ranked candidates minus the blocklist, capped at 3. The pipeline tries each in turn and stops at Usable text. The Semantic Scholar link is the last resort. It runs only for a Paper that OpenAlex gives no candidate.
+- Issue 16. Closed without code. The 3 landing-page-only Papers of the pool name doi.org three times and doaj.org once. Both hosts hold no file, so the `citation_pdf_url` hop pays 0 Papers today.
+- Issue 17, pull request 23. robots.txt under RFC 9309, read inside `Fetcher.fetch` and before the fetch cache. A 200 and a 4xx that is not a rate limit are cached for a day. The wait is the larger of one second and a named `Crawl-delay`.
+- `bugs.md`, pull request 24. The twelve bugs of the day, with the root cause, the fix, the verification and the prevention for each one.
+
+The reason table now holds 12 names. `no_repository_location` is gone, and `no_open_location`, `no_pdf_link`, `blocklisted_only` and `robots_refused` are in, checked in that order.
+
+170 tests pass with ruff clean. No test reaches the network, and no test spends a token.
+
+The number so far is a prediction and not a measurement. A replay of the 20 committed OpenAlex records through the new rules gives 10 Papers with a candidate, against the 5 the old rule reached. A candidate is a link and not a file, so issue 19 is the number that counts.
+
+## The task for day 6
+
+Two issues remain from day 5, and they run in this order.
+
+1. Issue 18. The stage 2 gate counts the Papers with a candidate, through the same `open_candidates` the pipeline uses. `accept_topic` takes the lookup as a second plain function argument. The threshold stays at 3, and `SearchResult.open_copy_count` stays as a field that no gate reads.
+2. Issue 19. One live run of `measure-open-copies`, with the new rule and robots.txt in place. The table is a dated file in `docs/measurements`, with a `README.md` there that lists the runs. The per Paper list gains the attempts column, and the file names the previous number, the prediction and the new number.
+
+Day 6 then holds two findings to carry forward. The gate will promise 10 where the pipeline reached 5, so the gap is the number for the stage 4 guard to answer. 3 of the 20 Papers are about ultra-processed food, so the search is not precise. The retrieval labelled set of day 7 is where that gets a number.
+
 
 ## Do not do yet
 
