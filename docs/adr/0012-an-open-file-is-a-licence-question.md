@@ -27,6 +27,8 @@ An open file is a licence question. OpenAlex marks a location `is_oa` and states
 
 A candidate is any open location that names a PDF link and whose host is not on the blocklist. Candidates rank with a repository first and a journal second, and inside one rank they keep the order OpenAlex returned, so `best_oa_location` stays first. Fynd tries at most 3 candidates and stops at the first file.
 
+Usable text ends the attempts, and a file alone does not. The candidates of one Paper are three files of one article, and the usable text checks test the file. A scan of paper pages extracts to nonsense, and the next candidate can be a born digital file that extracts cleanly. The cost is one extra fetch for a Paper that already failed a check, which was 0 Papers of 20 on 2026-10-09. A file that failed a check is still the Paper's answer when no later candidate gives better, and it beats a refusal that came after it, because the pipeline got one step further with the file.
+
 The blocklist holds one kind of entry, which is a host that holds no file by design. Three hosts are on it today, each with the reason that measured it.
 
 | Host | Why it holds no file |

@@ -114,9 +114,10 @@ def read_open_copy(
 ) -> OpenCopyResult:
     """Returns the Usable text of one Paper, or the reason it has none.
 
-    Each candidate is fetched in turn, and the first file ends the attempts,
-    whether or not its text passes the checks. A second candidate of one Paper
-    is the same article, so a failed check is the Paper's answer.
+    Each candidate is fetched in turn, and Usable text ends the attempts. A
+    file whose text fails a check does not, because the candidates are three
+    files of one article and the checks test the file. A scan of paper pages
+    extracts to nonsense, and the next candidate can be a clean file.
 
     A host that refuses never stops the run, and neither does one that times
     out. A timeout is a failure and not an answer, so when no candidate gave a
@@ -130,6 +131,9 @@ def read_open_copy(
     last: OpenCopy | None = None
     last_reason = ""
     failure: FetchFailed | None = None
+    # The last file that arrived and failed a check. It beats a later refusal
+    # as the Paper's answer, because the pipeline got one step further with it.
+    failed_file: OpenCopyResult | None = None
     for open_copy in candidates:
         tried.append(open_copy.host)
         last = open_copy
@@ -142,14 +146,28 @@ def read_open_copy(
         if isinstance(answer, Fetched):
             extracted = extract(answer.data)
             against = check(extracted.text)
-            return OpenCopyResult(
+            result = OpenCopyResult(
                 paper=paper,
                 reason=against or reasons.USABLE,
                 open_copy=open_copy,
                 extracted=extracted,
                 tried_hosts=tuple(tried),
             )
+            if result.is_usable:
+                return result
+            failed_file = result
+            continue
         last_reason = answer.reason
+
+    if failed_file is not None:
+        # The hosts of every attempt, including the ones after this file.
+        return OpenCopyResult(
+            paper=failed_file.paper,
+            reason=failed_file.reason,
+            open_copy=failed_file.open_copy,
+            extracted=failed_file.extracted,
+            tried_hosts=tuple(tried),
+        )
 
     if not last_reason and failure is not None:
         # Every candidate failed, and a failure is not an answer. Nothing of it

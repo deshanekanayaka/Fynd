@@ -293,7 +293,7 @@ def test_a_second_candidate_is_tried_after_a_refusal() -> None:
     assert result.attempts == 2
 
 
-def test_the_first_file_stops_the_attempts() -> None:
+def test_usable_text_stops_the_attempts() -> None:
     asked: list = []
 
     def fetch(url: str):
@@ -312,9 +312,35 @@ def test_the_first_file_stops_the_attempts() -> None:
     assert result.attempts == 1
 
 
-def test_a_text_that_fails_a_check_stops_the_attempts() -> None:
-    # A file arrived, so the Paper has its answer. A second candidate of the
-    # same Paper is the same article, and the reason table counts the failure.
+def test_a_text_that_fails_a_check_tries_the_next_candidate() -> None:
+    # The candidates are three files of one article, and the checks test the
+    # file. A scan of paper pages extracts to nonsense, and the next candidate
+    # can be the publisher file that extracts cleanly.
+    asked: list = []
+
+    def fetch(url: str):
+        asked.append(url)
+        return pdf_bytes()
+
+    def extract(data: bytes) -> Extracted:
+        text = "Please accept our cookies." if len(asked) == 1 else A_LONG_TEXT
+        return Extracted(text=text, extractor="pdfplumber 0.11.10", structure=[])
+
+    result = read_open_copy(
+        paper(),
+        resolve_to(Resolution(found=True, candidates=(REPOSITORY_COPY, JOURNAL_COPY))),
+        fetch,
+        extract,
+        reason_against_paper_text,
+    )
+
+    assert asked == [REPOSITORY_COPY.url, JOURNAL_COPY.url]
+    assert result.reason == reasons.USABLE
+    assert result.open_copy == JOURNAL_COPY
+    assert result.attempts == 2
+
+
+def test_the_last_failed_text_is_the_answer_when_every_file_fails() -> None:
     asked: list = []
 
     def fetch(url: str):
@@ -329,8 +355,30 @@ def test_a_text_that_fails_a_check_stops_the_attempts() -> None:
         reason_against_paper_text,
     )
 
-    assert asked == [REPOSITORY_COPY.url]
+    assert asked == [REPOSITORY_COPY.url, JOURNAL_COPY.url]
     assert result.reason == reasons.TEXT_TOO_SHORT
+    assert result.tried_hosts == ("dro.dur.ac.uk", "www.mdpi.com")
+
+
+def test_a_failed_text_beats_a_later_refusal_as_the_reason() -> None:
+    # The pipeline got one step further with the file than with the 403, and
+    # the reason table counts the step a Paper reached.
+    def fetch(url: str):
+        if url == REPOSITORY_COPY.url:
+            return pdf_bytes()
+        return Refused(status=403, content_type="text/html", reason=reasons.FETCH_REFUSED)
+
+    result = read_open_copy(
+        paper(),
+        resolve_to(Resolution(found=True, candidates=(REPOSITORY_COPY, JOURNAL_COPY))),
+        fetch,
+        extract_to("energy " * 2000),
+        reason_against_paper_text,
+    )
+
+    assert result.reason == reasons.NO_SECTION_WORD
+    assert result.open_copy == REPOSITORY_COPY
+    assert result.attempts == 2
 
 
 def test_the_last_refusal_is_the_reason_when_every_candidate_fails() -> None:
