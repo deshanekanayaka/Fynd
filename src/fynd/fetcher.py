@@ -48,7 +48,16 @@ FETCH_SHAPE_VERSION: Final = 1
 # for this run, and neither answer is cached, so one bad day at one university
 # does not wall that host off for ever.
 ROBOTS_PATH: Final = "/robots.txt"
-ROBOTS_SHAPE_VERSION: Final = 1
+ROBOTS_SHAPE_VERSION: Final = 2
+
+# A stored robots answer is read again after a day. RFC 9309 asks a crawler
+# not to use a cached robots.txt for longer than 24 hours, and a repository
+# that adds a rule next week must win over a file Fynd read today.
+ROBOTS_MAX_AGE_SECONDS: Final = 24 * 60 * 60
+
+# The cap on a robots.txt body. RFC 9309 asks a crawler to read at least
+# 500 kibibytes, and a host that sends more than that is not sending rules.
+ROBOTS_MAX_BYTES: Final = 500 * 1024
 
 # A host may name a `Crawl-delay`. Fynd waits the larger of its own one second
 # and that delay. A delay above this cap costs 10 minutes over 20 Papers, so
@@ -102,7 +111,17 @@ class Robots:
 def robots_url_of(url: str) -> str:
     """Returns the robots.txt address of the host one link sits on."""
     parts = urlparse(url)
-    return urlunsplit((parts.scheme or "https", parts.netloc, ROBOTS_PATH, "", ""))
+    return urlunsplit((parts.scheme, parts.netloc, ROBOTS_PATH, "", ""))
+
+
+def is_fetchable(url: str) -> bool:
+    """Says whether this link names a host and a scheme Fynd fetches.
+
+    A link with no host shares one robots answer with every other such link,
+    and the rules of one host must never govern another.
+    """
+    parts = urlparse(url)
+    return parts.scheme in ("http", "https") and bool(parts.netloc)
 
 
 def robots_from(status: int, text: str, agent: str) -> Robots:
@@ -173,19 +192,29 @@ class Fetcher:
     def robots_for(self, url: str) -> Robots:
         """Returns the robots.txt rules of the host one link sits on.
 
-        The answer is read once for a host in a run, and a 200 and a 4xx are
-        cached on disk. A 5xx, a rate limit and a timeout are not cached.
+        The answer is read once for a host in a run. A 200 and a 4xx that is
+        not a rate limit are cached on disk for a day. A 5xx, a rate limit and
+        a timeout are never cached, so one bad day at one university does not
+        wall that host off for ever.
         """
-        host = host_of(url)
+        parts = urlparse(url)
+        host = parts.netloc
         known = self.robots.get(host)
         if known is not None:
             return known
 
         agent = user_agent()
-        parts = {"api": "robots", "host": host, "shape": ROBOTS_SHAPE_VERSION}
-        key = cache.cache_key("robots", parts)
+        # The scheme is part of the key, because RFC 9309 scopes robots.txt to
+        # one scheme and one host.
+        stored_parts = {
+            "api": "robots",
+            "scheme": parts.scheme,
+            "host": host,
+            "shape": ROBOTS_SHAPE_VERSION,
+        }
+        key = cache.cache_key("robots", stored_parts)
         stored = cache.read(key)
-        if stored is not None:
+        if stored is not None and not self.robots_is_stale(stored):
             answer = robots_from(int(stored["status"]), str(stored["text"]), agent)
             self.robots[host] = answer
             return answer
@@ -193,9 +222,16 @@ class Fetcher:
         status, text, answered = self.fetch_robots(url, host)
         answer = robots_from(status, text, agent)
         if answered:
-            cache.write(key, parts, {"status": status, "text": text})
+            cache.write(
+                key, stored_parts, {"status": status, "text": text, "read_at": time.time()}
+            )
         self.robots[host] = answer
         return answer
+
+    def robots_is_stale(self, stored: dict) -> bool:
+        """Says whether a stored robots answer is older than a day."""
+        read_at = float(stored.get("read_at") or 0.0)
+        return time.time() - read_at > ROBOTS_MAX_AGE_SECONDS
 
     def fetch_robots(self, url: str, host: str) -> tuple[int, str, bool]:
         """Calls one host for its robots.txt. One of two methods that use the network.
@@ -205,17 +241,31 @@ class Fetcher:
         """
         self.wait_for_host(host)
         try:
-            response = self.client.get(robots_url_of(url))
-        except (httpx.TimeoutException, httpx.TransportError):
+            with self.client.stream("GET", robots_url_of(url)) as response:
+                status = response.status_code
+                text = ""
+                if status == 200:
+                    # The body is capped. A host that sends more than the cap
+                    # is not sending rules, and the read stops there.
+                    body = bytearray()
+                    for chunk in response.iter_bytes():
+                        body.extend(chunk)
+                        if len(body) >= ROBOTS_MAX_BYTES:
+                            break
+                    text = bytes(body[:ROBOTS_MAX_BYTES]).decode("utf-8", "replace")
+        except (httpx.TimeoutException, httpx.TooManyRedirects, httpx.TransportError):
             # No answer is not a permission. This run asks this host for
-            # nothing, and nothing is cached.
+            # nothing, and nothing is cached. A redirect chain that never ends
+            # is one such answer, and RFC 9309 counts it as unreachable.
             self.last_request_at[host] = time.monotonic()
             return 0, "", False
         self.last_request_at[host] = time.monotonic()
-        if response.status_code == 200:
-            return 200, response.text, True
-        answered = 400 <= response.status_code < 500
-        return response.status_code, "", answered
+        if status == 200:
+            return 200, text, True
+        # A rate limit says nothing about what this host permits, so it is
+        # never stored. RFC 9309 counts it with a 5xx.
+        answered = 400 <= status < 500 and status != RATE_LIMIT_STATUS
+        return status, "", answered
 
     def fetch(self, url: str) -> FetchAnswer:
         """Returns the bytes of one Open copy, or the reason a host gave none.
@@ -227,6 +277,11 @@ class Fetcher:
         refused even when an earlier run already holds its bytes. A published
         table must not count a file Fynd may no longer ask for.
         """
+        if not is_fetchable(url):
+            # A link with no host or an unknown scheme is not a fetch target,
+            # and it must never share one host's robots answer with another.
+            return Refused(status=NO_STATUS, content_type="", reason=reasons.FETCH_REFUSED)
+
         robots = self.robots_for(url)
         if not robots.allows(url, user_agent()):
             # Nothing is written to the fetch cache. The robots answer is

@@ -1,11 +1,15 @@
 """Fynd reads robots.txt before it fetches, and obeys it. See RFC 9309."""
 
+import time
+
 import httpx
 import pytest
 
 from fynd import reasons
 from fynd.fetcher import (
     MAX_CRAWL_DELAY_SECONDS,
+    ROBOTS_MAX_AGE_SECONDS,
+    ROBOTS_MAX_BYTES,
     SECONDS_BETWEEN_REQUESTS,
     Fetched,
     Fetcher,
@@ -187,3 +191,77 @@ def test_a_robots_refusal_writes_no_fetch_answer(a_cache_and_an_address) -> None
 
     assert [name for name in written if name.startswith("fetch-")] == []
     assert [name for name in written if name.startswith("robots-")] != []
+
+
+def test_a_rate_limit_on_robots_is_not_cached() -> None:
+    # A 429 says nothing about what a host permits. Stored, it would refuse
+    # that host for ever, because nothing in the cache expires it.
+    Fetcher(transport=transport_with_robots(httpx.Response(429), [])).fetch(PAPER_URL)
+
+    calls: list = []
+    allowed = robots_text("User-agent: *\nDisallow:\n")
+    answer = Fetcher(transport=transport_with_robots(allowed, calls)).fetch(PAPER_URL)
+
+    assert isinstance(answer, Fetched)
+
+
+def test_a_robots_redirect_loop_allows_nothing_and_does_not_crash() -> None:
+    # httpx raises TooManyRedirects, which is not a transport error. Out of
+    # the fetch it would end the whole measurement run on one Paper.
+    calls: list = []
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        if request.url.path == "/robots.txt":
+            return httpx.Response(302, headers={"location": "/robots.txt?a=1"})
+        calls.append(request)
+        return httpx.Response(200, content=PDF_BODY)
+
+    answer = Fetcher(transport=httpx.MockTransport(handler)).fetch(PAPER_URL)
+
+    assert isinstance(answer, Refused)
+    assert answer.reason == reasons.ROBOTS_REFUSED
+    assert calls == []
+
+
+def test_a_stored_robots_answer_is_read_again_after_a_day(monkeypatch) -> None:
+    # A repository that adds a rule next week must win over a file Fynd read
+    # today. RFC 9309 asks for one day at most.
+    rules = robots_text("User-agent: *\nDisallow:\n")
+    Fetcher(transport=transport_with_robots(rules, [], [])).fetch(PAPER_URL)
+
+    a_day_later = time.time() + ROBOTS_MAX_AGE_SECONDS + 1
+    monkeypatch.setattr("fynd.fetcher.time.time", lambda: a_day_later)
+    robots_calls: list = []
+    disallow = robots_text("User-agent: *\nDisallow: /id/eprint/\n")
+    second = Fetcher(transport=transport_with_robots(disallow, [], robots_calls))
+
+    answer = second.fetch(PAPER_URL)
+
+    assert len(robots_calls) == 1
+    assert isinstance(answer, Refused)
+    assert answer.reason == reasons.ROBOTS_REFUSED
+
+
+def test_a_huge_robots_body_is_cut_at_the_cap() -> None:
+    # A host that sends a megabyte at robots.txt is not sending rules.
+    calls: list = []
+    body = "# comment\n" * (ROBOTS_MAX_BYTES // 5)
+    fetcher = Fetcher(transport=transport_with_robots(robots_text(body), calls))
+
+    answer = fetcher.fetch(PAPER_URL)
+
+    assert isinstance(answer, Fetched)
+
+
+def test_a_link_with_no_host_is_never_fetched() -> None:
+    # Such a link would share one robots answer with every other one, and the
+    # rules of one host must never govern another.
+    calls: list = []
+    rules = robots_text("User-agent: *\nDisallow:\n")
+    fetcher = Fetcher(transport=transport_with_robots(rules, calls))
+
+    answer = fetcher.fetch("dro.dur.ac.uk/id/eprint/1/aaa.pdf")
+
+    assert isinstance(answer, Refused)
+    assert answer.reason == reasons.FETCH_REFUSED
+    assert calls == []

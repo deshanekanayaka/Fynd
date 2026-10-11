@@ -43,6 +43,8 @@ Fynd reads robots.txt before the first fetch to a host and obeys it, under RFC 9
 
 The check runs before the fetch cache, so a path a host disallows is refused even when an earlier run already holds its bytes. A published table must not count a file Fynd may no longer ask for.
 
+A stored robots answer is read again after one day, which is the limit RFC 9309 names, because a repository that adds a rule next week must win over a file Fynd read today. The body is capped at 500 kibibytes, which is the size that standard asks a crawler to read. A redirect chain that never ends counts as unreachable, with a timeout and a 5xx and a rate limit. A link with no host or with a scheme that is not http or https is never fetched, because such a link would share one robots answer with every other one, and the rules of one host must never govern another.
+
 `urllib.robotparser` from the standard library matches the rules, and Fynd fetches the file itself, so the timeout, the cache and the user agent stay Fynd's own. Two differences are worth knowing. That module is not a certified RFC 9309 implementation, and it reads a whole number `Crawl-delay` and ignores a fractional one, so `Crawl-delay: 0.5` reads as no delay and Fynd then waits its own one second, which is longer.
 
 Fynd waits the larger of one second and a named `Crawl-delay`, up to 10 seconds. A longer delay skips that host, because 30 seconds for each file is 10 minutes over 20 Papers. A robots refusal spends one of the 3 attempts, so a Paper whose every candidate is disallowed records 3 attempts and the reason `robots_refused`.

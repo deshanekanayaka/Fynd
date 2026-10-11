@@ -211,7 +211,8 @@ def test_two_links_on_one_host_wait_and_two_hosts_do_not(monkeypatch) -> None:
     fetcher.fetch("https://dro.dur.ac.uk/bbb.pdf")
     assert waits == [1.0, 1.0]
 
-    # A second host is read from its own robots.txt, and waits for nobody.
+    # A second host is read from its own robots.txt, so it waits once for
+    # that request and not for the first host.
     fetcher.fetch("https://www.mdpi.com/ccc.pdf")
     assert waits == [1.0, 1.0, 1.0]
 
