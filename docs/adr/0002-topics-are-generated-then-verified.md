@@ -9,6 +9,14 @@ Stage 2 must show the student 5 to 8 Topics inside the Domain they picked. Fynd 
 
 Fynd stores no corpus of its own. Semantic Scholar is the index, and a Topic is a label for a search and not a Claim, so a Topic does not need the citation guard that protects the handover.
 
+## Note added 2026-10-11
+
+The threshold of 3 now counts a different thing. It counted the Papers that Semantic Scholar marked with an open link, which was 12 of 20 for the Seeded Topic. It now counts the Papers whose OpenAlex record names an open location with a PDF link, after the blocklist, which is 10 of 20 for the same pool.
+
+The reason is a measured gap. The run of 2026-10-09 reached Usable text for 5 of those 20 Papers. A student who passed stage 2 on the number 12 met the number 5 two Stages later, which is the failure this product exists to prevent. The new count costs 20 cached lookups and no download, and stage 4 reads the same cached answers.
+
+The threshold stays at 3, and the stage 4 guard of 2 Papers stays as the second net. See [ADR 0012](./0012-an-open-file-is-a-licence-question.md).
+
 ## Consequences
 
 The contract is the part that must not change: a Topic reaches the student only if a real search returns enough open Papers for it. The generator behind that contract can change later. A grounded generator, which runs one broad search for the Domain, clusters the titles it gets back, and names each cluster, fits behind the same contract with no change downstream.

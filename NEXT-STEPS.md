@@ -1,6 +1,6 @@
 # Next steps
 
-Updated: 2026-10-09, day 4. Target ship date: 2026-10-26.
+Updated: 2026-10-11, day 5. Target ship date: 2026-10-26.
 The ship date is a target and not a constraint. The design phase takes the time it needs, because Deshan must be able to explain every part of this project.
 Read [PRD.md](./PRD.md) for the product and [CONTEXT.md](./CONTEXT.md) for the vocabulary.
 
@@ -247,24 +247,33 @@ Backend first, with no frontend.
 
 Make sure that step 5 runs end to end from the command line before any FastAPI endpoint or any React component exists.
 
-## The task for day 5
+## Settled on day 5: the licence reversal, and the design round that closed it
 
-The coverage of the Open copy comes first, because every later number rests on it. Six issues hold the work, numbered 14 to 19 on GitHub, and three of them can start now.
+Updated 2026-10-11. The design round for day 5 is closed, and 24 decisions are written down. Issue 14 holds the records, and [ADR 0012](./docs/adr/0012-an-open-file-is-a-licence-question.md) is the decision.
 
-The finding, from the cached records of the run of 2026-10-09 over the same 20 Papers. 6 Papers are closed, with no free copy anywhere. 14 are open. 10 of the 14 carry a direct PDF link on a host Fynd is allowed to fetch. The pipeline reached 5.
+The finding, from the 20 cached OpenAlex records of the run of 2026-10-09 over the same 20 Papers.
 
-So the gate walls cost 6 Papers, and our own rule costs 5 more. The rule accepts a location whose OpenAlex source is a repository, and nothing else. It refuses a `cc-by` file at a journal. ADR 0012, in issue 14, records the reversal: an open file is a licence question and not a host question.
+- 6 Papers are closed, with no open location anywhere.
+- 14 are open. 11 of the 14 name at least one open location with a PDF link.
+- 1 of the 11 names only a doi.org link, which holds no file. So 10 Papers carry a free file on a host Fynd can fetch.
+- The pipeline reached 5.
 
-Four changes follow, with a number predicted for each one.
+So the gate walls cost 6 Papers, and Fynd's own rule costs 5 more. The rule accepted a location only when OpenAlex called its source a repository, and it refused 7 open PDF links at journals, 5 of them with a stated `cc-by` licence. An open file is a licence question and not a host question.
 
-- Accept every open location with a PDF link, rank a repository first and a journal second, and try up to 3. Predicted 10 of 20, against 5 today. Issue 15.
-- Read `citation_pdf_url` from a landing page and follow it once. Pure, EPrints and DSpace all emit that tag, and Zotero and Unpaywall both read it. Predicted up to 4 more. Issue 16.
-- Read and obey robots.txt, under RFC 9309. Fynd reads none today, and it fetches from 9 university hosts. Issue 17.
-- Count the open locations for the stage 2 gate. Semantic Scholar said 12 of 20, and 5 gave text, so a student can pass stage 2 and collapse at stage 4. Issue 18.
+The decisions, in the order the issues ship.
 
-Issue 19 measures again and publishes the gain. Europe PMC and CORE stay on the shelf until that number says they are worth a day.
+- Issue 14. ADR 0012, the pointer in ADR 0007, the dated note in ADR 0002, the Open copy entry in `CONTEXT.md`, and this section. No code.
+- Issue 15. One function, `open_candidates(work)` in `openalex.py`, returns the open locations with a PDF link, ranked repository first and journal second, in the OpenAlex order inside a rank, minus the blocklist. At most 3 attempts for one Paper. The Semantic Scholar link stays as the last resort, and only when OpenAlex names no candidate. Predicted 10 of 20, against 5 today.
+- Issue 16. Closed, not built. The 3 landing-page-only Papers of this pool name doi.org three times and doaj.org once, and both hosts are on the blocklist. The `citation_pdf_url` hop pays 0 Papers here, and the premise that those pages come from Pure, EPrints and DSpace is wrong for this pool. The hop returns when a measured run shows a landing-page-only Paper on a repository host.
+- Issue 17. robots.txt under RFC 9309, read inside `Fetcher.fetch`, so every link passes it. `urllib.robotparser` from the standard library does the matching. A 200 and a 404 are cached for each host, and a 5xx and a timeout are not. The wait is the larger of 1 second and a named `Crawl-delay`, up to 10 seconds, and a longer delay skips that host. A robots refusal spends one of the 3 attempts.
+- Issue 18. The stage 2 gate counts the Papers with a candidate, which is 10 for this pool against the 12 Semantic Scholar claimed. `accept_topic` takes the lookup as a second plain function argument. The threshold stays at 3. `SearchResult.open_copy_count` stays as a field, and no gate reads it.
+- Issue 19. One live run, and a dated file in `docs/measurements`, with a `README.md` there that lists the runs. The per Paper list gains the attempts column. The thresholds of 3,000 characters, 0.95 ordinary share and the section word check are unchanged before the run, because the new journal files are the first publisher PDFs this pipeline sees.
 
-One more finding waits for day 7. 3 of the 20 Papers are about ultra-processed food, so the search is not precise. The retrieval labelled set is where that gets a number.
+The reason vocabulary after day 5. `no_repository_location` is gone. `no_open_location`, `no_pdf_link`, `blocklisted_only` and `robots_refused` join the table, checked in that order. The table of 2026-10-09 keeps the names it was written with.
+
+The blocklist holds hosts that hold no file by design, which is doi.org, dx.doi.org and doaj.org. A host that refused once is not listed, because the fetch cache holds its status and the table counts it.
+
+One finding still waits for day 7. 3 of the 20 Papers are about ultra-processed food, so the search is not precise. The retrieval labelled set is where that gets a number.
 
 ## Do not do yet
 

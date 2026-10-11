@@ -55,7 +55,7 @@ One published academic work, with its identifiers, title, abstract, and a link t
 _Avoid_: article, publication, study
 
 **Open copy**:
-The free file of a Paper, held in a repository. Fynd fetches an Open copy and never fetches a publisher page.
+The free file of a Paper, wherever it sits. OpenAlex marks a location as open, and Fynd fetches the file it names. A paywalled page is not an Open copy, and a link that holds no file is a lookup key.
 _Avoid_: open access PDF, free version, preprint
 
 **Source text**:
