@@ -25,20 +25,32 @@ def host_of_result(result: OpenCopyResult) -> str:
 
 
 def host_rows(results: list[OpenCopyResult]) -> list[dict[str, object]]:
-    """Counts the links tried, the files received, and the texts that passed."""
+    """Counts the links tried, the files received, and the texts that passed.
+
+    One Paper tries up to 3 links since ADR 0012, so every host it reached
+    gets a link counted. The file and the text belong to the host that
+    answered last, which is the host the result holds.
+    """
     # A plain dictionary of counters, one entry for each host, built in the
     # order the hosts first appear.
     rows: dict[str, dict[str, object]] = {}
-    for result in results:
-        host = host_of_result(result)
+
+    def row_for(host: str) -> dict[str, object]:
         if host not in rows:
             rows[host] = {"host": host, "tried": 0, "files": 0, "usable": 0}
-        row = rows[host]
-        row["tried"] = int(row["tried"]) + 1
+        return rows[host]
+
+    for result in results:
+        # A Paper that never reached a link still needs its own row, and the
+        # report leaves that row out of the table.
+        for host in result.tried_hosts or (host_of_result(result),):
+            row = row_for(host or NO_HOST)
+            row["tried"] = int(row["tried"]) + 1
+        answered = row_for(host_of_result(result))
         if result.extracted is not None:
-            row["files"] = int(row["files"]) + 1
+            answered["files"] = int(answered["files"]) + 1
         if result.is_usable:
-            row["usable"] = int(row["usable"]) + 1
+            answered["usable"] = int(answered["usable"]) + 1
     return list(rows.values())
 
 

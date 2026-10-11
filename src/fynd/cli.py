@@ -84,13 +84,17 @@ def run_resolve_open_copy(doi: str) -> None:
     if not answer.found:
         print(f"OpenAlex holds no record for {doi}.")
         raise SystemExit(1)
-    if answer.open_copy is None:
-        print(f"OpenAlex holds {doi}, and no repository location for it.")
+    if not answer.candidates:
+        print(f"OpenAlex holds {doi}, and no file Fynd can fetch: {answer.reason}")
         raise SystemExit(1)
-    copy = answer.open_copy
-    print(f"url     {copy.url}")
-    print(f"host    {copy.host}")
-    print(f"license {copy.license or 'not stated'}")
+
+    # Every candidate, in the order the pipeline would try them. A repository
+    # ranks first and a journal second. See ADR 0012.
+    print(f"{len(answer.candidates)} candidates for {doi}, in the order Fynd tries them.")
+    for number, copy in enumerate(answer.candidates, start=1):
+        print(f"{number} url     {copy.url}")
+        print(f"  host    {copy.host}")
+        print(f"  license {copy.license or 'not stated'}")
 
 
 def run_fetch_open_copy(url: str) -> None:
@@ -163,7 +167,10 @@ def run_measure_open_copies() -> None:
             continue
         results.append(result)
         host = result.open_copy.host if result.open_copy else "-"
-        print(f"{number:3} {paper.title[:50]:50} {host:28} {result.reason}")
+        print(
+            f"{number:3} {paper.title[:50]:50} {host:28} "
+            f"{result.attempts} tries  {result.reason}"
+        )
 
     MEASUREMENT_FILE.parent.mkdir(parents=True, exist_ok=True)
     MEASUREMENT_FILE.write_text(

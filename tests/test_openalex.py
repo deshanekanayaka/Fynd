@@ -1,19 +1,27 @@
-"""The second lookup has to find a repository file, and refuse a publisher."""
+"""The second lookup has to find every open file, and rank a repository first."""
 
 import httpx
 import pytest
 
+from fynd import reasons
 from fynd.contact import ContactEmailMissing
-from fynd.openalex import OpenAlex, WorkNotRead
+from fynd.openalex import (
+    OpenAlex,
+    WorkNotRead,
+    holds_no_file,
+    open_candidates,
+    reason_for_no_candidate,
+)
 
 # One recorded reply, trimmed to the fields Fynd reads. A real work carries a
-# publisher location and a repository location, and Fynd wants the second.
+# journal location and a repository location, and both are candidates now.
+# See ADR 0012.
 RECORDED_WORK = {
     "id": "https://openalex.org/W123",
     "doi": "https://doi.org/10.1000/aaa",
     "best_oa_location": {
         "is_oa": True,
-        "pdf_url": None,
+        "pdf_url": "https://www.sciencedirect.com/aaa.pdf",
         "landing_page_url": "https://www.sciencedirect.com/aaa",
         "license": "cc-by",
         "source": {"display_name": "Applied Energy", "type": "journal"},
@@ -21,7 +29,7 @@ RECORDED_WORK = {
     "locations": [
         {
             "is_oa": True,
-            "pdf_url": None,
+            "pdf_url": "https://www.sciencedirect.com/aaa.pdf",
             "landing_page_url": "https://www.sciencedirect.com/aaa",
             "license": "cc-by",
             "source": {"display_name": "Applied Energy", "type": "journal"},
@@ -49,7 +57,7 @@ def client_that_returns(status: int, reply: dict | None, calls: list) -> httpx.C
     return httpx.Client(transport=httpx.MockTransport(handler))
 
 
-def test_the_repository_location_wins_over_the_publisher(tmp_path, monkeypatch) -> None:
+def test_a_repository_ranks_before_a_journal(tmp_path, monkeypatch) -> None:
     monkeypatch.setenv("FYND_CACHE_DIR", str(tmp_path))
     monkeypatch.setenv("FYND_CONTACT_EMAIL", "deshan@example.org")
     calls: list = []
@@ -58,10 +66,83 @@ def test_the_repository_location_wins_over_the_publisher(tmp_path, monkeypatch) 
     answer = resolver.resolve("10.1000/aaa")
 
     assert answer.found is True
-    assert answer.open_copy is not None
-    assert answer.open_copy.url == "https://dro.dur.ac.uk/aaa.pdf"
-    assert answer.open_copy.host == "dro.dur.ac.uk"
-    assert answer.open_copy.license == "cc-by"
+    assert answer.reason == ""
+    assert [copy.url for copy in answer.candidates] == [
+        "https://dro.dur.ac.uk/aaa.pdf",
+        "https://www.sciencedirect.com/aaa.pdf",
+    ]
+    assert answer.candidates[0].host == "dro.dur.ac.uk"
+    assert answer.candidates[0].license == "cc-by"
+
+
+def test_one_location_is_not_offered_twice(tmp_path, monkeypatch) -> None:
+    # The journal location is both `best_oa_location` and the first entry of
+    # `locations`. Two attempts at one link would spend the cap of 3 on it.
+    monkeypatch.setenv("FYND_CACHE_DIR", str(tmp_path))
+    monkeypatch.setenv("FYND_CONTACT_EMAIL", "deshan@example.org")
+    resolver = OpenAlex(client=client_that_returns(200, RECORDED_WORK, []))
+
+    answer = resolver.resolve("10.1000/aaa")
+
+    assert len(answer.candidates) == 2
+
+
+def test_a_journal_pdf_is_a_candidate(tmp_path, monkeypatch) -> None:
+    # The rule this reverses refused 7 open PDF links at journals in the pool
+    # of 2026-10-09, and OpenAlex states a cc-by licence for 5 of them.
+    monkeypatch.setenv("FYND_CACHE_DIR", str(tmp_path))
+    monkeypatch.setenv("FYND_CONTACT_EMAIL", "deshan@example.org")
+    work = {
+        "best_oa_location": None,
+        "locations": [
+            {
+                "is_oa": True,
+                "pdf_url": "https://www.mdpi.com/eee.pdf",
+                "landing_page_url": "https://www.mdpi.com/eee",
+                "license": "cc-by",
+                "source": {"display_name": "Energies", "type": "journal"},
+            }
+        ],
+    }
+    resolver = OpenAlex(client=client_that_returns(200, work, []))
+
+    answer = resolver.resolve("10.1000/eee")
+
+    assert [copy.url for copy in answer.candidates] == ["https://www.mdpi.com/eee.pdf"]
+    assert answer.candidates[0].license == "cc-by"
+
+
+def test_candidates_keep_the_openalex_order_inside_one_rank(tmp_path, monkeypatch) -> None:
+    # No licence sort and no known good host sort. 4 of the 18 open PDF links
+    # of the measured pool state no licence, and one of those gave 75,457
+    # characters of Usable text.
+    monkeypatch.setenv("FYND_CACHE_DIR", str(tmp_path))
+    monkeypatch.setenv("FYND_CONTACT_EMAIL", "deshan@example.org")
+    work = {
+        "best_oa_location": None,
+        "locations": [
+            {
+                "is_oa": True,
+                "pdf_url": "https://eprints.whiterose.ac.uk/fff.pdf",
+                "license": None,
+                "source": {"display_name": "White Rose", "type": "repository"},
+            },
+            {
+                "is_oa": True,
+                "pdf_url": "https://serval.unil.ch/fff.pdf",
+                "license": "cc-by",
+                "source": {"display_name": "Serval", "type": "repository"},
+            },
+        ],
+    }
+    resolver = OpenAlex(client=client_that_returns(200, work, []))
+
+    answer = resolver.resolve("10.1000/fff")
+
+    assert [copy.url for copy in answer.candidates] == [
+        "https://eprints.whiterose.ac.uk/fff.pdf",
+        "https://serval.unil.ch/fff.pdf",
+    ]
 
 
 def test_the_best_location_wins_when_it_is_a_repository(tmp_path, monkeypatch) -> None:
@@ -81,12 +162,11 @@ def test_the_best_location_wins_when_it_is_a_repository(tmp_path, monkeypatch) -
 
     answer = resolver.resolve("10.1000/bbb")
 
-    assert answer.open_copy is not None
-    assert answer.open_copy.url == "https://arxiv.org/pdf/2201.00001"
-    assert answer.open_copy.host == "arxiv.org"
+    assert answer.candidates[0].url == "https://arxiv.org/pdf/2201.00001"
+    assert answer.candidates[0].host == "arxiv.org"
 
 
-def test_a_work_with_only_a_publisher_location_gives_no_open_copy(tmp_path, monkeypatch) -> None:
+def test_a_work_with_no_open_location_at_all(tmp_path, monkeypatch) -> None:
     # A found record with no file is a fact about the Paper, and the reason
     # table counts it apart from a Paper OpenAlex never heard of.
     monkeypatch.setenv("FYND_CACHE_DIR", str(tmp_path))
@@ -108,7 +188,8 @@ def test_a_work_with_only_a_publisher_location_gives_no_open_copy(tmp_path, monk
     answer = resolver.resolve("10.1000/ccc")
 
     assert answer.found is True
-    assert answer.open_copy is None
+    assert answer.candidates == ()
+    assert answer.reason == reasons.NO_OPEN_LOCATION
 
 
 def test_an_unknown_identifier_is_not_found(tmp_path, monkeypatch) -> None:
@@ -119,12 +200,13 @@ def test_an_unknown_identifier_is_not_found(tmp_path, monkeypatch) -> None:
     answer = resolver.resolve("10.1000/nothing")
 
     assert answer.found is False
-    assert answer.open_copy is None
+    assert answer.candidates == ()
 
 
-def test_a_landing_page_is_used_when_there_is_no_pdf_link(tmp_path, monkeypatch) -> None:
-    # The fetcher then refuses the page, and the reason table says not a PDF,
-    # which is a measured fact and not a guess about the host.
+def test_a_landing_page_is_not_a_candidate(tmp_path, monkeypatch) -> None:
+    # Issue 16 is closed, so nothing follows a landing page to its file. The
+    # reason counts the case, and the next measurement says whether the hop
+    # is worth a day.
     monkeypatch.setenv("FYND_CACHE_DIR", str(tmp_path))
     monkeypatch.setenv("FYND_CONTACT_EMAIL", "deshan@example.org")
     work = {
@@ -143,8 +225,66 @@ def test_a_landing_page_is_used_when_there_is_no_pdf_link(tmp_path, monkeypatch)
 
     answer = resolver.resolve("10.1000/ddd")
 
-    assert answer.open_copy is not None
-    assert answer.open_copy.url == "https://www.research.ed.ac.uk/ddd"
+    assert answer.candidates == ()
+    assert answer.reason == reasons.NO_PDF_LINK
+
+
+def test_a_work_whose_only_pdf_links_hold_no_file(tmp_path, monkeypatch) -> None:
+    # One Paper of the measured pool names exactly one PDF link, and it is a
+    # doi.org address. doi.org holds no file, so the Paper has no candidate.
+    monkeypatch.setenv("FYND_CACHE_DIR", str(tmp_path))
+    monkeypatch.setenv("FYND_CONTACT_EMAIL", "deshan@example.org")
+    work = {
+        "best_oa_location": None,
+        "locations": [
+            {
+                "is_oa": True,
+                "pdf_url": "https://doi.org/10.1000/ggg",
+                "license": "cc-by",
+                "source": {"display_name": "A journal", "type": "journal"},
+            },
+            {
+                "is_oa": True,
+                "pdf_url": "https://doaj.org/article/ggg.pdf",
+                "license": "cc-by-sa",
+                "source": {"display_name": "DOAJ", "type": "repository"},
+            },
+        ],
+    }
+    resolver = OpenAlex(client=client_that_returns(200, work, []))
+
+    answer = resolver.resolve("10.1000/ggg")
+
+    assert answer.candidates == ()
+    assert answer.reason == reasons.BLOCKLISTED_ONLY
+
+
+def test_a_blocklisted_link_is_dropped_and_the_rest_stay(tmp_path, monkeypatch) -> None:
+    monkeypatch.setenv("FYND_CACHE_DIR", str(tmp_path))
+    monkeypatch.setenv("FYND_CONTACT_EMAIL", "deshan@example.org")
+    work = {
+        "best_oa_location": None,
+        "locations": [
+            {
+                "is_oa": True,
+                "pdf_url": "https://doi.org/10.1000/hhh",
+                "license": "cc-by",
+                "source": {"display_name": "A journal", "type": "journal"},
+            },
+            {
+                "is_oa": True,
+                "pdf_url": "https://discovery.ucl.ac.uk/hhh.pdf",
+                "license": "cc-by",
+                "source": {"display_name": "UCL Discovery", "type": "repository"},
+            },
+        ],
+    }
+    resolver = OpenAlex(client=client_that_returns(200, work, []))
+
+    answer = resolver.resolve("10.1000/hhh")
+
+    assert [copy.url for copy in answer.candidates] == ["https://discovery.ucl.ac.uk/hhh.pdf"]
+    assert answer.reason == ""
 
 
 def test_every_answer_is_cached(tmp_path, monkeypatch) -> None:
@@ -228,3 +368,24 @@ def test_an_identifier_with_a_hash_is_escaped(tmp_path, monkeypatch) -> None:
     asked = str(calls[0].url)
     assert "10.1000%2Fa%23b%3Fc%3D1" in asked
     assert asked.count("#") == 0
+
+
+def test_the_blocklist_reads_a_host_in_any_spelling() -> None:
+    # doaj.org answered 2 fetches with a 403 on 2026-10-09. The same index
+    # under `www.` is the same index.
+    assert holds_no_file("https://doaj.org/article/aaa.pdf") is True
+    assert holds_no_file("https://www.doaj.org/article/aaa.pdf") is True
+    assert holds_no_file("https://DOI.org/10.1000/aaa") is True
+    assert holds_no_file("https://discovery.ucl.ac.uk/aaa.pdf") is False
+
+
+def test_an_open_location_with_no_link_at_all_is_still_open() -> None:
+    # OpenAlex calls this location open, so the Paper is not closed. The
+    # reason table must not read it as a Paper with no open copy anywhere.
+    work = {
+        "best_oa_location": None,
+        "locations": [{"is_oa": True, "source": {"type": "repository"}}],
+    }
+
+    assert open_candidates(work) == []
+    assert reason_for_no_candidate(work) == reasons.NO_PDF_LINK

@@ -11,7 +11,13 @@ from fynd.open_copy import OpenCopyResult
 TODAY = dt.date(2026, 10, 9)
 
 
-def result(reason: str, host: str = "", characters: int = 0, year: int = 2024) -> OpenCopyResult:
+def result(
+    reason: str,
+    host: str = "",
+    characters: int = 0,
+    year: int = 2024,
+    tried: tuple[str, ...] = (),
+) -> OpenCopyResult:
     """Builds one pipeline result, as the measurement reads it."""
     copy = OpenCopy(url=f"https://{host}/aaa.pdf", host=host, license="cc-by") if host else None
     extracted = None
@@ -22,7 +28,29 @@ def result(reason: str, host: str = "", characters: int = 0, year: int = 2024) -
         reason=reason,
         open_copy=copy,
         extracted=extracted,
+        tried_hosts=tried or ((host,) if host else ()),
     )
+
+
+def test_every_host_a_paper_tried_counts_a_link() -> None:
+    # One Paper tries up to 3 links since ADR 0012. A table that counted one
+    # link for each Paper would hide the 403 that sent it to the second host,
+    # under a column header that reads "Links tried".
+    results = [
+        result(
+            reasons.USABLE,
+            "www.mdpi.com",
+            characters=9000,
+            tried=("dro.dur.ac.uk", "www.mdpi.com"),
+        )
+    ]
+
+    rows = host_rows(results)
+
+    assert rows == [
+        {"host": "dro.dur.ac.uk", "tried": 1, "files": 0, "usable": 0},
+        {"host": "www.mdpi.com", "tried": 1, "files": 1, "usable": 1},
+    ]
 
 
 def test_a_host_row_counts_the_links_the_files_and_the_usable_texts() -> None:
@@ -49,7 +77,7 @@ def test_every_reason_is_counted_including_the_ones_at_zero() -> None:
 
     assert counts[reasons.USABLE] == 1
     assert counts[reasons.NOT_A_PDF] == 0
-    assert len(counts) == 9
+    assert len(counts) == len(reasons.ALL)
 
 
 def test_the_report_holds_the_three_tables_and_the_query() -> None:
