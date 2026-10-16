@@ -11,11 +11,15 @@ Fynd stores no corpus of its own. Semantic Scholar is the index, and a Topic is 
 
 ## Note added 2026-10-11
 
-The threshold of 3 now counts a different thing. It counted the Papers that Semantic Scholar marked with an open link, which was 12 of 20 for the Seeded Topic. It now counts the Papers whose OpenAlex record names an open location with a PDF link, after the blocklist, which is 10 of 20 for the same pool.
+The threshold of 3 now counts a different thing. It counted the Papers that Semantic Scholar marked with an open link, which is 14 of 20 for the Seeded Topic pool of 2026-10-09. It now counts the Papers whose OpenAlex record names an open location with a PDF link, after the blocklist, which is 10 of 20 for the same pool.
 
 The reason is a measured gap. The run of 2026-10-09 reached Usable text for 5 of those 20 Papers. A student who passed stage 2 on the number 12 met the number 5 two Stages later, which is the failure this product exists to prevent. The new count costs 20 cached lookups and no download, and stage 4 reads the same cached answers.
 
 The threshold stays at 3, and the stage 4 guard of 2 Papers stays as the second net. See [ADR 0012](./0012-an-open-file-is-a-licence-question.md).
+
+This note first said 12 where it now says 14. The number 12 belongs to the pool of day 1, which searched with no Evidence window. The code shipped on 2026-10-16 as issue 18, and `tests/test_stage2_pool.py` reads both numbers from the committed pool and the committed OpenAlex records.
+
+A Paper the count cannot check does not count. A Paper with no digital object identifier is not looked up, and a Paper whose lookup fails is skipped, so the count errs low. A number that promises a file the pipeline cannot fetch is the failure this gate exists to prevent.
 
 ## Consequences
 

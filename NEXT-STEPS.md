@@ -31,7 +31,7 @@ Code that runs today, as `uv run python -m fynd.cli <command>`:
 - `extract` turns one file into a Source text.
 - `measure-open-copies` runs the whole Open copy pipeline over 20 Papers and writes the published table.
 - A run needs `SEMANTIC_SCHOLAR_API_KEY`, `ANTHROPIC_API_KEY` and `FYND_CONTACT_EMAIL` in a `.env` file. The command names the missing one.
-- Every external answer is cached on disk, including a refusal. 133 tests pass with ruff clean, and no test reaches the network or spends a token.
+- Every external answer is cached on disk, including a refusal. 176 tests pass with ruff clean, and no test reaches the network or spends a token.
 
 ## How we work
 
@@ -293,7 +293,7 @@ The number so far is a prediction and not a measurement. A replay of the 20 comm
 
 ## Built on day 6: the stage 2 gate
 
-Issue 18 is done.
+Issue 18 is done and merged as pull request 26.
 
 - `accept_topic` takes the OpenAlex lookup as a fourth argument with no default value, and `count_papers_with_a_candidate` in `stage2.py` holds the rule.
 - A Paper counts when OpenAlex names an open location with a PDF link on a host that holds a file, which is the candidate list of issue 15.
@@ -305,13 +305,21 @@ Issue 18 is done.
 - The command line checks `FYND_CONTACT_EMAIL` before the model call, because the gate now makes outbound requests of its own.
 - 176 tests pass with ruff clean. No test reaches the network, and no test spends a token.
 
-## The task for day 6
+## The task for day 7
 
-One issue remains from day 5.
+One issue remains from day 5, and it is the next thing to do.
 
 1. Issue 19. One live run of `measure-open-copies`, with the new rule and robots.txt in place. The table is a dated file in `docs/measurements`, with a `README.md` there that lists the runs. The per Paper list gains the attempts column, and the file names the previous number, the prediction and the new number.
 
-Day 6 then holds two findings to carry forward. The gate will promise 10 where the pipeline reached 5, so the gap is the number for the stage 4 guard to answer. 3 of the 20 Papers are about ultra-processed food, so the search is not precise. The retrieval labelled set of day 7 is where that gets a number.
+Two findings carry forward. The gate promises 10 where the pipeline reached 5, so the gap is the number for the stage 4 guard to answer. 3 of the 20 Papers are about ultra-processed food, so the search is not precise. The retrieval labelled set is where that gets a number.
+
+## Where day 6 ended
+
+Issue 18 shipped, and `bugs.md` holds the four bugs its code review found. Two of the four are behaviour, which are a failed lookup that ended the whole Stage and a missing contact address found after the model call. Two are wording that lies to the next reader.
+
+Three documents changed with the code. `PRD.md` states what the stage 2 count counts. The note of 2026-10-11 in [ADR 0002](./docs/adr/0002-topics-are-generated-then-verified.md) says 14 where it said 12, because 12 belongs to the pool of day 1 with no Evidence window. This file holds the day 6 entry above.
+
+Issue 19 is the only open issue. It is one live run of `measure-open-copies`, and it turns the prediction of 10 into a measurement.
 
 
 ## Do not do yet
