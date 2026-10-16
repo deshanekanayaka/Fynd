@@ -6,6 +6,124 @@ A bug a code review found before anyone ran the code is still a bug. The mistake
 
 ---
 
+## One failed OpenAlex lookup broke the whole Stage
+
+**Found:** 2026-10-16, by a code review of branch `issue-18-stage-2-gate-counts-candidates`, before a merge to `main`.
+
+**What happened:**
+
+The stage 2 gate now asks OpenAlex about every Paper of the search, and counts the Papers that name a file Fynd may fetch:
+
+```python
+for paper in result.papers:
+    if not paper.doi:
+        continue
+    if resolve(paper.doi).candidates:
+        count += 1
+```
+
+`OpenAlex.fetch_work` raises `WorkNotRead` for every status that is not 200 and not 404. A 503 from OpenAlex, or a 429, therefore left `count_papers_with_a_candidate`, left `accept_topic`, and ended the Stage.
+
+Here is the cost in one example. The search returns 20 Papers. The first 14 resolve, and 6 of them already hold a candidate, which is twice the threshold of 3. The 15th identifier gets a 503. The student gets no decision at all, although the answer was decided five Papers earlier.
+
+**Root cause:** the new code treated a transport failure as a reason to stop. ADR 0006 says that `accept` returns what it decided and does not raise for a normal outcome. A remote service that answers 503 is a normal outcome for a gate that makes 20 calls.
+
+**Fix:** the loop catches `WorkNotRead` and skips that Paper. A Paper Fynd could not ask about is a Paper it cannot promise, so the count errs low, which is what the gate already does for a Paper with no digital object identifier.
+
+**Verification:** a test passes a lookup that raises `WorkNotRead` for one identifier of four. It asserts the answer is `TopicKept` with a count of 3.
+
+**Prevention:**
+
+- A function that calls a remote service once for each item of a pool needs one guard for each item. The same lesson is in the robots.txt entry below, and this is the second time a loop over 20 Papers lost all 20 to one of them.
+- Read the error classes of the function you call before you call it in a loop. `resolve` reads the cache first, which hides how often it reaches the network.
+- A Stage returns a decision. When a new argument can raise, the Stage needs a rule for that failure, written at the same time as the argument.
+
+---
+
+## The missing contact address was found after the money was spent
+
+**Found:** 2026-10-16, by the same code review.
+
+**What happened:**
+
+`run_stage_2` guards one variable before it does any work:
+
+```python
+if not os.environ.get("ANTHROPIC_API_KEY"):
+    raise SystemExit(...)
+```
+
+The gate now calls OpenAlex, and every outbound request names a human through `contact_email()`, which raises `ContactEmailMissing` when `FYND_CONTACT_EMAIL` is absent. Stage 2 never needed that address before, because Semantic Scholar does not read it.
+
+So a student with the model key set and no contact address paid for the model call that proposes 10 Topics, paid for the search, and then stopped at the first uncached identifier with no decision. The command line prints the right sentence, because `ContactEmailMissing` is caught at the edge. The sentence just arrives after the cost.
+
+**Root cause:** the guard list at the top of a command is a copy of what that command needed on the day it was written. A new call inside a Stage added a new requirement, and nothing connects the two.
+
+**Fix:** `run_stage_2` calls `contact_email()` before the model call. The call raises the same exception with the same sentence, and the edge still catches it.
+
+**Verification:** a read of `run_stage_2`, where the check now sits above the model call. No test covers it, because the guard is one line at the edge, and `tests/test_openalex.py` already holds a test that the lookup raises `ContactEmailMissing` with no address set.
+
+**Prevention:**
+
+- When a Stage gains a new outside call, read the environment that call needs, and check it where the command starts.
+- A check that costs nothing belongs before a call that costs money. The order of the two guards is the whole fix.
+
+---
+
+## A docstring named a measurement file that does not exist yet
+
+**Found:** 2026-10-16, by the same code review.
+
+**What happened:**
+
+The docstring of `SearchResult.open_copy_count` was rewritten to say that no gate reads the field any more, and it added this:
+
+> the measurement files quote it beside the count the stage 2 gate uses
+
+`docs/measurements/open-copy-hosts.md` is the only measurement file today, and it quotes neither number. It reports Usable text by host and by reason. The sentence becomes true after the live run of issue 19, and a reader who follows it today finds nothing.
+
+**Root cause:** the sentence described the plan and not the repository. The design round of day 5 settled that the measurement files quote both numbers, and the docstring copied the decision as if it were already done.
+
+**Fix:** the docstring now says what the field is and what the gate counts instead, with the two numbers of the pool of 2026-10-09, and it names no file.
+
+**Verification:** a read of `docs/measurements/open-copy-hosts.md`.
+
+**Prevention:**
+
+- A docstring states what is true in this commit. A plan goes in `NEXT-STEPS.md`, where a date and an issue number carry it.
+- A cross reference to a file is a promise that a reader will check. Open the file before you name it.
+
+---
+
+## A test name said stage 2 reads a field it had just stopped reading
+
+**Found:** 2026-10-16, by the same code review.
+
+**What happened:**
+
+`tests/test_semantic_scholar.py` held this name:
+
+```python
+def test_the_open_copy_count_is_what_stage_2_reads(tmp_path, monkeypatch) -> None:
+```
+
+The assertion inside it is still right, because the field still counts the Papers with a link. The name is now the opposite of the truth, and `models.py` states the truth three files away: "No gate reads this number."
+
+The next reader greps for what the gate reads, finds this name, and trusts it. A test name is read far more often than the two lines under it.
+
+**Root cause:** the change moved the rule out of one file and left the name that described the old rule in another file. Nothing fails when a name goes stale.
+
+**Fix:** the test is now `test_the_open_copy_count_counts_the_papers_with_a_link`, with a comment that says the stage 2 gate stopped reading it.
+
+**Verification:** a search for `stage_2_reads` across the repository returns nothing.
+
+**Prevention:**
+
+- When a rule moves, grep for the words of the old rule and not only for the names of the functions. A name in a test is documentation that no compiler checks.
+- A behaviour the code no longer has must not survive as a test name, because a name outlives the memory of the change.
+
+---
+
 ## A redirect loop on robots.txt ends the whole measurement run
 
 **Found:** 2026-10-11, by a code review of branch `read-and-obey-robots-txt`, before a merge to `main`.
