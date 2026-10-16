@@ -18,7 +18,7 @@ import anthropic
 from dotenv import load_dotenv
 
 from fynd.claude import ModelRefused, ask_for_json
-from fynd.contact import ContactEmailMissing
+from fynd.contact import ContactEmailMissing, contact_email
 from fynd.extract import extract_html, extract_pdf
 from fynd.fetcher import Fetched, Fetcher, FetchFailed, looks_like_a_pdf
 from fynd.measure import report
@@ -56,6 +56,9 @@ def run_stage_2(domain: str, pick: str, avoid: list[str]) -> None:
         raise SystemExit(
             "Set ANTHROPIC_API_KEY in your .env file. Stage 2 asks a model for Topics."
         )
+    # The gate asks OpenAlex, and every outbound request names a human. The
+    # check runs first, so a missing address costs no model call and no search.
+    contact_email()
 
     offered = stage2.offer_topics(domain, ask_for_json, avoid=avoid or None)
     print(f"Stage 2 offers {len(offered)} Topics for the Domain {domain}.")
@@ -68,10 +71,14 @@ def run_stage_2(domain: str, pick: str, avoid: list[str]) -> None:
 
     print()
     client = SemanticScholar()
+    # The gate asks OpenAlex about each Paper of the search. A found record and
+    # a plain no are both cached, so a second run of the same Topic asks again
+    # only for the Papers whose lookup failed.
     answer = stage2.accept_topic(
         pick,
         offered,
         search_with(client),
+        OpenAlex().resolve,
         today=dt.date.today(),
     )
     print("Stage 2 decided:", answer)

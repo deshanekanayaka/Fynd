@@ -9,6 +9,7 @@ Every file here is a test input. Two are saved web pages, and three are written 
 | `statistics-table.html` | Written by hand on 2026-10-09 | Deshan owns it |
 | `ons-energy-efficiency.html` | Office for National Statistics, saved 2026-10-09 | Open Government Licence v3.0, stated in the page |
 | `govuk-energy-consumption.html` | Department for Energy Security and Net Zero on gov.uk, saved 2026-10-09 | Open Government Licence v3.0, stated in the page |
+| `pool-2026-10-09.json` | The cached Semantic Scholar search of 2026-10-09 | Facts about 20 Papers, and no abstract |
 
 The two saved pages carry the Open Government Licence, which allows a copy with an attribution. The attribution is the table above.
 
@@ -21,3 +22,11 @@ The design round of day 4 asked for one real commercial product page. A commerci
 `ons-energy-efficiency.html` is a statistics article that gives 31,415 characters of text. It is the good case.
 
 `govuk-energy-consumption.html` is a statistics release page that gives 1,898 characters. The numbers live in a spreadsheet behind a link, so the page itself holds almost nothing. It is the case the usable text checks exist to catch.
+
+## Why the pool file holds no abstract
+
+`pool-2026-10-09.json` is the 20 Papers of the Seeded Topic run of 2026-10-09,
+with the identifier, the title, the year, the digital object identifier and the
+Semantic Scholar link of each one. The abstracts stay out, because [ADR 0011](../../docs/adr/0011-the-public-repository-holds-the-text-and-not-the-files.md)
+keeps the Semantic Scholar replies out of git for that reason. A title and an
+identifier are facts about a Paper, and the test needs nothing more.

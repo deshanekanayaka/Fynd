@@ -11,7 +11,7 @@ supersedes the repository rule of ADR 0007.
 """
 
 from dataclasses import dataclass
-from typing import Any, Final
+from typing import Any, Final, Protocol
 from urllib.parse import quote, urlparse
 
 import httpx
@@ -138,6 +138,12 @@ def reason_for_no_candidate(work: dict[str, Any]) -> str:
     if not any(location.get("pdf_url") for location in locations):
         return reasons.NO_PDF_LINK
     return reasons.BLOCKLISTED_ONLY
+
+
+class Resolve(Protocol):
+    """The OpenAlex lookup, which the edge supplies."""
+
+    def __call__(self, doi: str) -> Resolution: ...
 
 
 class OpenAlex:

@@ -46,7 +46,14 @@ class SearchResult(BaseModel):
 
     @property
     def open_copy_count(self) -> int:
-        """Counts the Papers with an Open copy, which is what stage 2 reads."""
+        """Counts the Papers that Semantic Scholar says have an open link.
+
+        No gate reads this number. It arrives free in the reply, and it is
+        the number the stage 2 gate stopped reading, because it counts a Paper
+        whose only address is a doi.org lookup. The gate counts the Papers
+        OpenAlex gives a candidate instead. For the pool of 2026-10-09 this
+        number is 14 and that one is 10. See issue 18.
+        """
         # The search asks for the Evidence window, so every Paper counted here
         # is inside it. See ADR 0008.
         count = 0

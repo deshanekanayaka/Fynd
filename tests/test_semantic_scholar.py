@@ -68,7 +68,9 @@ def test_a_missing_field_becomes_a_default(tmp_path, monkeypatch) -> None:
     assert second.has_open_copy is False
 
 
-def test_the_open_copy_count_is_what_stage_2_reads(tmp_path, monkeypatch) -> None:
+def test_the_open_copy_count_counts_the_papers_with_a_link(tmp_path, monkeypatch) -> None:
+    # No gate reads this number. The stage 2 gate counts the Papers OpenAlex
+    # gives a candidate, and this field is what it stopped reading.
     monkeypatch.setenv("FYND_CACHE_DIR", str(tmp_path))
     search = SemanticScholar(client=client_that_returns(RECORDED_REPLY, []))
 

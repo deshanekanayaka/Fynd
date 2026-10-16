@@ -10,6 +10,7 @@ from typing import Any, Final, Protocol
 
 from fynd import prompts
 from fynd.models import SearchResult, Topic
+from fynd.openalex import Resolve, WorkNotRead
 
 # Ask for 10 and show 5 to 8. The extra two cover the items the shape check
 # drops, and 5 to 8 is the PRD promise to the student.
@@ -197,16 +198,49 @@ def offer_topics(domain: str, ask_model: AskModel, avoid: list[str] | None = Non
     raise AssertionError("unreachable")
 
 
+def count_papers_with_a_candidate(result: SearchResult, resolve: Resolve) -> int:
+    """Counts the Papers of one search that offer a file Fynd may fetch.
+
+    A Paper counts when OpenAlex names an open location with a PDF link on a
+    host that holds a file, which is the candidate list the stage 4 pipeline
+    fetches. It costs one cached lookup for each Paper and no download.
+
+    A Paper with no identifier is not looked up and does not count, although
+    the pipeline would still try its Semantic Scholar link as a last resort.
+    The gate counts low on purpose, because a promise the pipeline cannot keep
+    is the failure this gate exists to prevent. See ADR 0012 and issue 18.
+    """
+    count = 0
+    for paper in result.papers:
+        if not paper.doi:
+            continue
+        try:
+            answer = resolve(paper.doi)
+        except WorkNotRead:
+            # One lookup that fails is not a broken Stage. ADR 0006 asks this
+            # function for a decision, and a Paper Fynd could not ask about is
+            # a Paper it cannot promise, so the count errs low as it does for
+            # a Paper with no identifier.
+            continue
+        if answer.candidates:
+            count += 1
+    return count
+
+
 def accept_topic(
     pick: str,
     offered: list[Topic],
     search: Search,
+    resolve: Resolve,
     today: dt.date,
 ) -> TopicDecision:
-    """Keeps the picked Topic when a real search finds enough open Papers.
+    """Keeps the picked Topic when enough Papers offer a file Fynd may fetch.
 
     `offered` is the list the runner saved for this Project, and never a list
     the caller sent, because the secret link is the only access control.
+
+    `resolve` is the OpenAlex lookup, and it has no default value, because the
+    threshold rule belongs to the Stage and the edge wires the real one.
     """
     picked = None
     for topic in offered:
@@ -218,7 +252,11 @@ def accept_topic(
 
     # The search runs here, because the threshold rule belongs to the Stage.
     result = search(query=picked.query, year_from=first_year_in_window(today))
-    count = result.open_copy_count
+    # Semantic Scholar names a link for a Paper whose only address is a doi.org
+    # lookup, and it claimed 14 of these 20 Papers while 10 hold a file. A
+    # student who passes on the claimed number meets the truth two Stages
+    # later, which is the failure this product exists to prevent.
+    count = count_papers_with_a_candidate(result, resolve)
     if count >= OPEN_PAPER_THRESHOLD:
         return TopicKept(topic=picked, open_paper_count=count)
     return TopicBelowThreshold(topic=picked, open_paper_count=count)
