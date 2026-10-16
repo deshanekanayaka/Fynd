@@ -4,7 +4,9 @@ import datetime as dt
 
 import pytest
 
-from fynd.models import Paper, SearchResult, Topic
+from fynd import reasons
+from fynd.models import OpenCopy, Paper, SearchResult, Topic
+from fynd.openalex import Resolution, WorkNotRead
 from fynd.stages.stage2 import (
     MAXIMUM_TOPICS_TO_SHOW,
     MINIMUM_TOPICS_TO_SHOW,
@@ -42,7 +44,11 @@ def model_that_returns(*answers, calls: list):
 
 
 def search_that_returns(open_copies: int, calls: list):
-    """Builds a fake search that returns a fixed number of Papers with an Open copy."""
+    """Builds a fake search that returns a fixed number of Papers with an Open copy.
+
+    Every Paper carries the Semantic Scholar link and a digital object
+    identifier, because the gate now looks each identifier up.
+    """
 
     def search(query: str, year_from: int) -> SearchResult:
         calls.append((query, year_from))
@@ -52,12 +58,32 @@ def search_that_returns(open_copies: int, calls: list):
                 Paper(
                     paper_id=f"p{number}",
                     title=f"Paper {number}",
+                    doi=f"10.0/p{number}",
                     open_copy_url=f"https://repository.example/{number}.pdf",
                 )
             )
         return SearchResult(query=query, total=open_copies, papers=papers)
 
     return search
+
+
+def resolve_that_gives(candidates: int, calls: list | None = None):
+    """Builds a fake lookup that names a candidate for the first few Papers.
+
+    The fake answers for the identifiers `10.0/p0` upward, which is what
+    `search_that_returns` hands out.
+    """
+
+    def resolve(doi: str) -> Resolution:
+        if calls is not None:
+            calls.append(doi)
+        number = int(doi.rsplit("p", 1)[-1])
+        if number < candidates:
+            found = OpenCopy(url=f"https://repository.example/{number}.pdf", host="x")
+            return Resolution(found=True, candidates=(found,))
+        return Resolution(found=True, reason=reasons.NO_PDF_LINK)
+
+    return resolve
 
 
 def test_the_evidence_window_starts_five_years_back_counting_this_year() -> None:
@@ -195,7 +221,7 @@ def test_a_short_list_twice_breaks_the_stage() -> None:
     assert len(calls) == 2
 
 
-def test_accept_topic_keeps_a_topic_the_search_agrees_with() -> None:
+def test_accept_topic_keeps_a_topic_the_lookup_agrees_with() -> None:
     offered = [Topic(slug="grid", label="Grid", query="grid flexibility")]
     calls: list = []
 
@@ -203,6 +229,7 @@ def test_accept_topic_keeps_a_topic_the_search_agrees_with() -> None:
         "grid",
         offered,
         search_that_returns(OPEN_PAPER_THRESHOLD, calls=calls),
+        resolve_that_gives(OPEN_PAPER_THRESHOLD),
         today=dt.date(2026, 10, 8),
     )
 
@@ -213,9 +240,29 @@ def test_accept_topic_searches_with_the_query_and_the_window() -> None:
     offered = [Topic(slug="grid", label="Grid", query="grid flexibility")]
     calls: list = []
 
-    accept_topic("grid", offered, search_that_returns(3, calls=calls), today=dt.date(2026, 1, 1))
+    accept_topic(
+        "grid",
+        offered,
+        search_that_returns(3, calls=calls),
+        resolve_that_gives(3),
+        today=dt.date(2026, 1, 1),
+    )
 
     assert calls == [("grid flexibility", 2022)]
+
+
+def test_the_gate_counts_the_papers_with_a_candidate_and_not_the_search_field() -> None:
+    # Semantic Scholar names a link for every Paper here, and only two of them
+    # hold a file Fynd may fetch. The student sees the two. See ADR 0012.
+    offered = [Topic(slug="grid", label="Grid", query="grid flexibility")]
+    search = search_that_returns(6, calls=[])
+
+    answer = accept_topic(
+        "grid", offered, search, resolve_that_gives(2), today=dt.date(2026, 10, 8)
+    )
+
+    assert search(query="grid flexibility", year_from=2022).open_copy_count == 6
+    assert answer == TopicBelowThreshold(topic=offered[0], open_paper_count=2)
 
 
 def test_a_topic_under_the_threshold_is_not_a_failure() -> None:
@@ -226,13 +273,61 @@ def test_a_topic_under_the_threshold_is_not_a_failure() -> None:
     answer = accept_topic(
         "grid",
         offered,
-        search_that_returns(OPEN_PAPER_THRESHOLD - 1, calls=[]),
+        search_that_returns(OPEN_PAPER_THRESHOLD, calls=[]),
+        resolve_that_gives(OPEN_PAPER_THRESHOLD - 1),
         today=dt.date(2026, 10, 8),
     )
 
     assert answer == TopicBelowThreshold(
         topic=offered[0], open_paper_count=OPEN_PAPER_THRESHOLD - 1
     )
+
+
+def test_a_paper_with_no_identifier_costs_no_lookup_and_does_not_count() -> None:
+    # OpenAlex is asked by identifier alone. The pipeline would still try the
+    # Semantic Scholar link of such a Paper, so the gate counts low, which is
+    # the safe side of a promise.
+    offered = [Topic(slug="grid", label="Grid", query="grid flexibility")]
+    looked_up: list = []
+
+    def search(query: str, year_from: int) -> SearchResult:
+        return SearchResult(
+            query=query,
+            total=2,
+            papers=[
+                Paper(paper_id="a", title="A", open_copy_url="https://repo.example/a.pdf"),
+                Paper(paper_id="b", title="B", open_copy_url="https://repo.example/b.pdf"),
+            ],
+        )
+
+    answer = accept_topic(
+        "grid",
+        offered,
+        search,
+        resolve_that_gives(0, calls=looked_up),
+        today=dt.date(2026, 10, 8),
+    )
+
+    assert answer == TopicBelowThreshold(topic=offered[0], open_paper_count=0)
+    assert looked_up == []
+
+
+def test_a_lookup_that_fails_counts_low_and_does_not_break_the_stage() -> None:
+    # ADR 0006 asks accept_topic for a decision. One Paper OpenAlex refused to
+    # answer about is a Paper Fynd cannot promise, so it does not count.
+    offered = [Topic(slug="grid", label="Grid", query="grid flexibility")]
+    working = resolve_that_gives(4)
+
+    def resolve(doi: str) -> Resolution:
+        if doi == "10.0/p1":
+            raise WorkNotRead("OpenAlex answered 503 for the identifier 10.0/p1.")
+        return working(doi)
+
+    answer = accept_topic(
+        "grid", offered, search_that_returns(4, calls=[]), resolve, today=dt.date(2026, 10, 8)
+    )
+
+    assert answer == TopicKept(topic=offered[0], open_paper_count=3)
 
 
 def test_a_pick_the_stage_never_offered_is_refused_without_a_search() -> None:
@@ -242,7 +337,11 @@ def test_a_pick_the_stage_never_offered_is_refused_without_a_search() -> None:
     offered = [Topic(slug="grid", label="Grid", query="grid flexibility")]
 
     answer = accept_topic(
-        "nuclear-fusion", offered, search_that_returns(9, calls=calls), today=dt.date(2026, 10, 8)
+        "nuclear-fusion",
+        offered,
+        search_that_returns(9, calls=calls),
+        resolve_that_gives(9),
+        today=dt.date(2026, 10, 8),
     )
 
     assert answer == TopicNotOffered(pick="nuclear-fusion")

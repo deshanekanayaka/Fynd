@@ -1,6 +1,6 @@
 # Next steps
 
-Updated: 2026-10-11, end of day 5. Target ship date: 2026-10-26.
+Updated: 2026-10-16, day 6. Target ship date: 2026-10-26.
 The ship date is a target and not a constraint. The design phase takes the time it needs, because Deshan must be able to explain every part of this project.
 Read [PRD.md](./PRD.md) for the product and [CONTEXT.md](./CONTEXT.md) for the vocabulary.
 
@@ -266,7 +266,7 @@ The decisions, in the order the issues ship.
 - Issue 15. One function, `open_candidates(work)` in `openalex.py`, returns the open locations with a PDF link, ranked repository first and journal second, in the OpenAlex order inside a rank, minus the blocklist. At most 3 attempts for one Paper. The Semantic Scholar link stays as the last resort, and only when OpenAlex names no candidate. Predicted 10 of 20, against 5 today.
 - Issue 16. Closed, not built. The 3 landing-page-only Papers of this pool name doi.org three times and doaj.org once, and both hosts are on the blocklist. The `citation_pdf_url` hop pays 0 Papers here, and the premise that those pages come from Pure, EPrints and DSpace is wrong for this pool. The hop returns when a measured run shows a landing-page-only Paper on a repository host.
 - Issue 17. robots.txt under RFC 9309, read inside `Fetcher.fetch`, so every link passes it. `urllib.robotparser` from the standard library does the matching. A 200 and a 404 are cached for each host, and a 5xx and a timeout are not. The wait is the larger of 1 second and a named `Crawl-delay`, up to 10 seconds, and a longer delay skips that host. A robots refusal spends one of the 3 attempts.
-- Issue 18. The stage 2 gate counts the Papers with a candidate, which is 10 for this pool against the 12 Semantic Scholar claimed. `accept_topic` takes the lookup as a second plain function argument. The threshold stays at 3. `SearchResult.open_copy_count` stays as a field, and no gate reads it.
+- Issue 18. The stage 2 gate counts the Papers with a candidate, which is 10 for this pool against the 14 Semantic Scholar claimed. The design round wrote 12 here, which is the day 1 count from the pool with no Evidence window. The committed pool file and the test say 14. `accept_topic` takes the lookup as a second plain function argument. The threshold stays at 3. `SearchResult.open_copy_count` stays as a field, and no gate reads it.
 - Issue 19. One live run, and a dated file in `docs/measurements`, with a `README.md` there that lists the runs. The per Paper list gains the attempts column. The thresholds of 3,000 characters, 0.95 ordinary share and the section word check are unchanged before the run, because the new journal files are the first publisher PDFs this pipeline sees.
 
 The reason vocabulary after day 5. `no_repository_location` is gone. `no_open_location`, `no_pdf_link`, `blocklisted_only` and `robots_refused` join the table, checked in that order. The table of 2026-10-09 keeps the names it was written with.
@@ -291,12 +291,25 @@ The reason table now holds 12 names. `no_repository_location` is gone, and `no_o
 
 The number so far is a prediction and not a measurement. A replay of the 20 committed OpenAlex records through the new rules gives 10 Papers with a candidate, against the 5 the old rule reached. A candidate is a link and not a file, so issue 19 is the number that counts.
 
+## Built on day 6: the stage 2 gate
+
+Issue 18 is done.
+
+- `accept_topic` takes the OpenAlex lookup as a fourth argument with no default value, and `count_papers_with_a_candidate` in `stage2.py` holds the rule.
+- A Paper counts when OpenAlex names an open location with a PDF link on a host that holds a file, which is the candidate list of issue 15.
+- A Paper with no digital object identifier costs no lookup and does not count. The pipeline would still try its Semantic Scholar link as a last resort, so the gate counts low, which is the safe side of a promise to the student.
+- The threshold stays at 3, and `SearchResult.open_copy_count` stays as a field that no gate reads.
+- `tests/files/pool-2026-10-09.json` holds the 20 Papers of the run of 2026-10-09, with no abstracts. `tests/test_stage2_pool.py` replays them against the 20 OpenAlex records in git, and both numbers come from that data.
+- The old number for this pool is 14 and the new one is 10. The design round of day 5 wrote 12, which belongs to the day 1 pool with no Evidence window.
+- A lookup that fails does not break the Stage. The Paper does not count, and the Stage still returns a decision, as ADR 0006 asks.
+- The command line checks `FYND_CONTACT_EMAIL` before the model call, because the gate now makes outbound requests of its own.
+- 176 tests pass with ruff clean. No test reaches the network, and no test spends a token.
+
 ## The task for day 6
 
-Two issues remain from day 5, and they run in this order.
+One issue remains from day 5.
 
-1. Issue 18. The stage 2 gate counts the Papers with a candidate, through the same `open_candidates` the pipeline uses. `accept_topic` takes the lookup as a second plain function argument. The threshold stays at 3, and `SearchResult.open_copy_count` stays as a field that no gate reads.
-2. Issue 19. One live run of `measure-open-copies`, with the new rule and robots.txt in place. The table is a dated file in `docs/measurements`, with a `README.md` there that lists the runs. The per Paper list gains the attempts column, and the file names the previous number, the prediction and the new number.
+1. Issue 19. One live run of `measure-open-copies`, with the new rule and robots.txt in place. The table is a dated file in `docs/measurements`, with a `README.md` there that lists the runs. The per Paper list gains the attempts column, and the file names the previous number, the prediction and the new number.
 
 Day 6 then holds two findings to carry forward. The gate will promise 10 where the pipeline reached 5, so the gap is the number for the stage 4 guard to answer. 3 of the 20 Papers are about ultra-processed food, so the search is not precise. The retrieval labelled set of day 7 is where that gets a number.
 

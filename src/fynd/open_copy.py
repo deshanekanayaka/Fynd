@@ -16,13 +16,7 @@ from fynd import reasons
 from fynd.extract import Extracted
 from fynd.fetcher import FetchAnswer, Fetched, FetchFailed
 from fynd.models import OpenCopy, Paper
-from fynd.openalex import Resolution, holds_no_file, host_of
-
-
-class Resolve(Protocol):
-    """The OpenAlex lookup, which the edge supplies."""
-
-    def __call__(self, doi: str) -> Resolution: ...
+from fynd.openalex import Resolve, holds_no_file, host_of
 
 
 class Fetch(Protocol):
