@@ -16,6 +16,33 @@ from fynd.open_copy import OpenCopyResult
 # was tried for it.
 NO_HOST: Final = "no link"
 
+# The header of a fresh README, written once, the first time a run adds its
+# line to an empty directory.
+README_HEADER: Final = (
+    "# The measurement runs",
+    "",
+    "One line for each live run of `measure-open-copies`, oldest first.",
+    "",
+)
+
+
+def readme_line(today: dt.date) -> str:
+    """Returns the one line a run adds to the README of `docs/measurements`."""
+    return f"- [{today.isoformat()}](open-copy-hosts-{today.isoformat()}.md)"
+
+
+def readme_with(existing: str, today: dt.date) -> str:
+    """Adds today's run to the README text, in order, with no date twice.
+
+    A second run on the same date writes the same line again rather than a
+    second one, so the README lists runs and not attempts at a run.
+    """
+    lines = list(README_HEADER) if not existing else existing.splitlines()
+    line = readme_line(today)
+    if line not in lines:
+        lines.append(line)
+    return "\n".join(lines) + "\n"
+
 
 def host_of_result(result: OpenCopyResult) -> str:
     """Returns the host a result belongs to in the host table."""
@@ -76,13 +103,23 @@ def report(
     limit: int,
     today: dt.date,
     dropped: int = 0,
+    previous: int | None = None,
+    predicted: int | None = None,
 ) -> str:
     """Returns the whole measurement file as one string.
 
     `limit` is the size of the searched pool, and `dropped` is the number of
     Papers whose run broke, so the denominator is the pool and never the rows
     that survived.
+
+    `previous` and `predicted` name the last run's count and what the rule fix
+    predicted. Pass both to print the one line that says what really happened,
+    against the old number and the prediction. Leave either at `None` to skip
+    that line, for a run with nothing yet to compare against.
     """
+    total = len(results) + dropped
+    usable_total = sum(1 for result in results if result.is_usable)
+
     lines = [
         "# The Open copy of a Paper, by host",
         "",
@@ -96,6 +133,14 @@ def report(
         "",
         "The fetched files are not in git. A reader runs the command again to get them. "
         "See [ADR 0011](../adr/0011-the-public-repository-holds-the-text-and-not-the-files.md).",
+    ]
+    if previous is not None and predicted is not None:
+        lines += [
+            "",
+            f"The previous run reached {previous} of {limit} Papers. The rule fix predicted "
+            f"{predicted}. This run reached {usable_total} of {total}.",
+        ]
+    lines += [
         "",
         "## By host",
         "",
@@ -112,8 +157,6 @@ def report(
         usable = int(row["usable"])
         lines.append(f"| {row['host']} | {tried} | {files} | {usable} | {share(usable, tried)} |")
 
-    total = len(results) + dropped
-    usable_total = sum(1 for result in results if result.is_usable)
     lines += [
         "",
         f"{usable_total} of {total} Papers reached Usable text, which is "
@@ -148,8 +191,8 @@ def report(
         "",
         "## By Paper",
         "",
-        "| Paper | Year | Host | Reason | Characters |",
-        "|---|---|---|---|---|",
+        "| Paper | Year | Host | Reason | Characters | Attempts |",
+        "|---|---|---|---|---|---|",
     ]
     for result in results:
         characters = len(result.extracted.text) if result.extracted is not None else 0
@@ -157,7 +200,7 @@ def report(
         year = result.paper.year if result.paper.year is not None else "-"
         lines.append(
             f"| {title[:70]} | {year} | {host_of_result(result)} | "
-            f"`{result.reason}` | {characters} |"
+            f"`{result.reason}` | {characters} | {result.attempts} |"
         )
 
     lines.append("")

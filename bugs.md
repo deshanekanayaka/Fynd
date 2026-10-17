@@ -6,6 +6,36 @@ A bug a code review found before anyone ran the code is still a bug. The mistake
 
 ---
 
+## A fixed comparison number stays wrong on every later run
+
+**Found:** 2026-10-17, by a code review of branch `record-day-6`, before a merge to `main`.
+
+**What happened:**
+
+Issue 19 asked the measurement file to name the previous count, the prediction, and the new count. The first draft added two constants to `src/fynd/cli.py`:
+
+```python
+PREVIOUS_USABLE = 5
+PREDICTED_USABLE = 10
+```
+
+`run_measure_open_copies` passed both to `report()` on every call. Those two numbers are the count from the run of 2026-10-09 and the prediction ADR 0012 made for the run after it. Neither number has a reader that moves it forward.
+
+Take a run on 2026-11-20. It writes the same sentence as this run, "The previous run reached 5 of 20 Papers. The rule fix predicted 10." The real previous run is the one from 2026-10-17 by then, and nobody made a new prediction for it.
+
+**Root cause:** a fact about one comparison, between two named dates, sat as a constant of the command. It belongs instead as a line in the one file that comparison produced. The command runs again next month. The constant does not know that.
+
+**Fix:** the two constants and the `previous=`/`predicted=` arguments leave `cli.py`. `measure.report()` keeps the optional `previous` and `predicted` parameters. A later issue can ask for a comparison again, and no caller passes them today. The one sentence this issue needed stays as plain text, already written into `docs/measurements/open-copy-hosts-2026-10-17.md`. The code can change, and that file stays as it was written.
+
+**Verification:** `tests/test_cli.py` asserts that `src/fynd/cli.py` holds no `previous=` or `predicted=` keyword argument. With both arguments left at `None`, `report()` prints no comparison line, and `tests/test_measure.py` already asserts that.
+
+**Prevention:**
+
+- A number that compares two runs by date is a fact about one occasion, and not a setting of the command. Write it into the file that occasion produced. Do not write it into a constant the command carries forward.
+- Ask one question of every module level constant: what reader moves this value, and on what event? A constant with no such reader is a fact dressed as a setting.
+
+---
+
 ## One failed OpenAlex lookup broke the whole Stage
 
 **Found:** 2026-10-16, by a code review of branch `issue-18-stage-2-gate-counts-candidates`, before a merge to `main`.

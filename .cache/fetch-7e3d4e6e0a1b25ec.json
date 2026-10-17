@@ -1,0 +1,15 @@
+{
+  "parts": {
+    "api": "open-copy-fetch",
+    "url": "https://www.ijspe.com/files/fbce6d8a-3da2-4577-bfaf-e9d99eeec599/vol-4-no-11-november-2022-1.pdf",
+    "redirects": 3,
+    "max_bytes": 20971520,
+    "shape": 1
+  },
+  "value": {
+    "kind": "bytes",
+    "content_type": "application/pdf",
+    "byte_count": 225129,
+    "file": "fetch-7e3d4e6e0a1b25ec.bin"
+  }
+}
