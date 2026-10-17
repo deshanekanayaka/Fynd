@@ -1,0 +1,15 @@
+{
+  "parts": {
+    "api": "open-copy-fetch",
+    "url": "http://ruj.uj.edu.pl/bitstreams/ce2e0fba-8462-4019-b465-915fdc982f4c/download",
+    "redirects": 3,
+    "max_bytes": 20971520,
+    "shape": 1
+  },
+  "value": {
+    "kind": "refusal",
+    "status": 200,
+    "content_type": "text/html; charset=utf-8",
+    "reason": "not_a_pdf"
+  }
+}

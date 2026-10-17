@@ -208,7 +208,7 @@ The one open item is a number and not a preference. The two thresholds and the s
 
 ## Measured on day 4: the first real number
 
-`uv run python -m fynd.cli measure-open-copies` ran live on 2026-10-09. The table is [docs/measurements/open-copy-hosts.md](./docs/measurements/open-copy-hosts.md).
+`uv run python -m fynd.cli measure-open-copies` ran live on 2026-10-09. The table is [docs/measurements/open-copy-hosts-2026-10-09.md](./docs/measurements/open-copy-hosts-2026-10-09.md).
 
 5 of 20 Papers reached Usable text, which is 25 percent. The 15 that did not split like this.
 
@@ -321,6 +321,18 @@ Three documents changed with the code. `PRD.md` states what the stage 2 count co
 
 Issue 19 is the only open issue. It is one live run of `measure-open-copies`, and it turns the prediction of 10 into a measurement.
 
+
+## Measured on day 7: issue 19 closes
+
+The live run of 2026-10-17 is [docs/measurements/open-copy-hosts-2026-10-17.md](./docs/measurements/open-copy-hosts-2026-10-17.md). A `README.md` in that directory lists every run. The per Paper table now holds an attempts column.
+
+The previous run reached 5 of 20. The rule fix of ADR 0012 predicted 10. This run also reached 5 of 20.
+
+10 Papers reached a candidate link, which matches the stage 2 gate exactly. Only 5 of those 10 gave Usable text. Two new refusals absorbed the gain that the candidate rule won. robots.txt now refuses `journals.plos.org` and `discovery.ucl.ac.uk`, and the second of those gave Usable text on 2026-10-09. `www.mdpi.com` refused both of its fetches, and `www.sciencedirect.com` refused all 3 of its attempts. One Paper gained a file through the new rule. The pool's last Paper now reaches `www.ijspe.com`, and the run of 2026-10-09 only reached a `fetch_refused` host for it. The gain and the loss cancel, so the published number holds at 5.
+
+Every reason this run named is already in `reasons.ALL`. No host this run refused belongs on the blocklist. The blocklist holds only a host that keeps no file by design. A host that refuses a fetch is counted in the fetch cache instead. See the note of 2026-10-11 on this point.
+
+The gap the stage 2 gate opened is now a measured number and not only a prediction. The gate promises 10, and the pipeline still reaches 5. The stage 4 guard of 2 Papers is the next place this gap is read.
 
 ## Do not do yet
 
