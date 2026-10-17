@@ -1,0 +1,15 @@
+{
+  "parts": {
+    "api": "open-copy-fetch",
+    "url": "https://www.mdpi.com/2076-3298/11/9/199/pdf?version=1726147204",
+    "redirects": 3,
+    "max_bytes": 20971520,
+    "shape": 1
+  },
+  "value": {
+    "kind": "refusal",
+    "status": 403,
+    "content_type": "text/html",
+    "reason": "fetch_refused"
+  }
+}

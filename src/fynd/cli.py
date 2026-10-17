@@ -21,7 +21,7 @@ from fynd.claude import ModelRefused, ask_for_json
 from fynd.contact import ContactEmailMissing, contact_email
 from fynd.extract import extract_html, extract_pdf
 from fynd.fetcher import Fetched, Fetcher, FetchFailed, looks_like_a_pdf
-from fynd.measure import report
+from fynd.measure import readme_with, report
 from fynd.open_copy import read_open_copy
 from fynd.openalex import OpenAlex, WorkNotRead
 from fynd.semantic_scholar import RateLimited, SemanticScholar
@@ -135,7 +135,8 @@ def run_extract(path: str) -> None:
 # label and the query of a real stage 2 run come from a model, and a published
 # number cannot depend on a model call.
 SEEDED_TOPIC_QUERY = "United Kingdom household energy forecasting"
-MEASUREMENT_FILE = pathlib.Path("docs/measurements/open-copy-hosts.md")
+MEASUREMENT_DIR = pathlib.Path("docs/measurements")
+MEASUREMENT_README = MEASUREMENT_DIR / "README.md"
 
 # The size of the measured pool. The table names it, so a reader knows the
 # denominator even when a Paper drops out of the run.
@@ -179,19 +180,27 @@ def run_measure_open_copies() -> None:
             f"{result.attempts} tries  {result.reason}"
         )
 
-    MEASUREMENT_FILE.parent.mkdir(parents=True, exist_ok=True)
-    MEASUREMENT_FILE.write_text(
+    today = dt.date.today()
+    measurement_file = MEASUREMENT_DIR / f"open-copy-hosts-{today.isoformat()}.md"
+    MEASUREMENT_DIR.mkdir(parents=True, exist_ok=True)
+    measurement_file.write_text(
         report(
             results,
             query=SEEDED_TOPIC_QUERY,
             year_from=year_from,
             limit=MEASURED_POOL_SIZE,
             dropped=len(dropped),
-            today=dt.date.today(),
+            today=today,
         ),
         encoding="utf-8",
     )
-    print(f"\nWrote {MEASUREMENT_FILE}")
+    print(f"\nWrote {measurement_file}")
+
+    existing_readme = ""
+    if MEASUREMENT_README.exists():
+        existing_readme = MEASUREMENT_README.read_text(encoding="utf-8")
+    MEASUREMENT_README.write_text(readme_with(existing_readme, today), encoding="utf-8")
+    print(f"Wrote {MEASUREMENT_README}")
 
 
 def main() -> None:

@@ -31,7 +31,7 @@ Code that runs today, as `uv run python -m fynd.cli <command>`:
 - `extract` turns one file into a Source text.
 - `measure-open-copies` runs the whole Open copy pipeline over 20 Papers and writes the published table.
 - A run needs `SEMANTIC_SCHOLAR_API_KEY`, `ANTHROPIC_API_KEY` and `FYND_CONTACT_EMAIL` in a `.env` file. The command names the missing one.
-- Every external answer is cached on disk, including a refusal. 133 tests pass with ruff clean, and no test reaches the network or spends a token.
+- Every external answer is cached on disk, including a refusal. 176 tests pass with ruff clean, and no test reaches the network or spends a token.
 
 ## How we work
 
@@ -208,7 +208,7 @@ The one open item is a number and not a preference. The two thresholds and the s
 
 ## Measured on day 4: the first real number
 
-`uv run python -m fynd.cli measure-open-copies` ran live on 2026-10-09. The table is [docs/measurements/open-copy-hosts.md](./docs/measurements/open-copy-hosts.md).
+`uv run python -m fynd.cli measure-open-copies` ran live on 2026-10-09. The table is [docs/measurements/open-copy-hosts-2026-10-09.md](./docs/measurements/open-copy-hosts-2026-10-09.md).
 
 5 of 20 Papers reached Usable text, which is 25 percent. The 15 that did not split like this.
 
@@ -293,7 +293,7 @@ The number so far is a prediction and not a measurement. A replay of the 20 comm
 
 ## Built on day 6: the stage 2 gate
 
-Issue 18 is done.
+Issue 18 is done and merged as pull request 26.
 
 - `accept_topic` takes the OpenAlex lookup as a fourth argument with no default value, and `count_papers_with_a_candidate` in `stage2.py` holds the rule.
 - A Paper counts when OpenAlex names an open location with a PDF link on a host that holds a file, which is the candidate list of issue 15.
@@ -305,14 +305,34 @@ Issue 18 is done.
 - The command line checks `FYND_CONTACT_EMAIL` before the model call, because the gate now makes outbound requests of its own.
 - 176 tests pass with ruff clean. No test reaches the network, and no test spends a token.
 
-## The task for day 6
+## The task for day 7
 
-One issue remains from day 5.
+One issue remains from day 5, and it is the next thing to do.
 
 1. Issue 19. One live run of `measure-open-copies`, with the new rule and robots.txt in place. The table is a dated file in `docs/measurements`, with a `README.md` there that lists the runs. The per Paper list gains the attempts column, and the file names the previous number, the prediction and the new number.
 
-Day 6 then holds two findings to carry forward. The gate will promise 10 where the pipeline reached 5, so the gap is the number for the stage 4 guard to answer. 3 of the 20 Papers are about ultra-processed food, so the search is not precise. The retrieval labelled set of day 7 is where that gets a number.
+Two findings carry forward. The gate promises 10 where the pipeline reached 5, so the gap is the number for the stage 4 guard to answer. 3 of the 20 Papers are about ultra-processed food, so the search is not precise. The retrieval labelled set is where that gets a number.
 
+## Where day 6 ended
+
+Issue 18 shipped, and `bugs.md` holds the four bugs its code review found. Two of the four are behaviour, which are a failed lookup that ended the whole Stage and a missing contact address found after the model call. Two are wording that lies to the next reader.
+
+Three documents changed with the code. `PRD.md` states what the stage 2 count counts. The note of 2026-10-11 in [ADR 0002](./docs/adr/0002-topics-are-generated-then-verified.md) says 14 where it said 12, because 12 belongs to the pool of day 1 with no Evidence window. This file holds the day 6 entry above.
+
+Issue 19 is the only open issue. It is one live run of `measure-open-copies`, and it turns the prediction of 10 into a measurement.
+
+
+## Measured on day 7: issue 19 closes
+
+The live run of 2026-10-17 is [docs/measurements/open-copy-hosts-2026-10-17.md](./docs/measurements/open-copy-hosts-2026-10-17.md). A `README.md` in that directory lists every run. The per Paper table now holds an attempts column.
+
+The previous run reached 5 of 20. The rule fix of ADR 0012 predicted 10. This run also reached 5 of 20.
+
+10 Papers reached a candidate link, which matches the stage 2 gate exactly. Only 5 of those 10 gave Usable text. Two new refusals absorbed the gain that the candidate rule won. robots.txt now refuses `journals.plos.org` and `discovery.ucl.ac.uk`, and the second of those gave Usable text on 2026-10-09. `www.mdpi.com` refused both of its fetches, and `www.sciencedirect.com` refused all 3 of its attempts. One Paper gained a file through the new rule. The pool's last Paper now reaches `www.ijspe.com`, and the run of 2026-10-09 only reached a `fetch_refused` host for it. The gain and the loss cancel, so the published number holds at 5.
+
+Every reason this run named is already in `reasons.ALL`. No host this run refused belongs on the blocklist. The blocklist holds only a host that keeps no file by design. A host that refuses a fetch is counted in the fetch cache instead. See the note of 2026-10-11 on this point.
+
+The gap the stage 2 gate opened is now a measured number and not only a prediction. The gate promises 10, and the pipeline still reaches 5. The stage 4 guard of 2 Papers is the next place this gap is read.
 
 ## Do not do yet
 

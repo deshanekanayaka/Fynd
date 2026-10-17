@@ -4,7 +4,7 @@ import datetime as dt
 
 from fynd import reasons
 from fynd.extract import Extracted
-from fynd.measure import NO_HOST, host_rows, reason_counts, report
+from fynd.measure import NO_HOST, host_rows, readme_with, reason_counts, report
 from fynd.models import OpenCopy, Paper
 from fynd.open_copy import OpenCopyResult
 
@@ -142,6 +142,70 @@ def test_a_title_with_a_pipe_does_not_break_the_table() -> None:
 def test_an_empty_pool_still_writes_a_file() -> None:
     text = report([], query="a query", year_from=2022, limit=20, today=TODAY)
     assert "0 of 0 Papers reached Usable text, which is -" in text
+
+
+def test_the_by_paper_table_names_the_attempts() -> None:
+    tried_two = ("doaj.org", "www.mdpi.com")
+    text = report(
+        [result(reasons.USABLE, "www.mdpi.com", characters=9000, tried=tried_two)],
+        query="a query",
+        year_from=2022,
+        limit=20,
+        today=TODAY,
+    )
+
+    header = text[text.index("## By Paper") :]
+    assert "| Attempts |" in header
+    assert "| 2 |" in header
+
+
+def test_the_comparison_line_names_the_previous_the_prediction_and_the_new_count() -> None:
+    text = report(
+        [result(reasons.USABLE, "www.mdpi.com", characters=9000)],
+        query="a query",
+        year_from=2022,
+        limit=20,
+        today=TODAY,
+        previous=5,
+        predicted=10,
+    )
+
+    assert "The previous run reached 5 of 20 Papers." in text
+    assert "The rule fix predicted 10." in text
+    assert "This run reached 1 of 1." in text
+
+
+def test_the_comparison_line_is_absent_with_nothing_to_compare() -> None:
+    text = report(
+        [result(reasons.USABLE, "www.mdpi.com", characters=9000)],
+        query="a query",
+        year_from=2022,
+        limit=20,
+        today=TODAY,
+    )
+
+    assert "previous run" not in text
+
+
+def test_readme_with_writes_a_header_for_an_empty_file() -> None:
+    text = readme_with("", TODAY)
+    assert "# The measurement runs" in text
+    assert "- [2026-10-09](open-copy-hosts-2026-10-09.md)" in text
+
+
+def test_readme_with_keeps_the_earlier_lines() -> None:
+    first = readme_with("", dt.date(2026, 10, 9))
+    second = readme_with(first, dt.date(2026, 10, 17))
+
+    assert "- [2026-10-09](open-copy-hosts-2026-10-09.md)" in second
+    assert "- [2026-10-17](open-copy-hosts-2026-10-17.md)" in second
+
+
+def test_readme_with_does_not_add_the_same_date_twice() -> None:
+    first = readme_with("", TODAY)
+    second = readme_with(first, TODAY)
+
+    assert second.count("open-copy-hosts-2026-10-09.md") == 1
 
 
 def test_a_dropped_paper_stays_in_the_denominator() -> None:

@@ -80,7 +80,7 @@ Fynd stores the Source text for any Open copy, and shows only the located quote 
 
 ## The command and the table
 
-One command produces the per host numbers: `uv run python -m fynd.cli measure-open-copies`. It writes `docs/measurements/open-copy-hosts.md`.
+One command produces the per host numbers: `uv run python -m fynd.cli measure-open-copies`. It writes a dated file in `docs/measurements`, for example `open-copy-hosts-2026-10-09.md`, and a `README.md` there lists every run.
 
 That directory holds every published number. The verifier table, the retrieval table, and the independence table join it, so a reviewer finds them in one place.
 

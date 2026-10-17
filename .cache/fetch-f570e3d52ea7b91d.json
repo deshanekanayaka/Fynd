@@ -1,0 +1,15 @@
+{
+  "parts": {
+    "api": "open-copy-fetch",
+    "url": "https://www.mdpi.com/1996-1073/15/19/7437/pdf?version=1665551986",
+    "redirects": 3,
+    "max_bytes": 20971520,
+    "shape": 1
+  },
+  "value": {
+    "kind": "refusal",
+    "status": 403,
+    "content_type": "text/html",
+    "reason": "fetch_refused"
+  }
+}

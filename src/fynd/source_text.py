@@ -2,7 +2,7 @@
 
 Usable text is a Source text that passes the checks, so Fynd reads Claims from
 it. Every number here comes from the live run of 2026-10-09, which is in
-`docs/measurements/open-copy-hosts.md`.
+`docs/measurements/open-copy-hosts-2026-10-09.md`.
 
 A Paper and a web page get different checks. A Paper has sections, and a
 statistics page has none, so the section word check runs on a Paper only.

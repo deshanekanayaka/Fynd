@@ -1,0 +1,15 @@
+{
+  "parts": {
+    "api": "open-copy-fetch",
+    "url": "http://sro.sussex.ac.uk/id/eprint/106862/1/1-s2.0-S0301421522003573-main.pdf",
+    "redirects": 3,
+    "max_bytes": 20971520,
+    "shape": 1
+  },
+  "value": {
+    "kind": "refusal",
+    "status": 202,
+    "content_type": "text/html; charset=UTF-8",
+    "reason": "fetch_refused"
+  }
+}
