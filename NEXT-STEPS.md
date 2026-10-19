@@ -231,7 +231,7 @@ The licence finding changed what git holds. 2 of the 5 Papers that gave Usable t
 
 ## Open items that need a decision from Deshan
 
-One. This file names two different tasks for day 8, and only Deshan picks the order.
+One. This file names two different next tasks, and only Deshan picks the order. Day 8 raised it and did not settle it, so it now gates day 9. The task for day 9 below holds both branches and a recommendation.
 
 The build sequence below says step 4 is Claim extraction with the tiered verifier. The scope change of 2026-10-07 says days 8 and 9 are the retrieval labelled set. Both are written down, and neither is wrong. The argument for the labelled set first is the imprecise search. 3 of the 20 Papers are about ultra-processed food. Claim extraction over an imprecise pool measures the wrong thing. The argument for Claim extraction first is metric 1. It is the gate that runs in continuous integration, and nothing tests it yet.
 
@@ -432,7 +432,42 @@ Voice input is a separate and larger cost, and it is not part of this design. It
 
 ### What day 8 changed
 
-No code. This entry is the thing to read before the retrieval labelled set starts. Issue 19 closed on day 7, so no issue is open. The open item above names the one decision.
+One schema decision, four documents, and one new file. No Stage changed its behaviour. Pull request 28 holds all of it.
+
+## Where day 8 ended
+
+Pull request 28 merged on 2026-10-19. 183 tests pass with ruff clean. No test reaches the network, and no test spends a token.
+
+What shipped:
+
+- The `project` table holds no check constraint on `domain`. See [docs/database-design.md](./docs/database-design.md).
+- The comment above `SEEDED_DOMAINS` in `src/fynd/stages/stage1.py` names where the list lives. The tuple itself did not change, and the file holds no other edit.
+- [docs/references.md](./docs/references.md) is new. It holds every outside repository and API with its link, its licence, and what Fynd took.
+- `PRD.md` says the free text search bar is designed for release 2, so the non-goal does not read as a rejection.
+- The three day 8 entries above.
+
+One risk came with the schema decision, and it is stated here so nobody meets it by surprise. The database now accepts any string in `domain`. `accept_domain` is the only gate. A `domain` lookup table with a foreign key is the belt and braces version, and it grows without a migration. A check constraint does not.
+
+Three designs are written and none is built. The Domain target of 10. The free text search bar of release 2. The avatar by DiceBear.
+
+Two findings carry forward:
+
+- No code tests the `query` the model writes at stage 2. The prompt asks for three to eight words with no boolean operators, and nothing holds it to that. This is why 3 of the 20 Papers in the measured pool are about ultra-processed food.
+- The OpenAlex field and topic counts of day 8 come from API calls made by hand. No command reproduces them. The repository rule is that a published number comes from a command anyone runs, so a command is follow-up work.
+
+Housekeeping. 5 local branches from merged pull requests are still on the machine, which are `accept-every-open-location-with-a-pdf-link`, `let-the-domain-list-grow`, `record-day-6`, `record-the-licence-reversal` and `step-3-the-open-copy-and-the-source-text`.
+
+## The task for day 9
+
+The open item gates this, because day 8 named the choice and did not make it. Both tasks below are written down in this file, and the order is Deshan's to pick.
+
+Branch A is the retrieval labelled set. 40 to 60 Papers on the Seeded Topic, hand labelled as relevant or not relevant, then recall at 20 and nDCG for four configurations. It also closes the embedding choice by measurement, and the vector size follows the model that wins.
+
+Branch B is step 4 of the build sequence. Claim extraction with Claude Haiku 4.5, one call per chunk, and the tiered verifier of [ADR 0005](./docs/adr/0005-a-claim-is-a-located-span.md). A Claim that no tier can place in the Source text is dropped. This is metric 1, which is the gate that runs in continuous integration.
+
+The recommendation is branch A, and the reason is the untested `query`. Claim extraction over an imprecise pool measures the prompt and the pool at the same time, and a bad number then has two possible causes. The labelled set puts a number on retrieval first, so metric 1 later reads against a pool you trust. Deshan overrules this freely, because metric 1 is the gate that ships and it has no test today.
+
+Whichever branch starts, it starts with a design round and not with code.
 
 ## Do not do yet
 
