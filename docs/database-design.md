@@ -34,11 +34,11 @@ create table project (
   id bigint generated always as identity primary key,
   secret_link_id uuid not null default gen_random_uuid() unique,
   domain text not null,
-  created_at timestamptz not null default now(),
-  constraint project_domain_valid
-    check (domain in ('technology', 'energy'))
+  created_at timestamptz not null default now()
 );
 ```
+
+The `domain` column holds no check constraint, and the decision is dated 2026-10-19. An earlier draft named the two seeded Domains inside the table. The Domain list grows in release 2, and a check constraint turns each new Domain into a migration against live rows. `accept_domain` in `src/fynd/stages/stage1.py` already refuses a Domain that stage 1 never offered. So the table rule adds no safety that the Stage does not give. A `text` column is the right shape for a list that grows. See the day 8 entry in [NEXT-STEPS.md](../NEXT-STEPS.md).
 
 The `secret_link_id` is the value in the secret link. The `id` is what every other table points at. Two columns, not one, for two reasons. A leaked log line that holds a foreign key does not hand over a Project. You can also issue a new `secret_link_id` without moving a single row.
 

@@ -6,7 +6,9 @@ ADR 0006 gives every Stage two jobs and no saving. The runner writes the rows.
 from dataclasses import dataclass
 from typing import Final
 
-# ADR 0009 cut Healthcare. The `project` check constraint holds the same two.
+# ADR 0009 cut Healthcare. This tuple is the only place the list lives, because
+# the `project` table dropped its check constraint on 2026-10-19 so release 2
+# adds a Domain without a migration.
 SEEDED_DOMAINS: Final = ("technology", "energy")
 
 

@@ -1,6 +1,6 @@
 # Next steps
 
-Updated: 2026-10-16, day 6. Target ship date: 2026-10-26.
+Updated: 2026-10-19, day 8. Target ship date: 2026-10-26.
 The ship date is a target and not a constraint. The design phase takes the time it needs, because Deshan must be able to explain every part of this project.
 Read [PRD.md](./PRD.md) for the product and [CONTEXT.md](./CONTEXT.md) for the vocabulary.
 
@@ -31,7 +31,7 @@ Code that runs today, as `uv run python -m fynd.cli <command>`:
 - `extract` turns one file into a Source text.
 - `measure-open-copies` runs the whole Open copy pipeline over 20 Papers and writes the published table.
 - A run needs `SEMANTIC_SCHOLAR_API_KEY`, `ANTHROPIC_API_KEY` and `FYND_CONTACT_EMAIL` in a `.env` file. The command names the missing one.
-- Every external answer is cached on disk, including a refusal. 176 tests pass with ruff clean, and no test reaches the network or spends a token.
+- Every external answer is cached on disk, including a refusal. 183 tests pass with ruff clean, and no test reaches the network or spends a token.
 
 ## How we work
 
@@ -231,7 +231,9 @@ The licence finding changed what git holds. 2 of the 5 Papers that gave Usable t
 
 ## Open items that need a decision from Deshan
 
-None.
+One. This file names two different tasks for day 8, and only Deshan picks the order.
+
+The build sequence below says step 4 is Claim extraction with the tiered verifier. The scope change of 2026-10-07 says days 8 and 9 are the retrieval labelled set. Both are written down, and neither is wrong. The argument for the labelled set first is the imprecise search. 3 of the 20 Papers are about ultra-processed food. Claim extraction over an imprecise pool measures the wrong thing. The argument for Claim extraction first is metric 1. It is the gate that runs in continuous integration, and nothing tests it yet.
 
 The embedding model left this list on 2026-10-07. It is no longer a question to answer by preference. Days 8 and 9 answer it with recall at 20 and nDCG on the hand labelled set, and the vector size follows the model that wins.
 
@@ -333,6 +335,104 @@ The previous run reached 5 of 20. The rule fix of ADR 0012 predicted 10. This ru
 Every reason this run named is already in `reasons.ALL`. No host this run refused belongs on the blocklist. The blocklist holds only a host that keeps no file by design. A host that refuses a fetch is counted in the fetch cache instead. See the note of 2026-10-11 on this point.
 
 The gap the stage 2 gate opened is now a measured number and not only a prediction. The gate promises 10, and the pipeline still reaches 5. The stage 4 guard of 2 Papers is the next place this gap is read.
+
+## Settled on day 8: how stage 2 asks for a Topic, and three outside references
+
+Updated 2026-10-19. No code changed today. This entry answers one question and records three repositories read on 2026-10-19.
+
+### How the model proposes a Topic
+
+Yes, there is a prompt, and it is the only prompt file that exists. It is `prompts/propose-topics-v1.md`, and it holds 23 lines. ADR 0004 names three prompts. The Claim extraction prompt and the drafting prompt are not written.
+
+The prompt holds four placeholders. `{{TOPIC_COUNT}}` is 10. `{{DOMAIN_NAME}}` is the Domain the student kept at stage 1. `{{AVOID_LIST}}` names the Topics a Re-roll already showed, and reads `none` on a first ask. `{{RETRY_NOTE}}` is empty on the first ask.
+
+The prompt states four rules for a Topic.
+
+- The Topic names a real area of work, and not a product idea.
+- Published research exists, so a search returns papers from the last five years.
+- One student builds software about the Topic in one academic year.
+- The Topic is narrow enough to search, and wide enough to hold several papers.
+
+Each Topic carries two fields, and the difference matters. `label` is what the student reads, in five words or fewer. `query` is what Fynd sends to Semantic Scholar, in three to eight words, with no punctuation and no boolean operators.
+
+`offer_topics` in `src/fynd/stages/stage2.py` asks for 10 Topics and shows 5 to 8. The extra two cover the items the shape check drops. The answer shape is a JSON schema that lives in the Stage and not in the model client. The shape of an answer is a rule of the Stage.
+
+Two facts about the prompt file are load bearing.
+
+The whole file content is hashed, and the hash is part of the cache key. A typo fixed without a rename still misses the cache. So no published number belongs to a prompt that nobody can read.
+
+The retry note is the second ask, and it is only filled on attempt 2. The model runs at temperature zero, and the cache keys on the filled text. An identical second ask returns the first unusable answer off disk for ever. The note changes the text, which changes the hash, which makes the retry a real second question.
+
+### The finding that matters for the search
+
+No code tests the `query` field against its own rules. The prompt asks for three to eight words with no boolean operators. Neither the JSON schema nor `topics_from_answer` enforces either rule. The query reaches Semantic Scholar as the model wrote it.
+
+This is the cause of a number already in this file. 3 of the 20 Papers of the measured pool are about ultra-processed food. The search is not precise, and the query is unmeasured. The retrieval labelled set is where that becomes a number.
+
+### Three references read on 2026-10-19
+
+Every link, licence and borrowed idea now lives in [docs/references.md](./docs/references.md). Read that file before copying a line from any of them. Two of the three state no licence, so Fynd reads those for ideas and copies no code.
+
+Three findings from those repositories change the Fynd plan, so they are recorded here too.
+
+A judged number never belongs in continuous integration. Every DeepEval judge metric spends a token on every run. Fynd holds that no test reaches the network and no test spends a token, and 183 tests hold that line. A judged number belongs in a command a person runs, which writes a dated file, as `measure-open-copies` does. Metric 1 is the exception the PRD already names, and it replays committed text with no judge.
+
+The labelled set must pin a reference date. The evaluation lab warns that its sample dates are fixed while its date tool reads the machine clock. A correct answer then disagrees with the reference answer. Fynd carries the same hole. `first_year_in_window(today)` reads the clock, so the Evidence window moves on 1 January and the cache key moves with it. The date goes in the dated file beside every number.
+
+`tests/files/pool-2026-10-09.json` is a pool and not a golden set, because it holds no expected answer. The labelled set of 10 Sources needs the Golden shape, which writes the expected answer down before the run.
+
+### Settled on day 8: the Domain list grows, and the table stops blocking it
+
+The Domain list is two today because the project is still in build. It is not two because a student only wants two. Release 2 carries more.
+
+One edit shipped today, and it is the only thing that was going to cost a refactor. The `project` table in [docs/database-design.md](./docs/database-design.md) held `check (domain in ('technology', 'energy'))`. A check constraint turns each new Domain into a migration against live rows. The table does not exist yet, so the edit cost one line. `accept_domain` already refuses a Domain stage 1 never offered, so the table rule added no safety. The comment in `src/fynd/stages/stage1.py` now says where the list lives.
+
+Nothing else blocks the growth. A Domain is a plain string from end to end. It travels from the command line argument, through the exact match in `accept_domain`, into the `{{DOMAIN_NAME}}` placeholder. No code in `src/` branches on its value, and no Stage after stage 1 knows the list exists. So a new Domain is one entry in `SEEDED_DOMAINS`.
+
+The target for release 2 is 10 Domains, inside a band of 8 to 12. The reasoning is below, and the numbers are hand measurements of 2026-10-19 that no command reproduces yet.
+
+- Volume never binds. Open-access papers published since 2022, counted by primary topic, run from 15.4 million for Physics and Astronomy down to 58,559 for Chemical Engineering. A Topic needs 3 Papers to pass the stage 2 gate.
+- Energy is thin. It holds 197,873 open-access papers and ranks 22nd of the 26 OpenAlex fields. Computer Science holds 2.47 million, which is 12 times more. So the measured rate of 5 usable Papers in 20 is near a worst case, and a later Domain likely reads better.
+- Buildability binds instead. Of the 200 largest Energy topics, 22 read as software one student builds. Dentistry, Veterinary, Nursing, Chemistry and Materials Science give a software student almost nothing.
+- Depth shows as a number for each Domain, and not as a long list. Ten Domains each carrying a measured usable-Paper rate is stronger than 26 nobody tested. The PRD already holds that a part with no number is a prompt.
+- Below 6 reads as a toy and forces the student. Above 12 slows the pick and multiplies the measurement work.
+
+A Fynd Domain maps to one or more OpenAlex fields. There are 26 fields, and `Energy` is one of them exactly, at `https://openalex.org/fields/21`. `Technology` is not in the taxonomy at all, and its nearest match is Computer Science. So the two current Domains are not the same kind of thing. Energy is an application area and Technology is the student's own discipline. The naming needs settling before a student reads it.
+
+A workable ten, unbuilt and open to change: Computer Science, Engineering, Environmental Science, Energy, Medicine, Health Professions, Business and Management, Economics, Social Sciences, Psychology. If the list ever grows past 12, OpenAlex groups its 26 fields under 4 headings, which gives a two-level picker for free.
+
+### Designed on day 8 for release 2: the free text search bar
+
+A student types a sentence into a search bar instead of picking from the list. `PRD.md` holds this as a non-goal for version 1, at the lines about free text Topic entry and about a chat interface. This entry is the design, and it is not permission to build.
+
+The rule that keeps ADR 0006 intact: free text is a way into the offered list and never a replacement for the Pick. `accept_domain` and `accept_topic` still receive a Pick that Fynd offered.
+
+The branch the student asked about mostly disappears, for two reasons.
+
+The 26 OpenAlex fields cover all of published research. No sentence a student types lands outside them, so a Domain router always lands somewhere. The worst case is an odd fit and not a miss.
+
+What a student types is almost never a Domain. "Reducing food waste in restaurants" is a Topic. Fynd already holds the machine that tests an arbitrary Topic. The search plus `count_papers_with_a_candidate` takes any query string and answers whether recent, fetchable, open literature exists for it. That is the internet search, and it is written, cached and measured. So the free text path reuses the gate and needs no new verifier.
+
+The path, end to end.
+
+1. The student types a sentence.
+2. The model returns a `label` and a `query`, which is the job it already does at stage 2.
+3. The existing search runs with the Evidence window.
+4. The existing gate counts the Papers with a candidate.
+5. 3 or more Papers means the Topic proceeds.
+6. Fewer means Fynd shows the count and offers the Domain list, as a weak generated Topic does today.
+
+Three costs to plan for.
+
+A free text Topic skips the feasibility rule. The prompt makes the model promise that one student builds the Topic in one academic year. A typed sentence carries no such promise, and "build artificial general intelligence" passes the literature gate easily. So free text needs one extra closed question about buildability. The Roam repository in [docs/references.md](./docs/references.md) shows the shape. The model picks from a fixed set of answers with a probability, and the code owns the threshold.
+
+Free text is the first untrusted student writing to enter Fynd. Today the only input is a Pick from a closed list, so nothing can be injected. Once a sentence reaches a prompt, prompt injection is real. Roam trims to 300 characters, drops control characters, escapes before the query, and tests an injection attempt.
+
+Voice input is a separate and larger cost, and it is not part of this design. It needs speech to text, a microphone permission, and a text alternative for metric 4. Text first.
+
+### What day 8 changed
+
+No code. This entry is the thing to read before the retrieval labelled set starts. Issue 19 closed on day 7, so no issue is open. The open item above names the one decision.
 
 ## Do not do yet
 

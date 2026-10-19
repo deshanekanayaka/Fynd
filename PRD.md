@@ -68,7 +68,7 @@ The export is a conversation starter for the first supervisor meeting, not a spe
 ## Non-goals for version 1
 
 - No accounts, no passwords, no supervisor accounts. A signed Invite code grants access, and a secret link reaches a Project.
-- No free text Topic entry. Fynd proposes Topics inside the 2 seeded Domains.
+- No free text Topic entry. Fynd proposes Topics inside the 2 seeded Domains. A free text search bar is designed for release 2, and the design is in the day 8 entry of [NEXT-STEPS.md](./NEXT-STEPS.md). The Domain list also grows in release 2, with 10 as the target.
 - No paywalled papers. Open abstracts and open full text only.
 - No requirements documents and no ERD drafting. That is release 2.
 - No revising a Project after export.
