@@ -481,7 +481,7 @@ The open item of day 8 is closed. Branch B, which is Claim extraction with the t
 - Four queries build it, 20 Papers each, deduplicated by Semantic Scholar identifier. One is the `query` the model wrote, one is the Seeded Topic hand written, and two are a wider and a narrower rewording. The four queries go in the dated file.
 - Recall over a pool is recall inside the pool. A relevant Paper that no query returned is invisible, and the file states that as a limit beside the single annotator.
 - The grade has three values. 2 means the Paper's main subject is the Topic, and a student would cite it in the Problem section. 1 means the Paper covers one part of the Topic, or the Topic in another place or another setting. 0 means the Paper is about something else, as the three ultra-processed food Papers are.
-- One worked case pins the rule. A good paper on Spanish household energy forecasting is a 1 and not a 2, because `CONTEXT.md` ties a Problem to a place.
+- One worked case pins the rule. A good paper on Spanish household energy forecasting is a 2. Corrected on 2026-10-20, and the reason is in the day 10 entry below. The first rule said 1, because `CONTEXT.md` ties a Problem to a place.
 - Grading reads the title and the abstract only, in a shuffled order with a fixed seed, with no rank and no query shown. Grading in rank order makes a high ranked Paper read as relevant.
 - Deshan is the only annotator, so there is no agreement number. The table states that as a limit, as the README states the grader of metric 2.
 
@@ -591,6 +591,18 @@ The retrieval table therefore measures one thing, which is how well a ranking or
 ### 15 Papers from each query, and not 20
 
 The first live run took 20 from each query, which offered 79 Papers against a cap of 60, so the cap dropped 19 Papers that nobody chose to drop. With no overlap to absorb, 15 from each gives exactly 60 and nothing is lost. The number is a measurement and not a preference.
+
+### The grading rule graded the wrong thing
+
+The first rule marked a Paper down for its country. A good paper on Spanish household energy forecasting was a 1 and not a 2, because `CONTEXT.md` ties a Problem to a place. Deshan caught it before grading a single Paper.
+
+The place does not belong to a Paper. `CONTEXT.md` gives it to a Statistic, which is a published figure from an official body showing the Problem is real in one place, and `PRD.md` makes stage 3 demand at least one Claim from a Statistic or a Product. A Paper carries the Existing approach and the Technical core, and neither has a place, which is the same reason the Evidence window does not apply to them.
+
+So the old rule would have taught the ranking to prefer a Paper that merely mentions the United Kingdom over a Paper holding the method a student needs. The measured pool holds two of exactly that kind, which are a policy model of the United Kingdom and a comparison of artificial intelligence governance.
+
+The grade now reads the subject alone, which is household energy forecasting, and ignores the country. A 2 is that subject anywhere. A 1 covers part of it, such as forecasting that is not household, or household energy with no forecasting. A 0 is another subject.
+
+One consequence is a finding the table can now publish. Three of the four queries name the United Kingdom and one does not, so the per query rows are where it shows whether the country words help the search or drag in papers about the wrong subject. No number in the table says anything about whether Fynd finds United Kingdom evidence, and the file states that as a limit.
 
 ### The bug the first live run found
 

@@ -115,7 +115,7 @@ The 10 Sources whose true Claims are written down by hand. Metric 1 scores Claim
 _Avoid_: golden set, ground truth, the labelled set
 
 **Relevance grade**:
-The hand written 0, 1 or 2 that says how well one Paper matches a Topic.
+The hand written 0, 1 or 2 that says how well one Paper matches the subject of a Topic. It ignores the place, because a Statistic and not a Paper proves a Problem is real in a place.
 _Avoid_: label, score, rating, judgement
 
 **Invite**:
