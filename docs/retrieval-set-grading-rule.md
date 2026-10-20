@@ -20,6 +20,12 @@ So a rule that marked a Spanish paper down would teach the ranking to prefer a p
 
 Read the title and the abstract. Nothing else.
 
+The command shows both. It reads the abstract from the disk cache of the search that found the Paper, and it writes the abstract nowhere, because [ADR 0011](./adr/0011-the-public-repository-holds-the-text-and-not-the-files.md) keeps an abstract out of this public repository.
+
+8 of the 60 Papers have no abstract anywhere in the cache, because Semantic Scholar holds none for them. The command says so and you grade the title alone. The table states that as a limit.
+
+The results and the conclusion of a Paper would be better evidence than the abstract, and they are out of reach. The measured runs say 5 of 20 Papers reach a full text Fynd can read, so a rule that asked for the conclusion would be ungradeable for most of the set.
+
 Grade in the order the command shows them. That order is shuffled with a fixed seed, so it carries no rank. A list read in rank order produces agreement with the ranking, and this set exists to disagree with the ranking when the ranking is wrong.
 
 Do not look up which query returned the Paper. The file records that for the table, not for you.

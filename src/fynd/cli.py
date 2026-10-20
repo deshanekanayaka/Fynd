@@ -13,6 +13,7 @@ import datetime as dt
 import os
 import pathlib
 import sys
+import textwrap
 
 import anthropic
 from dotenv import load_dotenv
@@ -26,7 +27,7 @@ from fynd.measure import readme_with, report
 from fynd.open_copy import read_open_copy
 from fynd.openalex import OpenAlex, WorkNotRead
 from fynd.retrieval_set import RetrievalSet, SetTooSmall, build_set
-from fynd.semantic_scholar import RateLimited, SemanticScholar
+from fynd.semantic_scholar import RateLimited, SemanticScholar, cached_abstracts
 from fynd.source_text import reason_against_paper_text
 from fynd.stages import stage1, stage2
 
@@ -272,12 +273,30 @@ def run_grade_retrieval_set(as_of: str, show: bool) -> None:
         print(f"Every Paper is graded. Counts: {grade_counts(held)}")
         return
 
+    # The abstract is read from the disk cache and never written anywhere. The
+    # rule says to read the title and the abstract, and ADR 0011 keeps an
+    # abstract out of git, so the two live together here.
+    abstracts = cached_abstracts()
+    missing = [entry for entry in waiting if entry.paper_id not in abstracts]
+
     print(f"{len(waiting)} Papers to grade, for the Topic {held.topic}.")
-    print("2 is on the Topic. 1 touches it. 0 is something else.")
-    print(f"The full rule is {GRADING_RULE}. Press s to skip a Paper, or q to stop.\n")
+    print("2 is on the subject. 1 covers part of it. 0 is another subject.")
+    print(f"The full rule is {GRADING_RULE}. Press s to skip a Paper, or q to stop.")
+    if missing:
+        print(
+            f"{len(missing)} of these Papers have no abstract anywhere in the cache, "
+            "so they are graded on the title alone and the file says so."
+        )
+    print()
 
     for number, entry in enumerate(waiting, start=1):
         print(f"{number} of {len(waiting)}  {entry.title}")
+        abstract = abstracts.get(entry.paper_id)
+        if abstract:
+            for line in textwrap.wrap(abstract, width=96):
+                print(f"    {line}")
+        else:
+            print("    No abstract in the cache. Grade the title alone.")
         answer = input("  grade: ").strip().lower()
         if answer == "q":
             break

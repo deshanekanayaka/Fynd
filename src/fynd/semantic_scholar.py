@@ -127,3 +127,29 @@ class SemanticScholar:
             "Set SEMANTIC_SCHOLAR_API_KEY in your .env file, because the "
             "endpoint without a key is shared with everyone."
         )
+
+
+def cached_abstracts() -> dict[str, str]:
+    """Returns the abstract of every Paper any cached search reply holds.
+
+    Grading needs the abstract, and ADR 0011 keeps an abstract out of git. The
+    two live together here. The text is read from the cache on the machine
+    doing the grading, and nothing writes it anywhere else.
+
+    A reply with no abstract for a Paper leaves that Paper out, so a caller
+    shows the title alone and says the abstract is missing.
+    """
+    found: dict[str, str] = {}
+    for path in sorted(cache.cache_dir().glob("s2-search-*.json")):
+        stored = cache.read_file(path)
+        if not isinstance(stored, dict) or "value" not in stored:
+            continue
+        reply = stored["value"]
+        if not isinstance(reply, dict):
+            continue
+        for item in reply.get("data", []):
+            abstract = item.get("abstract")
+            paper_id = item.get("paperId")
+            if paper_id and abstract:
+                found[paper_id] = abstract
+    return found
