@@ -1,6 +1,6 @@
 # Next steps
 
-Updated: 2026-10-19, day 8. Target ship date: 2026-10-26.
+Updated: 2026-10-20, day 9. Target ship date: 2026-10-26.
 The ship date is a target and not a constraint. The design phase takes the time it needs, because Deshan must be able to explain every part of this project.
 Read [PRD.md](./PRD.md) for the product and [CONTEXT.md](./CONTEXT.md) for the vocabulary.
 
@@ -84,7 +84,7 @@ Six items enter the plan, in this order.
 
 1. Done as a decision. Prompts as versioned files, and a replayable cache. See [ADR 0004](./docs/adr/0004-replayable-runs-and-versioned-prompts.md).
 2. Done as a decision. The tiered verifier, and a Claim stored as a located span. See [ADR 0005](./docs/adr/0005-a-claim-is-a-located-span.md).
-3. The retrieval labelled set, hybrid search, and two embedding models compared. This closes the embedding decision by measurement.
+3. The retrieval labelled set, hybrid search, and two embedding models compared. This closes the embedding decision by measurement. Note added 2026-10-20. One embedding model ships, published at two vector sizes, and the day 9 entry says why two could not resolve. The labelled set is now the Retrieval set.
 4. Independence as a coauthor graph rule, with identifier deduplication.
 5. Done as a decision, with item 2. Character offsets travel through extraction, normalization, and chunking, and the pipeline composes the offset maps.
 6. Tracing with tokens, cost, and 95th percentile latency for each Stage.
@@ -231,11 +231,11 @@ The licence finding changed what git holds. 2 of the 5 Papers that gave Usable t
 
 ## Open items that need a decision from Deshan
 
-One. This file names two different next tasks, and only Deshan picks the order. Day 8 raised it and did not settle it, so it now gates day 9. The task for day 9 below holds both branches and a recommendation.
+One. Closed on 2026-10-20. Branch A was chosen. This item is kept because the argument behind it is still the reason the order is right, and branch B is the task after branch A.
 
 The build sequence below says step 4 is Claim extraction with the tiered verifier. The scope change of 2026-10-07 says days 8 and 9 are the retrieval labelled set. Both are written down, and neither is wrong. The argument for the labelled set first is the imprecise search. 3 of the 20 Papers are about ultra-processed food. Claim extraction over an imprecise pool measures the wrong thing. The argument for Claim extraction first is metric 1. It is the gate that runs in continuous integration, and nothing tests it yet.
 
-The embedding model left this list on 2026-10-07. It is no longer a question to answer by preference. Days 8 and 9 answer it with recall at 20 and nDCG on the hand labelled set, and the vector size follows the model that wins.
+The embedding model left this list on 2026-10-07. It is no longer a question to answer by preference. Note added 2026-10-20. One model ships, and the measurement now answers the vector size rather than the vendor. See the day 9 entry.
 
 ## The build sequence for stage 1 to stage 3
 
@@ -468,6 +468,93 @@ Branch B is step 4 of the build sequence. Claim extraction with Claude Haiku 4.5
 The recommendation is branch A, and the reason is the untested `query`. Claim extraction over an imprecise pool measures the prompt and the pool at the same time, and a bad number then has two possible causes. The labelled set puts a number on retrieval first, so metric 1 later reads against a pool you trust. Deshan overrules this freely, because metric 1 is the gate that ships and it has no test today.
 
 Whichever branch starts, it starts with a design round and not with code.
+
+## Settled on day 9: branch A, and how retrieval is measured
+
+Updated 2026-10-20. Branch A is chosen, which is the Retrieval set. No code changed today. Nine rounds of questions closed the design, and the decisions are below. Two records join `docs/adr/`, and three words join `CONTEXT.md`.
+
+The open item of day 8 is closed. Branch B, which is Claim extraction with the tiered verifier, is the task after this one.
+
+### What the Retrieval set is
+
+- The Retrieval set holds 40 to 60 Papers of the Seeded Topic, each with a hand written Relevance grade.
+- Four queries build it, 20 Papers each, deduplicated by Semantic Scholar identifier. One is the `query` the model wrote, one is the Seeded Topic hand written, and two are a wider and a narrower rewording. The four queries go in the dated file.
+- Recall over a pool is recall inside the pool. A relevant Paper that no query returned is invisible, and the file states that as a limit beside the single annotator.
+- The grade has three values. 2 means the Paper's main subject is the Topic, and a student would cite it in the Problem section. 1 means the Paper covers one part of the Topic, or the Topic in another place or another setting. 0 means the Paper is about something else, as the three ultra-processed food Papers are.
+- One worked case pins the rule. A good paper on Spanish household energy forecasting is a 1 and not a 2, because `CONTEXT.md` ties a Problem to a place.
+- Grading reads the title and the abstract only, in a shuffled order with a fixed seed, with no rank and no query shown. Grading in rank order makes a high ranked Paper read as relevant.
+- Deshan is the only annotator, so there is no agreement number. The table states that as a limit, as the README states the grader of metric 2.
+
+### The table
+
+- Five configurations and not four, because the day 1 design put reciprocal rank fusion and a reorder in one row, and one row cannot say which of the two moved the number.
+- The rows are the Semantic Scholar ranking as it arrives, BM25, dense vectors, the fusion of those two, and the fusion reordered by a hosted reranker.
+- The baseline is the ranking of one named query, which is the `query` the model wrote, because a pool of four queries has four rankings and no single one. The other three queries get extra rows, and the spread between them is the day 8 finding about an untested `query`.
+- The numbers are recall at 10, recall at 20, and nDCG at 10. Recall at 20 stays the headline because `PRD.md` names it and 20 is the cut. Recall at 10 is the column that will separate the rows, because 20 of about 60 Papers reads high for everything.
+- Raw counts print beside every rate, so a reader sees the denominator.
+- Every constant is fixed at its published default and nothing is tuned, which is 60 for reciprocal rank fusion. Tuning against the same 60 Papers that the table reports would fit the set. The file says "no tuning, defaults stated".
+
+### One embedding model, and a fixed cost
+
+- One embedding model, which is `voyage-4-lite`, published at 1024 and at 512 dimensions. That closes the pgvector column size by measurement, which is the part that is hard to reverse once rows exist.
+- Two embedding models were the old plan. On a set with about 20 to 25 relevant Papers, a gap of one or two Papers is not a finding, so the comparison could not resolve what it claimed. The vendor rests on price, on the free tokens, and on one account covering embedding and reranking, and the file says that in one sentence.
+- The reorder row uses the hosted `rerank-3-lite` and not a local cross encoder. Render's free web service holds 512 megabytes, so a local model measures a path Fynd cannot serve.
+- Every paid API in Fynd is prepaid, with automatic recharge off, so the worst case is a failed request and never a bill. The README states the measured token count for one Project, so a run's cost is known before it is made.
+- The arithmetic says this never leaves the free tier. 60 abstracts cost about 24,000 tokens, one whole Project costs about 150,000, and the 5 Projects of metric 2 cost about 750,000. Voyage gives 200 million free tokens on the `voyage-4` family. No embedding vendor sells a fixed monthly plan, so the choice was prepaid credit or a local model.
+
+### What git holds, and why this is not a continuous integration gate
+
+- Git holds the grades, the four queries, the reference date, the identifiers, and the table. Git holds no abstract and no vector.
+- `ADR 0011` refuses a committed abstract, and the keyword and dense rows read abstract text. So the command reads them from the local cache, and a reader who re-runs it fetches them again with a key. The file states that.
+- `PRD.md` lists the retrieval table as a table in the repository and not as a gate, so this number never has to replay with no network. Metric 1 stays the only continuous integration gate.
+- A vector of a 2026 model is dead weight once the model changes, so no vector enters git.
+- The command takes the reference date as an argument with no default, and writes it into both the set file and the dated table. `first_year_in_window(today)` reads the machine clock, so the Evidence window moves on 1 January and the cache key moves with it. That hole closes for every later measurement with the same argument.
+
+### The correction that changed the shipped flow
+
+Recall at 20 means nothing when the pool is 20. The old flow searched for 20 Papers, stage 3 read all 20 abstracts, and stage 4 showed all 20, so nothing was ever discarded by rank. A perfect ranking and a random ranking sent the same Papers forward.
+
+So the search asks for 50 Papers, the ranking cuts them to 20, and the expensive work stays at 20 Papers. One search call for 50 costs the same one request as a call for 20. The stage 2 gate counts the candidates inside the top 20 and not inside the 50, and the threshold stays at 3.
+
+Pooling four queries at serve time is not shipped. That gives about 80 Papers through the Open copy pipeline, and the elapsed time of that pipeline has no measurement yet.
+
+### Where the ranking runs
+
+- BM25 in Python, and it is the shipped path, so the measurement and the product are one piece of code.
+- Postgres holds no BM25. Its full text search ranks with `ts_rank`, which weights a term differently, so a published BM25 number never describes a `tsvector` query.
+- A Topic's pool is tens of Papers, so ranking it in memory is free. pgvector stays for the stage 5 chunk search, where the row count is real.
+- `tsvector` leaves the Retrieval row and the Storage row of the technical direction table. See [ADR 0013](./docs/adr/0013-retrieval-ranks-in-python-over-a-pool-cut-to-20.md).
+- The in process harness needs no database and no network, which keeps the rule that no test reaches the network. There is no later port to Postgres to re-measure.
+
+### Stage 4, which this design reached into
+
+The measured runs say 5 of 20 Papers reach Usable text, so most cards on that screen name a Paper stage 5 cannot read. See [ADR 0014](./docs/adr/0014-stage-4-pre-selects-and-a-card-explains-with-facts.md).
+
+- Fynd pre-selects and the student overrides. Every Paper of the top 20 shows with the keeps already ticked, so a student who clicks through still gets a sensible Shortlist.
+- The Shortlist is capped at 10 Papers, because stage 5 runs one model call per chunk and metric 3 allows 3 minutes.
+- No model writes the line under a Paper. It names the matched terms, the year, and the full text status. A written sentence would be the first ungrounded sentence Fynd shows, at 20 model calls, with no guard and no number.
+- A hybrid ranking needs two kinds of reason. A term match names its stems, and a meaning match says the meaning is close with no exact term match.
+- The full text status cannot be known when the screen opens. One Paper allows 3 fetch attempts at a 30 second timeout plus a robots wait, so 20 Papers run far past 3 minutes. The screen opens with the ranking, the year and the terms, and each status fills in through the 3 second polling of `ADR 0003`. Nothing is pre-ticked until its status is known.
+- The screen states the count in one sentence, for example "5 of 20 Papers have a full text Fynd can read".
+- The Papers with no Usable text still show, sorted after the readable ones. Hiding them shows 5 cards and teaches that screening is trivial.
+- The Shortlist is the Pick that stage 4 accepts, which is one item of the type Shortlist. No new route and no new word. `accept` checks every identifier against the offered list, as `ADR 0006` asks.
+
+### The gap this design found in metric 3
+
+Neither measurement file records elapsed time. Metric 3 says every Stage returns in under 3 minutes, and the Open copy pipeline is the Stage most likely to break it. The measurement command gains elapsed time per Paper and a total.
+
+### The task for day 10
+
+Six issues, in this order. The blocking edges are set by the order.
+
+1. The records. The three `CONTEXT.md` entries, `ADR 0013`, `ADR 0014`, the `PRD.md` edits that drop `tsvector` from two rows, the `docs/defensibility.md` line, and this entry. No code.
+2. The Retrieval set. The four queries, the search for 50 Papers, the hand grading of 40 to 60 Papers, and the set file with its reference date. This issue also adds the shape check on the `query` the model writes, which is three to eight words with no boolean operators, and it writes the current query into the set file first so the table shows the before and the after.
+3. `src/fynd/retrieval.py`, holding BM25, the dense ranking with `voyage-4-lite`, and the fusion.
+4. The live run, and the dated table in `docs/measurements` with the `README.md` entry.
+5. The stage 2 gate moves to the top 20 of the 50 Paper search.
+6. The stage 4 design record, which is a document and not code, because stage 4 has no tables yet.
+
+Branch B follows, which is step 4 of the build sequence.
 
 ## Do not do yet
 
