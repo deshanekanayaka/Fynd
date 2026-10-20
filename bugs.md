@@ -6,6 +6,28 @@ A bug a code review found before anyone ran the code is still a bug. The mistake
 
 ---
 
+## A published number nobody checked against the file it came from
+
+**Found:** 2026-10-20, by a code review of branch `build-the-retrieval-set`, before a merge to `main`.
+
+**What happened:**
+
+`docs/retrieval-set-grading-rule.md` said "Three such Papers reached the measured pool of 2026-10-17". `NEXT-STEPS.md` said "3 of the 20 Papers are about ultra-processed food" in six places, from day 4 onward.
+
+The count is 2. `docs/measurements/open-copy-hosts-2026-10-17.md` holds two such Papers, `docs/measurements/open-copy-hosts-2026-10-09.md` holds two, and `tests/files/pool-2026-10-09.json` holds two. No file anywhere holds three.
+
+The wrong number then travelled. It reached the spec of issue 30, the argument for branch A over branch B in the day 8 entry, and the new grading rule, each time as a fact that justified a decision.
+
+**Root cause:** the number was read once by eye and then copied by hand. No command produced it, and nobody opened the table again before repeating it. `AGENTS.md` states the rule that a published number comes from a command anyone runs, and this number never had one.
+
+**Fix:** every copy in `NEXT-STEPS.md` says 2, the grading rule says 2, and a dated section in `NEXT-STEPS.md` records the correction so the old number is not a mystery to the next reader. The finding behind the number does not change, because a search returning 2 food Papers for an energy Topic is still imprecise.
+
+**Verification:** `grep -ci ultra docs/measurements/open-copy-hosts-2026-10-17.md` returns 2, and so does the same count over the 2026-10-09 table and the committed pool file. The retrieval table of issue 34 replaces the hand count with a graded number, which is what the Retrieval set exists for.
+
+**Prevention:** before a document repeats a count, run the count. A number in prose that no command produces is a claim, and this repository already says so. The rule now has a second case behind it, which is that a number which justifies a decision gets checked at the moment it is reused, and not only at the moment it is written.
+
+---
+
 ## A fixed comparison number stays wrong on every later run
 
 **Found:** 2026-10-17, by a code review of branch `record-day-6`, before a merge to `main`.

@@ -24,6 +24,7 @@ from fynd.fetcher import Fetched, Fetcher, FetchFailed, looks_like_a_pdf
 from fynd.measure import readme_with, report
 from fynd.open_copy import read_open_copy
 from fynd.openalex import OpenAlex, WorkNotRead
+from fynd.retrieval_set import SetTooSmall, build_set
 from fynd.semantic_scholar import RateLimited, SemanticScholar
 from fynd.source_text import reason_against_paper_text
 from fynd.stages import stage1, stage2
@@ -63,7 +64,9 @@ def run_stage_2(domain: str, pick: str, avoid: list[str]) -> None:
     offered = stage2.offer_topics(domain, ask_for_json, avoid=avoid or None)
     print(f"Stage 2 offers {len(offered)} Topics for the Domain {domain}.")
     for topic in offered:
-        print(f"  {topic.slug:40} {topic.label}")
+        # The query is printed beside the label, because it is the text that
+        # reaches Semantic Scholar and the Retrieval set records it verbatim.
+        print(f"  {topic.slug:40} {topic.label:45} {topic.query}")
 
     if not pick:
         print("\nPass --pick with one slug above to see the Open copy count.")
@@ -134,8 +137,11 @@ def run_extract(path: str) -> None:
 # The Seeded Topic, fixed here so the published table names one query. The
 # label and the query of a real stage 2 run come from a model, and a published
 # number cannot depend on a model call.
-SEEDED_TOPIC_QUERY = "United Kingdom household energy forecasting"
 MEASUREMENT_DIR = pathlib.Path("docs/measurements")
+# The Retrieval set sits with the other committed test data, because the
+# retrieval measurement replays it the way the pool file is replayed.
+RETRIEVAL_SET_DIR = pathlib.Path("tests/files")
+GRADING_RULE = pathlib.Path("docs/retrieval-set-grading-rule.md")
 MEASUREMENT_README = MEASUREMENT_DIR / "README.md"
 
 # The size of the measured pool. The table names it, so a reader knows the
@@ -152,7 +158,7 @@ def run_measure_open_copies() -> None:
 
     year_from = stage2.first_year_in_window(dt.date.today())
     search = SemanticScholar()
-    found = search.search(SEEDED_TOPIC_QUERY, year_from=year_from, limit=MEASURED_POOL_SIZE)
+    found = search.search(stage2.SEEDED_TOPIC, year_from=year_from, limit=MEASURED_POOL_SIZE)
     print(f"{len(found.papers)} Papers for the Seeded Topic, from {year_from} onward.")
 
     resolver = OpenAlex()
@@ -186,7 +192,7 @@ def run_measure_open_copies() -> None:
     measurement_file.write_text(
         report(
             results,
-            query=SEEDED_TOPIC_QUERY,
+            query=stage2.SEEDED_TOPIC,
             year_from=year_from,
             limit=MEASURED_POOL_SIZE,
             dropped=len(dropped),
@@ -201,6 +207,43 @@ def run_measure_open_copies() -> None:
         existing_readme = MEASUREMENT_README.read_text(encoding="utf-8")
     MEASUREMENT_README.write_text(readme_with(existing_readme, today), encoding="utf-8")
     print(f"Wrote {MEASUREMENT_README}")
+
+
+def run_build_retrieval_set(as_of: str, model_query: str) -> None:
+    if not os.environ.get("SEMANTIC_SCHOLAR_API_KEY"):
+        raise SystemExit(
+            "Set SEMANTIC_SCHOLAR_API_KEY in your .env file. The Retrieval set runs "
+            "four searches for the Seeded Topic."
+        )
+    try:
+        reference_date = dt.date.fromisoformat(as_of)
+    except ValueError:
+        raise SystemExit(
+            f"--as-of needs a date like 2026-10-20, and it got {as_of!r}. Every "
+            "published number states the date its Evidence window came from."
+        ) from None
+
+    client = SemanticScholar()
+    built = build_set(client.search, reference_date=reference_date, model_query=model_query)
+
+    for query in built.queries:
+        found = [entry for entry in built.entries if query.name in entry.queries]
+        print(f"{query.name:9} {len(found):3} Papers in the set  {query.text}")
+    print(f"\n{len(built.entries)} Papers to grade, in a shuffled order.")
+    if built.papers_offered > len(built.entries):
+        left_out = built.papers_offered - len(built.entries)
+        print(
+            f"The four queries offered {built.papers_offered} Papers, so the cap left "
+            f"{left_out} out. The set is a pool, and the table states that as a limit."
+        )
+
+    RETRIEVAL_SET_DIR.mkdir(parents=True, exist_ok=True)
+    set_file = RETRIEVAL_SET_DIR / f"retrieval-set-{reference_date.isoformat()}.json"
+    # The abstracts are not written. The measurement reads them from the cache,
+    # because ADR 0011 refuses a committed abstract and this file enters git.
+    set_file.write_text(built.model_dump_json(indent=2) + "\n", encoding="utf-8")
+    print(f"Wrote {set_file}")
+    print(f"Grade it against {GRADING_RULE}. Every grade is 0, 1 or 2.")
 
 
 def main() -> None:
@@ -233,6 +276,20 @@ def main() -> None:
 
     stages.add_parser("measure-open-copies", help="run the pipeline and write the table")
 
+    retrieval_set = stages.add_parser(
+        "build-retrieval-set", help="run the four queries and write the ungraded Retrieval set"
+    )
+    retrieval_set.add_argument(
+        "--as-of",
+        required=True,
+        help="the reference date the Evidence window is counted from, as 2026-10-20",
+    )
+    retrieval_set.add_argument(
+        "--model-query",
+        required=True,
+        help="the query the model wrote for the Seeded Topic, copied from a stage2 run",
+    )
+
     fetch = stages.add_parser("fetch-open-copy", help="fetch one Open copy and keep the bytes")
     fetch.add_argument("--url", required=True, help="the repository link OpenAlex resolved")
 
@@ -250,6 +307,8 @@ def main() -> None:
             run_extract(args.path)
         elif args.stage == "measure-open-copies":
             run_measure_open_copies()
+        elif args.stage == "build-retrieval-set":
+            run_build_retrieval_set(args.as_of, args.model_query)
         else:
             run_fetch_open_copy(args.url)
     except (
@@ -259,6 +318,7 @@ def main() -> None:
         WorkNotRead,
         FetchFailed,
         ContactEmailMissing,
+        SetTooSmall,
         anthropic.AnthropicError,
     ) as error:
         # A traceback teaches the reader nothing here. The message is the fix.

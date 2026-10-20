@@ -221,7 +221,7 @@ Three findings follow from that run.
 
 The stage 2 threshold of 3 Papers with an Open copy holds for this Topic, but the margin is thin. 5 files is above the stage 4 guard of 2, and a Topic one step narrower returns fewer.
 
-The search is not precise. 3 of the 20 Papers are about ultra-processed food, which is what the labelled set of day 7 exists to measure.
+The search is not precise. 2 of the 20 Papers are about ultra-processed food, which is what the labelled set of day 7 exists to measure.
 
 A doi.org address arrived from OpenAlex as a repository location, and the first run fetched it. ADR 0007 forbids that, so the guard now covers every location and not only the Semantic Scholar fallback. One test holds it.
 
@@ -233,7 +233,7 @@ The licence finding changed what git holds. 2 of the 5 Papers that gave Usable t
 
 One. Closed on 2026-10-20. Branch A was chosen. This item is kept because the argument behind it is still the reason the order is right, and branch B is the task after branch A.
 
-The build sequence below says step 4 is Claim extraction with the tiered verifier. The scope change of 2026-10-07 says days 8 and 9 are the retrieval labelled set. Both are written down, and neither is wrong. The argument for the labelled set first is the imprecise search. 3 of the 20 Papers are about ultra-processed food. Claim extraction over an imprecise pool measures the wrong thing. The argument for Claim extraction first is metric 1. It is the gate that runs in continuous integration, and nothing tests it yet.
+The build sequence below says step 4 is Claim extraction with the tiered verifier. The scope change of 2026-10-07 says days 8 and 9 are the retrieval labelled set. Both are written down, and neither is wrong. The argument for the labelled set first is the imprecise search. 2 of the 20 Papers are about ultra-processed food. Claim extraction over an imprecise pool measures the wrong thing. The argument for Claim extraction first is metric 1. It is the gate that runs in continuous integration, and nothing tests it yet.
 
 The embedding model left this list on 2026-10-07. It is no longer a question to answer by preference. Note added 2026-10-20. One model ships, and the measurement now answers the vector size rather than the vendor. See the day 9 entry.
 
@@ -275,7 +275,7 @@ The reason vocabulary after day 5. `no_repository_location` is gone. `no_open_lo
 
 The blocklist holds hosts that hold no file by design, which is doi.org, dx.doi.org and doaj.org. A host that refused once is not listed, because the fetch cache holds its status and the table counts it.
 
-One finding still waits for day 7. 3 of the 20 Papers are about ultra-processed food, so the search is not precise. The retrieval labelled set is where that gets a number.
+One finding still waits for day 7. 2 of the 20 Papers are about ultra-processed food, so the search is not precise. The retrieval labelled set is where that gets a number.
 
 ## Built on day 5: the coverage work, and where it ended
 
@@ -313,7 +313,7 @@ One issue remains from day 5, and it is the next thing to do.
 
 1. Issue 19. One live run of `measure-open-copies`, with the new rule and robots.txt in place. The table is a dated file in `docs/measurements`, with a `README.md` there that lists the runs. The per Paper list gains the attempts column, and the file names the previous number, the prediction and the new number.
 
-Two findings carry forward. The gate promises 10 where the pipeline reached 5, so the gap is the number for the stage 4 guard to answer. 3 of the 20 Papers are about ultra-processed food, so the search is not precise. The retrieval labelled set is where that gets a number.
+Two findings carry forward. The gate promises 10 where the pipeline reached 5, so the gap is the number for the stage 4 guard to answer. 2 of the 20 Papers are about ultra-processed food, so the search is not precise. The retrieval labelled set is where that gets a number.
 
 ## Where day 6 ended
 
@@ -367,7 +367,7 @@ The retry note is the second ask, and it is only filled on attempt 2. The model 
 
 No code tests the `query` field against its own rules. The prompt asks for three to eight words with no boolean operators. Neither the JSON schema nor `topics_from_answer` enforces either rule. The query reaches Semantic Scholar as the model wrote it.
 
-This is the cause of a number already in this file. 3 of the 20 Papers of the measured pool are about ultra-processed food. The search is not precise, and the query is unmeasured. The retrieval labelled set is where that becomes a number.
+This is the cause of a number already in this file. 2 of the 20 Papers of the measured pool are about ultra-processed food. The search is not precise, and the query is unmeasured. The retrieval labelled set is where that becomes a number.
 
 ### Three references read on 2026-10-19
 
@@ -452,7 +452,7 @@ Three designs are written and none is built. The Domain target of 10. The free t
 
 Two findings carry forward:
 
-- No code tests the `query` the model writes at stage 2. The prompt asks for three to eight words with no boolean operators, and nothing holds it to that. This is why 3 of the 20 Papers in the measured pool are about ultra-processed food.
+- No code tests the `query` the model writes at stage 2. The prompt asks for three to eight words with no boolean operators, and nothing holds it to that. This is why 2 of the 20 Papers in the measured pool are about ultra-processed food.
 - The OpenAlex field and topic counts of day 8 come from API calls made by hand. No command reproduces them. The repository rule is that a published number comes from a command anyone runs, so a command is follow-up work.
 
 Housekeeping. 5 local branches from merged pull requests are still on the machine, which are `accept-every-open-location-with-a-pdf-link`, `let-the-domain-list-grow`, `record-day-6`, `record-the-licence-reversal` and `step-3-the-open-copy-and-the-source-text`.
@@ -555,6 +555,14 @@ Six issues, in this order. The blocking edges are set by the order.
 6. The stage 4 design record, which is a document and not code, because stage 4 has no tables yet.
 
 Branch B follows, which is step 4 of the build sequence.
+
+## The correction of 2026-10-20: the ultra-processed food count
+
+This file said "3 of the 20 Papers are about ultra-processed food" in six places, from day 4 onward. The real count is 2.
+
+Both published tables hold 2 such Papers, and so does the committed pool file. The number was never produced by a command, which is the rule this repository states for a published number. A code review of issue 32 caught it.
+
+Every copy in this file now says 2. The finding itself does not change. A search that returns 2 Papers about food for a Topic about energy is still an imprecise search, and the Retrieval set is still where it gets a real number.
 
 ## Do not do yet
 

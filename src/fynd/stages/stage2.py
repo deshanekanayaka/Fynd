@@ -24,6 +24,11 @@ OPEN_PAPER_THRESHOLD: Final = 3
 # The Evidence window of ADR 0008, in years.
 EVIDENCE_WINDOW_YEARS: Final = 5
 
+# The one Topic fixed in the repository, which every published number of the
+# retrieval work is measured on. It lives here so one string has one home, as
+# SEEDED_DOMAINS does in stage1.py. See CONTEXT.md.
+SEEDED_TOPIC: Final = "United Kingdom household energy forecasting"
+
 TOPIC_PROMPT_NAME: Final = "propose-topics-v1"
 
 # The cache key carries this version, so a changed shape misses the cache.
