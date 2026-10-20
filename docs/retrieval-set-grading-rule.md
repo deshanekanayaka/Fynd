@@ -30,6 +30,30 @@ Grade in the order the command shows them. That order is shuffled with a fixed s
 
 Do not look up which query returned the Paper. The file records that for the table, not for you.
 
+## The two questions
+
+Every grade comes from these two questions, in this order. The abstract almost always answers both, and the dataset sentence answers the first one more reliably than the title does.
+
+**Question 1. Whose energy is it?**
+
+It is household energy when the abstract says household, home, dwelling, residential, domestic, consumer, appliance, behind-the-meter, or a smart meter at a customer's property. An abstract that says it used half-hourly readings from 5,000 households has answered yes, whatever the title said.
+
+It is not household energy when the unit is a feeder, a substation, a city, a region, a country, a national grid, a power plant, or a commercial building.
+
+**Question 2. Does it predict a future value?**
+
+It predicts when the abstract says forecast, forecasting, predict, prediction, or the estimation of a future demand.
+
+It does not predict when the abstract only describes, measures, surveys, assesses, reviews, compares, or explains something that already happened. A review of forecasting methods is the exception, and it counts as predicting, because it is about the task.
+
+**Then the grade follows.**
+
+Both answers yes is a 2. One of the two is a 1. Neither is a 0.
+
+## What to ignore
+
+Ignore the country. Ignore the method, so a transformer, a random forest and a plain regression are all equal here. Ignore the journal, the year and the length. None of them changes what the Paper is about.
+
 ## The three grades
 
 Grade 2 means the Paper is on the subject. It forecasts or predicts household or residential energy, electricity, gas or heat. The country does not matter, and neither does the method.
