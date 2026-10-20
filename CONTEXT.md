@@ -35,7 +35,7 @@ The narrow area a Project works inside, for example household energy forecasting
 _Avoid_: subfield, niche, keyword
 
 **Seeded Topic**:
-The one Topic fixed in the repository. The labelled set and the regression tests run against it.
+The one Topic fixed in the repository. The Retrieval set, the Claim set and the regression tests run against it.
 _Avoid_: test topic, default topic, example
 
 **Problem**:
@@ -103,8 +103,20 @@ The one sentence that says how a Proposal differs from the Existing approaches i
 _Avoid_: novelty, contribution, USP
 
 **Shortlist**:
-The set of Sources the student keeps as relevant. Only shortlisted Sources get a deep read.
+The set of Sources the student keeps as relevant. Only shortlisted Sources get a deep read. The Shortlist is the Pick that stage 4 accepts.
 _Avoid_: screening, triage, selection, filter
+
+**Retrieval set**:
+The 40 to 60 Papers of the Seeded Topic that carry a hand written Relevance grade. Fynd scores its Paper ranking against it.
+_Avoid_: eval set, test set, golden set, the labelled set
+
+**Claim set**:
+The 10 Sources whose true Claims are written down by hand. Metric 1 scores Claim extraction against it.
+_Avoid_: golden set, ground truth, the labelled set
+
+**Relevance grade**:
+The hand written 0, 1 or 2 that says how well one Paper matches a Topic.
+_Avoid_: label, score, rating, judgement
 
 **Invite**:
 A signed code in a link that lets one visitor create Projects. Fynd has no accounts and no passwords.
