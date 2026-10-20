@@ -16,7 +16,7 @@ from fynd.retrieval_set import (
     SET_MAX,
     SET_MIN,
     SHUFFLE_SEED,
-    SetTooSmallOrTooBig,
+    SetTooSmall,
     build_set,
     entries_from,
     shuffled,
@@ -131,7 +131,7 @@ def test_the_set_asks_every_query_for_the_search_limit_inside_the_window() -> No
         assert limit == SEARCH_LIMIT
     # The query the model wrote is recorded exactly as it arrived.
     assert built.queries[0].text == "household energy forecasting uk"
-    assert built.queries[0].source == "model"
+    assert built.queries[0].written_by == "model"
 
 
 def test_the_set_records_the_reference_date_and_its_own_limits() -> None:
@@ -153,13 +153,13 @@ def test_the_set_records_the_reference_date_and_its_own_limits() -> None:
     assert len(built.entries) == SET_MAX
 
 
-def test_a_set_outside_40_to_60_papers_stops_the_run() -> None:
+def test_a_set_under_40_papers_stops_the_run() -> None:
     def search(query: str, year_from: int, limit: int) -> SearchResult:
         # Every query returns the same two Papers, so the pool is far too small
         # to grade, and a silent small set would publish a meaningless recall.
         return SearchResult(query=query, papers=[paper(1), paper(2)])
 
-    with pytest.raises(SetTooSmallOrTooBig) as stopped:
+    with pytest.raises(SetTooSmall) as stopped:
         build_set(search, reference_date=TODAY, model_query="a b c")
 
     assert "pooled 2 Papers" in str(stopped.value)
@@ -176,3 +176,14 @@ def test_the_module_reads_no_clock() -> None:
     # published number would stop meaning what it said.
     assert "date.today" not in source
     assert "datetime.now" not in source
+
+
+def test_a_grade_outside_0_1_2_is_refused() -> None:
+    from pydantic import ValidationError
+
+    from fynd.retrieval_set import SetEntry
+
+    # A hand edited file is the only writer of a grade, so a typo has to stop
+    # here and not inside the recall arithmetic.
+    with pytest.raises(ValidationError):
+        SetEntry(paper_id="p1", title="Paper 1", grade=7)

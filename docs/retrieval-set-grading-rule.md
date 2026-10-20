@@ -34,7 +34,7 @@ Grade every place question the same way. A Paper about another country, another 
 
 ## Three more cases this pool holds
 
-A Paper about ultra-processed food is a 0. Three such Papers reached the measured pool of 2026-10-17, which is the finding this set exists to put a number on.
+A Paper about ultra-processed food is a 0. Two such Papers reached the measured pool of 2026-10-17, which is the finding this set exists to put a number on.
 
 A Paper about United Kingdom energy that forecasts nothing, for example a survey of fuel poverty, is a 1. The place and the subject match, and the task does not.
 

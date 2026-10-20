@@ -15,15 +15,12 @@ does, so the Evidence window of a published number never moves on 1 January.
 
 import datetime as dt
 import random
-from typing import Final, Protocol
+from typing import Final, Literal, Protocol
 
 from pydantic import BaseModel, Field
 
 from fynd.models import SearchResult
-from fynd.stages.stage2 import first_year_in_window
-
-# The Seeded Topic, which is the one Topic fixed in the repository.
-SEEDED_TOPIC: Final = "United Kingdom household energy forecasting"
+from fynd.stages.stage2 import SEEDED_TOPIC, first_year_in_window
 
 # What each query asks the search for. 50 is the limit the shipped flow uses,
 # so the cache this run fills is the cache a shipped run reads. See ADR 0013.
@@ -39,13 +36,17 @@ PER_QUERY: Final = 20
 SET_MIN: Final = 40
 SET_MAX: Final = 60
 
-# A fixed seed, so a re-run writes the same order and a second person grades
+# A fixed seed, so a re-run writes the same order and a later re-grade reads
 # the same file. The date it was chosen on carries no meaning beyond that.
 SHUFFLE_SEED: Final = 20261020
 
 
-class SetTooSmallOrTooBig(Exception):
-    """Raised when the pool falls outside the band a person can grade."""
+class SetTooSmall(Exception):
+    """Raised when the four queries pooled too few Papers to grade.
+
+    There is no matching error for too many. The pool stops at SET_MAX while it
+    is built, so only the lower end can fail.
+    """
 
 
 class SeedQuery(BaseModel):
@@ -55,9 +56,10 @@ class SeedQuery(BaseModel):
     # not have to match a long query string to know where a Paper came from.
     name: str
     text: str
-    # Where the text came from, which is `model` or `hand`. The model one is
-    # the finding this set exists to measure, so its provenance is in the file.
-    source: str
+    # Who wrote the text, which is `model` or `hand`. CONTEXT.md fixes the word
+    # Source for anything Fynd cites, so this field does not use it. The model
+    # one is the finding this set exists to measure, so it is named in the file.
+    written_by: str
     note: str
 
 
@@ -68,7 +70,9 @@ class SetEntry(BaseModel):
     title: str
     year: int | None = None
     # A Relevance grade is 0, 1 or 2, and None means nobody has graded it yet.
-    grade: int | None = None
+    # The type refuses a fourth value, because a typo in a hand edited file
+    # would otherwise reach the recall arithmetic.
+    grade: Literal[0, 1, 2] | None = None
     queries: list[str] = Field(default_factory=list)
 
 
@@ -97,19 +101,19 @@ HAND_QUERIES: Final = (
     SeedQuery(
         name="hand",
         text=SEEDED_TOPIC,
-        source="hand",
+        written_by="hand",
         note="The Seeded Topic written out, which is the query the measured runs used.",
     ),
     SeedQuery(
         name="wider",
         text="household energy demand forecasting",
-        source="hand",
+        written_by="hand",
         note="The same subject with the country dropped, which should return more Papers.",
     ),
     SeedQuery(
         name="narrower",
         text="United Kingdom smart meter load forecasting",
-        source="hand",
+        written_by="hand",
         note="One step narrower, which should return fewer Papers and more exact ones.",
     ),
 )
@@ -176,16 +180,13 @@ def build_set(
     search: Search,
     reference_date: dt.date,
     model_query: str,
-    per_query: int = PER_QUERY,
-    search_limit: int = SEARCH_LIMIT,
-    seed: int = SHUFFLE_SEED,
 ) -> RetrievalSet:
     """Runs the four queries and returns the set, shuffled and ungraded."""
     queries = [
         SeedQuery(
             name="model",
             text=model_query,
-            source="model",
+            written_by="model",
             note=(
                 "The query the model wrote for the Seeded Topic, recorded exactly as it "
                 "arrived and before any shape check existed. See issue 38."
@@ -197,11 +198,11 @@ def build_set(
     year_from = first_year_in_window(reference_date)
     results = []
     for query in queries:
-        results.append((query.name, search(query.text, year_from=year_from, limit=search_limit)))
+        results.append((query.name, search(query.text, year_from=year_from, limit=SEARCH_LIMIT)))
 
-    entries = entries_from(results, per_query=per_query, cap=SET_MAX)
+    entries = entries_from(results, per_query=PER_QUERY, cap=SET_MAX)
     if len(entries) < SET_MIN:
-        raise SetTooSmallOrTooBig(
+        raise SetTooSmall(
             f"The four queries pooled {len(entries)} Papers, and the set needs "
             f"{SET_MIN} to {SET_MAX}. The queries overlap too much, so widen one of them."
         )
@@ -209,9 +210,9 @@ def build_set(
     return RetrievalSet(
         topic=SEEDED_TOPIC,
         reference_date=reference_date,
-        search_limit=search_limit,
-        per_query=per_query,
-        shuffle_seed=seed,
+        search_limit=SEARCH_LIMIT,
+        per_query=PER_QUERY,
+        shuffle_seed=SHUFFLE_SEED,
         queries=queries,
-        entries=shuffled(entries, seed),
+        entries=shuffled(entries, SHUFFLE_SEED),
     )

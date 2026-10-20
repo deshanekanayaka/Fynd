@@ -24,7 +24,7 @@ from fynd.fetcher import Fetched, Fetcher, FetchFailed, looks_like_a_pdf
 from fynd.measure import readme_with, report
 from fynd.open_copy import read_open_copy
 from fynd.openalex import OpenAlex, WorkNotRead
-from fynd.retrieval_set import SetTooSmallOrTooBig, build_set
+from fynd.retrieval_set import SetTooSmall, build_set
 from fynd.semantic_scholar import RateLimited, SemanticScholar
 from fynd.source_text import reason_against_paper_text
 from fynd.stages import stage1, stage2
@@ -135,7 +135,6 @@ def run_extract(path: str) -> None:
 # The Seeded Topic, fixed here so the published table names one query. The
 # label and the query of a real stage 2 run come from a model, and a published
 # number cannot depend on a model call.
-SEEDED_TOPIC_QUERY = "United Kingdom household energy forecasting"
 MEASUREMENT_DIR = pathlib.Path("docs/measurements")
 # The Retrieval set sits with the other committed test data, because the
 # retrieval measurement replays it the way the pool file is replayed.
@@ -157,7 +156,7 @@ def run_measure_open_copies() -> None:
 
     year_from = stage2.first_year_in_window(dt.date.today())
     search = SemanticScholar()
-    found = search.search(SEEDED_TOPIC_QUERY, year_from=year_from, limit=MEASURED_POOL_SIZE)
+    found = search.search(stage2.SEEDED_TOPIC, year_from=year_from, limit=MEASURED_POOL_SIZE)
     print(f"{len(found.papers)} Papers for the Seeded Topic, from {year_from} onward.")
 
     resolver = OpenAlex()
@@ -191,7 +190,7 @@ def run_measure_open_copies() -> None:
     measurement_file.write_text(
         report(
             results,
-            query=SEEDED_TOPIC_QUERY,
+            query=stage2.SEEDED_TOPIC,
             year_from=year_from,
             limit=MEASURED_POOL_SIZE,
             dropped=len(dropped),
@@ -223,11 +222,7 @@ def run_build_retrieval_set(as_of: str, model_query: str) -> None:
         ) from None
 
     client = SemanticScholar()
-
-    def search(query: str, year_from: int, limit: int):
-        return client.search(query, year_from=year_from, limit=limit)
-
-    built = build_set(search, reference_date=reference_date, model_query=model_query)
+    built = build_set(client.search, reference_date=reference_date, model_query=model_query)
 
     for query in built.queries:
         found = [entry for entry in built.entries if query.name in entry.queries]
@@ -315,7 +310,7 @@ def main() -> None:
         WorkNotRead,
         FetchFailed,
         ContactEmailMissing,
-        SetTooSmallOrTooBig,
+        SetTooSmall,
         anthropic.AnthropicError,
     ) as error:
         # A traceback teaches the reader nothing here. The message is the fix.
