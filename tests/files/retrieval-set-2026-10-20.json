@@ -1,0 +1,516 @@
+{
+  "topic": "United Kingdom household energy forecasting",
+  "reference_date": "2026-10-20",
+  "search_limit": 50,
+  "per_query": 15,
+  "papers_offered": 60,
+  "shuffle_seed": 20261020,
+  "queries": [
+    {
+      "name": "hand",
+      "text": "United Kingdom household energy forecasting",
+      "written_by": "hand",
+      "note": "The Seeded Topic written out, which is the query the measured runs used."
+    },
+    {
+      "name": "wider",
+      "text": "household energy demand forecasting",
+      "written_by": "hand",
+      "note": "The same subject with the country dropped, which should return more Papers."
+    },
+    {
+      "name": "narrower",
+      "text": "United Kingdom smart meter load forecasting",
+      "written_by": "hand",
+      "note": "One step narrower, which should return fewer Papers and more exact ones."
+    },
+    {
+      "name": "reworded",
+      "text": "domestic electricity consumption prediction United Kingdom",
+      "written_by": "hand",
+      "note": "The same Topic in other words, which tests the ranking on vocabulary."
+    }
+  ],
+  "entries": [
+    {
+      "paper_id": "77cfe997f776a08cc0b55a527b53771ca94278a6",
+      "title": "Electricity demand forecasting at distribution and household levels using explainable causal graph neural network",
+      "grade": null,
+      "queries": [
+        "wider"
+      ]
+    },
+    {
+      "paper_id": "e8ad3c3ed4b8d14202f4b440ab0e21c68a12685a",
+      "title": "An LSTM-SAE-Based Behind-the-Meter Load Forecasting Method",
+      "grade": null,
+      "queries": [
+        "narrower"
+      ]
+    },
+    {
+      "paper_id": "f4088eebb868c4e33f0e0a5cce1aaf0106b59608",
+      "title": "IoT-Based Electricity Consumption Prediction with User-Controlled Appliance Shutdown",
+      "grade": null,
+      "queries": [
+        "reworded"
+      ]
+    },
+    {
+      "paper_id": "9acd5087d7b6d5939f8c0fc40a08aa19f7edccf2",
+      "title": "What Data Do You Really Need? Feature-Level Privacy Analysis for Household Energy Forecasting",
+      "grade": null,
+      "queries": [
+        "hand"
+      ]
+    },
+    {
+      "paper_id": "e5956632cb38345bdf933f36d4a19b0e4802170a",
+      "title": "Load Forecasting Models in Smart Grid Using Smart Meter Information: A Review",
+      "grade": null,
+      "queries": [
+        "narrower"
+      ]
+    },
+    {
+      "paper_id": "72a1d2cfc4095e09b50a92c33a058a9963439d20",
+      "title": "Designing a GRU-Based Energy Demand Forecasting and Decision Tree-Aided Energy Controller Model for IoT-Driven Home Automation System",
+      "grade": null,
+      "queries": [
+        "wider"
+      ]
+    },
+    {
+      "paper_id": "f31fd05ef4d2e91b16f4978fb529bf49105c7cc2",
+      "title": "Spatiotemporal Graph Neural Networks for Short-Term Load Forecasting: Does a graph inferred from smart meter data help?",
+      "grade": null,
+      "queries": [
+        "narrower"
+      ]
+    },
+    {
+      "paper_id": "f0bd97ac2df80328e29de0533f9f9ce02183b4d2",
+      "title": "Dual Similarity-Driven Federated Learning for Smart-Meter-Based Load Forecasting in IoT Power Systems",
+      "grade": null,
+      "queries": [
+        "narrower"
+      ]
+    },
+    {
+      "paper_id": "42ecf4d765e74a82136023fe3e966bec207dad8e",
+      "title": "Can household energy efficiency dampen crude oil price volatility in the United States?",
+      "grade": null,
+      "queries": [
+        "hand"
+      ]
+    },
+    {
+      "paper_id": "ae63001949da01dd11fe5d7d01c2ac15b8a19824",
+      "title": "Foreign direct investment and infrastructural development in Nigeria: Comparative analysis of inflows from China, United States and the United Kingdom",
+      "grade": null,
+      "queries": [
+        "reworded"
+      ]
+    },
+    {
+      "paper_id": "37dcaa3af62c9af05fb48bde8ed13ebe003b9408",
+      "title": "What really matters to reduce the energy demand of household electronics? Global sensitivity analysis of circular economy strategies for the United Kingdom",
+      "grade": null,
+      "queries": [
+        "hand"
+      ]
+    },
+    {
+      "paper_id": "0156d4f0f1aaf50e1de5b66096bfa2def70e8c4c",
+      "title": "Understandings of ultra-processed foods among adults with responsibility for household food activities in the United Kingdom: a qualitative study",
+      "grade": null,
+      "queries": [
+        "hand"
+      ]
+    },
+    {
+      "paper_id": "3c38a2b89357283d44e84fc84e6e5518de8fafa8",
+      "title": "Seafood supply mapping reveals production and consumption mismatches and large dietary nutrient losses through exports in the United Kingdom",
+      "grade": null,
+      "queries": [
+        "reworded"
+      ]
+    },
+    {
+      "paper_id": "57a9beef4b1893fd457fe89f9349a6829fe12fc3",
+      "title": "Bottom-up forecasting: Applications and limitations in load forecasting using smart-meter data",
+      "grade": null,
+      "queries": [
+        "narrower"
+      ]
+    },
+    {
+      "paper_id": "44781072c1933075222ee1c133a707212881b977",
+      "title": "Multi-Step Ahead Natural Gas Consumption Forecasting Based on a Hybrid Model: Case Studies in The Netherlands and the United Kingdom",
+      "grade": null,
+      "queries": [
+        "hand"
+      ]
+    },
+    {
+      "paper_id": "ee33d5fbd36dbfd3b770010e4f28ba2365881c9e",
+      "title": "Developing a Multi-Region Stacking Ensemble Framework via Scenario-Based Digital Twin Simulation for Short-Term Household Energy Demand Forecasting",
+      "grade": null,
+      "queries": [
+        "wider"
+      ]
+    },
+    {
+      "paper_id": "b53df30054934fd9854cd0928b53a16c2fcc5504",
+      "title": "Deep Temporal Convolutional Neural Network for Predicting Electricity Consumption",
+      "grade": null,
+      "queries": [
+        "reworded"
+      ]
+    },
+    {
+      "paper_id": "8899c72e829499ca7530adc24d58a498182ecfca",
+      "title": "Artificial Neural Network Based Short-Term Load Forecasting of Nuwakot Distribution Center Using Smart Meter AMI Data",
+      "grade": null,
+      "queries": [
+        "narrower"
+      ]
+    },
+    {
+      "paper_id": "e3cc695c396421bd0be5c9df1722b6718746a96e",
+      "title": "Designing a Smart System for Predicting Energy Consumption in Bisha City, Kingdom of Saudi Arabia",
+      "grade": null,
+      "queries": [
+        "reworded"
+      ]
+    },
+    {
+      "paper_id": "4974d3b9e707121f99cf6c3958389d8af9ac0283",
+      "title": "Timing of energy intake and ultra-processed food consumption are associated with obesity in adults in the United Kingdom: a pooled cross-sectional analysis of the National Diet and Nutrition Survey (2008-2019).",
+      "grade": null,
+      "queries": [
+        "hand"
+      ]
+    },
+    {
+      "paper_id": "9f88d1f220e2c40bfe174a2024cba2a612968d02",
+      "title": "Forecasting of the Household Cooking Energy Demand Pattern and Emission Scenario in Nepal",
+      "grade": null,
+      "queries": [
+        "wider"
+      ]
+    },
+    {
+      "paper_id": "2bb148072eb6ee0f60079bb8109eeb2c0e4c53b5",
+      "title": "Energy Demand Forecasting in Building using Recural Neural Network",
+      "grade": null,
+      "queries": [
+        "wider"
+      ]
+    },
+    {
+      "paper_id": "b996f0a9d0b794a8babe37ab9d0fecef79c1b764",
+      "title": "A Cross-Dimensional Analysis of Data-Driven Short-Term Load Forecasting Methods with Large-scale Smart Meter Data",
+      "grade": null,
+      "queries": [
+        "narrower"
+      ]
+    },
+    {
+      "paper_id": "a6cfa515f91ca79654debdca3ec4b9b69ead3fcc",
+      "title": "Building-Level Multi-Energy Load Forecasting: A Graph Representation Learning Convolution-Based Approach in Smart Meter-Enabled Environments",
+      "grade": null,
+      "queries": [
+        "narrower"
+      ]
+    },
+    {
+      "paper_id": "0a4460cad44418bb2070048dbeb59477314b99a3",
+      "title": "Transformer-Based Short-Term Load Forecasting for Smart Grid Energy Management Using Smart Meter Data",
+      "grade": null,
+      "queries": [
+        "narrower"
+      ]
+    },
+    {
+      "paper_id": "3ad2a52cbaba7f9addbe8f4de9b5ce5e883c54e5",
+      "title": "Hybrid Ensemble Forecasting of Household Energy Consumption Using Prophet, BiLSTM, and Light GBM Models",
+      "grade": null,
+      "queries": [
+        "wider"
+      ]
+    },
+    {
+      "paper_id": "69e1c6f056304d359d4f7d093f37748bf121c8e3",
+      "title": "Social outcomes of energy use in the United Kingdom: Household energy footprints and their links to well-being",
+      "grade": null,
+      "queries": [
+        "hand"
+      ]
+    },
+    {
+      "paper_id": "b7af6a62eb7e469c8c6afee584d6f59e02ba0159",
+      "title": "A Comparative Evaluation of Statistical, Hybrid, and Deep Learning Models for Short-Term Electricity Demand Forecasting in The United Kingdom",
+      "grade": null,
+      "queries": [
+        "hand"
+      ]
+    },
+    {
+      "paper_id": "c1b5fd7d00fc8c0fac517328a1691209e015f9ca",
+      "title": "Explainable AI for Interpretable and Model-Agnostic Energy Consumption Prediction",
+      "grade": null,
+      "queries": [
+        "reworded"
+      ]
+    },
+    {
+      "paper_id": "12293ea5e67286b5a70db4d31bc5a13598a40652",
+      "title": "Gathering baseline data to assess household energy interventions' impact on indoor air quality, occupant health, and wellbeing: In2Air a non-randomized experiment.",
+      "grade": null,
+      "queries": [
+        "hand"
+      ]
+    },
+    {
+      "paper_id": "679c1a61bd3a077dea286a3b05ecbb3a0c188876",
+      "title": "AI-Based Energy Consumption Prediction and Scheduling for Smart Homes",
+      "grade": null,
+      "queries": [
+        "reworded"
+      ]
+    },
+    {
+      "paper_id": "188d3826d2cd3a44e64baaa789934bd692343da7",
+      "title": "High-Resolution Smart Meter Load Forecasting in Morocco: Model Performance, Diagnostics, and Interpretability Analysis for LaÃ¢youne Zone 1",
+      "grade": null,
+      "queries": [
+        "narrower"
+      ]
+    },
+    {
+      "paper_id": "d330e6e99f43e7150269c1c58fe9f45fdd231555",
+      "title": "High-resolution smart meter load dataset collected from multiple cities in Morocco",
+      "grade": null,
+      "queries": [
+        "narrower"
+      ]
+    },
+    {
+      "paper_id": "d773660eef5f0f2ef3fe9b69364ba4a1f9d76f3f",
+      "title": "Burnout among international versus domestic medical graduates in the United States and United Kingdom: a systematic review and meta-analysis of trainees and early-career physicians",
+      "grade": null,
+      "queries": [
+        "reworded"
+      ]
+    },
+    {
+      "paper_id": "c8646fafe74d51cd3b261c261908e4126e987bf9",
+      "title": "Forecasting energy demand and efficiency in a smart home environment through advanced ensemble model: Stacking and voting",
+      "grade": null,
+      "queries": [
+        "wider"
+      ]
+    },
+    {
+      "paper_id": "99e28babd617bebeec9a2b40e9e02433b49a0129",
+      "title": "Time Series Regression: Prediction of Electricity Consumption Based on Number of Consumers at National Electricity Supply Company",
+      "grade": null,
+      "queries": [
+        "reworded"
+      ]
+    },
+    {
+      "paper_id": "c7267bd92a510e32836061cbaac69c925e092530",
+      "title": "Forecasting Household Demand-Side Flexibility Using XGBoost for Smart Energy Management",
+      "grade": null,
+      "queries": [
+        "wider"
+      ]
+    },
+    {
+      "paper_id": "6e343617a0baf0f4b42fbddc4d6e7d699696b7b9",
+      "title": "Short-Term Residential Load Forecasting with Machine Learning Using Smart Meter and Weather Data",
+      "grade": null,
+      "queries": [
+        "narrower"
+      ]
+    },
+    {
+      "paper_id": "1c2949dd509a2f3522ca73d1df644b188faabfde",
+      "title": "Analysis of the impact of epidemic situation on total electricity consumption of the United States under the prediction scenario",
+      "grade": null,
+      "queries": [
+        "reworded"
+      ]
+    },
+    {
+      "paper_id": "4d831da1511b440783a2ffa20a923bbef7190e93",
+      "title": "A Hybrid BERT-ELM Framework for Robust Time Series Forecasting of Solar Energy Generation in EU Renewable Power Plants",
+      "grade": null,
+      "queries": [
+        "hand"
+      ]
+    },
+    {
+      "paper_id": "a2aaf915931d10b9e03f1fdabdd8b2e855478b50",
+      "title": "Comparison of ReCiPe 2016, ILCD 2011, CML-IA baseline and IMPACT 2002+ LCIA methods: a case study based on the electricity consumption mix in Europe",
+      "grade": null,
+      "queries": [
+        "reworded"
+      ]
+    },
+    {
+      "paper_id": "f8d1010b26e37014fec9426d07b93f2b17e039d9",
+      "title": "The Relationship between Electricity Consumption, Price of Oils, and Gross Domestic Product in the Gulf Cooperation Council Countries",
+      "grade": null,
+      "queries": [
+        "reworded"
+      ]
+    },
+    {
+      "paper_id": "91f792b64a992e97a4f7bc4360ede3aec9163afc",
+      "title": "Deep Learning-Based Probabilistic Forecasting of Household Energy Consumption in Smart Grids",
+      "grade": null,
+      "queries": [
+        "hand"
+      ]
+    },
+    {
+      "paper_id": "39cdb3340d410c6d612578f9d838ddbf3c6936e2",
+      "title": "Enhancing interpretability in power management: A time-encoded household energy forecasting using hybrid deep learning model",
+      "grade": null,
+      "queries": [
+        "wider"
+      ]
+    },
+    {
+      "paper_id": "ce67a19cfcc8116a0b1483dd114745c3c5350f6a",
+      "title": "Energy and Climate Policy in a DSGE Model of the United Kingdom",
+      "grade": null,
+      "queries": [
+        "hand"
+      ]
+    },
+    {
+      "paper_id": "0cc9614392f0f2553378f86cbeec221ee630ba06",
+      "title": "Asynchronous adaptive federated learning for distributed load forecasting with smart meter data",
+      "grade": null,
+      "queries": [
+        "narrower"
+      ]
+    },
+    {
+      "paper_id": "3c289646949801b07d547b5b0efa2abc8d41bbb3",
+      "title": "Assessing Hierarchical Temporal Memory Against an LSTM Baseline for Short-Term Smart-Meter Load Forecasting",
+      "grade": null,
+      "queries": [
+        "narrower"
+      ]
+    },
+    {
+      "paper_id": "39d54f7328322fdc2d6ac8def89988fbe58b9aec",
+      "title": "An explainable hybrid transformer-BiLSTM framework for multivariate household energy demand forecasting with weather integration",
+      "grade": null,
+      "queries": [
+        "wider"
+      ]
+    },
+    {
+      "paper_id": "1730d7b565f19420df741bfadad29d4dc5cfa2e2",
+      "title": "ForecastExplainer: Explainable household energy demand forecasting by approximating shapley values using DeepLIFT",
+      "grade": null,
+      "queries": [
+        "wider"
+      ]
+    },
+    {
+      "paper_id": "ddb371957ef0def2d504f6cbc61b2a337e34b7de",
+      "title": "Predicting Electricity Consumption in the Kingdom of Saudi Arabia",
+      "grade": null,
+      "queries": [
+        "reworded"
+      ]
+    },
+    {
+      "paper_id": "681b568cd61d6b2d3df7cbbcd7ec1f7e73818cef",
+      "title": "Artificial Intelligence Governance and Cybersecurity Trust: A Comparative Study of Public Infrastructure Systems in India, Singapore, and the United Kingdom",
+      "grade": null,
+      "queries": [
+        "hand"
+      ]
+    },
+    {
+      "paper_id": "5369b25c43dae4cfe1b1dd5e46f3362441bb2096",
+      "title": "Electricity consumption prediction in smart buildings using deep learning approaches (2025)",
+      "grade": null,
+      "queries": [
+        "reworded"
+      ]
+    },
+    {
+      "paper_id": "e0128f4ae6b3cc51540bdcc8313d2193924d8aad",
+      "title": "Scalable Patterns of Smart Meter Adoption in the United Kingdom: A Data Mining and Machine Learning Analysis of Quarterly Government Data (2012–2025)",
+      "grade": null,
+      "queries": [
+        "narrower"
+      ]
+    },
+    {
+      "paper_id": "71ed699c1d5d311e7b7fe0ef9cd19b3052081821",
+      "title": "A Two-Stage CNN-BiLSTM-Attention and XGBoost Framework for Household Energy Demand Forecasting",
+      "grade": null,
+      "queries": [
+        "wider"
+      ]
+    },
+    {
+      "paper_id": "fc2e4455c1b2b3e363a27aac13c88006fb0a1dba",
+      "title": "Forecasting United Kingdom's energy consumption using machine learning and hybrid approaches",
+      "grade": null,
+      "queries": [
+        "hand"
+      ]
+    },
+    {
+      "paper_id": "fe0b330cdba403109b882eb37b823255c72ee554",
+      "title": "Renewable Energy and Load Demand Forecasting Using Multivariate Time Series Foundation Model",
+      "grade": null,
+      "queries": [
+        "hand"
+      ]
+    },
+    {
+      "paper_id": "022f60d47a10ba575a723c7aef547f08c74a573e",
+      "title": "DEVELOPMENT OF ENERGY SYSTEM MODELING IN EAST KALIMANTAN'S HOUSEHOLD SECTOR WITH BOTTOM-UP APPROACH FOR ENERGY DEMAND FORECAST IN 2060",
+      "grade": null,
+      "queries": [
+        "wider"
+      ]
+    },
+    {
+      "paper_id": "45449107a1a310933757fc8a213b888334cc710f",
+      "title": "Macroeconomic Policies and Market Circulation: A Comparative Study of Post-Pandemic Economic Recovery in China and the United Kingdom",
+      "grade": null,
+      "queries": [
+        "reworded"
+      ]
+    },
+    {
+      "paper_id": "dd22f6f5940c3d2fb938042c27f9133a2fc2f4f1",
+      "title": "Probabilistic Forecasting of Energy Demand in a Household",
+      "grade": null,
+      "queries": [
+        "wider"
+      ]
+    },
+    {
+      "paper_id": "8c1c946993b164b107a31003b0c6d6e30980b8af",
+      "title": "SHORT TERM LOAD FORECASTING FOR ENERGY CONSUMPTION THROUGH MACHINE LEARNING: SVR AND LSTM-DRIVEN DEMAND FORECASTING",
+      "grade": null,
+      "queries": [
+        "wider"
+      ]
+    }
+  ]
+}

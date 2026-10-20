@@ -564,6 +564,40 @@ Both published tables hold 2 such Papers, and so does the committed pool file. T
 
 Every copy in this file now says 2. The finding itself does not change. A search that returns 2 Papers about food for a Topic about energy is still an imprecise search, and the Retrieval set is still where it gets a real number.
 
+## Measured on day 10: the four queries share no Papers at all
+
+The Retrieval set is built. `tests/files/retrieval-set-2026-10-20.json` holds 60 Papers of the Seeded Topic, shuffled, ungraded, with no abstract. Grade it against [docs/retrieval-set-grading-rule.md](./docs/retrieval-set-grading-rule.md).
+
+Three findings came out of the live runs, and the first one changes how the rest of this work reads.
+
+### The wording decides which Papers a student gets
+
+The four queries returned 60 Papers and not one Paper appeared in two of them. The overlap is zero.
+
+All four describe the same Topic. They are `United Kingdom household energy forecasting`, `household energy demand forecasting`, `United Kingdom smart meter load forecasting`, and `domestic electricity consumption prediction United Kingdom`. Semantic Scholar answered each with a set of Papers the other three never mentioned.
+
+So the `query` is not one input among several. It decides which 20 Papers a Project is built on, and the ranking only reorders what the words already chose. A student today sees one of four disjoint worlds and never learns the other three exist.
+
+Two consequences follow. The shape check of issue 38 is worth more than its size suggests, because the words are the input that matters most. And pooling several queries at serve time, which ADR 0013 deferred, now has a measured argument behind it for release 2.
+
+### The model never proposes the Seeded Topic
+
+Two live stage 2 runs on 2026-10-20 proposed 16 Topics for the Energy Domain. Not one of them is the Seeded Topic. Every Topic the model wrote names a task, for example `electricity load profile clustering segmentation`, and not one names a country.
+
+The first design of the Retrieval set held four queries, one of which was the query the model wrote for the Seeded Topic. That query does not exist and no Re-roll will produce it. So the set holds four hand written queries, all for the Seeded Topic, because a Relevance grade only means something against one Topic.
+
+The retrieval table therefore measures one thing, which is how well a ranking orders Papers. It does not measure the words the model chooses. That second question is its own measurement, on 3 Topics the model really proposed, grading only the top 10 Papers of each. It is a new ticket, and the finding above argues for running it early.
+
+### 15 Papers from each query, and not 20
+
+The first live run took 20 from each query, which offered 79 Papers against a cap of 60, so the cap dropped 19 Papers that nobody chose to drop. With no overlap to absorb, 15 from each gives exactly 60 and nothing is lost. The number is a measurement and not a preference.
+
+### The bug the first live run found
+
+Stage 2 had never run live. `src/fynd/claude.py` sent `temperature=0` on every model call, and the Anthropic SDK has removed every sampling parameter, so the call raised a `TypeError` before any request left the machine. 198 tests passed throughout, because the test replaces the client with a fake that accepts any keyword.
+
+Fynd now sends no decoding parameter. [ADR 0004](./docs/adr/0004-replayable-runs-and-versioned-prompts.md) keeps its decision and carries a dated note, and the replay promise rests on the cache alone. `bugs.md` holds the entry, and its prevention rule is that the first live run of a command belongs inside the ticket that adds it.
+
 ## Do not do yet
 
 - No requirements documents and no ERD drafting. That is release 2.

@@ -26,10 +26,12 @@ from fynd.stages.stage2 import SEEDED_TOPIC, first_year_in_window
 # so the cache this run fills is the cache a shipped run reads. See ADR 0013.
 SEARCH_LIMIT: Final = 50
 
-# The most Papers one query may contribute. Four queries at 20 give at most 80
-# before the duplicates go, so the pool is also capped at SET_MAX below. The
-# other 30 Papers of each reply stay in the cache for a later run to read.
-PER_QUERY: Final = 20
+# The most Papers one query may contribute. 15 is a measurement and not a
+# guess. The live run of 2026-10-20 showed that four queries for the same Topic
+# return almost no Papers in common. At 20 each they offered 79 Papers, of which
+# only 1 was a duplicate, so the cap below dropped 19 Papers that nobody chose
+# to drop. At 15 each the pool is the whole union and nothing is lost.
+PER_QUERY: Final = 15
 
 # The set is useless outside this band. Too few Papers and recall at 20 is
 # arithmetic on nothing. Too many and the grading never finishes.
@@ -101,10 +103,19 @@ class Search(Protocol):
     def __call__(self, query: str, year_from: int, limit: int) -> SearchResult: ...
 
 
-# The three queries written by hand. The fourth is the one the model wrote, and
-# it arrives as an argument, because no placeholder in this file would be the
-# thing the model actually said.
-HAND_QUERIES: Final = (
+# The four queries, all written by hand, and all for the Seeded Topic.
+#
+# A fifth query, the one the model writes, was in the first design. It is gone,
+# because the model does not write one for this Topic. Two live stage 2 runs on
+# 2026-10-20 proposed 16 Topics for the Energy Domain and not one of them was
+# the Seeded Topic. Every Topic the model wrote names a task and none names a
+# country. So this set measures how well a ranking orders Papers, and it does
+# not measure the words a model chooses. That second question is its own
+# measurement on a Topic the model really proposes.
+#
+# All four are for the one Topic on purpose. A Paper carries one Relevance
+# grade, and a grade only means something against one Topic.
+SEED_QUERIES: Final = (
     SeedQuery(
         name="hand",
         text=SEEDED_TOPIC,
@@ -122,6 +133,12 @@ HAND_QUERIES: Final = (
         text="United Kingdom smart meter load forecasting",
         written_by="hand",
         note="One step narrower, which should return fewer Papers and more exact ones.",
+    ),
+    SeedQuery(
+        name="reworded",
+        text="domestic electricity consumption prediction United Kingdom",
+        written_by="hand",
+        note="The same Topic in other words, which tests the ranking on vocabulary.",
     ),
 )
 
@@ -191,24 +208,9 @@ def shuffled(entries: list[SetEntry], seed: int) -> list[SetEntry]:
     return mixed
 
 
-def build_set(
-    search: Search,
-    reference_date: dt.date,
-    model_query: str,
-) -> RetrievalSet:
+def build_set(search: Search, reference_date: dt.date) -> RetrievalSet:
     """Runs the four queries and returns the set, shuffled and ungraded."""
-    queries = [
-        SeedQuery(
-            name="model",
-            text=model_query,
-            written_by="model",
-            note=(
-                "The query the model wrote for the Seeded Topic, recorded exactly as it "
-                "arrived and before any shape check existed. See issue 38."
-            ),
-        ),
-        *HAND_QUERIES,
-    ]
+    queries = list(SEED_QUERIES)
 
     year_from = first_year_in_window(reference_date)
     results = []
