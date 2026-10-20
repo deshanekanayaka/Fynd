@@ -10,9 +10,9 @@ import pytest
 
 from fynd.models import Paper, SearchResult
 from fynd.retrieval_set import (
-    HAND_QUERIES,
     PER_QUERY,
     SEARCH_LIMIT,
+    SEED_QUERIES,
     SET_MAX,
     SET_MIN,
     SHUFFLE_SEED,
@@ -124,16 +124,16 @@ def test_the_set_asks_every_query_for_the_search_limit_inside_the_window() -> No
             papers=[paper(number) for number in range(start, start + 20)],
         )
 
-    built = build_set(search, reference_date=TODAY, model_query="household energy forecasting uk")
+    built = build_set(search, reference_date=TODAY)
 
-    assert len(asked) == 1 + len(HAND_QUERIES)
+    assert len(asked) == len(SEED_QUERIES)
     for _, year_from, limit in asked:
         # A 5 year Evidence window in 2026 starts in 2022.
         assert year_from == 2022
         assert limit == SEARCH_LIMIT
-    # The query the model wrote is recorded exactly as it arrived.
-    assert built.queries[0].text == "household energy forecasting uk"
-    assert built.queries[0].written_by == "model"
+    # Every query is for the one Topic, because a Relevance grade only means
+    # something against one Topic.
+    assert [query.written_by for query in built.queries] == ["hand"] * 4
 
 
 def test_the_set_records_the_reference_date_and_its_own_limits() -> None:
@@ -144,7 +144,7 @@ def test_the_set_records_the_reference_date_and_its_own_limits() -> None:
         start = 1000 * len(asked)
         return SearchResult(query=query, papers=[paper(start + n) for n in range(20)])
 
-    built = build_set(search, reference_date=TODAY, model_query="a b c")
+    built = build_set(search, reference_date=TODAY)
 
     assert built.reference_date == TODAY
     assert built.per_query == PER_QUERY
@@ -162,7 +162,7 @@ def test_a_set_under_40_papers_stops_the_run() -> None:
         return SearchResult(query=query, papers=[paper(1), paper(2)])
 
     with pytest.raises(SetTooSmall) as stopped:
-        build_set(search, reference_date=TODAY, model_query="a b c")
+        build_set(search, reference_date=TODAY)
 
     assert "pooled 2 Papers" in str(stopped.value)
     assert str(SET_MIN) in str(stopped.value)

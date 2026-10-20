@@ -209,7 +209,7 @@ def run_measure_open_copies() -> None:
     print(f"Wrote {MEASUREMENT_README}")
 
 
-def run_build_retrieval_set(as_of: str, model_query: str) -> None:
+def run_build_retrieval_set(as_of: str) -> None:
     if not os.environ.get("SEMANTIC_SCHOLAR_API_KEY"):
         raise SystemExit(
             "Set SEMANTIC_SCHOLAR_API_KEY in your .env file. The Retrieval set runs "
@@ -224,7 +224,7 @@ def run_build_retrieval_set(as_of: str, model_query: str) -> None:
         ) from None
 
     client = SemanticScholar()
-    built = build_set(client.search, reference_date=reference_date, model_query=model_query)
+    built = build_set(client.search, reference_date=reference_date)
 
     for query in built.queries:
         found = [entry for entry in built.entries if query.name in entry.queries]
@@ -284,11 +284,7 @@ def main() -> None:
         required=True,
         help="the reference date the Evidence window is counted from, as 2026-10-20",
     )
-    retrieval_set.add_argument(
-        "--model-query",
-        required=True,
-        help="the query the model wrote for the Seeded Topic, copied from a stage2 run",
-    )
+
 
     fetch = stages.add_parser("fetch-open-copy", help="fetch one Open copy and keep the bytes")
     fetch.add_argument("--url", required=True, help="the repository link OpenAlex resolved")
@@ -308,7 +304,7 @@ def main() -> None:
         elif args.stage == "measure-open-copies":
             run_measure_open_copies()
         elif args.stage == "build-retrieval-set":
-            run_build_retrieval_set(args.as_of, args.model_query)
+            run_build_retrieval_set(args.as_of)
         else:
             run_fetch_open_copy(args.url)
     except (
