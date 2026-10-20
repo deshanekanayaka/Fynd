@@ -46,9 +46,15 @@ It predicts when the abstract says forecast, forecasting, predict, prediction, o
 
 It does not predict when the abstract only describes, measures, surveys, assesses, reviews, compares, or explains something that already happened. A review of forecasting methods is the exception, and it counts as predicting, because it is about the task.
 
-**Then the grade follows.**
+**Then the grade follows. Question 1 is the gate, and question 2 is the grade.**
 
-Both answers yes is a 2. One of the two is a 1. Neither is a 0.
+The unit is not a household, so the grade is 0. Whatever it forecasts, and however good it is.
+
+The unit is a household and it predicts, so the grade is 2.
+
+The unit is a household and it does not predict, so the grade is 1.
+
+Nothing else earns a 1. A national forecast, a city forecast, a grid forecast and a solar plant forecast are all 0, because they fail the gate. This is stricter than it feels, and the reason is the measurement. A pool where 51 of 60 Papers count as relevant leaves recall at 20 unable to tell a good ranking from a random one.
 
 ## What to ignore
 
@@ -56,27 +62,35 @@ Ignore the country. Ignore the method, so a transformer, a random forest and a p
 
 ## The three grades
 
-Grade 2 means the Paper is on the subject. It forecasts or predicts household or residential energy, electricity, gas or heat. The country does not matter, and neither does the method.
+Grade 2 means household energy, forecast. The Paper predicts household or residential energy, electricity, gas or heat. The country does not matter, and neither does the method, and neither does the angle the Paper takes on the problem. A privacy study of household forecasting is still a 2, and so is an explainability study of it.
 
-Grade 1 means the Paper covers part of the subject. It forecasts energy that is not household energy, for example a national grid or a wind farm. Or it studies household energy and forecasts nothing, for example a survey of fuel poverty. Or it names no energy at all and gives a method a household forecaster would use.
+Grade 1 means household energy, not forecast. The Paper studies household energy and predicts nothing, for example a survey of fuel poverty, an intervention study, or a dataset paper.
 
-Grade 0 means the Paper is not relevant. It is about another subject.
+Grade 0 means the unit is not a household. A national or city electricity forecast is a 0. A grid, substation or feeder forecast is a 0. A power plant or solar generation forecast is a 0. A paper about another subject entirely is a 0.
 
 Recall counts a grade of 1 and a grade of 2 as relevant. nDCG uses all three grades, so the difference between a 1 and a 2 changes a published number.
 
+## The one case that still needs judgement
+
+A smart meter sits at a customer's property, so a Paper that forecasts from smart meter readings usually passes the gate and is a 2.
+
+It is a 0 when the Paper aggregates those readings away before forecasting. `Artificial Neural Network Based Short-Term Load Forecasting of Nuwakot Distribution Center Using Smart Meter AMI Data` says it forecasts "on the aggregate level for a distribution network", so the unit is the network and not the household. `Load Forecasting Models in Smart Grid Using Smart Meter Information: A Review` is about smart grid operation, so it is a 0 for the same reason.
+
+Read the abstract for the unit the forecast is made at, not for the unit the data came from.
+
 ## The worked cases
 
-A good paper on Spanish household energy forecasting is a 2. The subject is the subject, and the country belongs to a Statistic and not to a Paper.
+A good paper on Spanish household energy forecasting is a 2. The country belongs to a Statistic and not to a Paper.
 
 A paper that forecasts household electricity with no country named is a 2, for the same reason.
 
 A paper about ultra-processed food is a 0. Two such Papers reached the measured pool of 2026-10-17, which is the finding this set exists to put a number on.
 
-`Energy and Climate Policy in a DSGE Model of the United Kingdom` is a 1. It names the country and it is not a household forecast, so the country alone earns nothing.
+`Energy and Climate Policy in a DSGE Model of the United Kingdom` is a 1. Households consume the energy it models, and it simulates a policy instead of predicting demand.
 
-`Load Forecasting Models in Smart Grid Using Smart Meter Information: A Review` is a 2. A review of the exact subject is still the subject.
+`Predicting Electricity Consumption in the Kingdom of Saudi Arabia` is a 0. It forecasts well and the unit is a country.
 
-A paper that forecasts the load of a national grid is a 1. The subject is energy forecasting and the unit is not a household.
+`High-resolution smart meter load dataset collected from multiple cities in Morocco` is a 1. The readings are residential and the paper publishes data instead of a forecast.
 
 ## What to write down
 

@@ -610,6 +610,44 @@ Stage 2 had never run live. `src/fynd/claude.py` sent `temperature=0` on every m
 
 Fynd now sends no decoding parameter. [ADR 0004](./docs/adr/0004-replayable-runs-and-versioned-prompts.md) keeps its decision and carries a dated note, and the replay promise rests on the cache alone. `bugs.md` holds the entry, and its prevention rule is that the first live run of a command belongs inside the ticket that adds it.
 
+## Graded on day 10: the set, and what two graders cost to agree
+
+`tests/files/retrieval-set-2026-10-20.json` holds 60 Papers with a Relevance grade on every one. 32 are a 2, 7 are a 1 and 21 are a 0, so 39 of 60 count as relevant. Issue 33 is done.
+
+Two graders read the same 60 Papers, and the disagreement did the useful work.
+
+### The rule changed three times, and each change was a finding
+
+The first rule graded the country, so a Spanish household forecasting paper scored 1. That was wrong. `CONTEXT.md` gives the place to a Statistic, and a Paper carries the Existing approach and the Technical core, which have no place. A rule that marked a Paper down for its country would teach the ranking to prefer a Paper that merely mentions the United Kingdom, and the measured pool holds two of exactly those.
+
+The second rule asked for the title and the abstract, and the tool showed only the title, because ADR 0011 keeps an abstract out of this public repository. Both graders read 60 titles and agreed on 29 of them. The abstracts were on the machine the whole time, in the search cache, so the tool now reads them from there and writes them nowhere.
+
+The third rule is the one that worked. Question 1 asks whose energy it is and acts as the gate. Question 2 asks whether the Paper predicts a future value and sets the grade. Not a household is a 0 whatever it forecasts. A household that predicts is a 2. A household that does not predict is a 1.
+
+### The numbers from the two passes
+
+Exact agreement went from 28 of 60 to 31 of 60 with the restatement, which looks like no progress and is not what matters.
+
+Both passes reached 39 relevant Papers of 60, and both reached 21 zeros. Recall at 20 only sees the line between 0 and relevant, so the two passes agree exactly on the number the table publishes. 19 of the remaining disagreements were a 1 against a 2, which only nDCG sees, and every one of them was a household forecasting paper that the restated rule makes a 2.
+
+Four earlier guesses about the disagreement were tested and all four were wrong. The country was not inflating the hand grades, because both graders scored the United Kingdom papers lower. The 8 Papers with no abstract did not move the hand grades at all, at 0.88 against 0.85. The model pass was the biased one there, reading household-sounding titles optimistically with no abstract to check them.
+
+### Why a strict gate, and not a generous one
+
+A pool where 51 of 60 Papers count as relevant leaves recall at 20 unable to tell a good ranking from a random one. At 39 of 60 it can. So the gate is strict on purpose, and a national or city or grid forecast is a 0 even when it is a good paper.
+
+### What enters git
+
+The graded set file, with no abstract and no year. Beside it, three grader passes, each stamped with the hash of the rule that produced it: the hand pass and the model pass under the final rule, and the two title-only passes kept as evidence of how much the abstract matters. No published number is scored against a model pass.
+
+### The limits the table has to state
+
+One person's judgement decides every published grade, because Fynd is a solo project. A second pass exists and it is a model, not a second person.
+
+Recall over a pool is recall inside the pool. A relevant Paper that none of the four queries returned is invisible to every number in the table.
+
+No number says anything about whether Fynd finds United Kingdom evidence, because the grade ignores the country by design.
+
 ## Do not do yet
 
 - No requirements documents and no ERD drafting. That is release 2.
