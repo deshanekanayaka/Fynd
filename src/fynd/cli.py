@@ -24,6 +24,7 @@ from fynd.fetcher import Fetched, Fetcher, FetchFailed, looks_like_a_pdf
 from fynd.measure import readme_with, report
 from fynd.open_copy import read_open_copy
 from fynd.openalex import OpenAlex, WorkNotRead
+from fynd.retrieval_set import SetTooSmallOrTooBig, build_set
 from fynd.semantic_scholar import RateLimited, SemanticScholar
 from fynd.source_text import reason_against_paper_text
 from fynd.stages import stage1, stage2
@@ -136,6 +137,10 @@ def run_extract(path: str) -> None:
 # number cannot depend on a model call.
 SEEDED_TOPIC_QUERY = "United Kingdom household energy forecasting"
 MEASUREMENT_DIR = pathlib.Path("docs/measurements")
+# The Retrieval set sits with the other committed test data, because the
+# retrieval measurement replays it the way the pool file is replayed.
+RETRIEVAL_SET_DIR = pathlib.Path("tests/files")
+GRADING_RULE = pathlib.Path("docs/retrieval-set-grading-rule.md")
 MEASUREMENT_README = MEASUREMENT_DIR / "README.md"
 
 # The size of the measured pool. The table names it, so a reader knows the
@@ -203,6 +208,41 @@ def run_measure_open_copies() -> None:
     print(f"Wrote {MEASUREMENT_README}")
 
 
+def run_build_retrieval_set(as_of: str, model_query: str) -> None:
+    if not os.environ.get("SEMANTIC_SCHOLAR_API_KEY"):
+        raise SystemExit(
+            "Set SEMANTIC_SCHOLAR_API_KEY in your .env file. The Retrieval set runs "
+            "four searches for the Seeded Topic."
+        )
+    try:
+        reference_date = dt.date.fromisoformat(as_of)
+    except ValueError:
+        raise SystemExit(
+            f"--as-of needs a date like 2026-10-20, and it got {as_of!r}. Every "
+            "published number states the date its Evidence window came from."
+        ) from None
+
+    client = SemanticScholar()
+
+    def search(query: str, year_from: int, limit: int):
+        return client.search(query, year_from=year_from, limit=limit)
+
+    built = build_set(search, reference_date=reference_date, model_query=model_query)
+
+    for query in built.queries:
+        found = [entry for entry in built.entries if query.name in entry.queries]
+        print(f"{query.name:9} {len(found):3} Papers in the set  {query.text}")
+    print(f"\n{len(built.entries)} Papers to grade, in a shuffled order.")
+
+    RETRIEVAL_SET_DIR.mkdir(parents=True, exist_ok=True)
+    set_file = RETRIEVAL_SET_DIR / f"retrieval-set-{reference_date.isoformat()}.json"
+    # The abstracts are not written. The measurement reads them from the cache,
+    # because ADR 0011 refuses a committed abstract and this file enters git.
+    set_file.write_text(built.model_dump_json(indent=2) + "\n", encoding="utf-8")
+    print(f"Wrote {set_file}")
+    print(f"Grade it against {GRADING_RULE}. Every grade is 0, 1 or 2.")
+
+
 def main() -> None:
     # Only the command line reads the .env file. A library that reads it would
     # change the environment under a test.
@@ -233,6 +273,20 @@ def main() -> None:
 
     stages.add_parser("measure-open-copies", help="run the pipeline and write the table")
 
+    retrieval_set = stages.add_parser(
+        "build-retrieval-set", help="run the four queries and write the ungraded Retrieval set"
+    )
+    retrieval_set.add_argument(
+        "--as-of",
+        required=True,
+        help="the reference date the Evidence window is counted from, as 2026-10-20",
+    )
+    retrieval_set.add_argument(
+        "--model-query",
+        required=True,
+        help="the query the model wrote for the Seeded Topic, copied from a stage2 run",
+    )
+
     fetch = stages.add_parser("fetch-open-copy", help="fetch one Open copy and keep the bytes")
     fetch.add_argument("--url", required=True, help="the repository link OpenAlex resolved")
 
@@ -250,6 +304,8 @@ def main() -> None:
             run_extract(args.path)
         elif args.stage == "measure-open-copies":
             run_measure_open_copies()
+        elif args.stage == "build-retrieval-set":
+            run_build_retrieval_set(args.as_of, args.model_query)
         else:
             run_fetch_open_copy(args.url)
     except (
@@ -259,6 +315,7 @@ def main() -> None:
         WorkNotRead,
         FetchFailed,
         ContactEmailMissing,
+        SetTooSmallOrTooBig,
         anthropic.AnthropicError,
     ) as error:
         # A traceback teaches the reader nothing here. The message is the fix.
