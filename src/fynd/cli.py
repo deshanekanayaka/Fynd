@@ -13,6 +13,7 @@ import datetime as dt
 import os
 import pathlib
 import sys
+import textwrap
 
 import anthropic
 from dotenv import load_dotenv
@@ -21,11 +22,12 @@ from fynd.claude import ModelRefused, ask_for_json
 from fynd.contact import ContactEmailMissing, contact_email
 from fynd.extract import extract_html, extract_pdf
 from fynd.fetcher import Fetched, Fetcher, FetchFailed, looks_like_a_pdf
+from fynd.grading import GradeRefused, apply_grades, grade_counts, ungraded, worksheet_rows
 from fynd.measure import readme_with, report
 from fynd.open_copy import read_open_copy
 from fynd.openalex import OpenAlex, WorkNotRead
-from fynd.retrieval_set import SetTooSmall, build_set
-from fynd.semantic_scholar import RateLimited, SemanticScholar
+from fynd.retrieval_set import RetrievalSet, SetTooSmall, build_set
+from fynd.semantic_scholar import RateLimited, SemanticScholar, cached_abstracts
 from fynd.source_text import reason_against_paper_text
 from fynd.stages import stage1, stage2
 
@@ -246,6 +248,72 @@ def run_build_retrieval_set(as_of: str) -> None:
     print(f"Grade it against {GRADING_RULE}. Every grade is 0, 1 or 2.")
 
 
+def retrieval_set_path(as_of: str) -> pathlib.Path:
+    """Returns the set file for one reference date, the way the builder named it."""
+    return RETRIEVAL_SET_DIR / f"retrieval-set-{as_of}.json"
+
+
+def run_grade_retrieval_set(as_of: str, show: bool) -> None:
+    set_file = retrieval_set_path(as_of)
+    if not set_file.exists():
+        raise SystemExit(
+            f"No set file at {set_file}. Run build-retrieval-set --as-of {as_of} first."
+        )
+    held = RetrievalSet.model_validate_json(set_file.read_text(encoding="utf-8"))
+
+    if show:
+        for row in worksheet_rows(held):
+            print(row)
+        print()
+        print(f"Counts: {grade_counts(held)}")
+        return
+
+    waiting = ungraded(held)
+    if not waiting:
+        print(f"Every Paper is graded. Counts: {grade_counts(held)}")
+        return
+
+    # The abstract is read from the disk cache and never written anywhere. The
+    # rule says to read the title and the abstract, and ADR 0011 keeps an
+    # abstract out of git, so the two live together here.
+    abstracts = cached_abstracts()
+    missing = [entry for entry in waiting if entry.paper_id not in abstracts]
+
+    print(f"{len(waiting)} Papers to grade, for the Topic {held.topic}.")
+    print("2 is on the subject. 1 covers part of it. 0 is another subject.")
+    print(f"The full rule is {GRADING_RULE}. Press s to skip a Paper, or q to stop.")
+    if missing:
+        print(
+            f"{len(missing)} of these Papers have no abstract anywhere in the cache, "
+            "so they are graded on the title alone and the file says so."
+        )
+    print()
+
+    for number, entry in enumerate(waiting, start=1):
+        print(f"{number} of {len(waiting)}  {entry.title}")
+        abstract = abstracts.get(entry.paper_id)
+        if abstract:
+            for line in textwrap.wrap(abstract, width=96):
+                print(f"    {line}")
+        else:
+            print("    No abstract in the cache. Grade the title alone.")
+        answer = input("  grade: ").strip().lower()
+        if answer == "q":
+            break
+        if answer in ("s", ""):
+            continue
+        try:
+            held = apply_grades(held, {entry.paper_id: int(answer)})
+        except ValueError:
+            print(f"  {answer!r} is not 0, 1 or 2. The Paper stays ungraded.")
+            continue
+        # Written after every answer, so a stopped session loses nothing.
+        set_file.write_text(held.model_dump_json(indent=2) + "\n", encoding="utf-8")
+
+    print(f"\nWrote {set_file}")
+    print(f"Counts: {grade_counts(held)}")
+
+
 def main() -> None:
     # Only the command line reads the .env file. A library that reads it would
     # change the environment under a test.
@@ -276,6 +344,16 @@ def main() -> None:
 
     stages.add_parser("measure-open-copies", help="run the pipeline and write the table")
 
+    grade = stages.add_parser(
+        "grade-retrieval-set", help="write a Relevance grade on each Paper of the Retrieval set"
+    )
+    grade.add_argument("--as-of", required=True, help="the reference date of the set file")
+    grade.add_argument(
+        "--show",
+        action="store_true",
+        help="print every Paper with its grade and stop, writing nothing",
+    )
+
     retrieval_set = stages.add_parser(
         "build-retrieval-set", help="run the four queries and write the ungraded Retrieval set"
     )
@@ -305,6 +383,8 @@ def main() -> None:
             run_measure_open_copies()
         elif args.stage == "build-retrieval-set":
             run_build_retrieval_set(args.as_of)
+        elif args.stage == "grade-retrieval-set":
+            run_grade_retrieval_set(args.as_of, args.show)
         else:
             run_fetch_open_copy(args.url)
     except (
@@ -315,6 +395,7 @@ def main() -> None:
         FetchFailed,
         ContactEmailMissing,
         SetTooSmall,
+        GradeRefused,
         anthropic.AnthropicError,
     ) as error:
         # A traceback teaches the reader nothing here. The message is the fix.

@@ -481,7 +481,7 @@ The open item of day 8 is closed. Branch B, which is Claim extraction with the t
 - Four queries build it, 20 Papers each, deduplicated by Semantic Scholar identifier. One is the `query` the model wrote, one is the Seeded Topic hand written, and two are a wider and a narrower rewording. The four queries go in the dated file.
 - Recall over a pool is recall inside the pool. A relevant Paper that no query returned is invisible, and the file states that as a limit beside the single annotator.
 - The grade has three values. 2 means the Paper's main subject is the Topic, and a student would cite it in the Problem section. 1 means the Paper covers one part of the Topic, or the Topic in another place or another setting. 0 means the Paper is about something else, as the three ultra-processed food Papers are.
-- One worked case pins the rule. A good paper on Spanish household energy forecasting is a 1 and not a 2, because `CONTEXT.md` ties a Problem to a place.
+- One worked case pins the rule. A good paper on Spanish household energy forecasting is a 2. Corrected on 2026-10-20, and the reason is in the day 10 entry below. The first rule said 1, because `CONTEXT.md` ties a Problem to a place.
 - Grading reads the title and the abstract only, in a shuffled order with a fixed seed, with no rank and no query shown. Grading in rank order makes a high ranked Paper read as relevant.
 - Deshan is the only annotator, so there is no agreement number. The table states that as a limit, as the README states the grader of metric 2.
 
@@ -592,11 +592,61 @@ The retrieval table therefore measures one thing, which is how well a ranking or
 
 The first live run took 20 from each query, which offered 79 Papers against a cap of 60, so the cap dropped 19 Papers that nobody chose to drop. With no overlap to absorb, 15 from each gives exactly 60 and nothing is lost. The number is a measurement and not a preference.
 
+### The grading rule graded the wrong thing
+
+The first rule marked a Paper down for its country. A good paper on Spanish household energy forecasting was a 1 and not a 2, because `CONTEXT.md` ties a Problem to a place. Deshan caught it before grading a single Paper.
+
+The place does not belong to a Paper. `CONTEXT.md` gives it to a Statistic, which is a published figure from an official body showing the Problem is real in one place, and `PRD.md` makes stage 3 demand at least one Claim from a Statistic or a Product. A Paper carries the Existing approach and the Technical core, and neither has a place, which is the same reason the Evidence window does not apply to them.
+
+So the old rule would have taught the ranking to prefer a Paper that merely mentions the United Kingdom over a Paper holding the method a student needs. The measured pool holds two of exactly that kind, which are a policy model of the United Kingdom and a comparison of artificial intelligence governance.
+
+The grade now reads the subject alone, which is household energy forecasting, and ignores the country. A 2 is that subject anywhere. A 1 covers part of it, such as forecasting that is not household, or household energy with no forecasting. A 0 is another subject.
+
+One consequence is a finding the table can now publish. Three of the four queries name the United Kingdom and one does not, so the per query rows are where it shows whether the country words help the search or drag in papers about the wrong subject. No number in the table says anything about whether Fynd finds United Kingdom evidence, and the file states that as a limit.
+
 ### The bug the first live run found
 
 Stage 2 had never run live. `src/fynd/claude.py` sent `temperature=0` on every model call, and the Anthropic SDK has removed every sampling parameter, so the call raised a `TypeError` before any request left the machine. 198 tests passed throughout, because the test replaces the client with a fake that accepts any keyword.
 
 Fynd now sends no decoding parameter. [ADR 0004](./docs/adr/0004-replayable-runs-and-versioned-prompts.md) keeps its decision and carries a dated note, and the replay promise rests on the cache alone. `bugs.md` holds the entry, and its prevention rule is that the first live run of a command belongs inside the ticket that adds it.
+
+## Graded on day 10: the set, and what two graders cost to agree
+
+`tests/files/retrieval-set-2026-10-20.json` holds 60 Papers with a Relevance grade on every one. 32 are a 2, 7 are a 1 and 21 are a 0, so 39 of 60 count as relevant. Issue 33 is done.
+
+Two graders read the same 60 Papers, and the disagreement did the useful work.
+
+### The rule changed three times, and each change was a finding
+
+The first rule graded the country, so a Spanish household forecasting paper scored 1. That was wrong. `CONTEXT.md` gives the place to a Statistic, and a Paper carries the Existing approach and the Technical core, which have no place. A rule that marked a Paper down for its country would teach the ranking to prefer a Paper that merely mentions the United Kingdom, and the measured pool holds two of exactly those.
+
+The second rule asked for the title and the abstract, and the tool showed only the title, because ADR 0011 keeps an abstract out of this public repository. Both graders read 60 titles and agreed on 29 of them. The abstracts were on the machine the whole time, in the search cache, so the tool now reads them from there and writes them nowhere.
+
+The third rule is the one that worked. Question 1 asks whose energy it is and acts as the gate. Question 2 asks whether the Paper predicts a future value and sets the grade. Not a household is a 0 whatever it forecasts. A household that predicts is a 2. A household that does not predict is a 1.
+
+### The numbers from the two passes
+
+Exact agreement went from 28 of 60 to 31 of 60 with the restatement, which looks like no progress and is not what matters.
+
+Both passes reached 39 relevant Papers of 60, and both reached 21 zeros. Recall at 20 only sees the line between 0 and relevant, so the two passes agree exactly on the number the table publishes. 19 of the remaining disagreements were a 1 against a 2, which only nDCG sees, and every one of them was a household forecasting paper that the restated rule makes a 2.
+
+Four earlier guesses about the disagreement were tested and all four were wrong. The country was not inflating the hand grades, because both graders scored the United Kingdom papers lower. The 8 Papers with no abstract did not move the hand grades at all, at 0.88 against 0.85. The model pass was the biased one there, reading household-sounding titles optimistically with no abstract to check them.
+
+### Why a strict gate, and not a generous one
+
+A pool where 51 of 60 Papers count as relevant leaves recall at 20 unable to tell a good ranking from a random one. At 39 of 60 it can. So the gate is strict on purpose, and a national or city or grid forecast is a 0 even when it is a good paper.
+
+### What enters git
+
+The graded set file, with no abstract and no year. Beside it, three grader passes, each stamped with the hash of the rule that produced it: the hand pass and the model pass under the final rule, and the two title-only passes kept as evidence of how much the abstract matters. No published number is scored against a model pass.
+
+### The limits the table has to state
+
+One person's judgement decides every published grade, because Fynd is a solo project. A second pass exists and it is a model, not a second person.
+
+Recall over a pool is recall inside the pool. A relevant Paper that none of the four queries returned is invisible to every number in the table.
+
+No number says anything about whether Fynd finds United Kingdom evidence, because the grade ignores the country by design.
 
 ## Do not do yet
 

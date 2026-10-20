@@ -143,3 +143,29 @@ def test_a_failed_search_is_never_cached(tmp_path, monkeypatch) -> None:
         search.search("anything", year_from=2022)
 
     assert list(tmp_path.iterdir()) == []
+
+
+def test_the_cached_abstracts_are_read_by_paper_identifier(tmp_path, monkeypatch) -> None:
+    import json
+
+    from fynd.semantic_scholar import cached_abstracts
+
+    monkeypatch.setenv("FYND_CACHE_DIR", str(tmp_path))
+    (tmp_path / "s2-search-abc.json").write_text(
+        json.dumps(
+            {
+                "parts": {"api": "semantic-scholar-search"},
+                "value": {
+                    "data": [
+                        {"paperId": "p1", "title": "One", "abstract": "The first abstract."},
+                        # A Paper with no abstract is left out, so the grading
+                        # tool says so instead of showing an empty box.
+                        {"paperId": "p2", "title": "Two", "abstract": None},
+                    ]
+                },
+            }
+        ),
+        encoding="utf-8",
+    )
+    found = cached_abstracts()
+    assert found == {"p1": "The first abstract."}
