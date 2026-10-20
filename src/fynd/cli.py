@@ -64,7 +64,9 @@ def run_stage_2(domain: str, pick: str, avoid: list[str]) -> None:
     offered = stage2.offer_topics(domain, ask_for_json, avoid=avoid or None)
     print(f"Stage 2 offers {len(offered)} Topics for the Domain {domain}.")
     for topic in offered:
-        print(f"  {topic.slug:40} {topic.label}")
+        # The query is printed beside the label, because it is the text that
+        # reaches Semantic Scholar and the Retrieval set records it verbatim.
+        print(f"  {topic.slug:40} {topic.label:45} {topic.query}")
 
     if not pick:
         print("\nPass --pick with one slug above to see the Open copy count.")
@@ -228,6 +230,12 @@ def run_build_retrieval_set(as_of: str, model_query: str) -> None:
         found = [entry for entry in built.entries if query.name in entry.queries]
         print(f"{query.name:9} {len(found):3} Papers in the set  {query.text}")
     print(f"\n{len(built.entries)} Papers to grade, in a shuffled order.")
+    if built.papers_offered > len(built.entries):
+        left_out = built.papers_offered - len(built.entries)
+        print(
+            f"The four queries offered {built.papers_offered} Papers, so the cap left "
+            f"{left_out} out. The set is a pool, and the table states that as a limit."
+        )
 
     RETRIEVAL_SET_DIR.mkdir(parents=True, exist_ok=True)
     set_file = RETRIEVAL_SET_DIR / f"retrieval-set-{reference_date.isoformat()}.json"

@@ -68,7 +68,10 @@ class SetEntry(BaseModel):
 
     paper_id: str
     title: str
-    year: int | None = None
+    # No year. The grading rule says to read the title and the abstract and
+    # nothing else, and the Evidence window already keeps every Paper in the
+    # set inside the last 5 years, so a year on the line separates nothing and
+    # can push a grade down for a reason the rule does not allow.
     # A Relevance grade is 0, 1 or 2, and None means nobody has graded it yet.
     # The type refuses a fourth value, because a typo in a hand edited file
     # would otherwise reach the recall arithmetic.
@@ -83,6 +86,10 @@ class RetrievalSet(BaseModel):
     reference_date: dt.date
     search_limit: int
     per_query: int
+    # How many Papers the four queries offered, before the cap. When this is
+    # larger than the number of entries, the cap left Papers out, and a reader
+    # of a recall number has to know that the pool was truncated.
+    papers_offered: int
     shuffle_seed: int
     queries: list[SeedQuery]
     entries: list[SetEntry]
@@ -158,10 +165,18 @@ def entries_from(
             by_identifier[paper.paper_id] = SetEntry(
                 paper_id=paper.paper_id,
                 title=paper.title,
-                year=paper.year,
                 queries=[name],
             )
     return list(by_identifier.values())
+
+
+def papers_offered(results: list[tuple[str, SearchResult]], per_query: int) -> int:
+    """Counts the Papers the queries offered, before the cap took its share."""
+    identifiers = set()
+    for _, result in results:
+        for paper in result.papers[:per_query]:
+            identifiers.add(paper.paper_id)
+    return len(identifiers)
 
 
 def shuffled(entries: list[SetEntry], seed: int) -> list[SetEntry]:
@@ -200,6 +215,7 @@ def build_set(
     for query in queries:
         results.append((query.name, search(query.text, year_from=year_from, limit=SEARCH_LIMIT)))
 
+    offered = papers_offered(results, per_query=PER_QUERY)
     entries = entries_from(results, per_query=PER_QUERY, cap=SET_MAX)
     if len(entries) < SET_MIN:
         raise SetTooSmall(
@@ -212,6 +228,7 @@ def build_set(
         reference_date=reference_date,
         search_limit=SEARCH_LIMIT,
         per_query=PER_QUERY,
+        papers_offered=offered,
         shuffle_seed=SHUFFLE_SEED,
         queries=queries,
         entries=shuffled(entries, SHUFFLE_SEED),

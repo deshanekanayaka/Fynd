@@ -39,17 +39,19 @@ def found(name: str, numbers: range | list[int]) -> tuple[str, SearchResult]:
     return name, SearchResult(query=f"query for {name}", total=len(papers), papers=papers)
 
 
-def test_an_entry_keeps_the_identifier_the_title_and_the_year() -> None:
+def test_an_entry_keeps_the_identifier_and_the_title() -> None:
     entries = entries_from([found("hand", [1])], per_query=PER_QUERY)
     assert entries[0].paper_id == "p1"
     assert entries[0].title == "Paper 1"
-    assert entries[0].year == 2024
 
 
-def test_an_entry_holds_no_abstract() -> None:
+def test_an_entry_holds_no_abstract_and_no_year() -> None:
     entries = entries_from([found("hand", [1])], per_query=PER_QUERY)
-    # ADR 0011 refuses a committed abstract, and this file enters git.
+    # ADR 0011 refuses a committed abstract, and this file enters git. The year
+    # is left out because the grading rule says to read the title and the
+    # abstract and nothing else.
     assert "abstract" not in entries[0].model_dump()
+    assert "year" not in entries[0].model_dump()
 
 
 def test_a_grade_starts_empty() -> None:
@@ -187,3 +189,14 @@ def test_a_grade_outside_0_1_2_is_refused() -> None:
     # here and not inside the recall arithmetic.
     with pytest.raises(ValidationError):
         SetEntry(paper_id="p1", title="Paper 1", grade=7)
+
+
+def test_the_set_records_how_many_papers_the_queries_offered() -> None:
+    from fynd.retrieval_set import papers_offered
+
+    results = [found("first", [1, 2, 3]), found("second", [3, 4])]
+    # Four distinct Papers across the two queries, and p3 is in both.
+    assert papers_offered(results, per_query=20) == 4
+    # The cap keeps fewer than that, and the difference is what the command
+    # reports, because a truncated pool changes what a recall number means.
+    assert len(entries_from(results, per_query=20, cap=2)) == 2
