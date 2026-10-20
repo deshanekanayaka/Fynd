@@ -6,6 +6,32 @@ A bug a code review found before anyone ran the code is still a bug. The mistake
 
 ---
 
+## A request parameter the SDK had removed
+
+**Found:** 2026-10-20, by the first live stage 2 run, on branch `send-no-temperature`.
+
+**What happened:**
+
+`uv run python -m fynd.cli stage2 --domain energy` stopped with a `TypeError`.
+
+```
+TypeError: Messages.create() got an unexpected keyword argument 'temperature'
+```
+
+`src/fynd/claude.py` sent `temperature=0` on every model call, because ADR 0004 asked for fixed decoding. The Anthropic SDK has removed every sampling parameter. `messages.create` in version 1.12.1 accepts no `temperature`, no `top_p` and no `top_k`, so the call failed before any request left the machine.
+
+Stage 2 had never run live. 198 tests passed, the command had never asked a model anything, and `pyproject.toml` allows `anthropic>=1.12.1`, so the installed version was always going to be one that refuses the argument.
+
+**Root cause:** the test fakes the SDK at the client boundary. `tests/test_claude.py` replaces `fynd.claude.anthropic.Anthropic` with a fake whose `create(**kwargs)` accepts anything, so it asserted that `temperature` was 0 in the arguments and could never learn that the real method takes no such argument. A fake that accepts every keyword cannot fail on a keyword the real one dropped.
+
+**Fix:** the request sends no decoding parameter, and the cache key names none, because a key that names a value the request does not carry lies to the next reader. ADR 0004 keeps its decision and carries a dated note that says the replay promise now rests on the cache alone.
+
+**Verification:** `tests/test_claude.py` asserts that the arguments hold no `temperature`, no `top_p` and no `top_k`. The live stage 2 run then returned Topics.
+
+**Prevention:** a test that fakes an outside library cannot check that library's signature, so the first live run of a command is part of the work and not a later step. This is the second finding from a first live run, after the cap that silently dropped Papers from the Retrieval set. Both were invisible to a green suite. When a ticket adds a command, run it once against the real service before the ticket closes, and write down what the run returned.
+
+---
+
 ## A published number nobody checked against the file it came from
 
 **Found:** 2026-10-20, by a code review of branch `build-the-retrieval-set`, before a merge to `main`.

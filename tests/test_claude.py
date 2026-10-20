@@ -56,7 +56,9 @@ def test_a_good_reply_is_parsed_and_cached(tmp_path, monkeypatch) -> None:
     assert len(calls) == 1
 
 
-def test_the_request_fixes_the_model_and_the_temperature(tmp_path, monkeypatch) -> None:
+def test_the_request_names_the_model_and_sends_no_decoding_parameter(
+    tmp_path, monkeypatch
+) -> None:
     # ADR 0004 fixes decoding, so the same question returns the same answer.
     monkeypatch.setenv("FYND_CACHE_DIR", str(tmp_path))
     calls: list = []
@@ -66,7 +68,11 @@ def test_the_request_fixes_the_model_and_the_temperature(tmp_path, monkeypatch) 
     ask_for_json("a prompt", "aaa", SCHEMA, 1)
 
     assert calls[0]["model"] == HAIKU
-    assert calls[0]["temperature"] == 0
+    # The SDK removed every sampling parameter, and passing one raises a
+    # TypeError before a request leaves the machine. See bugs.md.
+    assert "temperature" not in calls[0]
+    assert "top_p" not in calls[0]
+    assert "top_k" not in calls[0]
     assert calls[0]["output_config"]["format"]["schema"] == SCHEMA
 
 

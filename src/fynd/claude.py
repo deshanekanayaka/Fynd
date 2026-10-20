@@ -15,8 +15,11 @@ from fynd import cache
 # The PRD gives the Topic proposal and the Claim extraction to Haiku 4.5.
 HAIKU: Final = "claude-haiku-4-5"
 
-# ADR 0004 fixes decoding, so the same question returns the same answer.
-TEMPERATURE: Final = 0
+# ADR 0004 asked for temperature zero, and the Anthropic SDK removed the
+# parameter. `messages.create` in 1.12.1 does not accept it at all, and passing
+# it raises a TypeError before any request leaves the machine. So the request
+# sends no decoding parameter, and the replay promise of ADR 0004 now rests on
+# the cache alone. See the note of 2026-10-20 in that record.
 MAX_TOKENS: Final = 4000
 
 
@@ -44,7 +47,9 @@ def ask_for_json(
         "model": model,
         "prompt_sha256": prompt_sha256,
         "input_sha256": hashlib.sha256(filled_prompt.encode("utf-8")).hexdigest(),
-        "temperature": TEMPERATURE,
+        # No decoding parameter sits in the key, because none is sent. A key
+        # that names a value the request does not carry tells the next reader
+        # a number was fixed when it was not.
         "max_tokens": MAX_TOKENS,
         "schema_version": schema_version,
     }
@@ -57,7 +62,6 @@ def ask_for_json(
     response = client.messages.create(
         model=model,
         max_tokens=MAX_TOKENS,
-        temperature=TEMPERATURE,
         messages=[{"role": "user", "content": filled_prompt}],
         output_config={"format": {"type": "json_schema", "schema": schema}},
     )
