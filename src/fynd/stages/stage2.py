@@ -27,7 +27,15 @@ EVIDENCE_WINDOW_YEARS: Final = 5
 # The one Topic fixed in the repository, which every published number of the
 # retrieval work is measured on. It lives here so one string has one home, as
 # SEEDED_DOMAINS does in stage1.py. See CONTEXT.md.
+#
+# Two strings and not one. The label is what a student reads, and it names the
+# place, because the Problem belongs to a place and a Statistic proves it. The
+# query is what a search and a ranking read, and it names the subject alone,
+# because a method a student copies does not change at a border. The measured
+# table of 2026-10-22 is the evidence: ranking with the label found 12 of the
+# 39 relevant Papers and ranking with the query found 20. See ADR 0015.
 SEEDED_TOPIC: Final = "United Kingdom household energy forecasting"
+SEEDED_TOPIC_QUERY: Final = "household energy forecasting"
 
 TOPIC_PROMPT_NAME: Final = "propose-topics-v1"
 

@@ -26,9 +26,20 @@ from fynd.grading import GradeRefused, apply_grades, grade_counts, ungraded, wor
 from fynd.measure import OPEN_COPY_STEM, RETRIEVAL_STEM, readme_with, report
 from fynd.open_copy import read_open_copy
 from fynd.openalex import OpenAlex, WorkNotRead
+from fynd.retrieval import bm25_ranking
+from fynd.retrieval_report import (
+    Row,
+    rows_from_searches,
+    shared_papers,
+)
 from fynd.retrieval_report import report as retrieval_report
-from fynd.retrieval_report import rows_from_searches, shared_papers
-from fynd.retrieval_set import RetrievalSet, SetTooSmall, build_set
+from fynd.retrieval_set import (
+    RetrievalSet,
+    SetTooSmall,
+    build_set,
+    papers_without_abstract,
+    pool_papers,
+)
 from fynd.semantic_scholar import RateLimited, SemanticScholar, cached_abstracts
 from fynd.source_text import reason_against_paper_text
 from fynd.stages import stage1, stage2
@@ -386,6 +397,32 @@ def run_measure_retrieval(as_of: str) -> None:
             "a new set."
         )
 
+    # The Papers with their abstracts, which only a text ranking needs. The set
+    # file holds no abstract, so the text comes from the search cache and is
+    # written nowhere. See ADR 0011.
+    pool = pool_papers(results, per_query=held.per_query, keep=set(graded))
+    if not held.topic_query:
+        raise SystemExit(
+            f"The set at {set_file} records no `topic_query`. A ranking asks the pool "
+            "for words, and the label of a Topic names a place the grading rule ignores. "
+            "Add the subject words as `topic_query` to the file. See ADR 0015."
+        )
+
+    # Two BM25 rows and not one. The label names the place and the query names
+    # the subject, and the gap between the two rows is the finding of day 12.
+    # Both are published, because a table that showed only the better one would
+    # be a configuration chosen after seeing the numbers. See ADR 0015.
+    for asked, what in ((held.topic, "label"), (held.topic_query, "query")):
+        rows.append(
+            Row(
+                name=f"BM25, {what}",
+                note=f"BM25 over the pool, asked for the {what} `{asked}`",
+                ranking=[item.paper_id for item in bm25_ranking(asked, pool)],
+                is_fynd_ranking=True,
+                reads_text=True,
+            )
+        )
+
     today = dt.date.today()
     text = retrieval_report(
         rows=rows,
@@ -396,6 +433,7 @@ def run_measure_retrieval(as_of: str) -> None:
         set_file=pathlib.PurePosixPath(set_file.as_posix()),
         per_query=held.per_query,
         shared=shared_papers(results, per_query=held.per_query),
+        without_abstract=papers_without_abstract(pool),
     )
 
     # The table is named after the graded set and not after today, because the

@@ -103,6 +103,7 @@ def test_the_table_names_every_row_with_its_numbers() -> None:
         set_file=SET_FILE,
         per_query=15,
         shared=0,
+        without_abstract=0,
     )
 
     assert "| Baseline |" in text
@@ -121,6 +122,7 @@ def test_the_table_states_its_three_limits() -> None:
         set_file=SET_FILE,
         per_query=15,
         shared=0,
+        without_abstract=0,
     )
 
     assert "One person wrote every published grade" in text
@@ -141,6 +143,7 @@ def test_the_table_names_the_queries_and_the_dates() -> None:
         set_file=SET_FILE,
         per_query=15,
         shared=0,
+        without_abstract=0,
     )
 
     assert "household energy demand forecasting" in text
@@ -203,13 +206,14 @@ def test_the_table_says_when_no_row_is_a_fynd_ranking() -> None:
         set_file=SET_FILE,
         per_query=15,
         shared=0,
+        without_abstract=0,
     )
     assert "No row below is a ranking of Fynd" in arrival
 
     # The sentence has to disappear by itself when the first real row arrives,
     # or a later table would publish something untrue.
     with_ranking = report(
-        rows=[Row(name="BM25", note="", ranking=["two"], is_fynd_ranking=True)],
+        rows=[Row(name="BM25", note="", ranking=["two"], is_fynd_ranking=True, reads_text=True)],
         grades=GRADES,
         queries=[("hand", "a query")],
         reference_date=dt.date(2026, 10, 20),
@@ -217,6 +221,7 @@ def test_the_table_says_when_no_row_is_a_fynd_ranking() -> None:
         set_file=SET_FILE,
         per_query=15,
         shared=0,
+        without_abstract=0,
     )
     assert "No row below is a ranking of Fynd" not in with_ranking
 
@@ -231,6 +236,42 @@ def test_the_table_says_the_queries_overlap_when_they_do() -> None:
         set_file=SET_FILE,
         per_query=15,
         shared=3,
+        without_abstract=0,
     )
     assert "3 Papers were returned by more than one query" in text
     assert "share no Paper at all" not in text
+
+
+def test_the_table_counts_the_papers_with_no_abstract() -> None:
+    # BM25 reads the title and the abstract. A Paper with no abstract is
+    # ranked on its title alone, and the reader has to know how many.
+    text = report(
+        rows=[Row(name="BM25", note="", ranking=["two"], is_fynd_ranking=True, reads_text=True)],
+        grades=GRADES,
+        queries=[("hand", "a query")],
+        reference_date=dt.date(2026, 10, 20),
+        today=TODAY,
+        set_file=SET_FILE,
+        per_query=15,
+        shared=0,
+        without_abstract=8,
+    )
+
+    assert "8 Papers of the pool carry no abstract" in text
+
+
+def test_the_abstract_count_is_left_out_while_no_row_reads_text() -> None:
+    text = report(
+        rows=[Row(name="Baseline", note="", ranking=["two"])],
+        grades=GRADES,
+        queries=[("hand", "a query")],
+        reference_date=dt.date(2026, 10, 20),
+        today=TODAY,
+        set_file=SET_FILE,
+        per_query=15,
+        shared=0,
+        without_abstract=8,
+    )
+
+    # No row reads an abstract yet, so the sentence would explain nothing.
+    assert "no abstract" not in text

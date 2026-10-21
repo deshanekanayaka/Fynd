@@ -19,8 +19,8 @@ from typing import Final, Literal, Protocol
 
 from pydantic import BaseModel, Field
 
-from fynd.models import SearchResult
-from fynd.stages.stage2 import SEEDED_TOPIC, first_year_in_window
+from fynd.models import Paper, SearchResult
+from fynd.stages.stage2 import SEEDED_TOPIC, SEEDED_TOPIC_QUERY, first_year_in_window
 
 # What each query asks the search for. 50 is the limit the shipped flow uses,
 # so the cache this run fills is the cache a shipped run reads. See ADR 0013.
@@ -85,6 +85,13 @@ class RetrievalSet(BaseModel):
     """The whole set, as the file on disk holds it."""
 
     topic: str
+    # The words a ranking asks the pool for, which are the subject and not the
+    # place. The `topic` above is the label a student reads. A row of the table
+    # has to say which of the two it ranked with, and the two give very
+    # different numbers. See ADR 0015. The default is empty, so a set file
+    # written before this field still loads, and the measurement refuses to
+    # rank with an empty one instead of guessing.
+    topic_query: str = ""
     reference_date: dt.date
     search_limit: int
     per_query: int
@@ -187,6 +194,32 @@ def entries_from(
     return list(by_identifier.values())
 
 
+def pool_papers(
+    results: list[tuple[str, SearchResult]], per_query: int, keep: set[str]
+) -> list[Paper]:
+    """Returns the Papers of the graded pool, with the abstract the cache kept.
+
+    A ranking reads the title and the abstract, and the set file in git holds
+    no abstract, because ADR 0011 refuses one. So the text is read from the
+    cached search reply on the machine that runs the measurement, and it is
+    written nowhere.
+
+    `keep` is the graded pool. A Paper from rank 16 of a query was returned by
+    the search and never graded, so no ranking may score it.
+    """
+    found: dict[str, Paper] = {}
+    for _, result in results:
+        for paper in result.papers[:per_query]:
+            if paper.paper_id in keep and paper.paper_id not in found:
+                found[paper.paper_id] = paper
+    return list(found.values())
+
+
+def papers_without_abstract(papers: list[Paper]) -> int:
+    """Counts the Papers of the pool that carry no abstract."""
+    return sum(1 for paper in papers if not paper.abstract)
+
+
 def papers_offered(results: list[tuple[str, SearchResult]], per_query: int) -> int:
     """Counts the Papers the queries offered, before the cap took its share."""
     identifiers = set()
@@ -227,6 +260,7 @@ def build_set(search: Search, reference_date: dt.date) -> RetrievalSet:
 
     return RetrievalSet(
         topic=SEEDED_TOPIC,
+        topic_query=SEEDED_TOPIC_QUERY,
         reference_date=reference_date,
         search_limit=SEARCH_LIMIT,
         per_query=PER_QUERY,

@@ -6,6 +6,36 @@ A bug a code review found before anyone ran the code is still a bug. The mistake
 
 ---
 
+## A ranking asked the pool for a place the grading rule throws away
+
+**Found:** 2026-10-22, by the first BM25 row of the retrieval table, on branch `retrieval-bm25-row`.
+
+**What happened:**
+
+The BM25 row reached 12 of the 39 relevant Papers inside the top 20, and the order Semantic Scholar returned reached 17. A ranking that loses to the order it is supposed to improve is a result nobody can publish without an explanation.
+
+The numbers said where to look. An ultra-processed food Paper graded 0 sat at place 10. Four Papers about United Kingdom energy policy outranked Papers that forecast household demand and never name a country. 26 of the 32 Papers graded 2 sat outside the top 20.
+
+**Root cause:** the ranking asked the pool for the label of the Topic, which is "United Kingdom household energy forecasting". The grading rule asks two other questions. It asks whose energy a Paper is about, and whether the Paper predicts a future value. It ignores the country by design, because `CONTEXT.md` gives the place to a Statistic. The day 10 entry fixed that rule, so a Spanish household forecasting Paper is a 2.
+
+So the question the ranking asked and the question the grader answered were two different questions. BM25 counts words, and it weighs a word higher the fewer documents hold it. So "kingdom" at 23 of 60 Papers outweighed "forecast" at 44 of 60. The place word therefore decided the order, and the grades called that word meaningless.
+
+A `Topic` has carried a `label` and a `query` as separate fields since ADR 0002, and no code had ever used the difference. The Seeded Topic was one string, and the Retrieval set stored it as `topic`, so there was nothing else for a ranking to ask for.
+
+**The guess that was wrong:** the first written explanation blamed the 8 Papers that carry no abstract. It named the six graded 2 among them, at places 23, 24, 25, 40, 59 and 60. A code review pointed out that those six are every graded 2 Paper with no abstract. The list was the confound and not the evidence.
+
+Ranking only the 52 Papers that do have an abstract settled it. BM25 reached 11 of the 31 relevant Papers there and the arriving order reached 13, so BM25 lost with every abstract present. The missing text is a real effect and a small one. It also cuts both ways, because a title is a short document and BM25 divides a score by the length.
+
+**Fix:** a Topic carries two strings. The label names the place and a student reads it. The query names the subject and the search and every ranking read it. See [ADR 0015](./docs/adr/0015-a-topic-has-a-label-for-the-student-and-a-query-for-the-search.md).
+
+`stage2.py` holds `SEEDED_TOPIC` and `SEEDED_TOPIC_QUERY`. A Retrieval set records `topic_query` beside `topic`, so a later run ranks with the string that built the set. A set with no `topic_query` stops the measurement with a sentence, instead of falling back to the label in silence.
+
+**Verification:** the table holds a row for each string. BM25 asked for the label reaches 12 of 39. BM25 asked for the query reaches 20 of 39, at an nDCG of 0.945, which beats the arriving order at 17 of 39 and 0.897. Both rows are published, because a table that showed only the better one is a configuration chosen after the numbers.
+
+**Prevention:** the words a ranking asks for and the rule a grader follows are one decision and not two. When a grading rule throws something away, no ranking asks for it. The measurement file names the exact string each row was ranked with. This bug repeats the lesson of the day 10 grading rule, which changed three times before it matched the glossary. `CONTEXT.md` decides what a number means, and a number that disagrees with the glossary is a question about the code.
+
+---
+
 ## A request parameter the SDK had removed
 
 **Found:** 2026-10-20, by the first live stage 2 run, on branch `send-no-temperature`.
