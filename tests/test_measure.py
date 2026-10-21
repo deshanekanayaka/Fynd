@@ -4,7 +4,15 @@ import datetime as dt
 
 from fynd import reasons
 from fynd.extract import Extracted
-from fynd.measure import NO_HOST, host_rows, readme_with, reason_counts, report
+from fynd.measure import (
+    NO_HOST,
+    OPEN_COPY_STEM,
+    RETRIEVAL_STEM,
+    host_rows,
+    readme_with,
+    reason_counts,
+    report,
+)
 from fynd.models import OpenCopy, Paper
 from fynd.open_copy import OpenCopyResult
 
@@ -188,22 +196,22 @@ def test_the_comparison_line_is_absent_with_nothing_to_compare() -> None:
 
 
 def test_readme_with_writes_a_header_for_an_empty_file() -> None:
-    text = readme_with("", TODAY)
+    text = readme_with("", TODAY, OPEN_COPY_STEM)
     assert "# The measurement runs" in text
     assert "- [2026-10-09](open-copy-hosts-2026-10-09.md)" in text
 
 
 def test_readme_with_keeps_the_earlier_lines() -> None:
-    first = readme_with("", dt.date(2026, 10, 9))
-    second = readme_with(first, dt.date(2026, 10, 17))
+    first = readme_with("", dt.date(2026, 10, 9), OPEN_COPY_STEM)
+    second = readme_with(first, dt.date(2026, 10, 17), OPEN_COPY_STEM)
 
     assert "- [2026-10-09](open-copy-hosts-2026-10-09.md)" in second
     assert "- [2026-10-17](open-copy-hosts-2026-10-17.md)" in second
 
 
 def test_readme_with_does_not_add_the_same_date_twice() -> None:
-    first = readme_with("", TODAY)
-    second = readme_with(first, TODAY)
+    first = readme_with("", TODAY, OPEN_COPY_STEM)
+    second = readme_with(first, TODAY, OPEN_COPY_STEM)
 
     assert second.count("open-copy-hosts-2026-10-09.md") == 1
 
@@ -222,3 +230,13 @@ def test_a_dropped_paper_stays_in_the_denominator() -> None:
 
     assert "1 of 3 Papers reached Usable text, which is 33%" in text
     assert "2 Papers are missing from the tables below" in text
+
+
+def test_the_readme_lists_the_two_kinds_of_run_apart() -> None:
+    # A retrieval run and an Open copy run on the same date are two runs, and
+    # one line each, because they measure different things.
+    first = readme_with("", TODAY, OPEN_COPY_STEM)
+    second = readme_with(first, TODAY, RETRIEVAL_STEM)
+
+    assert f"- [{TODAY.isoformat()}]({OPEN_COPY_STEM}-{TODAY.isoformat()}.md)" in second
+    assert f"- [{TODAY.isoformat()}]({RETRIEVAL_STEM}-{TODAY.isoformat()}.md)" in second

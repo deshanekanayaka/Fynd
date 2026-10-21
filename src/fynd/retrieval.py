@@ -1,7 +1,7 @@
 """Rank a pool of Papers, so the cut to 20 keeps the right ones.
 
 The search asks for 50 Papers and a Project is built on 20, so this file
-decides which 20. It holds the four rankings the measured table compares: the
+decides which 20. It holds the four rankings the measured table will compare: the
 keyword ranking, the meaning ranking, the fusion of the two, and the fusion
 reordered by a hosted reranker. See ADR 0013.
 
