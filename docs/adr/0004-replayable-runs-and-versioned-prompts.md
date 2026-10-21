@@ -13,6 +13,14 @@ The file name carries a version for humans and for the tables, and the key carri
 
 Decoding is fixed. Temperature is zero for all three prompts, which are propose Topics, extract Claims, and draft the Proposal.
 
+### Note added 2026-10-20: the decoding parameter is gone
+
+The Anthropic SDK removed every sampling parameter. `messages.create` in version 1.12.1 does not accept `temperature`, `top_p` or `top_k`, and passing one raises a `TypeError` before a request leaves the machine. The first live stage 2 run found it.
+
+So Fynd sends no decoding parameter, and the cache key names none. The replay promise of this record stands on the cache alone, which is the part that always carried it. An input that was asked once returns the same answer for ever, because the answer is read from disk.
+
+What is lost is the promise across two machines with empty caches. Two first runs of the same prompt can differ, and nothing Fynd can send prevents that. Every published number already carries the model identifier and the prompt hash, so a number stays traceable to what produced it. A number that must be reproducible from nothing now needs the cached answer in git, which is the rule ADR 0011 already states for the Claim set.
+
 Every evaluation result carries the model identifier and the prompt hash that produced it. Nothing in the cache is deleted when a prompt changes.
 
 ## Consequences
