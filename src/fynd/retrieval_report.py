@@ -60,6 +60,10 @@ class Row:
     # search is not one. The file says so while every row is an arrival order,
     # and that sentence disappears by itself when the first real row arrives.
     is_fynd_ranking: bool = False
+    # Whether this row read the title and the abstract. A fusion reads places
+    # and not text, so the note about the missing abstracts belongs only to the
+    # rows the missing text really reaches.
+    reads_text: bool = False
 
 
 def rows_from_searches(
@@ -173,6 +177,7 @@ def report(
     set_file: pathlib.PurePosixPath,
     per_query: int,
     shared: int,
+    without_abstract: int,
 ) -> str:
     """Returns the whole measurement file as one string.
 
@@ -184,7 +189,7 @@ def report(
     `set_file` is the path of the graded set inside the repository, and the
     link is built from it, so a moved set never leaves a dead link behind.
 
-    `per_query` and `shared` are facts of this run. Every sentence below that
+    `per_query`, `shared` and `without_abstract` are facts of this run. Every sentence below that
     names a number reads it from an argument, because a sentence written once
     by hand goes stale on the next run. See the two entries of that kind in
     `bugs.md`.
@@ -229,6 +234,20 @@ def report(
                 "against.",
                 "",
             ]
+        ),
+        *(
+            [
+                f"{without_abstract} Papers of the pool carry no abstract, so a row that "
+                "reads text reads the title of those alone. That cuts both ways. A title "
+                "is a short document, and BM25 divides a score by the length, so a title "
+                "that holds a query word scores higher than a long abstract that holds "
+                "it once. The abstracts are read from the search cache on the machine "
+                "that runs this command, and they enter no file. See [ADR 0011]"
+                "(../adr/0011-the-public-repository-holds-the-text-and-not-the-files.md).",
+                "",
+            ]
+            if any(row.reads_text for row in rows)
+            else []
         ),
         *(
             []

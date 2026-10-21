@@ -1,6 +1,6 @@
 # Next steps
 
-Updated: 2026-10-21, day 11. Target ship date: 2026-10-26.
+Updated: 2026-10-22, day 12. Target ship date: 2026-10-26.
 The ship date is a target and not a constraint. The design phase takes the time it needs, because Deshan must be able to explain every part of this project.
 Read [PRD.md](./PRD.md) for the product and [CONTEXT.md](./CONTEXT.md) for the vocabulary.
 
@@ -673,6 +673,36 @@ No row is a ranking of Fynd yet, and the file says so in a sentence that disappe
 ### The task for day 12
 
 Issue 35, then 36, then 37, in that order, each adding its row to the same file. Then issue 39, which moves the stage 2 gate to the top 20 of the 50 Paper search.
+
+## Measured on day 12: BM25 ranks worse than the order the search returned
+
+Issue 35 is done, and the BM25 row is in [docs/measurements/retrieval-table-2026-10-20.md](./docs/measurements/retrieval-table-2026-10-20.md). It reaches 12 of the 39 relevant Papers inside the top 20, which is 31 percent. The baseline reaches 17, which is 44 percent. nDCG at 10 says the same, at 0.561 against 0.897. 26 of the 32 Papers graded 2 sit outside the top 20.
+
+A row that loses to the arriving order is a finding and not a failure. Two causes were on the table, and one measurement separated them.
+
+### The first guess was the missing abstracts, and it is the smaller cause
+
+8 Papers of the 60 carry no abstract, and 6 of those are graded 2. They sit at places 23, 24, 25, 40, 59 and 60, which looks damning until you notice that the list is every graded 2 with no abstract and not a sample of anything.
+
+The missing text cuts both ways. A title is a short document, and BM25 divides a score by the length of the document, so a 22 word title that holds four query words outranks a 250 word abstract that holds five. The Paper at place 1 of the BM25 row has no abstract.
+
+Ranking only the 52 Papers that do have an abstract settles it. BM25 reaches 11 of the 31 relevant Papers there and the arriving order reaches 13. So BM25 still loses with every abstract present, and the missing text is not what decides the row.
+
+### The real cause is that the query names a country and the grade ignores it
+
+The Topic is "United Kingdom household energy forecasting", so the query carries five stems and two of them name a place. The grading rule throws the place away on purpose, because `CONTEXT.md` gives the place to a Statistic, and the day 10 entry records why a Spanish household forecasting Paper is a 2.
+
+So the two disagree, and the word counter follows the words. An ultra-processed food Paper graded 0 sits at place 10, because its abstract names United Kingdom households and energy. Four Papers about United Kingdom energy policy and energy use outrank Papers that forecast household demand without naming the country.
+
+The same BM25 over the same pool, asked for "household energy forecasting", reaches 20 of 39 and scores 0.945. That number is a diagnosis and it is not in the table, because a query chosen after seeing its score fits the set, which is the one thing the file promises it did not do. A query rewriting rule has to be decided first and measured after, on a set that was not used to find the effect.
+
+### One more thing the diagnosis turned up
+
+`stem("united")` returns `unit`, because the rule strips a trailing "ed". 28 of the 60 Papers hold `unit` and only 23 hold `kingdom`, and the matches include a Paper about the United States and a Paper about Nigeria. So one of the two country stems is a collision, and the `ponytail:` comment in `src/fynd/retrieval.py` already names that ceiling. A Porter stemmer would remove it, and nothing here says yet whether it would move a published number.
+
+### The task for day 13
+
+Issue 36, which adds the two meaning rows at 1024 and 512 dimensions, and then issue 37, which adds the fusion and the reordered fusion. The meaning rows are the next evidence about the country, because a vector of the Topic carries the place as a part of a meaning and not as a word to count.
 
 ## Do not do yet
 

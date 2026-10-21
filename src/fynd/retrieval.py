@@ -123,9 +123,9 @@ def tokens(text: str) -> list[str]:
 def document_text(paper: Paper) -> str:
     """Returns the text a ranking reads for one Paper, which is title and abstract.
 
-    A Paper with no abstract is ranked on its title alone. 8 of the 60 Papers
-    of the Retrieval set have no abstract, and dropping them would change the
-    pool a recall number is measured over.
+    A Paper with no abstract is ranked on its title alone, and the measured
+    table counts how many of those a pool holds. Dropping them instead would
+    change the pool a recall number is measured over.
     """
     return f"{paper.title} {paper.abstract}".strip()
 

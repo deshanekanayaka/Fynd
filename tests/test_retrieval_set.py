@@ -19,6 +19,8 @@ from fynd.retrieval_set import (
     SetTooSmall,
     build_set,
     entries_from,
+    papers_without_abstract,
+    pool_papers,
     shuffled,
 )
 
@@ -200,3 +202,50 @@ def test_the_set_records_how_many_papers_the_queries_offered() -> None:
     # The cap keeps fewer than that, and the difference is what the command
     # reports, because a truncated pool changes what a recall number means.
     assert len(entries_from(results, per_query=20, cap=2)) == 2
+
+
+def with_abstract(paper_id: str, abstract: str) -> Paper:
+    return Paper(paper_id=paper_id, title=paper_id, abstract=abstract)
+
+
+def test_the_pool_holds_the_abstract_the_cache_kept() -> None:
+    # A ranking reads the abstract, and the set file in git holds none. The
+    # text comes from the cached search reply and goes nowhere else.
+    results = [
+        ("hand", SearchResult(query="hand", papers=[with_abstract("a1", "An abstract.")])),
+        ("wider", SearchResult(query="wider", papers=[with_abstract("b1", "Another.")])),
+    ]
+
+    pool = pool_papers(results, per_query=2, keep={"a1", "b1"})
+
+    assert [paper.paper_id for paper in pool] == ["a1", "b1"]
+    assert pool[0].abstract == "An abstract."
+
+
+def test_a_paper_two_queries_both_returned_is_in_the_pool_once() -> None:
+    results = [
+        ("hand", SearchResult(query="hand", papers=[with_abstract("same", "An abstract.")])),
+        ("wider", SearchResult(query="wider", papers=[with_abstract("same", "An abstract.")])),
+    ]
+
+    assert len(pool_papers(results, per_query=2, keep={"same"})) == 1
+
+
+def test_the_pool_leaves_out_a_paper_the_set_never_held() -> None:
+    # The ranked pool is the graded pool. A Paper from rank 16 of a query was
+    # returned by the search and never graded, so no ranking may score it.
+    results = [
+        (
+            "hand",
+            SearchResult(query="hand", papers=[with_abstract("a1", "x"), with_abstract("a2", "y")]),
+        )
+    ]
+
+    pool = pool_papers(results, per_query=2, keep={"a1"})
+
+    assert [paper.paper_id for paper in pool] == ["a1"]
+
+
+def test_the_papers_with_no_abstract_are_counted() -> None:
+    pool = [with_abstract("a1", "An abstract."), with_abstract("a2", "")]
+    assert papers_without_abstract(pool) == 1

@@ -26,9 +26,20 @@ from fynd.grading import GradeRefused, apply_grades, grade_counts, ungraded, wor
 from fynd.measure import OPEN_COPY_STEM, RETRIEVAL_STEM, readme_with, report
 from fynd.open_copy import read_open_copy
 from fynd.openalex import OpenAlex, WorkNotRead
+from fynd.retrieval import bm25_ranking
+from fynd.retrieval_report import (
+    Row,
+    rows_from_searches,
+    shared_papers,
+)
 from fynd.retrieval_report import report as retrieval_report
-from fynd.retrieval_report import rows_from_searches, shared_papers
-from fynd.retrieval_set import RetrievalSet, SetTooSmall, build_set
+from fynd.retrieval_set import (
+    RetrievalSet,
+    SetTooSmall,
+    build_set,
+    papers_without_abstract,
+    pool_papers,
+)
 from fynd.semantic_scholar import RateLimited, SemanticScholar, cached_abstracts
 from fynd.source_text import reason_against_paper_text
 from fynd.stages import stage1, stage2
@@ -386,6 +397,23 @@ def run_measure_retrieval(as_of: str) -> None:
             "a new set."
         )
 
+    # The Papers with their abstracts, which only a text ranking needs. The set
+    # file holds no abstract, so the text comes from the search cache and is
+    # written nowhere. See ADR 0011.
+    pool = pool_papers(results, per_query=held.per_query, keep=set(graded))
+    rows.append(
+        Row(
+            name="BM25",
+            # The Topic and not one of the four queries. The grades say whether
+            # a Paper is about the Topic, so the Topic is what a ranking of the
+            # pool has to be measured against.
+            note=f"BM25 over the pool, for the Topic `{held.topic}`",
+            ranking=[item.paper_id for item in bm25_ranking(held.topic, pool)],
+            is_fynd_ranking=True,
+            reads_text=True,
+        )
+    )
+
     today = dt.date.today()
     text = retrieval_report(
         rows=rows,
@@ -396,6 +424,7 @@ def run_measure_retrieval(as_of: str) -> None:
         set_file=pathlib.PurePosixPath(set_file.as_posix()),
         per_query=held.per_query,
         shared=shared_papers(results, per_query=held.per_query),
+        without_abstract=papers_without_abstract(pool),
     )
 
     # The table is named after the graded set and not after today, because the

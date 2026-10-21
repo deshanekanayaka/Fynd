@@ -19,7 +19,7 @@ from typing import Final, Literal, Protocol
 
 from pydantic import BaseModel, Field
 
-from fynd.models import SearchResult
+from fynd.models import Paper, SearchResult
 from fynd.stages.stage2 import SEEDED_TOPIC, first_year_in_window
 
 # What each query asks the search for. 50 is the limit the shipped flow uses,
@@ -185,6 +185,32 @@ def entries_from(
                 queries=[name],
             )
     return list(by_identifier.values())
+
+
+def pool_papers(
+    results: list[tuple[str, SearchResult]], per_query: int, keep: set[str]
+) -> list[Paper]:
+    """Returns the Papers of the graded pool, with the abstract the cache kept.
+
+    A ranking reads the title and the abstract, and the set file in git holds
+    no abstract, because ADR 0011 refuses one. So the text is read from the
+    cached search reply on the machine that runs the measurement, and it is
+    written nowhere.
+
+    `keep` is the graded pool. A Paper from rank 16 of a query was returned by
+    the search and never graded, so no ranking may score it.
+    """
+    found: dict[str, Paper] = {}
+    for _, result in results:
+        for paper in result.papers[:per_query]:
+            if paper.paper_id in keep and paper.paper_id not in found:
+                found[paper.paper_id] = paper
+    return list(found.values())
+
+
+def papers_without_abstract(papers: list[Paper]) -> int:
+    """Counts the Papers of the pool that carry no abstract."""
+    return sum(1 for paper in papers if not paper.abstract)
 
 
 def papers_offered(results: list[tuple[str, SearchResult]], per_query: int) -> int:
