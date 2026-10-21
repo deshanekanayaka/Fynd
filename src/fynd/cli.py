@@ -401,18 +401,27 @@ def run_measure_retrieval(as_of: str) -> None:
     # file holds no abstract, so the text comes from the search cache and is
     # written nowhere. See ADR 0011.
     pool = pool_papers(results, per_query=held.per_query, keep=set(graded))
-    rows.append(
-        Row(
-            name="BM25",
-            # The Topic and not one of the four queries. The grades say whether
-            # a Paper is about the Topic, so the Topic is what a ranking of the
-            # pool has to be measured against.
-            note=f"BM25 over the pool, for the Topic `{held.topic}`",
-            ranking=[item.paper_id for item in bm25_ranking(held.topic, pool)],
-            is_fynd_ranking=True,
-            reads_text=True,
+    if not held.topic_query:
+        raise SystemExit(
+            f"The set at {set_file} records no `topic_query`. A ranking asks the pool "
+            "for words, and the label of a Topic names a place the grading rule ignores. "
+            "Add the subject words as `topic_query` to the file. See ADR 0015."
         )
-    )
+
+    # Two BM25 rows and not one. The label names the place and the query names
+    # the subject, and the gap between the two rows is the finding of day 12.
+    # Both are published, because a table that showed only the better one would
+    # be a configuration chosen after seeing the numbers. See ADR 0015.
+    for asked, what in ((held.topic, "label"), (held.topic_query, "query")):
+        rows.append(
+            Row(
+                name=f"BM25, {what}",
+                note=f"BM25 over the pool, asked for the {what} `{asked}`",
+                ranking=[item.paper_id for item in bm25_ranking(asked, pool)],
+                is_fynd_ranking=True,
+                reads_text=True,
+            )
+        )
 
     today = dt.date.today()
     text = retrieval_report(

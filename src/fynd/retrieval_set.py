@@ -20,7 +20,7 @@ from typing import Final, Literal, Protocol
 from pydantic import BaseModel, Field
 
 from fynd.models import Paper, SearchResult
-from fynd.stages.stage2 import SEEDED_TOPIC, first_year_in_window
+from fynd.stages.stage2 import SEEDED_TOPIC, SEEDED_TOPIC_QUERY, first_year_in_window
 
 # What each query asks the search for. 50 is the limit the shipped flow uses,
 # so the cache this run fills is the cache a shipped run reads. See ADR 0013.
@@ -85,6 +85,13 @@ class RetrievalSet(BaseModel):
     """The whole set, as the file on disk holds it."""
 
     topic: str
+    # The words a ranking asks the pool for, which are the subject and not the
+    # place. The `topic` above is the label a student reads. A row of the table
+    # has to say which of the two it ranked with, and the two give very
+    # different numbers. See ADR 0015. The default is empty, so a set file
+    # written before this field still loads, and the measurement refuses to
+    # rank with an empty one instead of guessing.
+    topic_query: str = ""
     reference_date: dt.date
     search_limit: int
     per_query: int
@@ -253,6 +260,7 @@ def build_set(search: Search, reference_date: dt.date) -> RetrievalSet:
 
     return RetrievalSet(
         topic=SEEDED_TOPIC,
+        topic_query=SEEDED_TOPIC_QUERY,
         reference_date=reference_date,
         search_limit=SEARCH_LIMIT,
         per_query=PER_QUERY,

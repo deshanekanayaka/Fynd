@@ -23,6 +23,7 @@ from fynd.retrieval_set import (
     pool_papers,
     shuffled,
 )
+from fynd.stages.stage2 import SEEDED_TOPIC, SEEDED_TOPIC_QUERY
 
 TODAY = dt.date(2026, 10, 20)
 
@@ -249,3 +250,21 @@ def test_the_pool_leaves_out_a_paper_the_set_never_held() -> None:
 def test_the_papers_with_no_abstract_are_counted() -> None:
     pool = [with_abstract("a1", "An abstract."), with_abstract("a2", "")]
     assert papers_without_abstract(pool) == 1
+
+
+def test_the_set_records_the_query_a_ranking_asks_for() -> None:
+    # The label names a place and the grading rule throws the place away, so a
+    # ranking asks for the subject. The set carries both, and a later run
+    # ranks with the string that built it. See ADR 0015.
+    asked = []
+
+    def search(query: str, year_from: int, limit: int) -> SearchResult:
+        asked.append(query)
+        start = 1000 * len(asked)
+        return SearchResult(query=query, papers=[paper(start + n) for n in range(20)])
+
+    built = build_set(search, reference_date=TODAY)
+
+    assert built.topic == SEEDED_TOPIC
+    assert built.topic_query == SEEDED_TOPIC_QUERY
+    assert "kingdom" not in built.topic_query.lower()

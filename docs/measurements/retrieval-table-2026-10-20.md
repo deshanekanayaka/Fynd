@@ -23,7 +23,8 @@ A query row is not comparable with the baseline. One query returned 15 Papers of
 | wider | 36% (14/39) | 23% (9/39) | 0.922 | The `wider` query alone, as it arrived |
 | narrower | 33% (13/39) | 23% (9/39) | 0.887 | The `narrower` query alone, as it arrived |
 | reworded | 10% (4/39) | 8% (3/39) | 0.409 | The `reworded` query alone, as it arrived |
-| BM25 | 31% (12/39) | 18% (7/39) | 0.561 | BM25 over the pool, for the Topic `United Kingdom household energy forecasting` |
+| BM25, label | 31% (12/39) | 18% (7/39) | 0.561 | BM25 over the pool, asked for the label `United Kingdom household energy forecasting` |
+| BM25, query | 51% (20/39) | 26% (10/39) | 0.945 | BM25 over the pool, asked for the query `household energy forecasting` |
 
 ## The queries
 

@@ -1,5 +1,6 @@
 {
   "topic": "United Kingdom household energy forecasting",
+  "topic_query": "household energy forecasting",
   "reference_date": "2026-10-20",
   "search_limit": 50,
   "per_query": 15,

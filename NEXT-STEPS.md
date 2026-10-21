@@ -700,9 +700,25 @@ The same BM25 over the same pool, asked for "household energy forecasting", reac
 
 `stem("united")` returns `unit`, because the rule strips a trailing "ed". 28 of the 60 Papers hold `unit` and only 23 hold `kingdom`, and the matches include a Paper about the United States and a Paper about Nigeria. So one of the two country stems is a collision, and the `ponytail:` comment in `src/fynd/retrieval.py` already names that ceiling. A Porter stemmer would remove it, and nothing here says yet whether it would move a published number.
 
+### The fix: a Topic has a label and a query
+
+A `Topic` has carried a `label` and a `query` as separate fields since ADR 0002, and nothing had ever used the difference. The Seeded Topic was one string, so a ranking had nothing else to ask for.
+
+Now it is two. The label names the place and a student reads it, because the Problem belongs to a place and a Statistic proves it. The query names the subject and the search and every ranking read it, because a method a student copies does not change at a border. See [ADR 0015](./docs/adr/0015-a-topic-has-a-label-for-the-student-and-a-query-for-the-search.md) and the entry in `bugs.md`.
+
+The table holds a row for each string, and the gap is the finding. BM25 asked for the label reaches 12 of 39 at an nDCG of 0.561. BM25 asked for the query reaches 20 of 39 at 0.945, and both numbers beat the arriving order at 17 of 39 and 0.897. Recall at 10 reaches 10 of 39, which is every place the cut allows.
+
+Both rows stay. A table that showed only the better one is a configuration chosen after the numbers, and the order of events is written down: the diagnosis came first, and the decision rests on `CONTEXT.md` and not on the score.
+
+A country filter was considered and refused. Semantic Scholar gives a Paper no country field, so a filter is the same word match again, and the grading rule calls a Spanish household forecasting Paper a 2. The supervisors ask for the last 5 years, a citation count, and relevance, and the Evidence window already covers the first.
+
+### One thing the citation count turned up
+
+`citationCount` is not in the fields Fynd asks Semantic Scholar for, so no Stage and no card can show it. That is a bonus and not a blocker, and it has no issue yet.
+
 ### The task for day 13
 
-Issue 36, which adds the two meaning rows at 1024 and 512 dimensions, and then issue 37, which adds the fusion and the reordered fusion. The meaning rows are the next evidence about the country, because a vector of the Topic carries the place as a part of a meaning and not as a word to count.
+Issue 36, which adds the two meaning rows at 1024 and 512 dimensions, and then issue 37, which adds the fusion and the reordered fusion. The meaning rows are the next evidence about the place, because a vector of the label carries the place inside a meaning and not as a word to count. Issue 38 gains the rule of ADR 0015, so the `query` a model writes names the subject and the `label` names the place.
 
 ## Do not do yet
 
