@@ -20,8 +20,19 @@ import httpx
 
 from fynd import cache
 
-EMBEDDING_URL: Final = "https://api.voyageai.com/v1/embeddings"
-RERANK_URL: Final = "https://api.voyageai.com/v1/rerank"
+# Where the key was made decides the host, and the two do not accept each
+# other's keys. A key made in MongoDB Atlas begins with "al-" and answers at
+# ai.mongodb.com. A key made at voyageai.com answers at api.voyageai.com. The
+# key of this project is an Atlas one. A key scoped to a geography carries it
+# in the prefix, as "al-eu-" does, and then the host is eu.ai.mongodb.com.
+BASE_URL: Final = "https://ai.mongodb.com/v1"
+EMBEDDING_URL: Final = f"{BASE_URL}/embeddings"
+RERANK_URL: Final = f"{BASE_URL}/rerank"
+
+# The prefix of an Atlas key. A key with another prefix was made at voyageai.com
+# and the host above refuses it with a 401, which is an hour of confusion for a
+# reader who did not make the key. So the client says it in a sentence instead.
+ATLAS_KEY_PREFIX: Final = "al-"
 
 # One embedding model, which closes the pgvector column size by measurement.
 # Two models were the old plan, and on a set of 60 Papers a gap of one or two
@@ -193,7 +204,17 @@ class Voyage:
         if not self.api_key:
             raise KeyMissing(
                 "Set VOYAGE_API_KEY in your .env file. The ranking embeds every "
-                "abstract in the pool, and Voyage refuses a request with no key."
+                "abstract in the pool, and Voyage refuses a request with no key. "
+                "Make the key in MongoDB Atlas, because this client asks "
+                f"{BASE_URL} and an Atlas key is the one that host accepts."
+            )
+        if not self.api_key.startswith(ATLAS_KEY_PREFIX):
+            raise KeyMissing(
+                f"This VOYAGE_API_KEY was not made in MongoDB Atlas, and {BASE_URL} "
+                f"accepts only a key that begins with {ATLAS_KEY_PREFIX!r}. Make an "
+                "Atlas key, or point BASE_URL in src/fynd/voyage.py at "
+                "https://api.voyageai.com/v1, which is the host for a key made at "
+                "voyageai.com."
             )
 
         # Two tries at most. Nothing is cached, so a failure costs one wait.

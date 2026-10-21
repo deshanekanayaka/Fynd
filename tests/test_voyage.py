@@ -8,6 +8,7 @@ import httpx
 import pytest
 
 from fynd.voyage import (
+    BASE_URL,
     DIMENSIONS,
     EMBEDDING_MODEL,
     RERANK_MODEL,
@@ -36,7 +37,7 @@ def embedding_reply(vectors: list[list[float]], tokens: int = 7) -> tuple[int, d
 
 def test_a_vector_comes_back_for_every_text(tmp_path, monkeypatch) -> None:
     monkeypatch.setenv("FYND_CACHE_DIR", str(tmp_path))
-    monkeypatch.setenv("VOYAGE_API_KEY", "test-key")
+    monkeypatch.setenv("VOYAGE_API_KEY", "al-test-key")
     calls: list = []
     voyage = Voyage(client=client_that_returns([embedding_reply([[1.0], [2.0]])], calls))
 
@@ -48,22 +49,25 @@ def test_a_vector_comes_back_for_every_text(tmp_path, monkeypatch) -> None:
 
 def test_the_request_names_the_model_the_type_and_the_size(tmp_path, monkeypatch) -> None:
     monkeypatch.setenv("FYND_CACHE_DIR", str(tmp_path))
-    monkeypatch.setenv("VOYAGE_API_KEY", "test-key")
+    monkeypatch.setenv("VOYAGE_API_KEY", "al-test-key")
     calls: list = []
     voyage = Voyage(client=client_that_returns([embedding_reply([[1.0]])], calls))
 
     voyage.embed(["one"], input_type="query")
 
+    # The host is pinned, because an Atlas key is refused by the voyageai.com
+    # host and the other way round, and both answer the same two paths.
+    assert str(calls[0].url) == f"{BASE_URL}/embeddings"
     sent = calls[0].read().decode("utf-8")
     assert EMBEDDING_MODEL in sent
     assert '"input_type":"query"' in sent
     assert str(DIMENSIONS) in sent
-    assert calls[0].headers["authorization"] == "Bearer test-key"
+    assert calls[0].headers["authorization"] == "Bearer al-test-key"
 
 
 def test_a_second_run_asks_for_nothing(tmp_path, monkeypatch) -> None:
     monkeypatch.setenv("FYND_CACHE_DIR", str(tmp_path))
-    monkeypatch.setenv("VOYAGE_API_KEY", "test-key")
+    monkeypatch.setenv("VOYAGE_API_KEY", "al-test-key")
     calls: list = []
     voyage = Voyage(client=client_that_returns([embedding_reply([[1.0]])], calls))
 
@@ -76,7 +80,7 @@ def test_a_second_run_asks_for_nothing(tmp_path, monkeypatch) -> None:
 
 def test_only_the_new_text_is_sent(tmp_path, monkeypatch) -> None:
     monkeypatch.setenv("FYND_CACHE_DIR", str(tmp_path))
-    monkeypatch.setenv("VOYAGE_API_KEY", "test-key")
+    monkeypatch.setenv("VOYAGE_API_KEY", "al-test-key")
     calls: list = []
     replies = [embedding_reply([[1.0]]), embedding_reply([[2.0]])]
     voyage = Voyage(client=client_that_returns(replies, calls))
@@ -92,7 +96,7 @@ def test_only_the_new_text_is_sent(tmp_path, monkeypatch) -> None:
 
 def test_a_query_and_a_document_are_cached_apart(tmp_path, monkeypatch) -> None:
     monkeypatch.setenv("FYND_CACHE_DIR", str(tmp_path))
-    monkeypatch.setenv("VOYAGE_API_KEY", "test-key")
+    monkeypatch.setenv("VOYAGE_API_KEY", "al-test-key")
     calls: list = []
     replies = [embedding_reply([[1.0]]), embedding_reply([[9.0]])]
     voyage = Voyage(client=client_that_returns(replies, calls))
@@ -103,7 +107,7 @@ def test_a_query_and_a_document_are_cached_apart(tmp_path, monkeypatch) -> None:
 
 def test_the_tokens_of_a_run_are_counted(tmp_path, monkeypatch) -> None:
     monkeypatch.setenv("FYND_CACHE_DIR", str(tmp_path))
-    monkeypatch.setenv("VOYAGE_API_KEY", "test-key")
+    monkeypatch.setenv("VOYAGE_API_KEY", "al-test-key")
     calls: list = []
     voyage = Voyage(client=client_that_returns([embedding_reply([[1.0]], tokens=24)], calls))
 
@@ -118,7 +122,7 @@ def test_the_tokens_of_a_run_are_counted(tmp_path, monkeypatch) -> None:
 
 def test_no_text_means_no_request(tmp_path, monkeypatch) -> None:
     monkeypatch.setenv("FYND_CACHE_DIR", str(tmp_path))
-    monkeypatch.setenv("VOYAGE_API_KEY", "test-key")
+    monkeypatch.setenv("VOYAGE_API_KEY", "al-test-key")
     calls: list = []
     voyage = Voyage(client=client_that_returns([], calls))
 
@@ -137,7 +141,7 @@ def test_a_missing_key_is_said_in_a_sentence(tmp_path, monkeypatch) -> None:
 
 def test_the_reranker_returns_places_and_scores(tmp_path, monkeypatch) -> None:
     monkeypatch.setenv("FYND_CACHE_DIR", str(tmp_path))
-    monkeypatch.setenv("VOYAGE_API_KEY", "test-key")
+    monkeypatch.setenv("VOYAGE_API_KEY", "al-test-key")
     calls: list = []
     reply = (
         200,
@@ -160,7 +164,7 @@ def test_the_reranker_returns_places_and_scores(tmp_path, monkeypatch) -> None:
 
 def test_a_reranked_list_is_cached(tmp_path, monkeypatch) -> None:
     monkeypatch.setenv("FYND_CACHE_DIR", str(tmp_path))
-    monkeypatch.setenv("VOYAGE_API_KEY", "test-key")
+    monkeypatch.setenv("VOYAGE_API_KEY", "al-test-key")
     calls: list = []
     reply = (200, {"data": [{"index": 0, "relevance_score": 0.5}], "usage": {}})
     voyage = Voyage(client=client_that_returns([reply], calls))
@@ -172,7 +176,7 @@ def test_a_reranked_list_is_cached(tmp_path, monkeypatch) -> None:
 
 def test_two_refusals_in_a_row_raise(tmp_path, monkeypatch) -> None:
     monkeypatch.setenv("FYND_CACHE_DIR", str(tmp_path))
-    monkeypatch.setenv("VOYAGE_API_KEY", "test-key")
+    monkeypatch.setenv("VOYAGE_API_KEY", "al-test-key")
     monkeypatch.setattr("fynd.voyage.time.sleep", lambda seconds: None)
     calls: list = []
     voyage = Voyage(client=client_that_returns([(429, {"detail": "slow down"})], calls))
@@ -184,7 +188,7 @@ def test_two_refusals_in_a_row_raise(tmp_path, monkeypatch) -> None:
 
 def test_a_refused_request_caches_nothing(tmp_path, monkeypatch) -> None:
     monkeypatch.setenv("FYND_CACHE_DIR", str(tmp_path))
-    monkeypatch.setenv("VOYAGE_API_KEY", "test-key")
+    monkeypatch.setenv("VOYAGE_API_KEY", "al-test-key")
     monkeypatch.setattr("fynd.voyage.time.sleep", lambda seconds: None)
     calls: list = []
     replies = [(429, {"detail": "slow down"})]
@@ -202,7 +206,7 @@ def test_a_refused_request_caches_nothing(tmp_path, monkeypatch) -> None:
 
 def test_an_empty_reranked_list_is_not_cached(tmp_path, monkeypatch) -> None:
     monkeypatch.setenv("FYND_CACHE_DIR", str(tmp_path))
-    monkeypatch.setenv("VOYAGE_API_KEY", "test-key")
+    monkeypatch.setenv("VOYAGE_API_KEY", "al-test-key")
     calls: list = []
     replies = [(200, {"data": [], "usage": {}})]
     voyage = Voyage(client=client_that_returns(replies, calls))
@@ -220,7 +224,7 @@ def test_an_empty_reranked_list_is_not_cached(tmp_path, monkeypatch) -> None:
 
 def test_a_missing_vector_is_said_without_the_text(tmp_path, monkeypatch) -> None:
     monkeypatch.setenv("FYND_CACHE_DIR", str(tmp_path))
-    monkeypatch.setenv("VOYAGE_API_KEY", "test-key")
+    monkeypatch.setenv("VOYAGE_API_KEY", "al-test-key")
     calls: list = []
     voyage = Voyage(client=client_that_returns([embedding_reply([[1.0]])], calls))
 
@@ -231,3 +235,31 @@ def test_a_missing_vector_is_said_without_the_text(tmp_path, monkeypatch) -> Non
     # keeps the text out.
     assert "abstract that must stay out" not in str(refused.value)
     assert "1 of 2" in str(refused.value)
+
+
+def test_a_key_from_the_wrong_place_is_said_in_a_sentence(tmp_path, monkeypatch) -> None:
+    monkeypatch.setenv("FYND_CACHE_DIR", str(tmp_path))
+    # A key made at voyageai.com carries another prefix, and the Atlas host
+    # answers it with a 401 that explains nothing.
+    monkeypatch.setenv("VOYAGE_API_KEY", "pa-a-key-made-at-voyageai-com")
+    voyage = Voyage(client=client_that_returns([], []))
+
+    with pytest.raises(KeyMissing, match="not made in MongoDB Atlas"):
+        voyage.embed(["one"], input_type="document")
+
+
+def test_the_reranker_is_asked_at_the_same_host(tmp_path, monkeypatch) -> None:
+    monkeypatch.setenv("FYND_CACHE_DIR", str(tmp_path))
+    monkeypatch.setenv("VOYAGE_API_KEY", "al-test-key")
+    calls: list = []
+    reply = (200, {"data": [{"index": 0, "relevance_score": 0.5}], "usage": {}})
+    voyage = Voyage(client=client_that_returns([reply], calls))
+
+    voyage.rerank("household energy", ["one"])
+
+    assert str(calls[0].url) == f"{BASE_URL}/rerank"
+    sent = calls[0].read().decode("utf-8")
+    # The three fields the endpoint reads, which are not the fields of the
+    # embeddings endpoint.
+    assert '"query":"household energy"' in sent
+    assert '"documents":["one"]' in sent
