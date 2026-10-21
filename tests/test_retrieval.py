@@ -16,6 +16,8 @@ from fynd.retrieval import (
     dense_ranking,
     document_text,
     fuse,
+    keep_reasons,
+    matched_terms,
     rerank_ranking,
     stem,
     tokens,
@@ -270,3 +272,102 @@ def test_a_place_outside_the_pool_stops_the_ranking() -> None:
 
     with pytest.raises(ValueError, match="does not describe the pool"):
         rerank_ranking("household energy", [one], fake_rerank([(7, 0.9)], calls))
+
+
+def test_a_paper_carries_the_stems_it_matched() -> None:
+    # The card prints these words, so they come back in the order the query
+    # wrote them and not in the order the abstract did.
+    pool = [paper("hit", "Forecasting the energy use of a household")]
+    ranked = bm25_ranking("household energy forecasting", pool)
+    assert ranked[0].terms == ("household", "energy", "forecast")
+
+
+def test_a_stem_is_named_once_however_often_it_appears() -> None:
+    pool = [paper("hit", "Household household households")]
+    assert bm25_ranking("household", pool)[0].terms == ("household",)
+
+
+def test_a_paper_that_matched_no_stem_says_so() -> None:
+    pool = [paper("miss", "Ultra-processed food"), paper("hit", "Household energy")]
+    ranked = bm25_ranking("household energy", pool)
+    # Ordered last, and the empty tuple is what the card reads as no match.
+    assert ranked[-1].paper_id == "miss"
+    assert ranked[-1].terms == ()
+
+
+def test_the_keyword_ranking_claims_nothing_about_meaning() -> None:
+    pool = [paper("hit", "Household energy")]
+    assert bm25_ranking("household energy", pool)[0].meaning_is_close is False
+
+
+def test_the_meaning_ranking_marks_the_papers_inside_the_cut() -> None:
+    near = paper("near", "Domestic electricity use")
+    far = paper("far", "Ultra-processed food")
+    vectors = {
+        "household energy": [1.0, 0.0],
+        document_text(near): [0.9, 0.1],
+        document_text(far): [0.0, 1.0],
+    }
+    calls: list = []
+
+    ranked = dense_ranking("household energy", [near, far], fake_embed(vectors, calls), cut=1)
+
+    assert ranked[0].meaning_is_close is True
+    assert ranked[1].meaning_is_close is False
+    # The meaning ranking names no stem. It read a vector and not a word.
+    assert ranked[0].terms == ()
+
+
+def test_the_fusion_keeps_the_stems_and_the_close_meaning() -> None:
+    # The fused row is the row that ships, so a card under it has to say why
+    # the Paper is there. One half of the reason comes from each ranking.
+    by_word = [Ranked(paper_id="a", score=1.0, terms=("household",))]
+    by_meaning = [Ranked(paper_id="a", score=1.0, meaning_is_close=True)]
+
+    fused = fuse([by_word, by_meaning])
+
+    assert fused[0].terms == ("household",)
+    assert fused[0].meaning_is_close is True
+
+
+def test_a_paper_that_rose_on_meaning_alone_names_no_stem() -> None:
+    by_word = [Ranked(paper_id="a", score=0.0)]
+    by_meaning = [Ranked(paper_id="a", score=1.0, meaning_is_close=True)]
+
+    fused = fuse([by_word, by_meaning])
+
+    # This is the one case the card has to explain, because nothing else on it
+    # would tell a student why the Paper is on screen.
+    assert fused[0].terms == ()
+    assert fused[0].meaning_is_close is True
+
+
+def test_the_reranked_row_keeps_the_reason_of_the_fusion() -> None:
+    first = paper("first", "Household energy")
+    second = paper("second", "Domestic electricity")
+    fused = [
+        Ranked(paper_id="first", score=1.0, terms=("household",)),
+        Ranked(paper_id="second", score=0.5, meaning_is_close=True),
+    ]
+    calls: list = []
+
+    reordered = keep_reasons(
+        rerank_ranking(
+            "household energy", [first, second], fake_rerank([(1, 0.9), (0, 0.2)], calls)
+        ),
+        fused,
+    )
+
+    assert ids(reordered) == ["second", "first"]
+    assert reordered[0].meaning_is_close is True
+    assert reordered[1].terms == ("household",)
+    # The score is the reranker's own, and only the reason is carried over.
+    assert reordered[0].score == 0.9
+
+
+def test_matched_terms_reads_the_query_order() -> None:
+    assert matched_terms("energy household", "A household and its energy") == (
+        "energy",
+        "household",
+    )
+    assert matched_terms("household energy", "Ultra-processed food") == ()

@@ -17,7 +17,7 @@ would fit the set and publish a number that means nothing.
 
 import math
 import re
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from typing import Final, Protocol
 
 from fynd.models import Paper
@@ -64,10 +64,24 @@ NOT_A_PLURAL_AFTER: Final = ("s", "i", "u")
 
 @dataclass(frozen=True)
 class Ranked:
-    """One Paper in a ranking, with the score that placed it there."""
+    """One Paper in a ranking, with the score and the reason that placed it there.
+
+    The two reason fields are the facts the stage 4 card prints. A term match
+    names its stems. A meaning match says the meaning is close with no exact
+    term match. No model writes that line, and nothing here writes a sentence.
+    See ADR 0014.
+    """
 
     paper_id: str
     score: float
+    # The stems of the query this Paper holds, in the order the query wrote
+    # them. Empty means the Paper matched no word of the query, which the card
+    # says as plainly as a match.
+    terms: tuple[str, ...] = ()
+    # Whether the meaning ranking placed this Paper inside the cut. A Paper
+    # with no terms and a close meaning is the one case a student has to be
+    # told about, because nothing on the card would otherwise explain it.
+    meaning_is_close: bool = False
 
 
 class Embed(Protocol):
@@ -116,15 +130,62 @@ def document_text(paper: Paper) -> str:
     return f"{paper.title} {paper.abstract}".strip()
 
 
-def ordered(scores: dict[str, float]) -> list[Ranked]:
+def matched_terms(query: str, text: str) -> tuple[str, ...]:
+    """Returns the stems of the query that this text holds, in the query order.
+
+    The query order and not the alphabet, because the card prints these words
+    and a student reads them against the query they just saw. A stem appears
+    once however many times the text repeats it.
+    """
+    held = set(tokens(text))
+    found: list[str] = []
+    for word in tokens(query):
+        if word in held and word not in found:
+            found.append(word)
+    return tuple(found)
+
+
+def ordered(
+    scores: dict[str, float],
+    terms: dict[str, tuple[str, ...]] | None = None,
+    close: set[str] | None = None,
+) -> list[Ranked]:
     """Returns the Papers from the best score down, and by identifier on a tie.
 
     The identifier decides a tie on purpose. Two Papers with the same score
     would otherwise sit in whatever order the pool arrived in, and a published
     number has to repeat exactly on a second run.
+
+    `terms` and `close` carry the reason of each Paper. A ranking that knows
+    neither leaves both out, and the card then has nothing to print for it.
     """
     places = sorted(scores.items(), key=lambda item: (-item[1], item[0]))
-    return [Ranked(paper_id=paper_id, score=score) for paper_id, score in places]
+    return [
+        Ranked(
+            paper_id=paper_id,
+            score=score,
+            terms=(terms or {}).get(paper_id, ()),
+            meaning_is_close=paper_id in (close or set()),
+        )
+        for paper_id, score in places
+    ]
+
+
+def keep_reasons(ranked: list[Ranked], source: list[Ranked]) -> list[Ranked]:
+    """Returns the ranking with the reasons of another ranking written on it.
+
+    The reranker reorders Papers and knows nothing about stems, so the
+    reordered row would otherwise lose the reason the fusion already held.
+    """
+    reasons = {item.paper_id: item for item in source}
+    carried = []
+    for item in ranked:
+        reason = reasons.get(item.paper_id)
+        if reason is None:
+            carried.append(item)
+            continue
+        carried.append(replace(item, terms=reason.terms, meaning_is_close=reason.meaning_is_close))
+    return carried
 
 
 def bm25_ranking(query: str, papers: list[Paper]) -> list[Ranked]:
@@ -151,9 +212,11 @@ def bm25_ranking(query: str, papers: list[Paper]) -> list[Ranked]:
 
     total = len(documents)
     scores: dict[str, float] = {}
+    terms: dict[str, tuple[str, ...]] = {}
     for paper_id, words in documents.items():
         length = len(words)
         score = 0.0
+        matched: list[str] = []
         for word in tokens(query):
             held_by = holders.get(word, 0)
             if held_by == 0:
@@ -161,6 +224,11 @@ def bm25_ranking(query: str, papers: list[Paper]) -> list[Ranked]:
             frequency = words.count(word)
             if frequency == 0:
                 continue
+            if word not in matched:
+                # The stems the card prints. They are collected here and not in
+                # a second pass, because this loop already knows which word of
+                # the query this Paper holds.
+                matched.append(word)
             # The Lucene form of the inverse document frequency. The 1 inside
             # the logarithm keeps it positive, so a word in every document
             # adds nothing instead of subtracting.
@@ -170,7 +238,8 @@ def bm25_ranking(query: str, papers: list[Paper]) -> list[Ranked]:
             weight = BM25_K1 * (1 - BM25_B + BM25_B * length / average_length)
             score += idf * frequency * (BM25_K1 + 1) / (frequency + weight)
         scores[paper_id] = score
-    return ordered(scores)
+        terms[paper_id] = tuple(matched)
+    return ordered(scores, terms=terms)
 
 
 def cosine(left: list[float], right: list[float]) -> float:
@@ -196,11 +265,16 @@ def cosine(left: list[float], right: list[float]) -> float:
     return sum(a * b for a, b in zip(left, right)) / size
 
 
-def dense_ranking(query: str, papers: list[Paper], embed: Embed) -> list[Ranked]:
+def dense_ranking(query: str, papers: list[Paper], embed: Embed, cut: int = CUT) -> list[Ranked]:
     """Ranks the pool by meaning, with one embedding call for the whole pool.
 
     The query and the documents are two calls, because a vendor embeds a query
     and a document differently.
+
+    The first `cut` Papers are marked as a close meaning, which is the fact the
+    card prints for a Paper that holds no word of the query. The cut and not a
+    score threshold, because a cosine similarity has no value that means close
+    across models, and the cut is the line that already decides a Project.
     """
     if not papers:
         return []
@@ -220,7 +294,8 @@ def dense_ranking(query: str, papers: list[Paper], embed: Embed) -> list[Ranked]
     scores = {
         paper.paper_id: cosine(query_vector, vector) for paper, vector in zip(papers, vectors)
     }
-    return ordered(scores)
+    by_meaning = ordered(scores)
+    return [replace(item, meaning_is_close=place < cut) for place, item in enumerate(by_meaning)]
 
 
 def fuse(rankings: list[list[Ranked]], k: int = RRF_K) -> list[Ranked]:
@@ -232,10 +307,20 @@ def fuse(rankings: list[list[Ranked]], k: int = RRF_K) -> list[Ranked]:
     every order.
     """
     scores: dict[str, float] = {}
+    # The reason of a Paper is carried, because the fused row is the row that
+    # ships and a card under it has to say why the Paper is there. The terms
+    # come from the keyword ranking and the close meaning from the dense one,
+    # so a merge of the two loses neither.
+    terms: dict[str, tuple[str, ...]] = {}
+    close: set[str] = set()
     for ranking in rankings:
         for place, item in enumerate(ranking, start=1):
             scores[item.paper_id] = scores.get(item.paper_id, 0.0) + 1 / (k + place)
-    return ordered(scores)
+            if item.terms:
+                terms[item.paper_id] = item.terms
+            if item.meaning_is_close:
+                close.add(item.paper_id)
+    return ordered(scores, terms=terms, close=close)
 
 
 def rerank_ranking(query: str, papers: list[Paper], rerank: Rerank) -> list[Ranked]:
