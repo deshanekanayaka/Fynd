@@ -21,24 +21,30 @@ NO_HOST: Final = "no link"
 README_HEADER: Final = (
     "# The measurement runs",
     "",
-    "One line for each live run of `measure-open-copies`, oldest first.",
+    "One line for each live measurement run, oldest first.",
     "",
 )
 
+# The file name of each kind of run, which the README line points at. A second
+# kind of run arrived with the retrieval table, so the stem is an argument and
+# no longer a word inside the line.
+OPEN_COPY_STEM: Final = "open-copy-hosts"
+RETRIEVAL_STEM: Final = "retrieval-table"
 
-def readme_line(today: dt.date) -> str:
+
+def readme_line(today: dt.date, stem: str) -> str:
     """Returns the one line a run adds to the README of `docs/measurements`."""
-    return f"- [{today.isoformat()}](open-copy-hosts-{today.isoformat()}.md)"
+    return f"- [{today.isoformat()}]({stem}-{today.isoformat()}.md)"
 
 
-def readme_with(existing: str, today: dt.date) -> str:
+def readme_with(existing: str, today: dt.date, stem: str) -> str:
     """Adds today's run to the README text, in order, with no date twice.
 
     A second run on the same date writes the same line again rather than a
     second one, so the README lists runs and not attempts at a run.
     """
     lines = list(README_HEADER) if not existing else existing.splitlines()
-    line = readme_line(today)
+    line = readme_line(today, stem)
     if line not in lines:
         lines.append(line)
     return "\n".join(lines) + "\n"

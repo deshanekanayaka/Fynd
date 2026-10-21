@@ -23,9 +23,11 @@ from fynd.contact import ContactEmailMissing, contact_email
 from fynd.extract import extract_html, extract_pdf
 from fynd.fetcher import Fetched, Fetcher, FetchFailed, looks_like_a_pdf
 from fynd.grading import GradeRefused, apply_grades, grade_counts, ungraded, worksheet_rows
-from fynd.measure import readme_with, report
+from fynd.measure import OPEN_COPY_STEM, RETRIEVAL_STEM, readme_with, report
 from fynd.open_copy import read_open_copy
 from fynd.openalex import OpenAlex, WorkNotRead
+from fynd.retrieval_report import report as retrieval_report
+from fynd.retrieval_report import rows_from_searches, shared_papers
 from fynd.retrieval_set import RetrievalSet, SetTooSmall, build_set
 from fynd.semantic_scholar import RateLimited, SemanticScholar, cached_abstracts
 from fynd.source_text import reason_against_paper_text
@@ -184,12 +186,11 @@ def run_measure_open_copies() -> None:
         results.append(result)
         host = result.open_copy.host if result.open_copy else "-"
         print(
-            f"{number:3} {paper.title[:50]:50} {host:28} "
-            f"{result.attempts} tries  {result.reason}"
+            f"{number:3} {paper.title[:50]:50} {host:28} {result.attempts} tries  {result.reason}"
         )
 
     today = dt.date.today()
-    measurement_file = MEASUREMENT_DIR / f"open-copy-hosts-{today.isoformat()}.md"
+    measurement_file = MEASUREMENT_DIR / f"{OPEN_COPY_STEM}-{today.isoformat()}.md"
     MEASUREMENT_DIR.mkdir(parents=True, exist_ok=True)
     measurement_file.write_text(
         report(
@@ -207,7 +208,9 @@ def run_measure_open_copies() -> None:
     existing_readme = ""
     if MEASUREMENT_README.exists():
         existing_readme = MEASUREMENT_README.read_text(encoding="utf-8")
-    MEASUREMENT_README.write_text(readme_with(existing_readme, today), encoding="utf-8")
+    MEASUREMENT_README.write_text(
+        readme_with(existing_readme, today, OPEN_COPY_STEM), encoding="utf-8"
+    )
     print(f"Wrote {MEASUREMENT_README}")
 
 
@@ -314,6 +317,104 @@ def run_grade_retrieval_set(as_of: str, show: bool) -> None:
     print(f"Counts: {grade_counts(held)}")
 
 
+class PoolChanged(Exception):
+    """Raised when the searches no longer return the Papers that were graded."""
+
+
+def run_measure_retrieval(as_of: str) -> None:
+    """Writes the retrieval table for the graded set of one reference date."""
+    if not os.environ.get("SEMANTIC_SCHOLAR_API_KEY"):
+        raise SystemExit(
+            "Set SEMANTIC_SCHOLAR_API_KEY in your .env file. The table rebuilds the "
+            "order the four searches arrived in, and a cached reply still needs the key "
+            "when one query is missing from the cache."
+        )
+    try:
+        reference_date = dt.date.fromisoformat(as_of)
+    except ValueError:
+        raise SystemExit(
+            f"--as-of needs a date like 2026-10-20, and it got {as_of!r}. Every "
+            "published number states the date its Evidence window came from."
+        ) from None
+
+    set_file = retrieval_set_path(as_of)
+    if not set_file.exists():
+        raise SystemExit(
+            f"No set file at {set_file}. Run build-retrieval-set --as-of {as_of} first."
+        )
+    held = RetrievalSet.model_validate_json(set_file.read_text(encoding="utf-8"))
+
+    if not held.entries:
+        raise SystemExit(
+            f"The set at {set_file} holds no Papers. A table over an empty pool prints a "
+            "dash in every cell and says nothing, so nothing is published for it."
+        )
+
+    ungraded_papers = ungraded(held)
+    if ungraded_papers:
+        raise SystemExit(
+            f"{len(ungraded_papers)} Papers of {len(held.entries)} still carry no grade. "
+            f"Run grade-retrieval-set --as-of {as_of} first, because a recall number over "
+            "a half graded pool counts an ungraded Paper as a Paper nobody wants."
+        )
+
+    # The set file holds the grades in a shuffled order and no rank, so the
+    # order the searches arrived in is rebuilt from the cache. Every reply is
+    # already on disk from the day the set was built.
+    year_from = stage2.first_year_in_window(reference_date)
+    client = SemanticScholar()
+    results = []
+    for query in held.queries:
+        # The limit of the set file and not the constant of today. The limit is
+        # part of the search cache key, so asking with another one misses the
+        # cache, refetches live, and returns a pool nobody graded.
+        found = client.search(query.text, year_from=year_from, limit=held.search_limit)
+        print(f"{query.name:9} {len(found.papers):3} Papers returned  {query.text}")
+        results.append((query.name, found))
+
+    graded = {entry.paper_id: entry.grade for entry in held.entries if entry.grade is not None}
+    rows = rows_from_searches(results, per_query=held.per_query, pool_size=len(held.entries))
+    reached = {paper_id for row in rows for paper_id in row.ranking}
+    if reached != set(graded):
+        # A search that answers with other Papers today means the cache was
+        # cleared and the pool moved. Every number would then be measured over
+        # a pool that nobody graded.
+        raise PoolChanged(
+            f"The searches reached {len(reached)} of the {len(graded)} graded Papers. "
+            "The cached replies of the day the set was built are gone, so the table "
+            "would report a pool nobody graded. Restore the cache, or build and grade "
+            "a new set."
+        )
+
+    today = dt.date.today()
+    text = retrieval_report(
+        rows=rows,
+        grades=graded,
+        queries=[(query.name, query.text) for query in held.queries],
+        reference_date=reference_date,
+        today=today,
+        set_file=pathlib.PurePosixPath(set_file.as_posix()),
+        per_query=held.per_query,
+        shared=shared_papers(results, per_query=held.per_query),
+    )
+
+    # The table is named after the graded set and not after today, because the
+    # set decides every number in it. A second run of the same set rewrites the
+    # same file, and a second set gets its own file instead of overwriting one.
+    MEASUREMENT_DIR.mkdir(parents=True, exist_ok=True)
+    measurement_file = MEASUREMENT_DIR / f"{RETRIEVAL_STEM}-{reference_date.isoformat()}.md"
+    measurement_file.write_text(text, encoding="utf-8")
+    print(f"\nWrote {measurement_file}")
+
+    existing_readme = ""
+    if MEASUREMENT_README.exists():
+        existing_readme = MEASUREMENT_README.read_text(encoding="utf-8")
+    MEASUREMENT_README.write_text(
+        readme_with(existing_readme, reference_date, RETRIEVAL_STEM), encoding="utf-8"
+    )
+    print(f"Wrote {MEASUREMENT_README}")
+
+
 def main() -> None:
     # Only the command line reads the .env file. A library that reads it would
     # change the environment under a test.
@@ -363,6 +464,14 @@ def main() -> None:
         help="the reference date the Evidence window is counted from, as 2026-10-20",
     )
 
+    retrieval_table = stages.add_parser(
+        "measure-retrieval", help="write the retrieval table for a graded Retrieval set"
+    )
+    retrieval_table.add_argument(
+        "--as-of",
+        required=True,
+        help="the reference date of the graded set, as 2026-10-20",
+    )
 
     fetch = stages.add_parser("fetch-open-copy", help="fetch one Open copy and keep the bytes")
     fetch.add_argument("--url", required=True, help="the repository link OpenAlex resolved")
@@ -385,6 +494,8 @@ def main() -> None:
             run_build_retrieval_set(args.as_of)
         elif args.stage == "grade-retrieval-set":
             run_grade_retrieval_set(args.as_of, args.show)
+        elif args.stage == "measure-retrieval":
+            run_measure_retrieval(args.as_of)
         else:
             run_fetch_open_copy(args.url)
     except (
@@ -396,6 +507,7 @@ def main() -> None:
         ContactEmailMissing,
         SetTooSmall,
         GradeRefused,
+        PoolChanged,
         anthropic.AnthropicError,
     ) as error:
         # A traceback teaches the reader nothing here. The message is the fix.

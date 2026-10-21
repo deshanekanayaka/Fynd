@@ -1,6 +1,6 @@
 # Next steps
 
-Updated: 2026-10-20, day 9. Target ship date: 2026-10-26.
+Updated: 2026-10-21, day 11. Target ship date: 2026-10-26.
 The ship date is a target and not a constraint. The design phase takes the time it needs, because Deshan must be able to explain every part of this project.
 Read [PRD.md](./PRD.md) for the product and [CONTEXT.md](./CONTEXT.md) for the vocabulary.
 
@@ -647,6 +647,32 @@ One person's judgement decides every published grade, because Fynd is a solo pro
 Recall over a pool is recall inside the pool. A relevant Paper that none of the four queries returned is invisible to every number in the table.
 
 No number says anything about whether Fynd finds United Kingdom evidence, because the grade ignores the country by design.
+
+## Published on day 11: the retrieval table, and a baseline the design did not plan
+
+[docs/measurements/retrieval-table-2026-10-20.md](./docs/measurements/retrieval-table-2026-10-20.md) holds the first retrieval number of this project. Issue 34 is done. `uv run python -m fynd.cli measure-retrieval --as-of 2026-10-20` writes it, and the file is named after the graded set and not after the day, because the set decides every number in it.
+
+Two decisions of the day 9 design changed, and both are recorded here.
+
+### The baseline is the four searches interleaved
+
+The day 9 design made the baseline the ranking of the `query` the model wrote. That query is gone, because the model never proposes the Seeded Topic, which is the day 10 finding and now issue 43. So the baseline is the order the four searches really arrived in, taken one rank at a time from each query. The set builder already pools them in that order, so the baseline row is built by shipped code and not by a second rule written for the table.
+
+The other three readings were refused. A pool of 15 Papers makes recall at 20 equal 100 percent for every row, so the headline number would say nothing. Ranking each query's 50 returned Papers holds all 15 graded Papers inside the first 20 of the arriving order, so the baseline would read 100 percent again.
+
+### nDCG gives a Paper its grade as the gain
+
+A 2 is worth twice a 1. That is the original linear form, and it is the default of the scikit-learn function, so a reader can reproduce the number. The other published form weighs a 2 three times a 1. The file states which one it used, because nothing here is tuned and a reader cannot tell the two apart from a number.
+
+### What the numbers say
+
+The baseline reaches 17 of the 39 relevant Papers inside the top 20, which is 44 percent. The four query rows are the day 8 finding about an untested query, and the spread is wide: the `wider` query reaches 14 of 39, the `hand` query 8, and the `reworded` query 4. One query returned 15 Papers of the pool, so a query row cannot fill 20 places and the query rows compare with each other and never with the baseline.
+
+No row is a ranking of Fynd yet, and the file says so in a sentence that disappears by itself when the first one arrives. Issues 35, 36 and 37 add the BM25 row, the two meaning rows, the fusion and the reordered fusion. The code for all of them is in `src/fynd/retrieval.py` already, with the match reason, so those tickets wire rows and publish numbers.
+
+### The task for day 12
+
+Issue 35, then 36, then 37, in that order, each adding its row to the same file. Then issue 39, which moves the stage 2 gate to the top 20 of the 50 Paper search.
 
 ## Do not do yet
 
