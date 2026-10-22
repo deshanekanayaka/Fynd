@@ -16,6 +16,7 @@ import sys
 import textwrap
 
 import anthropic
+import httpx
 from dotenv import load_dotenv
 
 from fynd.claude import ModelRefused, ask_for_json
@@ -26,9 +27,10 @@ from fynd.grading import GradeRefused, apply_grades, grade_counts, ungraded, wor
 from fynd.measure import OPEN_COPY_STEM, RETRIEVAL_STEM, readme_with, report
 from fynd.open_copy import read_open_copy
 from fynd.openalex import OpenAlex, WorkNotRead
-from fynd.retrieval import bm25_ranking
+from fynd.retrieval import Embed, bm25_ranking
 from fynd.retrieval_report import (
     Row,
+    dense_rows,
     rows_from_searches,
     shared_papers,
 )
@@ -43,6 +45,9 @@ from fynd.retrieval_set import (
 from fynd.semantic_scholar import RateLimited, SemanticScholar, cached_abstracts
 from fynd.source_text import reason_against_paper_text
 from fynd.stages import stage1, stage2
+from fynd.voyage import ATLAS_KEY_PREFIX, EMBEDDING_MODEL, ReplyIncomplete, Voyage
+from fynd.voyage import KeyMissing as VoyageKeyMissing
+from fynd.voyage import RateLimited as VoyageRateLimited
 
 
 def search_with(client: SemanticScholar):
@@ -52,6 +57,20 @@ def search_with(client: SemanticScholar):
         return client.search(query, year_from=year_from)
 
     return search
+
+
+def embed_with(voyage: Voyage, dimensions: int) -> Embed:
+    """Returns the embedding function a ranking calls at one vector size.
+
+    The size is bound here and not inside the ranking, because the ranking
+    takes a plain function of texts and an input type, and the table asks the
+    same ranking for two sizes.
+    """
+
+    def embed(texts: list[str], input_type: str) -> list[list[float]]:
+        return voyage.embed(texts, input_type=input_type, dimensions=dimensions)
+
+    return embed
 
 
 def run_stage_1(domain: str) -> None:
@@ -340,6 +359,15 @@ def run_measure_retrieval(as_of: str) -> None:
             "order the four searches arrived in, and a cached reply still needs the key "
             "when one query is missing from the cache."
         )
+    # The prefix and not only the key, because the client refuses a key made at
+    # voyageai.com and this check runs before the four searches and both BM25
+    # rows. A key checked at the first embedding call fails a minute later.
+    if not os.environ.get("VOYAGE_API_KEY", "").startswith(ATLAS_KEY_PREFIX):
+        raise SystemExit(
+            "Set VOYAGE_API_KEY in your .env file to a key made in MongoDB Atlas, which "
+            f"begins with {ATLAS_KEY_PREFIX!r}. The meaning rows embed every abstract in "
+            "the pool, and the host this client asks accepts an Atlas key alone."
+        )
     try:
         reference_date = dt.date.fromisoformat(as_of)
     except ValueError:
@@ -422,6 +450,14 @@ def run_measure_retrieval(as_of: str) -> None:
                 reads_text=True,
             )
         )
+
+    # The meaning rows. The pool is embedded once per size and the two strings
+    # then read those vectors from the cache, so the second row of a size costs
+    # one small query embedding and nothing else.
+    voyage = Voyage()
+    strings = [("label", held.topic), ("query", held.topic_query)]
+    rows += dense_rows(strings, pool, lambda size: embed_with(voyage, size), EMBEDDING_MODEL)
+    print(f"\nVoyage charged this run for {voyage.tokens_used} tokens")
 
     today = dt.date.today()
     text = retrieval_report(
@@ -546,7 +582,15 @@ def main() -> None:
         SetTooSmall,
         GradeRefused,
         PoolChanged,
+        VoyageKeyMissing,
+        VoyageRateLimited,
+        ReplyIncomplete,
         anthropic.AnthropicError,
+        # A refused status and a dead connection both arrive from httpx, and
+        # this command is the first one that can meet either from Voyage. A
+        # mistyped key answers 401 and the host answers 5xx, and neither is
+        # worth a traceback.
+        httpx.HTTPError,
     ) as error:
         # A traceback teaches the reader nothing here. The message is the fix.
         print(error, file=sys.stderr)

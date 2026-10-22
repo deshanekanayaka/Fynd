@@ -1,6 +1,6 @@
 # Next steps
 
-Updated: 2026-10-22, day 12. Target ship date: 2026-10-26.
+Updated: 2026-10-23, day 13. Target ship date: 2026-10-26.
 The ship date is a target and not a constraint. The design phase takes the time it needs, because Deshan must be able to explain every part of this project.
 Read [PRD.md](./PRD.md) for the product and [CONTEXT.md](./CONTEXT.md) for the vocabulary.
 
@@ -496,11 +496,11 @@ The open item of day 8 is closed. Branch B, which is Claim extraction with the t
 
 ### One embedding model, and a fixed cost
 
-- One embedding model, which is `voyage-4-lite`, published at 1024 and at 512 dimensions. That closes the pgvector column size by measurement, which is the part that is hard to reverse once rows exist.
+- One embedding model, published at 1024 and at 512 dimensions. It was `voyage-4-lite` until the live run of day 13, and it is `voyage-3.5-lite` now, because the free tier refuses a series 4 model. That closes the pgvector column size by measurement, which is the part that is hard to reverse once rows exist.
 - Two embedding models were the old plan. On a set with about 20 to 25 relevant Papers, a gap of one or two Papers is not a finding, so the comparison could not resolve what it claimed. The vendor rests on price, on the free tokens, and on one account covering embedding and reranking, and the file says that in one sentence.
 - The reorder row uses the hosted `rerank-3-lite` and not a local cross encoder. Render's free web service holds 512 megabytes, so a local model measures a path Fynd cannot serve.
 - Every paid API in Fynd is prepaid, with automatic recharge off, so the worst case is a failed request and never a bill. The README states the measured token count for one Project, so a run's cost is known before it is made.
-- The arithmetic says this never leaves the free tier. 60 abstracts cost about 24,000 tokens, one whole Project costs about 150,000, and the 5 Projects of metric 2 cost about 750,000. Voyage gives 200 million free tokens on the `voyage-4` family. No embedding vendor sells a fixed monthly plan, so the choice was prepaid credit or a local model.
+- The arithmetic says this never leaves the free tier. 60 abstracts cost about 24,000 tokens, one whole Project costs about 150,000, and the 5 Projects of metric 2 cost about 750,000. Voyage gives 200 million free tokens on the `voyage-3` family, and day 13 found that the series 4 models need a payment method. No embedding vendor sells a fixed monthly plan, so the choice was prepaid credit or a local model.
 
 ### What git holds, and why this is not a continuous integration gate
 
@@ -549,7 +549,7 @@ Six issues, in this order. The blocking edges are set by the order.
 
 1. The records. The three `CONTEXT.md` entries, `ADR 0013`, `ADR 0014`, the `PRD.md` edits that drop `tsvector` from two rows, the `docs/defensibility.md` line, and this entry. No code.
 2. The Retrieval set. The four queries, the search for 50 Papers, the hand grading of 40 to 60 Papers, and the set file with its reference date. This issue also adds the shape check on the `query` the model writes, which is three to eight words with no boolean operators, and it writes the current query into the set file first so the table shows the before and the after.
-3. `src/fynd/retrieval.py`, holding BM25, the dense ranking with `voyage-4-lite`, and the fusion.
+3. `src/fynd/retrieval.py`, holding BM25, the dense ranking with `voyage-3.5-lite`, and the fusion.
 4. The live run, and the dated table in `docs/measurements` with the `README.md` entry.
 5. The stage 2 gate moves to the top 20 of the 50 Paper search.
 6. The stage 4 design record, which is a document and not code, because stage 4 has no tables yet.
@@ -719,6 +719,56 @@ A country filter was considered and refused. Semantic Scholar gives a Paper no c
 ### The task for day 13
 
 Issue 36, which adds the two meaning rows at 1024 and 512 dimensions, and then issue 37, which adds the fusion and the reordered fusion. The meaning rows are the next evidence about the place, because a vector of the label carries the place inside a meaning and not as a word to count. Issue 38 gains the rule of ADR 0015, so the `query` a model writes names the subject and the `label` names the place.
+
+## Measured on day 13: meaning beats the arriving order, and the place stops hurting
+
+Issue 36 is done. Four meaning rows are in [docs/measurements/retrieval-table-2026-10-20.md](./docs/measurements/retrieval-table-2026-10-20.md), one for each vector size and one for each string of the Topic.
+
+| Row | Recall at 20 | nDCG at 10 |
+|---|---|---|
+| Baseline | 17 of 39 | 0.897 |
+| BM25, label | 12 of 39 | 0.561 |
+| BM25, query | 20 of 39 | 0.945 |
+| Meaning 1024, label | 18 of 39 | 0.780 |
+| Meaning 1024, query | 18 of 39 | 1.000 |
+| Meaning 512, label | 18 of 39 | 0.780 |
+| Meaning 512, query | 17 of 39 | 1.000 |
+
+### A vector carries the place and a word counter trips over it
+
+This is the question day 12 left open. BM25 lost 8 Papers when the search asked for the label and not the query, at 12 against 20. The meaning ranking loses nothing. It reaches 18 Papers for both strings at 1024, and at 512 the label row reaches 18 and the query row 17, so the place costs the meaning rows no Paper at either size.
+
+So the two kinds of ranking fail differently on the same string. A word counter treats "united" and "kingdom" as two more words to count, and the grading rule throws the place away, so every Paper that merely names the country rises. A vector reads the whole phrase, and a Paper about household energy forecasting in Spain still sits near it. The label costs the meaning rows their ordering and not their reach, which is the 0.780 against 1.000 at nDCG.
+
+ADR 0015 stands either way, because a ranking reads the query and a student reads the label. The finding is that the dense row is the forgiving one when the label leaks into a search.
+
+### The top 10 of the query rows is a perfect order
+
+Both query rows score 1.000 at nDCG 10, which means no order of this pool puts better Papers in those 10 places. Recall at 10 reaches 10 of 39, which is every place the cut allows.
+
+That number is smaller than it looks. nDCG at 10 compares against the best 10 Papers of the pool, and the pool holds 32 Papers graded 2, so filling 10 places with 2s is enough to score 1.000. It says the first 10 Papers are all the best grade, and it says nothing about place 11 onward.
+
+### 512 costs one Paper of 39, and only on one of the two rows
+
+The query row reaches 18 Papers at 1024 and 17 at 512. The label row reaches 18 at both. So the half size costs one Paper of 39 on one row of two, and the ordering inside the top 10 does not move at all.
+
+That is the measured case for a 512 column, which halves what a Paper costs to store. The number is one Paper on one set and on one row, so the decision is a measured preference and not a settled fact, and the second embedding row of a later set can overturn it.
+
+### The model changed, because the free tier refuses the series 4 model
+
+The first live run of the embedding client failed. `voyage-4-lite` is refused with a 429 whose message names a missing payment method, and the refusal arrives for a request of one token, so it is a plan limit and not a rate limit. The same key answers 200 for `voyage-3.5-lite`, and the 200 million free tokens are a series 3 offer.
+
+Fynd now embeds with `voyage-3.5-lite`. The account stays prepaid, which is the rule the technical direction table set, and every row of the table prints the model name beside its size.
+
+### The client paces itself, because the free tier is 3 requests and 10000 tokens a minute
+
+A pool of 60 abstracts is about 18000 tokens, so one request for the whole pool breaks the token cap. A table of two sizes and two strings is more than 3 requests, so it breaks the request cap too.
+
+The client now cuts a pool into slices of about 3000 tokens, and it waits 21 seconds between requests. 3 requests a minute at 3000 tokens is 9000 a minute, which holds both caps at once. The whole table cost 16385 tokens, and a second run costs nothing, because every vector is on disk.
+
+### The task for day 14
+
+Issue 37, which adds the fusion and the reordered fusion. The reorder row needs `rerank-3-lite`, and nothing yet says whether the free tier serves a series 3 reranker, so the first live call of that row comes before its table entry. Then issue 39, which moves the stage 2 gate to the top 20 of the 50 Paper search, and issue 38, which gains the rule of ADR 0015.
 
 ## Do not do yet
 

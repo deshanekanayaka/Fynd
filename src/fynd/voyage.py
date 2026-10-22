@@ -37,7 +37,11 @@ ATLAS_KEY_PREFIX: Final = "al-"
 # One embedding model, which closes the pgvector column size by measurement.
 # Two models were the old plan, and on a set of 60 Papers a gap of one or two
 # Papers is not a finding, so the comparison could not resolve what it claimed.
-EMBEDDING_MODEL: Final = "voyage-4-lite"
+# The model was voyage-4-lite until the first live run of 2026-10-23. That host
+# refuses a one token request for a series 4 model with a 429 that names a
+# missing payment method, and the same key answers 200 for this one. The 200
+# million free tokens are a series 3 offer, and Fynd keeps the account prepaid.
+EMBEDDING_MODEL: Final = "voyage-3.5-lite"
 
 # The published size this model serves. The table also reports 512, which a
 # caller asks for by passing `dimensions`, so the pgvector column is chosen on
@@ -48,11 +52,37 @@ DIMENSIONS: Final = 1024
 # holds 512 megabytes, so a local model would measure a path Fynd cannot serve.
 RERANK_MODEL: Final = "rerank-3-lite"
 
+# An account with no payment method holds 3 requests and 10000 tokens a minute,
+# and the live run of 2026-10-23 found that both caps bite. A pool of 60
+# abstracts is about 18000 tokens, which one request cannot carry, and a table
+# asks for two sizes and two strings, which is more than 3 requests. Deshan
+# keeps this account prepaid on purpose, so the client bends and the billing
+# does not.
+#
+# The two numbers hold both caps together. One request every 21 seconds is
+# under 3 a minute, and 3 slices of 3000 tokens is 9000 a minute, which is
+# under 10000.
+MIN_SECONDS_BETWEEN_REQUESTS: Final = 21.0
+SLICE_TOKENS: Final = 3000
+
+# What the slice counts with. Voyage counts tokens and this file counts
+# characters, and four characters to a token is the rule of thumb for English
+# prose. The slice cap sits well under 10000, so the estimate has room to be
+# wrong.
+CHARACTERS_PER_TOKEN: Final = 4
+
 # One wait and one retry, which is the rule the Semantic Scholar client already
 # follows. Nothing is cached before the answer arrives, so a refusal costs one
 # wait and never a wrong vector.
+#
+# The wait is a whole minute, because the cap this client meets is a cap of a
+# minute. A shorter wait sends the second try into the same window the first
+# try was refused in, which spends the retry and reports a rate limit that one
+# more minute would have cleared. A run that was killed and started again hits
+# exactly that, because a new client knows nothing about the window the dead
+# one spent.
 # ponytail: one fixed retry, add real backoff if a run starts failing on this.
-RETRY_WAIT_SECONDS: Final = 3.0
+RETRY_WAIT_SECONDS: Final = 60.0
 
 # The shape of a stored value, which the cache key carries. A change to what
 # this file sends must not serve a vector the old request produced.
@@ -71,6 +101,31 @@ class ReplyIncomplete(Exception):
     """Raised when a reply does not describe everything the request sent."""
 
 
+def estimated_tokens(text: str) -> int:
+    """Returns about how many tokens Voyage counts for this text."""
+    return len(text) // CHARACTERS_PER_TOKEN + 1
+
+
+def slices(texts: list[str], budget: int = SLICE_TOKENS) -> list[list[str]]:
+    """Cuts the texts into groups that each stay under the token budget.
+
+    A text longer than the whole budget travels alone. Dropping it instead
+    would leave a Paper of the pool with no vector, and a ranking would then be
+    measured over fewer Papers than were graded.
+    """
+    groups: list[list[str]] = []
+    running = 0
+    for text in texts:
+        cost = estimated_tokens(text)
+        if groups and running + cost <= budget:
+            groups[-1].append(text)
+            running += cost
+            continue
+        groups.append([text])
+        running = cost
+    return groups
+
+
 class Voyage:
     """A Voyage client for one run, holding the key and the tokens it spent."""
 
@@ -81,6 +136,9 @@ class Voyage:
         # What this run paid for, which the measured table reports. A text the
         # cache already held adds nothing, so this counts the real spend.
         self.tokens_used = 0
+        # When the last request left, so the next one waits out the rate limit.
+        # It is per client and not per process, because one command builds one.
+        self.last_request_at: float | None = None
 
     def embed(
         self, texts: list[str], input_type: str, dimensions: int = DIMENSIONS
@@ -104,21 +162,18 @@ class Voyage:
             if text not in found and text not in missing:
                 missing.append(text)
 
-        if missing:
-            # ponytail: one request for the whole list. Voyage caps the inputs
-            # and the tokens of one call, and 60 abstracts is well inside both.
-            # Send the list in slices if a pool ever grows past the cap.
+        for slice_of_texts in slices(missing):
             payload = self.ask(
                 EMBEDDING_URL,
                 {
-                    "input": missing,
+                    "input": slice_of_texts,
                     "model": EMBEDDING_MODEL,
                     "input_type": input_type,
                     "output_dimension": dimensions,
                 },
             )
             for item in payload.get("data") or []:
-                text = missing[item["index"]]
+                text = slice_of_texts[item["index"]]
                 found[text] = item["embedding"]
                 parts = self.embedding_parts(text, input_type, dimensions)
                 cache.write(cache.cache_key("voyage-embed", parts), parts, item["embedding"])
@@ -196,6 +251,22 @@ class Voyage:
         usage = payload.get("usage") or {}
         self.tokens_used += usage.get("total_tokens") or 0
 
+    def wait_for_the_rate_limit(self) -> None:
+        """Waits until this client may send its next request.
+
+        The free tier allows 3 requests a minute, and a table asks for more
+        than 3. A refusal costs a minute of waiting and this costs 21 seconds,
+        so the client paces itself instead of learning the limit from a 429.
+        ponytail: a fixed gap. Read the rate limit headers of the reply if a
+        pool ever grows enough for this to be the slow part of a run.
+        """
+        now = time.monotonic()
+        if self.last_request_at is not None:
+            due = self.last_request_at + MIN_SECONDS_BETWEEN_REQUESTS
+            if due > now:
+                time.sleep(due - now)
+        self.last_request_at = time.monotonic()
+
     def ask(self, url: str, body: dict[str, Any]) -> dict[str, Any]:
         """Calls one Voyage endpoint. The only method here that uses the network.
 
@@ -219,6 +290,7 @@ class Voyage:
 
         # Two tries at most. Nothing is cached, so a failure costs one wait.
         for attempt in (1, 2):
+            self.wait_for_the_rate_limit()
             response = self.client.post(
                 url,
                 json=body,

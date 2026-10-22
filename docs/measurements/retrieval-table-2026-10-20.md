@@ -1,6 +1,6 @@
 # How well a ranking orders the Retrieval set
 
-Measured on 2026-10-22 by `uv run python -m fynd.cli measure-retrieval --as-of 2026-10-20`.
+Measured on 2026-10-23 by `uv run python -m fynd.cli measure-retrieval --as-of 2026-10-20`.
 
 The pool is the 60 Papers of [retrieval-set-2026-10-20.json](../../tests/files/retrieval-set-2026-10-20.json), each with a Relevance grade written by hand. 39 of them count as relevant, which is every Paper graded 1 or 2. The set was built on 2026-10-20, and that date fixes the Evidence window of every search behind it.
 
@@ -25,6 +25,10 @@ A query row is not comparable with the baseline. One query returned 15 Papers of
 | reworded | 10% (4/39) | 8% (3/39) | 0.409 | The `reworded` query alone, as it arrived |
 | BM25, label | 31% (12/39) | 18% (7/39) | 0.561 | BM25 over the pool, asked for the label `United Kingdom household energy forecasting` |
 | BM25, query | 51% (20/39) | 26% (10/39) | 0.945 | BM25 over the pool, asked for the query `household energy forecasting` |
+| Meaning 1024, label | 46% (18/39) | 23% (9/39) | 0.780 | The meaning ranking of `voyage-3.5-lite` at 1024 values, asked for the label `United Kingdom household energy forecasting` |
+| Meaning 1024, query | 46% (18/39) | 26% (10/39) | 1.000 | The meaning ranking of `voyage-3.5-lite` at 1024 values, asked for the query `household energy forecasting` |
+| Meaning 512, label | 46% (18/39) | 23% (9/39) | 0.780 | The meaning ranking of `voyage-3.5-lite` at 512 values, asked for the label `United Kingdom household energy forecasting` |
+| Meaning 512, query | 44% (17/39) | 26% (10/39) | 1.000 | The meaning ranking of `voyage-3.5-lite` at 512 values, asked for the query `household energy forecasting` |
 
 ## The queries
 

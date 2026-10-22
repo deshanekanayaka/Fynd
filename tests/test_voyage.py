@@ -9,14 +9,30 @@ import pytest
 
 from fynd.voyage import (
     BASE_URL,
+    CHARACTERS_PER_TOKEN,
     DIMENSIONS,
     EMBEDDING_MODEL,
+    MIN_SECONDS_BETWEEN_REQUESTS,
     RERANK_MODEL,
+    SLICE_TOKENS,
     KeyMissing,
     RateLimited,
     ReplyIncomplete,
     Voyage,
+    slices,
 )
+
+
+@pytest.fixture(autouse=True)
+def no_real_waiting(monkeypatch):
+    """Keeps the rate limit pacing out of the test run.
+
+    The client waits 21 seconds between requests, because the free tier allows
+    3 a minute. A test that sent two requests would really wait, so every test
+    here gets a sleep that returns at once, and a test that measures the wait
+    replaces this one.
+    """
+    monkeypatch.setattr("fynd.voyage.time.sleep", lambda seconds: None)
 
 
 def client_that_returns(replies: list, calls: list) -> httpx.Client:
@@ -263,3 +279,42 @@ def test_the_reranker_is_asked_at_the_same_host(tmp_path, monkeypatch) -> None:
     # embeddings endpoint.
     assert '"query":"household energy"' in sent
     assert '"documents":["one"]' in sent
+
+
+def test_a_long_pool_is_cut_into_slices_under_the_token_budget() -> None:
+    # An account with no payment method holds 10000 tokens a minute, and one
+    # request for 60 abstracts is about 18000, so the whole pool in one call is
+    # refused before it is sent.
+    budget = SLICE_TOKENS * CHARACTERS_PER_TOKEN
+    texts = ["x" * budget, "y" * (budget // 2), "z" * 4]
+
+    groups = slices(texts)
+
+    # The first text fills a slice by itself, and the other two share one.
+    assert groups == [[texts[0]], [texts[1], texts[2]]]
+
+
+def test_a_text_longer_than_the_budget_travels_alone() -> None:
+    # Dropping it would leave a Paper of the pool with no vector, and the
+    # recall number would then be measured over fewer Papers than were graded.
+    assert slices(["w" * 80_000]) == [["w" * 80_000]]
+
+
+def test_each_slice_is_one_request_and_the_client_paces_itself(tmp_path, monkeypatch) -> None:
+    monkeypatch.setenv("FYND_CACHE_DIR", str(tmp_path))
+    monkeypatch.setenv("VOYAGE_API_KEY", "al-test-key")
+    waits: list[float] = []
+    monkeypatch.setattr("fynd.voyage.time.sleep", waits.append)
+    long_one = "a" * (SLICE_TOKENS * CHARACTERS_PER_TOKEN)
+    long_two = "b" * (SLICE_TOKENS * CHARACTERS_PER_TOKEN)
+    calls: list = []
+    voyage = Voyage(client=client_that_returns([embedding_reply([[1.0]])], calls))
+
+    vectors = voyage.embed([long_one, long_two], input_type="document")
+
+    assert vectors == [[1.0], [1.0]]
+    assert len(calls) == 2
+    # One wait before the second request, and none before the first. The free
+    # tier allows 3 requests a minute, so the client paces itself.
+    assert len(waits) == 1
+    assert 0 < waits[0] <= MIN_SECONDS_BETWEEN_REQUESTS
