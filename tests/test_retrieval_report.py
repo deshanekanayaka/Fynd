@@ -8,8 +8,10 @@ import datetime as dt
 import pathlib
 
 from fynd.models import Paper, SearchResult
+from fynd.retrieval import document_text
 from fynd.retrieval_report import (
     Row,
+    dense_rows,
     ndcg_at,
     rate,
     recall_at,
@@ -275,3 +277,86 @@ def test_the_abstract_count_is_left_out_while_no_row_reads_text() -> None:
 
     # No row reads an abstract yet, so the sentence would explain nothing.
     assert "no abstract" not in text
+
+
+def embed_at_size(vectors: dict[int, dict[str, list[float]]], calls: list):
+    """Returns a factory of embedding functions, one for each vector size.
+
+    The table ranks the same pool at two sizes, so a test has to see that each
+    row asked at its own size and read the vectors that size returned.
+    """
+
+    def factory(size: int):
+        def embed(texts: list[str], input_type: str) -> list[list[float]]:
+            calls.append((size, input_type, texts))
+            return [vectors[size][text] for text in texts]
+
+        return embed
+
+    return factory
+
+
+def test_the_meaning_rows_rank_at_each_size_and_for_each_string() -> None:
+    # The label names the place and the query names the subject, and ADR 0015
+    # says a ranking reads the query. Both are published, because a table that
+    # held only the better one is a configuration chosen after the numbers.
+    near = Paper(paper_id="two", title="Household energy forecasting")
+    far = Paper(paper_id="zero", title="Ultra-processed food")
+    at_1024 = {
+        "United Kingdom household energy forecasting": [1.0, 0.0],
+        "household energy forecasting": [1.0, 0.0],
+        document_text(near): [0.9, 0.1],
+        document_text(far): [0.0, 1.0],
+    }
+    # At 512 the two Papers swap, so a row that read the wrong size is visible.
+    at_512 = dict(at_1024)
+    at_512[document_text(near)] = [0.0, 1.0]
+    at_512[document_text(far)] = [0.9, 0.1]
+    calls: list = []
+
+    rows = dense_rows(
+        [
+            ("label", "United Kingdom household energy forecasting"),
+            ("query", "household energy forecasting"),
+        ],
+        [far, near],
+        embed_at_size({1024: at_1024, 512: at_512}, calls),
+        "voyage-test",
+        sizes=(1024, 512),
+    )
+
+    assert [row.name for row in rows] == [
+        "Meaning 1024, label",
+        "Meaning 1024, query",
+        "Meaning 512, label",
+        "Meaning 512, query",
+    ]
+    assert [row.ranking for row in rows] == [
+        ["two", "zero"],
+        ["two", "zero"],
+        ["zero", "two"],
+        ["zero", "two"],
+    ]
+    assert all(row.is_fynd_ranking and row.reads_text for row in rows)
+    # Every call named the size of the row that made it.
+    assert {size for size, _, _ in calls} == {1024, 512}
+
+
+def test_a_meaning_row_names_the_string_it_asked_for() -> None:
+    one = Paper(paper_id="two", title="Household energy forecasting")
+    vectors = {1024: {"household energy forecasting": [1.0], document_text(one): [1.0]}}
+    calls: list = []
+
+    rows = dense_rows(
+        [("query", "household energy forecasting")],
+        [one],
+        embed_at_size(vectors, calls),
+        "voyage-test",
+        sizes=(1024,),
+    )
+
+    assert "`household energy forecasting`" in rows[0].note
+    assert "query" in rows[0].note
+    # The model is in the row, because a vector of one model says nothing
+    # about a vector of another.
+    assert "`voyage-test`" in rows[0].note

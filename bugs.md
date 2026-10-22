@@ -542,3 +542,27 @@ The candidate rules changed, so the version number in the OpenAlex cache key wen
 
 - Version the stored format and not the code that reads it. The question to ask is whether new code reading an old file produces a correct answer. A yes keeps the key, and a no earns the bump and the refetch that follows it.
 - A cache key is a contract with every file already written under it. Count the files before you change the key.
+
+---
+
+## The model the free tier refuses, and the rate limit the tests could not see
+
+**Found:** 2026-10-23, by the first live run of `measure-retrieval` with the meaning rows.
+
+**What happened:**
+
+The run stopped with "Voyage refused the request twice with status 429". 290 tests passed, and the embedding client had never reached the network.
+
+Two separate limits were behind it. A request for `voyage-4-lite` is refused with a 429 whose body names a missing payment method, and the refusal arrives for a request of one token, so the model is not available to this account at all. Under that sat the real rate limit of the free tier, which is 3 requests and 10000 tokens a minute. The pool of 60 abstracts is about 18000 tokens in one request, and the table asks for more than 3 requests.
+
+**Root cause:** the client was written against the published limits of a paid account. A test passes a fake transport, so no test can see a plan limit or a rate limit. The comment in `src/fynd/voyage.py` even said that 60 abstracts sit well inside the caps of one call, which was true of the documented cap and false of this account.
+
+**Fix:** the model is `voyage-3.5-lite`, which the same key answers 200 for. The client cuts a pool into slices of about 3000 tokens, and it waits 21 seconds between requests, which holds both caps at once.
+
+**Verification:** the run wrote the four meaning rows and reported 16385 tokens. A second run reported 0 tokens, because every vector is on disk.
+
+**Prevention:**
+
+- Read the 429 body. A rate limit and a plan limit arrive with the same status code, and only the sentence inside tells them apart.
+- A published rate limit belongs to a plan. Check the limits of the account that holds the key, and not the limits of the documentation page.
+- The day 12 rule held. The first live run of a command belongs inside the ticket that adds it, and this one found the problem on the day the code was written.

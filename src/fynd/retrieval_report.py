@@ -5,8 +5,10 @@ Project is built on. So this file turns a ranking and the hand grades into
 three numbers, and writes the dated file that publishes them.
 
 The arithmetic is separate from the ranking on purpose. `src/fynd/retrieval.py`
-orders Papers and knows nothing about a grade, and this file reads grades and
-knows nothing about BM25. A test can then compute every number by hand.
+orders Papers and knows nothing about a grade, and every number here is counted
+from a ranking and a grade alone. A test can then compute each one by hand. The
+row builders call a ranking, and they pass the embedding function straight
+through, so nothing here reaches the network either.
 
 Nothing here reads a clock. The caller passes both dates, because one is the
 reference date of the graded set and the other is the day the run happened.
@@ -15,11 +17,13 @@ reference date of the graded set and the other is the day the run happened.
 import datetime as dt
 import math
 import pathlib
+from collections.abc import Callable
 from dataclasses import dataclass, field
 from typing import Final
 
 from fynd.measure import share
-from fynd.models import SearchResult
+from fynd.models import Paper, SearchResult
+from fynd.retrieval import Embed, dense_ranking
 from fynd.retrieval_set import entries_from
 
 # A grade of 1 or 2 counts as relevant. A 1 covers one part of the Topic, and a
@@ -33,6 +37,11 @@ RELEVANT_GRADES: Final = (1, 2)
 HEADLINE_CUT: Final = 20
 SECOND_CUT: Final = 10
 NDCG_CUT: Final = 10
+
+# The vector sizes the meaning rows are published at. The pgvector column holds
+# one of the two, and the table and not a guess decides which. 1024 is what the
+# model serves, and 512 is the half a caller asks for.
+DENSE_SIZES: Final = (1024, 512)
 
 
 # The gain of one Paper is its grade. That is the original linear form of
@@ -100,6 +109,49 @@ def rows_from_searches(
                 ranking=[paper.paper_id for paper in result.papers[:per_query]],
             )
         )
+    return rows
+
+
+def dense_rows(
+    asked: list[tuple[str, str]],
+    papers: list[Paper],
+    embed_at: Callable[[int], Embed],
+    model: str,
+    sizes: tuple[int, ...] = DENSE_SIZES,
+) -> list[Row]:
+    """Returns one meaning row for each vector size and each string asked for.
+
+    `asked` holds the name and the text of each string, which is the label and
+    the query of the Topic. ADR 0015 gives the place to the label and the
+    subject to the query, and the gap between the two rows is the finding the
+    BM25 rows already published. Both are kept, because a table that held only
+    the better one is a configuration chosen after seeing the numbers.
+
+    `model` is the name of the embedding model, which every row prints. A
+    vector of one model says nothing about a vector of another, and the model
+    behind a published number has to be in the file beside it.
+
+    `embed_at` returns the embedding function for one size, so the ranking
+    still takes a plain function argument and a test passes a fake one. The
+    size loop is outside, because the pool is embedded once per size and the
+    second string then reads those vectors from the cache.
+    """
+    rows = []
+    for size in sizes:
+        embed = embed_at(size)
+        for what, text in asked:
+            rows.append(
+                Row(
+                    name=f"Meaning {size}, {what}",
+                    note=(
+                        f"The meaning ranking of `{model}` at {size} values, "
+                        f"asked for the {what} `{text}`"
+                    ),
+                    ranking=[item.paper_id for item in dense_ranking(text, papers, embed)],
+                    is_fynd_ranking=True,
+                    reads_text=True,
+                )
+            )
     return rows
 
 
