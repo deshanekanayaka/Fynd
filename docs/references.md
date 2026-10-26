@@ -11,6 +11,7 @@ Before you copy a line of code, read the licence column. Fynd is a public reposi
 | LangChain Agent Evaluation System | https://github.com/Mohamad-Hachem/LangChain_Agent_Evaluation_System | None stated | 2026-10-19 |
 | ai-teammates | https://github.com/code-with-antonio/ai-teammates | None stated | 2026-10-19 |
 | Roam, an Airbnb clone | https://github.com/jsmastery-pro/airbnb-clone | MIT | 2026-10-19 |
+| searchify | https://github.com/sami-mag07/searchify | MIT | 2026-10-26 |
 
 ### LangChain Agent Evaluation System
 
@@ -48,6 +49,56 @@ What Fynd takes, for the free text search bar of release 2.
 - The free text is bounded and escaped before it reaches a query. They trim to 300 characters, drop control characters, and they tested an injection attempt.
 
 This is the opposite of one thing stage 2 does today. The model writes the Topic `query` string by hand and nothing tests it, which is the imprecise-search finding of day 8.
+
+### searchify
+
+A Python package that searches the live web, strips the menus and footers off a page, and
+reorders the paragraphs it found so the best one comes first. It is MIT licensed, so Fynd can
+use its code and not only its ideas.
+
+Most of it answers a question Fynd does not ask. Fynd does not read live web pages. Fynd reads
+files that a publisher or a repository already put online, and it already strips those with
+`trafilatura` and `pdfplumber`. So the web search, the browser stages and the page cleaning are
+read for interest and nothing more.
+
+The one file worth copying is `skill/references/papers.py`. It asks three academic indexes at
+the same time, OpenAlex, Semantic Scholar and arXiv, and then it joins the three answers into
+one list.
+
+What Fynd takes.
+
+- Ask more than one index, and let one dead index fail quietly. It runs the three in a thread
+  pool, catches the error of each one, and returns an empty list for the one that broke instead
+  of stopping the whole search. Fynd asks Semantic Scholar alone today, so a good Paper that
+  Semantic Scholar ranks low is invisible to every number Fynd publishes.
+- Join duplicates on three keys in order. First the digital object identifier, then the arXiv
+  identifier, then the title with every character that is not a letter or a digit removed and
+  cut to 80 characters. Two keys can point at the same record, so a copy found by title still
+  merges with a copy found by identifier.
+- When two copies of one paper meet, fill each empty field from the other copy. This is worth
+  more to Fynd than the extra index is. 8 of the 60 Papers of the measured set carry no
+  abstract, and a Paper with no abstract is ranked on its title alone. OpenAlex often holds an
+  abstract where Semantic Scholar holds none, so filling those in lifts both the keyword
+  ranking and the meaning ranking and tunes no constant.
+- Walk the citation list. Semantic Scholar answers `/references` and `/citations` for one paper,
+  which reaches work that no wording of a search query would have found.
+
+What Fynd refuses.
+
+- Its sort, which is `citations * (1 + 0.5 * (sources - 1))`. The 0.5 is a hand picked number.
+  Every constant in `src/fynd/retrieval.py` sits at the published default of its method, because
+  a tuned constant measured against the same 60 Papers fits the set. Fynd records how many
+  indexes found a Paper as a plain field, and feeds the agreement into the fusion that already
+  carries a published k of 60.
+- Its reranker. It loads a cross encoder of about 470 megabytes, and the host Fynd deploys to
+  holds 512 megabytes. See the note in `src/fynd/voyage.py`.
+- Its several wordings of one question. Fynd already searches four ways, and the measured table
+  of 2026-10-20 reports a row for each.
+
+The cost to weigh before any of this is written. A wider pool is a different pool, so every
+recall number in `docs/measurements/retrieval-table-2026-10-20.md` stops describing it, and
+each new Paper needs a Relevance grade written by hand. Fynd is the project of one student, so
+that grading is the real price.
 
 ## APIs
 

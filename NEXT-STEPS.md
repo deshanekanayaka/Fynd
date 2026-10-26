@@ -770,6 +770,39 @@ The client now cuts a pool into slices of about 3000 tokens, and it waits 21 sec
 
 Issue 37, which adds the fusion and the reordered fusion. The reorder row needs `rerank-3-lite`, and nothing yet says whether the free tier serves a series 3 reranker, so the first live call of that row comes before its table entry. Then issue 39, which moves the stage 2 gate to the top 20 of the 50 Paper search, and issue 38, which gains the rule of ADR 0015.
 
+## Open concern: the test suite needs a prune, raised 2026-10-26
+
+Counted on 2026-10-26: 290 tests, 4293 lines of test code against 3951 lines of source
+code. There is more test code than there is application, and the application is not
+finished. The count was 183 on day 13, so it grew by about 100 in three days.
+
+Deshan's reading, which stands until a count says otherwise. A test a model wrote while
+writing the code it tests proves that the code does what it was just written to do. It
+catches a typo and an import that breaks today. It does not describe a promise, so it
+does not stop the promise from being broken in six months, and it has to be rewritten the
+moment the code underneath it is reshaped. A suite like that is a tax on every later
+change and not a safety net.
+
+Three numbers are worth having before anything is deleted.
+
+- How many tests fail if one real promise is broken by hand. Delete the body of
+  `retrieval.bm25_ranking` and count. A suite where 40 tests go red for one change is
+  testing the same thing 40 times.
+- How many tests name an internal function rather than a behaviour a reader cares about.
+  Those are the ones that break on a refactor and prove nothing.
+- Which files carry the real promises. `test_retrieval.py` holds 34 tests,
+  `test_open_copy.py` 28, and `test_retrieval_report.py` 24. The report file formats a
+  table, so 24 tests on it is a lot of weight on presentation.
+
+The work, when a day frees up. Keep the tests that would catch a broken promise: the
+character positions of a quote, the licence rule for an open file, the ranking order, the
+cache key, the refusal of a bad model reply. Delete the ones that restate the code. Write
+the kept ones down as a short list of promises in one file, so the list is the thing that
+is maintained and the tests follow it.
+
+Not now. Nothing here blocks the pointing feature, and pruning tests while the
+application is unfinished prunes the wrong ones.
+
 ## Do not do yet
 
 - No requirements documents and no ERD drafting. That is release 2.
