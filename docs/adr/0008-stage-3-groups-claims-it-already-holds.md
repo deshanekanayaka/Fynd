@@ -81,6 +81,14 @@ Currency improves, and it is not solved. The Evidence window keeps an old figure
 
 ## Consequences
 
+### Review update, 2026-11-07
+
+This fixed evidence-first sequence remains the baseline production design. After the measured baseline, a time-boxed LangGraph experiment is committed; adopting it in production is conditional on comparison with the fixed sequence and explicit recovery rules. The agent cannot alter evidence requirements. PRD.md defines its scope and unresolved limits.
+
+The model-comparison proposal now targets Claim-to-Problem support, the unchecked grouping relationship identified above. Start with an offline feasibility pilot. If a check is adopted, it sits after grouping and before cards reach the student, evaluating attachments without deleting located Claims. Define partial support for multi-part statements before model work. The baseline still uses metric 2; this update does not adopt a new model gate. Any extension to Gap support needs its own task and evaluation.
+
+### Existing consequences
+
 The drafting prompt changes job. It receives a list of verified Claims and returns 3 groupings with a statement, a place, and a group of people for each. It receives no freedom to add a fact.
 
 The numbers from the cached run make the OpenAlex lookup load bearing. Of the 20 Papers, 12 are from 2021 or later. 8 of those 12 carry an Open copy link, and 6 of the 8 are doi.org redirects. The two university repository copies are both older than 2021. So the Evidence window leaves 2 directly fetchable files, and the second resolution is what returns the pool to a usable size.

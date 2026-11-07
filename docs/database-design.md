@@ -1,6 +1,6 @@
 # Database design for stage 1 to stage 3
 
-Updated: 2026-10-08. Postgres on Supabase, with pgvector for stage 5.
+Updated: 2026-11-07 after the final review. Postgres on Supabase, with pgvector for stage 5. The schema remains a design, not an applied migration.
 Read [CONTEXT.md](../CONTEXT.md) for the words and [PRD.md](../PRD.md) for the scope.
 
 This document covers stage 1 to stage 3, which is the immediate next task in [NEXT-STEPS.md](../NEXT-STEPS.md). It holds seven tables. Stage 4 to stage 7 add tables later, and this document names them at the end without defining them.
@@ -80,6 +80,7 @@ One row for one Stage of one Project, while that Stage is working and after it s
 create table stage_run (
   project_id bigint not null references project (id) on delete cascade,
   stage_number smallint not null,
+  run_id uuid not null,
   state text not null,
   started_at timestamptz not null default now(),
   error text not null default '',
@@ -96,6 +97,8 @@ This table exists so that a `stage_state` row keeps one meaning, which is "this 
 
 The primary key is the pair, so one Stage of one Project holds one row. A Re-roll overwrites that row. Fynd keeps no history of attempts, because nothing in the product reads it.
 
+Clarification agreed 2026-11-07: `run_id` identifies the current logical run, not a new history row. An interrupted run reuses its identifier on retry; a Re-roll replaces it with a new identifier. A completed current run returns its saved result on repeat. An older run must not overwrite a newer run or its Stage state. The runner must prevent concurrent invocations from duplicating saved effects, and commit the Stage result and completion state consistently. The atomic ownership and commit mechanism needs a concrete design before implementation; adding the identifier alone does not provide idempotency. See draft [ADR 0017](./adr/0017-a-stage-run-has-one-current-identity.md).
+
 The `detail` column holds what the Stage has in hand before it finishes. Stage 2 puts the 10 proposed Topics there, and a count against each Topic the student already tried. Two reasons put that data in the database and not in a Python variable. The free container sleeps after 15 minutes and restarts, and the student sees the same list and the same counts after a reload. A `stage_state` row cannot hold it, because stage 2 has not finished.
 
 A separate table for the work in progress buys nothing, because every Stage needs one such value at a time and the pair of Project and Stage number already names it.
@@ -103,6 +106,8 @@ A separate table for the work in progress buys nothing, because every Stage need
 A Topic under the threshold is not a `failed` run. The state stays `running`, the count goes in `detail`, and the student picks again. The word `failed` keeps its one meaning, which is that the Stage broke, so metric 3 counts real failures only.
 
 A restart leaves a `running` row that no process owns, and no process will ever finish it. A read treats a `running` row older than 5 minutes as failed. The PRD caps a Stage at 3 minutes, so 5 minutes is past any real run, and a dead row clears itself with no background sweeper.
+
+Review correction, 2026-11-07: the preceding timeout rule cannot be implemented unchanged. `running` above includes waiting for a student's Pick, and human deliberation has no three-minute execution limit. Separate execution ownership/timeouts from the saved offered list and waiting state before implementation. Different attempts of one logical run share `run_id`; define an ownership mechanism that prevents an obsolete attempt from committing even when that identifier still matches. No new status column, ownership token or timeout value is selected by this note. See draft ADR 0017 and PRD.md's open non-functional values.
 
 ### source
 

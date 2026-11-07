@@ -1,6 +1,7 @@
 # Fynd: Evidence First Project Finder
 
-Owner: Deshan. Date: 2026-10-05. Target ship date: 2026-10-26.
+Owner: Deshan. Original date: 2026-10-05. Original target ship date: 2026-10-26.
+Design review closed: 2026-11-07. Baseline target date: TBD.
 Vocabulary lives in [CONTEXT.md](./CONTEXT.md). Every capitalised term here is defined there.
 
 ## Problem
@@ -22,7 +23,23 @@ Fynd succeeds if all four hold at ship date.
 3. Reliability: every stage returns in under 3 minutes, and a Project resumes correctly after the container restarts.
 4. Accessibility: WCAG 2.2 AA is the target, axe-core passes in continuous integration, and one keyboard-only pass and one screen reader pass are written up.
 
+Accessibility is version 1 work alongside frontend development, not an optional stretch after AWS or MCP. Automated coverage must include meaningful interface states such as Candidate Problem cards, the evidence panel, loading, thin evidence, and failures, rather than only the initial screen. Automated scans supplement the documented keyboard and screen-reader passes; they do not establish compliance by themselves.
+
 Metric 1 and metric 2 are the filter for every later feature request. A feature that lowers either one does not ship.
+
+Build order agreed on 2026-11-07: complete Stages 3 to 7 using the current fixed Stage 3 sequence before adding an agent or other optional technologies. The complete path includes the evidence checks, saved Stage state, and export. Measure metric 1 and review the 5 complete Projects for metric 2 before starting those additions. Visual polish can follow the first complete path; reliability and accessibility remain version 1 requirements. The purpose is to identify failures in the current design and give each later addition a measured comparison.
+
+## Baseline completion
+
+The baseline is complete and measured when all of these are available:
+
+- A live link where a stranger with an Invite can go from Domain to Export.
+- A README with the measured-components summary, retrieval table and initial verifier table near the top, followed by a short "Why not just use ChatGPT?" explanation. It describes Claims as Source-grounded and traceable, not established truth. The production guard does not use a commercial LLM judge; that judge is an offline experimental competitor only.
+- A recorded example of a rejected Claim or fewer than 3 Candidate Problems.
+- A grounding measurement and 5 complete Projects reviewed against the rubric, with results and failures disclosed.
+- Baseline quarantine and a small Injection set check, restart and retry checks, accessibility checks and manual passes, Langfuse tracing, and CI checks for the implemented promises.
+
+Completing a measurement is not the same as meeting its target. Report each metric as passed, failed, or not yet established. The measured baseline is the prerequisite for experiments; release readiness still requires the product gates above. Every experiment has a time box set before it starts. The baseline target date and time boxes remain TBD, not an extension of the expired original ship date.
 
 ## Measured components
 
@@ -37,6 +54,8 @@ The four metrics above gate the ship date. This section is different. It names t
 | Source text extraction | The share of Papers that give usable text, for each host | A table in the repository |
 | Source independence | The share of pairs the identifier resolver gets right, on 50 hand labelled pairs | A table in the repository |
 | Dropped evidence | The count of dropped Claims by reason and tier, and the count of retracted Papers | A file in the repository |
+| Prompt injection defence | Attack outcomes and legitimate Claim recovery on clean and attacked versions of the Injection set, with explicit denominators | A table in the repository |
+| Claim-to-Problem support experiment | Feasibility pilot first; model precision, recall, F1, thresholds, latency, cost and peak memory only when an adequate independent evaluation exists | Dated experiment reports, not a baseline gate |
 | Every Stage | Tokens, cost, and 95th percentile latency | Langfuse, and the README |
 
 Every number above is produced by a command anyone runs from the repository, against data in the repository. That is the difference between a number and a claim.
@@ -72,11 +91,56 @@ The export is a conversation starter for the first supervisor meeting, not a spe
 - No paywalled papers. Open abstracts and open full text only.
 - No requirements documents and no ERD drafting. That is release 2.
 - No revising a Project after export.
-- No model fine-tuning and no model training of your own.
+- No model training or fine-tuning in the initial product. After baseline completion and measurement, a bounded Claim-to-Problem support experiment may include training a logistic regression baseline and a LoRA fine-tune. It has learning value even if neither trained model ships. A trained model enters the product only if it demonstrates a worthwhile improvement over simpler alternatives on an adequate independent Fynd evaluation, preserves the product gates, and fits the hosting constraints. The experiment's data, budgets, time box, and deployment criteria must be settled before implementation.
 - No mobile app, no chat interface, no response streaming.
 - No live integrations with official data sources beyond one search step.
 
+The model comparison targets Claim-to-Problem support, separately from locating Claims. It is staged, not a requirement to complete a four-model study before shipping. Start with a small pilot of verified Claim/Candidate Problem pairs from the planned Claim set Sources and the reviewed Projects. An assistant may prepare pairs, but Deshan labels them before seeing predictions. The pilot tests whether the task is clear and manageable; it cannot establish model superiority or production accuracy.
+
+Use candidate negatives from other Candidate Problems within the same Topic, checking each by hand because swapping a Claim does not guarantee a negative. Report easy cross-Topic negatives separately. Record whether a Claim supports a particular factual assertion rather than requiring every Claim to establish an entire multi-part Problem. The exact label contract and treatment of partial support must be settled before model work. Mark ambiguous or specialist examples uncertain, report exclusions, and revise the task if labels are often uncertain. Candidate counts, label balance, and statistical uncertainty must be measured, not assumed from 5 Projects.
+
+If adequate evaluation data can be obtained, compare a simple classifier and an existing NLI model. LoRA and an LLM judge are bounded later experiments; stop when further work offers little value. SciFact labels can support training, but its scientific statements and abstract evidence differ from Fynd's real-world Claims and generated Problems. Transfer quality is unknown until measured. Training, prompt/threshold development, and final evaluation stay separate, including by Source and related Problem where reuse could leak information. No fixed uncertainty margin or close model ranking is claimed from the pilot. The LLM judge is a competitor checked against human labels, never the grading authority for the other models. It runs manually for dated measurements, outside continuous integration.
+
+Run the support study offline after Stage 3 grouping. If adopted, a support check belongs after grouping and before cards reach the student. It judges the Claim's attachment, not whether the located Claim should exist at all. Extending it to the Gap is a later hypothesis requiring its own task definition and evaluation, not automatic adoption of the same check. Metric 2 remains the baseline check on grouping under ADR 0008.
+
+The Injection set starts small and covers inputs Fynd actually reads, including Paper abstracts, fetched pages, and metadata passed to models. A small check of the quarantine boundary is baseline work; expand the set for later agent experiments. Each attack has an explicit forbidden outcome and a paired clean input. Reuse checked passages where possible. Report successful attacks, safe continuation, deliberate refusal, and technical failure separately, alongside legitimate Claim recovery. A crash or blanket refusal must not count as useful safe completion. Cached model-answer replay checks the handling of those answers; changed prompts or models require fresh measured runs to assess changed model behaviour. The initial examples, measurement command, and replay checks remain to be designed.
+
 ## Technical direction
+
+### Source text boundary
+
+Source text is untrusted data, including text inside a verified Claim. Extraction calls have no tools, and their prompts wrap and label Source text as data. Any future Stage 3 agent receives verified Claims, necessary metadata, and structured outcomes instead of Source text or Source passages. Verification runs inside each evidence tool before Claims are returned, so the agent cannot bypass it. Structured outcomes and counts explain failures without supplying Source passages.
+
+The student can inspect a cited Claim with its Source passage and original link. That human-facing retrieval is unavailable to the agent, and opening it does not send the passage to the agent. This boundary reduces exposure to prompt injection; locating a Claim does not prove that its words are safe, true, or relevant. See the draft [ADR 0016](./docs/adr/0016-source-passages-stay-outside-the-agent.md). The precise frontend layout remains undecided.
+
+### Committed Stage 3 experiment
+
+After the baseline is complete and measured, build and measure a time-boxed bounded LangGraph agent. Building the experiment is committed; production adoption is conditional. ADR 0008 remains the initial production design, and other Stages retain code-defined control flow. Compare the fixed sequence, explicit recovery rules, and the agent on declared Topic cases and resource limits. Classify Stage 3 failures against Candidate Problem requirements, not the later Gap's separate evidence bar. An exploratory batch of about 10 Topics is a proposed starting scope, not an adequate held-out evaluation by itself.
+
+The agent may select a permitted search, rewrite search words, and stop. Code enforces evidence rules and output acceptance. Eight tool calls is a starting proposal; define the unit and all resource caps before implementation. Reserve budget for grouping and checks. On budget exhaustion, show only supported Candidate Problems under the existing thin-evidence rules, without automatic budget increases. Publish tokens, cost and latency per agent action in addition to Stage tracing. Adopt the agent only if its improvement in Topics yielding supported Candidate Problems is meaningful relative to simpler rules and its cost. Publish the experiment even if adoption is rejected.
+
+### Non-functional design values still to settle
+
+The existing Seeded Topic gate still applies: additional Topics in the exploratory batch wait until metric 1 and metric 2 pass on the first. A completed but failing measurement is not permission to expand Topic scope or claim release readiness.
+
+These named placeholders record unresolved design inputs. They are not configured limits or measured results.
+
+| Placeholder | Status and decision needed |
+|---|---|
+| `BASELINE_TARGET_DATE` | TBD; the original ship date is expired. |
+| `PROJECT_SPEND_LIMIT` | TBD; distinguish the spending ceiling from measured and cached replay costs. |
+| `AGENT_TOOL_CALL_UNIT` | TBD; define whether one call can perform multiple fetches or model calls. |
+| `AGENT_TOOL_CALL_CAP` | 8 is an experimental proposal, not a validated value. |
+| `AGENT_TOKEN_CAP` | TBD; include reserved grouping/checking capacity and work inside tools. |
+| `STAGE_EXECUTION_BUDGET` | Existing target: under 3 minutes; define timing boundaries and agent/tool sub-budgets. Report cold startup, execution and time to usable results separately. A quick acknowledgement does not satisfy completion latency. |
+| `FUZZY_MATCH_THRESHOLD` | TBD from development data and separate evaluation; no fuzzy tier in the initial verifier. |
+| `SUPPORT_DECISION_THRESHOLD` | TBD only after the support task, label rules and adequate evaluation are defined; the pilot is not a production gate. |
+| `MODEL_MEMORY_LIMIT` | TBD from the chosen deployment's verified allowance; measure peak process memory, startup and inference before selecting or training a model. No model family is presumed to fit. |
+| `EXPERIMENT_TIME_BOXES` | TBD individually before agent, fuzzy, support-model, AWS or MCP work starts. |
+
+The local-model memory check is an early experiment prerequisite, not permission to extend baseline scope. Verify host limits, dependency size and runtime overhead rather than relying on an assumed 512 MB allowance or on model names. The runtime cache's durable storage and the distinction between active work and waiting for a student's Pick also need design. Local filesystem cache survival is not implied by saving Project rows in Supabase.
+
+### Stack
 
 Each choice maps to a line that the job postings ask for. Engineering owns the library picks inside each row.
 
@@ -87,13 +151,13 @@ Each choice maps to a line that the job postings ask for. Engineering owns the l
 | Accessibility | WCAG 2.2 AA target, axe-core in continuous integration | A claim with a check behind it |
 | Discovery | Semantic Scholar Academic Graph API with a key | Retrieval over a real corpus |
 | Retrieval | A search for 50 Papers, ranked by BM25 and dense vectors in Python and cut to 20, scored against the Retrieval set | Retrieval evaluation, recall at k, nDCG |
-| Open copy | OpenAlex resolves the Open copy by digital object identifier, and no publisher is fetched | Working with a real, broken supply of files |
+| Open copy | OpenAlex resolves open file candidates by digital object identifier; repository locations rank before journal locations under ADR 0012 | Working with a real, broken supply of files |
 | Source text | Open copy fetch, PDF and HTML extraction, and a quality detector with a per host success rate | Data engineering on messy input |
 | Real world evidence | One web search step for Statistics and Products | Context engineering |
 | Storage | Supabase Postgres, with pgvector for the stage 5 chunk search | Vector databases, database design |
 | Extraction | Claude Haiku 4.5, one call per chunk | Prompt engineering at volume |
 | Drafting | Claude Opus 5, one call per Proposal | Quality where it is the product |
-| Guard | A tiered verifier, from exact match to entailment, with thresholds tuned on the labelled set | Guardrails, faithfulness scoring |
+| Guard | Exact and normalised matching initially; fuzzy alignment and rejection-only entailment are measured extensions under ADR 0005 | Guardrails, faithfulness scoring |
 | Provenance | Character offsets carried through extraction, normalization, and chunking | Verifiable citations |
 | Independence | A coauthor graph rule, and identifier deduplication across three identifier kinds | Graph work, entity resolution |
 | Replay | Prompts as versioned files, and a cache keyed by every value that changes the answer | Prompt versioning, repeatable evaluation |
@@ -108,11 +172,35 @@ The Render free tier was confirmed on 2026-10-08. It grants 750 instance hours f
 
 Model cost is roughly 240,000 input tokens of extraction plus one drafting call. That is under one dollar per Project.
 
+The runner exposes `run_stage(project_id, stage, run_id)` and owns persistence; Stage rule files retain the separation in ADR 0006. Repeating a completed current run returns saved results without duplicating them. A retry reuses the run identifier; a Re-roll creates a new one. Older runs cannot overwrite newer state, and concurrent invocations must not duplicate committed effects. Version 1 retains one current `stage_run` row per Project and Stage, with no attempt history. This reliability work belongs to the baseline; moving execution to a queue is a separate proposal. Idempotency of saved state does not guarantee exactly one external call or charge. See draft [ADR 0017](./docs/adr/0017-a-stage-run-has-one-current-identity.md).
+
+### Optional AWS demonstration
+
+After the baseline and its measurements, an optional separately deployable SQS/Lambda path may invoke the same runner, with resources described in Terraform, a source-queue dead-letter policy, and a budget alert. The main version 1 deployment stays on FastAPI. The demonstration is complete only when duplicate delivery, retry after interruption, and eventual dead-letter handling have been checked, not merely a successful run. Queue delivery does not guarantee exactly-once work; a dead-letter queue does not repair failures; a budget alert is not a hard spending cap. The database-to-queue handoff, ownership and retry details, resource limits, and spending controls need design before implementation or deployment. No production migration is agreed.
+
+### Optional MCP demonstration
+
+After the AWS stretch item, an optional MCP interface may expose `search_papers` and `verify_claim` using the same underlying Fynd logic. Its purpose is learning and interoperability until a real external application needs it. Return Paper metadata, verified Claims, and verification outcomes, not abstracts or Source passages. Verification may read Source text internally. The interface cannot create Projects, record Picks, request Re-rolls, or start Stages. Enforce those limits in code, not only tool annotations. The transport, client, access controls, and operational limits remain to be designed; no public service or production dependency is required by this decision.
+
+### Continuous integration
+
+Add GitHub Actions checks as their components become runnable: ruff, contract tests, metric 1 replay, verifier measurements, Injection set replay checks, and frontend accessibility scans. Once established as required, these checks must pass before merging. Missing required replay data fails visibly rather than silently skipping evaluation. Tests use committed data permitted by ADR 0011 and call no live paid services. The initial exact/normalised guard needs no downloaded NLI model. If a local model later becomes a required check, CI setup obtains a pinned, permitted model artifact and caches it by its identity/revision; tests must not silently switch models or skip on a missing artifact. The retrieval table remains outside CI under ADR 0013; this decision does not move its uncommitted abstracts into git.
+
+A passing replay checks code against pinned inputs and recorded model answers. A prompt or model change affecting behaviour requires fresh dated evaluation and updated replay evidence before acceptance, even when the old replay still passes. Paid measurements and the LLM judge remain outside routine CI. Metric 2 remains the human review of complete Projects, not an automated judgement inferred from green checks. CI adoption does not authorise automatic deployment.
+
+### Test contracts and pruning
+
+Organise tests around product promises: a Claim maps to its Source span; a rejected Claim never reaches output; duplicate Sources cannot inflate independence; thin evidence cannot create an unsupported Candidate Problem; a Project resumes from saved Stage state after restart; and failed, duplicate, or obsolete runs cannot corrupt Project state. Add missing coverage while building the baseline. Retain useful checks for cache keys, malformed replies, fetching rules, budgets, and known bugs.
+
+Prune incrementally when reviewing the relevant code. Remove a test only when its promise is covered elsewhere, its requirement no longer applies, or it checks an unnecessary implementation detail. Preserve useful regression coverage. A large test count, a reference to an internal function, or many failures after one mutation is a reason to investigate, not proof that tests are redundant. Do not make a wholesale test cleanup a prerequisite for finishing the Stages.
+
 ## Design direction
 
 Structure comes from research tools, with Elicit as the reference for showing Claims with citations without drowning the reader. Colour and voice come from warm writing tools, and the empty states and the stage 3 copy carry that warmth, because the student is most uncertain there. Components are standard, so an input box feels like an input box. The theme is not the default: a chosen typeface pair, a chosen colour scale, a 5 step type scale, and one density. Stage 3 shows the 3 candidate Problems as three standard cards side by side, each with its 2 Claims and their citations. The bespoke problem picker was cut on 2026-10-07 to pay for the measured components, and the cards carry the same information in the same order.
 
 ## Three week plan
+
+The dated plan below is historical. The current baseline-first build order and the next section-by-section design task are recorded at the top of [NEXT-STEPS.md](./NEXT-STEPS.md). No replacement baseline date or experiment time box has been selected.
 
 Revised on 2026-10-07. The first version of this plan put one number on one component. This version puts a number on six, and pays for it with the cuts below.
 
