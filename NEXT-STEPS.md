@@ -1,8 +1,86 @@
 # Next steps
 
-Updated: 2026-10-23, day 13. Target ship date: 2026-10-26.
-The ship date is a target and not a constraint. The design phase takes the time it needs, because Deshan must be able to explain every part of this project.
-Read [PRD.md](./PRD.md) for the product and [CONTEXT.md](./CONTEXT.md) for the vocabulary.
+Updated: 2026-11-07 after the final review supplied by Deshan. Original target ship date: 2026-10-26. Baseline target date: **TBD**.
+Read [PRD.md](./PRD.md) for scope and [CONTEXT.md](./CONTEXT.md) for vocabulary. The build entries below retain their original dates.
+
+## Final design review, 2026-11-07
+
+The discussion is closed. Deshan supplied Claude's final response because Claude could not access the local changes or continue the review. Its useful recommendations are incorporated here; statements about unseen local files and unmeasured performance are not treated as verified facts. This session updates documents only. No implementation, infrastructure creation, or deployment is authorised.
+
+### Decisions and agreed reasons
+
+| Change | Final decision | Reason |
+|---|---|---|
+| 1. Baseline first | Keep | Finish and measure the product before judging additions. |
+| 2. Stage 3 agent | Commit to a time-boxed LangGraph experiment; production adoption conditional | Demonstrate agent engineering and publish the comparison even if simple rules win. |
+| 3. Quarantine | Keep in the baseline and later agent | Reduce exposure to instructions in Sources while preserving human inspection. |
+| 4. Citation guard | Exact/normalised first; evaluate fuzzy and rejection-only entailment later | Additional complexity must recover useful Claims without weakening location checks. |
+| 5. Model comparison | Target Claim-to-Problem support; pilot feasibility before model rankings | Address an unchecked evidence relationship and avoid overstating small-data results. |
+| 6. Injection set | Small baseline check, expanded for the agent | Test the quarantine boundary and legitimate evidence lost. |
+| 7. Runner | Keep idempotent saving inside FastAPI for version 1 | Protect Project state even if no queue is ever adopted. |
+| 8. Stretch | AWS then MCP optional; accessibility remains baseline | Separate infrastructure learning from required product quality. |
+| 9. CI | Keep, with explicit replay limitations | Automatically check promises without implying fresh model evaluation. |
+| 10. Tests | Add contracts and prune incrementally | Reduce redundant maintenance while retaining useful regression coverage. |
+
+### Baseline and experiment boundary
+
+PRD.md defines baseline completion: a live Invite-based Domain-to-Export journey; a README presenting measurements and the product's distinction from a chat assistant; a recorded refusal/thin-evidence example; grounding measurement and 5 reviewed Projects; plus reliability, quarantine, a small injection check, accessibility, tracing and CI. Claims are Source-grounded and traceable, not certified true. Completing measurements does not establish passing the product gates; disclose results and limitations.
+
+The agent experiment **will be built and measured after the baseline**, using LangGraph. Only production adoption is conditional. ADR 0008 remains the initial production workflow; other Stages retain code-defined control flow. Begin with an exploratory failure list on about 10 Topics, within budget. Record failures against Stage 3's two-Claim/Source-kind/place/people requirements, not the Gap's separate evidence bar. Compare fixed gathering, explicit recovery rules and the agent on declared cases. An exploratory failure set is not automatically an independent final evaluation.
+
+The agent may choose a permitted search, rewrite search words and stop. Code enforces evidence, output and resource limits. Eight tool calls is a proposal. Define the unit, token and spending caps and latency sub-budgets before implementation, including work inside tools. Reserve capacity for grouping and checks. Exhaustion ends search without more spending; show only supported Candidate Problems and apply the existing Topic-return rules. Trace tokens, cost and latency per agent action. Keep simpler production rules if the agent's benefit does not justify its cost, and publish the negative experiment.
+
+### Evidence and model evaluation
+
+The existing Seeded Topic gate still applies: additional Topics in the exploratory batch wait until metric 1 and metric 2 pass on the first. A measured baseline with a failing gate does not authorise Topic expansion.
+
+ADR 0005 now explicitly identifies exact and normalised matching as the initial verifier. Fuzzy alignment is a later experiment using missed true Claims and deliberately incorrect matches, with separate development/evaluation examples. Drop it if recovery is not worthwhile or no evaluated setting avoids incorrect admissions. The minimum worthwhile gain and threshold remain unset. Entailment compares located Source wording with proposed extraction wording only where fuzzy matching creates that need; it never admits an unlocated Claim. It is not the main model-comparison task.
+
+The model study instead targets **Claim-to-Problem support** after grouping. Start offline; if adopted, check before cards reach the student. Judge the attachment rather than deleting a located Claim. Define how a Claim supports a factual assertion within a multi-part Problem, and how partial support is labelled, before model work. Extending this check to the Gap is a separate hypothesis requiring its own definition and evaluation. Metric 2 remains the baseline grouping check.
+
+Use a small feasibility pilot of verified Claim/Problem pairs from the planned Claim set Sources and reviewed Projects. An assistant may prepare pairs; Deshan labels before seeing predictions. Minimise manual effort. This checks textual support, not scientific correctness. Mark ambiguous or specialist examples uncertain, report exclusions, and revise unclear rules before collecting more. It is not approval for a large annotation project.
+
+Include candidate hard negatives from other Candidate Problems in the same Topic, checking each rather than assuming a swapped pair is negative. Report easy cross-Topic negatives separately. Five Projects do not guarantee 15 Candidate Problems or independent balanced pairs. The pilot cannot establish production accuracy or rank close models. Claude's approximate uncertainty margin is not an adopted statistical result.
+
+If an adequate independent Fynd evaluation is feasible, compare a simple classifier and an existing NLI model. LoRA and an LLM judge remain bounded later experiments, not a compulsory four-model study. SciFact can supply training labels, but its scientific statements and abstract evidence differ from Fynd's real-world inputs. Transfer performance remains unknown. Separate training, development and final evaluation by Source and related Problem as needed. The judge is a manually run competitor against human labels, never the grading authority or production gate. A trained model ships only for a worthwhile independently measured benefit within product and hosting constraints. Without suitable Fynd evaluation, retain learning results without a Fynd improvement claim.
+
+Before model selection or training, measure peak process memory, startup and inference in the verified target environment. A presumed 512 MB limit and predictions about which model families fit are not measured findings. PRD.md holds named placeholders for memory, spending, caps, thresholds, dates and time boxes. No values are invented here.
+
+### Quarantine, reliability and release checks
+
+Extraction reads Source text as labelled data and has no tools. Evidence tools verify Claims before returning them. The agent receives verified Claims, necessary untrusted metadata and structured outcomes, never abstracts or Source passages. Students can inspect surrounding Source passages without feeding them to the agent. Injection can still travel in verified text. Draft ADR 0016 records the boundary and its trade-off. A small paired clean/attacked Injection set check is baseline work, with successful attacks, safe continuation, refusals, failures and legitimate Claim recovery reported separately.
+
+The runner owns saving under ADR 0006. Retry uses the same logical run identifier, a Re-roll a new one, and obsolete runs cannot overwrite current state. Keep one current Project/Stage row without attempt history. Draft ADR 0017 records the contract, not a finished concurrency mechanism. Ownership of different attempts of the same run, atomic commits, and the active-computation versus waiting-for-Pick distinction remain design blockers. Saving Stage state does not guarantee exactly one paid external call. Runtime cache durability must be designed separately from Project persistence.
+
+AWS and MCP remain optional demonstrations after the baseline. AWS must demonstrate duplicates, retries and dead-letter handling; a budget alert is not a hard cap. MCP exposes only metadata and permitted verification results, not Source passages or Project-changing tools. Main hosting remains in-process FastAPI on Render, with Vercel and Supabase; no production migration or public MCP service is approved.
+
+Add required CI checks as components become runnable. The initial verifier needs no NLI model download. If a local model later becomes required, obtain and cache a pinned permitted artifact during setup; fail visibly if required data/artifacts are unavailable. Tests use no live paid services. Changed model/prompt behaviour needs fresh dated measurements, not just old-answer replay. Metric 2 stays human. Add contract coverage while building and prune tests only for redundant promises, removed requirements or unnecessary implementation detail; preserve useful bug regression checks. The historical 290-test count is not evidence of redundancy.
+
+### Next design task and build sequence
+
+Resume the section-by-section design process: reconcile the existing product/scope material with the final changes (Section 2), then define non-functional requirements (Section 3). No separately named Section 2/3 draft was found in this checkout, so do not claim one has already been re-issued. PRD.md's named placeholder table records the missing decisions without inventing their values. Set a baseline target date and individual experiment time boxes in that planning step. Do not reopen the entire technology discussion.
+
+Before implementation, reconcile the actual state of outstanding retrieval tickets. Then use this sequence:
+
+1. Define and label the Claim set of 10 Sources, including the annotation rules and expected outputs.
+2. Build extraction and exact/normalised matching; measure metric 1 and disclose failures.
+3. Complete the fixed Stage 3 command-line path, quarantine wrappers and a small injection check.
+4. Design and implement the runner and persistence contracts, including restart, duplicate and stale-attempt checks.
+5. Complete Stages 4 to 7.
+6. Build the frontend with accessibility scans and the manual passes.
+7. Complete Langfuse and CI wiring before deployment. Add contract checks, tracing and local checks alongside their components rather than deferring all verification to this point.
+8. Deploy and measure the five complete Projects; publish the baseline and the exploratory Stage 3 failure list.
+9. Run separately time-boxed experiments: agent versus rules, fuzzy recovery, Claim-to-Problem support pilot and any justified model comparison, then optional AWS, then optional MCP. Perform a model-memory preflight before selecting or training local candidates. Baseline failures requiring a complex verifier must be disclosed and resolved before claiming the grounding gate passed.
+
+The original three-week schedule below is historical. Baseline date, experiment time boxes and exact model/agent budgets remain **TBD**. Draft ADRs 0016 and 0017 retain proposed status; no agent, trained model, AWS migration or MCP service is adopted for production.
+
+### Review provenance and learning
+
+Claude's final response was supplied by Deshan, not obtained through a connected service. Its claim that the ADR 0005 clarification was absent reflected lack of access: the dated local clarification already existed and is now expanded. The original training non-goal had no recorded rationale. Specific employer expectations remain unverified because the target job descriptions were not supplied. The [Claude review disposition](./docs/claude-alignment-review.md) records the closed review and corrections.
+
+Use CONTEXT.md only for glossary terms. New here: Claim-to-Problem support; Candidate Problem now explicitly says up to 3. No GLOSSARY.md or GLOSSARY-MAP.md is created. No new model or agent adoption ADR is appropriate before evidence exists.
+
+Teaching preferences: explain unfamiliar terms with short Fynd examples, infer speech-to-text mistakes, and ask only about unresolved decisions. No repeat-back quizzes unless requested. Interview readiness belongs to a separate session. Study areas include grounding versus quality, agent discretion versus enforced rules, fuzzy matching, support labels and partial evidence, independent evaluation, replay limits, and idempotency versus exactly-once calls.
 
 ## Where the work stands
 

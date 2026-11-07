@@ -43,7 +43,7 @@ The real situation the student's software will address, stated in plain words an
 _Avoid_: pain point, use case, research question
 
 **Candidate Problem**:
-One of the 3 Problems Fynd drafts at stage 3, each with 2 Claims. The student picks one.
+One of up to 3 Problems Fynd drafts at stage 3, each with 2 Claims. The student picks one.
 _Avoid_: problem candidate, option, suggestion
 
 **Source**:
@@ -66,6 +66,10 @@ _Avoid_: content, body, raw text, full text
 A Source text that passes the quality checks, so Fynd reads Claims from it.
 _Avoid_: good text, clean text, valid text, quality text
 
+**Source passage**:
+The portion of a Source text surrounding a Claim, shown with the Claim so a student can inspect its context.
+_Avoid_: raw passage, snippet, generated explanation
+
 **Statistic**:
 A published figure or rule from an official body that shows the Problem is real, for example an Office for National Statistics release.
 _Avoid_: data point, evidence, fact
@@ -85,6 +89,10 @@ _Avoid_: limitation, finding, insight, quote
 **Evidence window**:
 The 5 year age limit on a Source whose Claim proves a Problem is real. An Existing approach and a Technical core carry no limit.
 _Avoid_: recency filter, date cutoff, freshness
+
+**Claim-to-Problem support**:
+The relationship between a verified Claim and the factual assertion in a Candidate Problem it is cited to support. A located Claim can fail to support that assertion, and one Claim need not establish the whole Problem.
+_Avoid_: citation verification, Source truth, Claim correctness
 
 **Gap**:
 The shortcoming that several Existing approaches share, supported by Claims from independent Sources. The Gap is what a Proposal aims at.
@@ -113,6 +121,10 @@ _Avoid_: eval set, test set, golden set, the labelled set
 **Claim set**:
 The 10 Sources whose true Claims are written down by hand. Metric 1 scores Claim extraction against it.
 _Avoid_: golden set, ground truth, the labelled set
+
+**Injection set**:
+The examples of planted instructions in Fynd's real inputs, each paired with a clean version and an expected forbidden outcome. It measures attack outcomes and the legitimate Claims lost.
+_Avoid_: security benchmark, attack corpus, jailbreak set
 
 **Relevance grade**:
 The hand written 0, 1 or 2 that says how well one Paper matches the subject of a Topic. It ignores the place, because a Statistic and not a Paper proves a Problem is real in a place.
