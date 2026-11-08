@@ -1,8 +1,4 @@
-"""The retrieval table has to count recall and nDCG the way it says it does.
-
-Every number here is computed by hand in the test, because a measurement file
-that nobody can check is a claim and not a number.
-"""
+"""Checks ranking metrics against small examples and verifies report context."""
 
 import datetime as dt
 import pathlib
@@ -112,6 +108,7 @@ def test_the_table_names_every_row_with_its_numbers() -> None:
     assert "| hand |" in text
     # The headline rate and its raw count, for the baseline row at 20.
     assert "(2/3)" in text
+    assert "Recall at 10 cannot pass 3 of 3 Papers, which is 100%" in text
 
 
 def test_the_table_states_its_three_limits() -> None:

@@ -1,7 +1,11 @@
-"""The shapes Fynd passes between its own parts.
+"""Defines Topics, Papers, search responses, and Open copy locations.
 
-The words follow CONTEXT.md. These are pydantic models, not dataclasses,
-because each one is built from an API reply that leaves fields out.
+Stage 2 creates Topics for the student to pick. The Semantic Scholar client
+turns search replies into Papers and SearchResults for Stage 2 and retrieval.
+The OpenAlex client returns OpenCopy locations for the file-fetching pipeline.
+
+These shared types let that code use named fields instead of raw API replies.
+Pydantic checks field types; Stage and fetching code enforce product rules.
 """
 
 from pydantic import BaseModel, Field
@@ -10,10 +14,9 @@ from pydantic import BaseModel, Field
 class Topic(BaseModel):
     """One Topic a Stage offered."""
 
-    # The slug is what a Pick names, per ADR 0003. The label and the query both
-    # come from the model, per ADR 0002, so no later Stage rewrites one into
-    # the other.
+    # A Pick names the slug, so it does not depend on the display label.
     slug: str
+    # Keep the place in the label and out of the search query (ADR 0015).
     label: str
     query: str
 
@@ -25,15 +28,14 @@ class Paper(BaseModel):
     title: str
     abstract: str = ""
     year: int | None = None
-    # ADR 0007 added the digital object identifier, which OpenAlex needs to
-    # resolve the Open copy, and dropped the arXiv identifier, because the
-    # first live run returned none.
+    # OpenAlex uses the DOI to look up an Open copy.
     doi: str = ""
     open_copy_url: str = ""
 
     @property
     def has_open_copy(self) -> bool:
-        """Says whether this Paper has an Open copy link."""
+        """Reports whether Semantic Scholar supplied an open link."""
+        # A reported link may be a landing page, so this does not verify a file.
         return bool(self.open_copy_url)
 
 
@@ -42,20 +44,13 @@ class SearchResult(BaseModel):
 
     query: str
     total: int = 0
+    # Each search result needs its own list of Papers.
     papers: list[Paper] = Field(default_factory=list)
 
     @property
     def open_copy_count(self) -> int:
-        """Counts the Papers that Semantic Scholar says have an open link.
-
-        No gate reads this number. It arrives free in the reply, and it is
-        the number the stage 2 gate stopped reading, because it counts a Paper
-        whose only address is a doi.org lookup. The gate counts the Papers
-        OpenAlex gives a candidate instead. For the pool of 2026-10-09 this
-        number is 14 and that one is 10. See issue 18.
-        """
-        # The search asks for the Evidence window, so every Paper counted here
-        # is inside it. See ADR 0008.
+        """Counts Papers with an open link reported by Semantic Scholar."""
+        # Stage 2 uses OpenAlex candidates instead; reported links can hold no file.
         count = 0
         for paper in self.papers:
             if paper.has_open_copy:
@@ -66,8 +61,7 @@ class SearchResult(BaseModel):
 class OpenCopy(BaseModel):
     """The free file of a Paper, as OpenAlex located it."""
 
-    # The host is kept beside the link, because the measured table in
-    # docs/measurements groups every number by host. See ADR 0007.
     url: str
+    # Measurements group fetch outcomes by host.
     host: str
     license: str = ""

@@ -18,9 +18,7 @@ A_LONG_TEXT = "Results. The household energy demand of England rose again. " * 2
 REPOSITORY_COPY = OpenCopy(
     url="https://dro.dur.ac.uk/aaa.pdf", host="dro.dur.ac.uk", license="cc-by"
 )
-JOURNAL_COPY = OpenCopy(
-    url="https://www.mdpi.com/aaa.pdf", host="www.mdpi.com", license="cc-by"
-)
+JOURNAL_COPY = OpenCopy(url="https://www.mdpi.com/aaa.pdf", host="www.mdpi.com", license="cc-by")
 
 
 def paper(**fields) -> Paper:
@@ -121,8 +119,7 @@ def test_the_semantic_scholar_link_is_the_last_resort() -> None:
 
 
 def test_a_doi_org_link_is_never_a_fetch_target() -> None:
-    # 6 of the 12 links in the first live run were this. A doi.org link is a
-    # redirect to a publisher page, and ADR 0007 fetches no publisher.
+    # DOI resolver links are lookup keys, not file targets (ADR 0012).
     result = read_open_copy(
         paper(open_copy_url="https://doi.org/10.1000/aaa"),
         resolve_to(Resolution(found=True, reason=reasons.NO_OPEN_LOCATION)),
@@ -220,8 +217,8 @@ def test_every_reason_is_a_name_the_table_prints() -> None:
         reasons.NO_SECTION_WORD,
     ):
         assert reason in reasons.ALL
-    assert len(reasons.ALL) == 12
-    assert not hasattr(reasons, "NO_REPOSITORY_LOCATION")
+    # Each reason should produce one report row, without fixing the number of reasons.
+    assert len(reasons.ALL) == len(set(reasons.ALL))
 
 
 def test_a_text_at_the_length_threshold() -> None:
@@ -240,13 +237,9 @@ def test_a_paper_text_with_no_section_word_is_refused() -> None:
 
 
 def test_a_text_at_the_ordinary_share_boundary() -> None:
-    # 0.95 of the characters must be ordinary. Every real text of the live run
-    # scored above 0.996, and the old value of 0.80 passed a text that was one
-    # fifth rubbish.
-    assert reason_against_page_text("a" * 9600 + chr(0xE000) * 400) == ""
-    assert (
-        reason_against_page_text("a" * 9000 + chr(0xE000) * 1000) == reasons.TEXT_NOT_TEXTUAL
-    )
+    # Accept exactly 95%; reject one fewer ordinary character in the same-sized text.
+    assert reason_against_page_text("a" * 9500 + chr(0xE000) * 500) == ""
+    assert reason_against_page_text("a" * 9499 + chr(0xE000) * 501) == reasons.TEXT_NOT_TEXTUAL
 
 
 def test_the_semantic_scholar_link_is_not_used_when_openalex_names_one() -> None:

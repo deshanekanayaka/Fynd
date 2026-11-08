@@ -1,12 +1,9 @@
-"""Turn the bytes of an Open copy into a Source text.
+"""Extracts Source text from PDF and HTML bytes for
+ the Open copy pipeline and CLI.
 
-The Source text is the one exact string a Claim points into with two character
-offsets, so this file produces the value every later guard depends on. See
-ADR 0005 and ADR 0007.
-
-An extractor returns the flat text plus the structure, which is the page spans.
-It returns no offset map into the bytes, because a PDF holds no reading order,
-so a byte position names no sentence.
+PDFs use pdfplumber; HTML uses trafilatura. The result holds the extracted
+string, the library version, and PDF page ranges for display. Later Claims
+must point into this exact string, not the original file bytes (ADR 0005).
 """
 
 import io
@@ -18,29 +15,25 @@ import trafilatura
 
 from fynd import cache
 
-# What separates one page from the next in the Source text. Two newlines, so a
-# sentence never runs across a page break by accident.
+# Keep page boundaries visible instead of joining their text directly.
 PAGE_SEPARATOR: Final = "\n\n"
 
-# Two columns is the normal shape of an energy paper, and the widest shape Fynd
-# reads. A page with three columns gives one column of the three, which the
-# measurement shows and a later day fixes.
+# The split supports two columns; other counts would need different crop boundaries.
 MAX_COLUMNS: Final = 2
 
-# The gutter test. Fynd looks for a vertical band with no words in it, inside
-# the middle third of the page, and at least this wide in points. 18 points is
-# about three characters, which is wider than any word space.
+# Require an 18-point gap to avoid mistaking ordinary word spacing for a column break.
 MIN_GUTTER_POINTS: Final = 18.0
 GUTTER_SEARCH_START: Final = 0.33
 GUTTER_SEARCH_END: Final = 0.67
 GUTTER_STEP_POINTS: Final = 2.0
 
+# Bump this when our extraction rules or stored result shape change.
 EXTRACT_SHAPE_VERSION: Final = 1
 
 
 @dataclass(frozen=True)
 class Span:
-    """One labelled range of the Source text, held for display only."""
+    """A labelled character range in Source text, used for display."""
 
     kind: str
     label: str
@@ -50,7 +43,7 @@ class Span:
 
 @dataclass(frozen=True)
 class Extracted:
-    """The Source text of one Open copy, with the structure and the extractor."""
+    """Extracted Source text with its library version and display ranges."""
 
     text: str
     extractor: str
@@ -58,25 +51,23 @@ class Extracted:
 
 
 class Reader(Protocol):
-    """The job of turning bytes into a Source text, which the cache wraps."""
+    """A supplied function that converts bytes into an Extracted value."""
 
     def __call__(self, data: bytes) -> "Extracted": ...
 
 
 def pdf_extractor_name() -> str:
-    """Returns the PDF extractor and its version, for example `pdfplumber 0.11.4`."""
-    # The name travels with the text, because a text hash says that the text
-    # changed and nothing else says what changed it.
+    """Returns the installed PDF extraction library's name and version."""
     return f"pdfplumber {pdfplumber.__version__}"
 
 
 def html_extractor_name() -> str:
-    """Returns the HTML extractor and its version, for example `trafilatura 2.3.1`."""
+    """Returns the installed HTML extraction library's name and version."""
     return f"trafilatura {trafilatura.__version__}"
 
 
 def crossing_words(words: list[dict[str, Any]], x: float) -> bool:
-    """Says whether any word on the page crosses this vertical line."""
+    """Checks whether a word's bounding box crosses a vertical line."""
     for word in words:
         if word["x0"] < x < word["x1"]:
             return True
@@ -84,7 +75,7 @@ def crossing_words(words: list[dict[str, Any]], x: float) -> bool:
 
 
 def words_on_both_sides(words: list[dict[str, Any]], x: float) -> bool:
-    """Says whether words sit to the left of this line and to the right of it."""
+    """Checks for words on both sides of a proposed column split."""
     left = False
     right = False
     for word in words:
@@ -96,23 +87,12 @@ def words_on_both_sides(words: list[dict[str, Any]], x: float) -> bool:
 
 
 def gutter_of(page: Any) -> float | None:
-    """Returns the x of the gap between two columns, or None for one column.
-
-    A two column page is read as a whole page by pdfplumber, which puts the
-    first line of the left column and the first line of the right column on one
-    line. A Claim quoted from such a line is nonsense, so the gap is found and
-    each column is read on its own.
-    """
+    """Finds a likely column-gap position, or returns None when none qualifies."""
     words = page.extract_words()
     if not words:
         return None
 
-    # Walk the middle third of the page and keep the longest run of positions
-    # that no word crosses. A plain loop, because the page is a few hundred
-    # points wide and clarity matters more than speed here.
-    # The band is measured in page coordinates and never from the width alone,
-    # because a real page box starts where it likes. A word position is in the
-    # same coordinates, so the two must agree.
+    # Include the page origin because PDF coordinates do not always start at zero.
     left, _, right, _ = page.bbox
     width = right - left
     start = left + width * GUTTER_SEARCH_START
@@ -120,6 +100,7 @@ def gutter_of(page: Any) -> float | None:
     best_run = (0.0, 0.0)
     run_start: float | None = None
     x = start
+    # Scan 33–67% of the page width in 2-point increments for the widest clear gap.
     while x <= end:
         if crossing_words(words, x):
             run_start = None
@@ -133,13 +114,14 @@ def gutter_of(page: Any) -> float | None:
     if best_run[1] - best_run[0] < MIN_GUTTER_POINTS:
         return None
     middle = (best_run[0] + best_run[1]) / 2
+    # A clear margin is not a column gap unless text sits on both sides.
     if not words_on_both_sides(words, middle):
         return None
     return middle
 
 
 def page_text(page: Any) -> str:
-    """Returns the text of one page, one column at a time."""
+    """Reads a page whole or as left and right columns when a gap is found."""
     gutter = gutter_of(page)
     if gutter is None:
         return page.extract_text() or ""
@@ -147,9 +129,9 @@ def page_text(page: Any) -> str:
     columns = []
     left, top, right, bottom = page.bbox
     edges = [left, gutter, right]
+    # Read down the left column before the right to avoid interleaving sentences.
     for index in range(MAX_COLUMNS):
-        # The crop box lives inside the page box, so the top and the bottom
-        # come from the page and never from its height.
+        # Use actual page coordinates so cropping also works with a nonzero origin.
         box = (edges[index], top, edges[index + 1], bottom)
         text = page.crop(box).extract_text() or ""
         if text:
@@ -158,7 +140,7 @@ def page_text(page: Any) -> str:
 
 
 def read_pdf(data: bytes) -> Extracted:
-    """Turns PDF bytes into a Source text with one span for each page."""
+    """Reads PDF bytes into Source text with a display span for each page."""
     texts = []
     spans = []
     position = 0
@@ -167,8 +149,14 @@ def read_pdf(data: bytes) -> Extracted:
             text = page_text(page)
             texts.append(text)
             spans.append(
-                Span(kind="page", label=str(number), start=position, end=position + len(text))
+                Span(
+                    kind="page",
+                    label=str(number),
+                    start=position,
+                    end=position + len(text),
+                )
             )
+            # Count the two-newline separator so the next page's offsets stay correct.
             position += len(text) + len(PAGE_SEPARATOR)
 
     return Extracted(
@@ -179,26 +167,18 @@ def read_pdf(data: bytes) -> Extracted:
 
 
 def read_html(data: bytes) -> Extracted:
-    """Turns the bytes of a web page into a Source text, with no structure.
-
-    trafilatura removes the navigation, the cookie banner, and the footer. The
-    structure stays empty, because trafilatura returns headings with no
-    character positions, and nothing before the handover reads a section label.
-    """
-    # The bytes go in whole, because trafilatura reads the encoding the page
-    # declares. A decode to utf-8 here turns every character of a page in
-    # another encoding into one replacement glyph, which both breaks the text
-    # and pushes it under the ordinary share check.
+    """Extracts main text and table values from HTML bytes, without display spans."""
+    # Pass bytes so trafilatura can detect encoding instead of assuming UTF-8.
     text = trafilatura.extract(data, output_format="txt", include_tables=True)
+    # No HTML character ranges are produced by this extraction path.
     return Extracted(text=text or "", extractor=html_extractor_name(), structure=[])
 
 
-def cached_extraction(step: str, data: bytes, extractor: str, reader: Reader) -> Extracted:
-    """Returns the Source text for these bytes, from the cache when possible.
-
-    The key holds the hash of the bytes and the extractor with its version, so
-    a new library version misses this cache and reads the stored bytes again.
-    """
+def cached_extraction(
+    step: str, data: bytes, extractor: str, reader: Reader
+) -> Extracted:
+    """Reuses cached extraction or calls the supplied reader and saves its result."""
+    # Changed bytes or library versions must not reuse text with different offsets.
     parts = {
         "step": step,
         "bytes_sha256": cache.sha256_of(data),

@@ -1,8 +1,4 @@
-"""The Retrieval set has to pool four queries and give away no rank order.
-
-A grade read in rank order is not a grade, so the file ships shuffled. The
-abstracts stay out, because ADR 0011 refuses a committed abstract.
-"""
+"""Checks pool construction, reproducible shuffling, and saved Retrieval set fields."""
 
 import datetime as dt
 
@@ -74,8 +70,7 @@ def test_one_paper_from_two_queries_is_one_entry_that_names_both() -> None:
 
 
 def test_a_query_contributes_only_its_first_papers() -> None:
-    # The search asks for 50 so the shipped limit is exercised, and one query
-    # contributes at most 20 of them.
+    # This helper call takes 20 of 50 results; the production builder takes 15.
     entries = entries_from([found("hand", range(1, 51))], per_query=20)
     assert len(entries) == 20
     assert entries[-1].paper_id == "p20"
@@ -154,7 +149,7 @@ def test_the_set_records_the_reference_date_and_its_own_limits() -> None:
     assert built.search_limit == SEARCH_LIMIT
     assert built.topic == "United Kingdom household energy forecasting"
     assert len(built.queries) == 4
-    # Four queries of 20 Papers with no overlap at all stop at the cap.
+    # Four queries contribute 15 distinct Papers each, reaching the 60-Paper cap.
     assert len(built.entries) == SET_MAX
 
 
@@ -188,8 +183,7 @@ def test_a_grade_outside_0_1_2_is_refused() -> None:
 
     from fynd.retrieval_set import SetEntry
 
-    # A hand edited file is the only writer of a grade, so a typo has to stop
-    # here and not inside the recall arithmetic.
+    # Reject invalid saved grades before they can reach the metric calculations.
     with pytest.raises(ValidationError):
         SetEntry(paper_id="p1", title="Paper 1", grade=7)
 

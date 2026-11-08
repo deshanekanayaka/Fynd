@@ -1,0 +1,21 @@
+{
+  "name": "fynd-code-guide",
+  "private": true,
+  "type": "module",
+  "description": "Builds Fynd's local code guide from Markdown walkthroughs.",
+  "scripts": {
+    "build": "tailwindcss -i styles.css -o assets/styles.css --minify && node build.mjs",
+    "check": "node build.mjs --check && node --check assets/guide.js && prettier --check build.mjs assets/guide.js styles.css template.html pages README.md package.json",
+    "format": "prettier --write build.mjs assets/guide.js styles.css template.html pages README.md package.json"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "devDependencies": {
+    "@tailwindcss/cli": "4.3.5",
+    "gray-matter": "4.0.3",
+    "markdown-it": "15.0.3",
+    "prettier": "3.9.10",
+    "tailwindcss": "4.3.5"
+  }
+}

@@ -1,12 +1,9 @@
-"""Run a Stage from the command line.
+"""Runs Fynd's Stage, file-reading, and measurement commands from the terminal.
 
-An edge. It reads the environment, builds the real search and the real model,
-and passes them to a Stage as plain arguments. Every rule lives in the Stage.
-
-The runner and the database do not exist yet, so this command keeps no state
-between runs. It offers the Topics again before it reads a Pick, which costs
-nothing and returns the same list, because the cache holds it.
-"""
+This file loads .env, parses arguments, constructs real clients, and calls
+Stage rules or measurement helpers. It prints decisions, saves graded sets
+and reports, and presents expected service errors. Stage rules live in their
+own files; this CLI has no persisted Projects or Stage state."""
 
 import argparse
 import datetime as dt
@@ -51,55 +48,50 @@ from fynd.voyage import RateLimited as VoyageRateLimited
 
 
 def search_with(client: SemanticScholar):
-    """Returns the search function stage 2 calls."""
+    """Adapts the search client to the function Stage 2 expects."""
 
     def search(query: str, year_from: int):
+        """Searches Papers using the supplied client."""
         return client.search(query, year_from=year_from)
 
     return search
 
 
 def embed_with(voyage: Voyage, dimensions: int) -> Embed:
-    """Returns the embedding function a ranking calls at one vector size.
-
-    The size is bound here and not inside the ranking, because the ranking
-    takes a plain function of texts and an input type, and the table asks the
-    same ranking for two sizes.
-    """
+    """Binds a vector size to the embedding function used by retrieval."""
 
     def embed(texts: list[str], input_type: str) -> list[list[float]]:
+        """Embeds texts using the supplied client and chosen vector size."""
         return voyage.embed(texts, input_type=input_type, dimensions=dimensions)
 
     return embed
 
 
 def run_stage_1(domain: str) -> None:
+    """Offers Domains and prints the decision for a supplied Pick."""
     offered = stage1.offer_domains()
     print("Stage 1 offers:", ", ".join(offered))
     answer = stage1.accept_domain(domain, offered)
     print("Stage 1 decided:", answer)
-    # A refused Domain leaves a non-zero exit code, so a script and a reader
-    # both see the difference between a typo and an accepted Pick.
+    # A nonzero exit status lets scripts detect an unoffered Pick.
     if isinstance(answer, stage1.DomainNotOffered):
         raise SystemExit(1)
 
 
 def run_stage_2(domain: str, pick: str, avoid: list[str]) -> None:
-    # The most likely first run failure, so it gets a sentence and not a
-    # traceback from inside the client.
+    # Fail before model work when the CLI’s required API key is missing.
+    """Offers Topics and optionally checks a supplied Topic slug."""
     if not os.environ.get("ANTHROPIC_API_KEY"):
         raise SystemExit(
             "Set ANTHROPIC_API_KEY in your .env file. Stage 2 asks a model for Topics."
         )
-    # The gate asks OpenAlex, and every outbound request names a human. The
-    # check runs first, so a missing address costs no model call and no search.
+    # Check the operator address before model work because the later gate needs OpenAlex.
     contact_email()
 
     offered = stage2.offer_topics(domain, ask_for_json, avoid=avoid or None)
     print(f"Stage 2 offers {len(offered)} Topics for the Domain {domain}.")
     for topic in offered:
-        # The query is printed beside the label, because it is the text that
-        # reaches Semantic Scholar and the Retrieval set records it verbatim.
+        # Show the actual search words alongside the display label for inspection.
         print(f"  {topic.slug:40} {topic.label:45} {topic.query}")
 
     if not pick:
@@ -108,9 +100,7 @@ def run_stage_2(domain: str, pick: str, avoid: list[str]) -> None:
 
     print()
     client = SemanticScholar()
-    # The gate asks OpenAlex about each Paper of the search. A found record and
-    # a plain no are both cached, so a second run of the same Topic asks again
-    # only for the Papers whose lookup failed.
+    # Stage 2 owns the threshold; supply the real search and DOI lookup functions.
     answer = stage2.accept_topic(
         pick,
         offered,
@@ -124,6 +114,7 @@ def run_stage_2(domain: str, pick: str, avoid: list[str]) -> None:
 
 
 def run_resolve_open_copy(doi: str) -> None:
+    """Prints the ordered file candidates for a DOI."""
     answer = OpenAlex().resolve(doi)
     if not answer.found:
         print(f"OpenAlex holds no record for {doi}.")
@@ -132,8 +123,7 @@ def run_resolve_open_copy(doi: str) -> None:
         print(f"OpenAlex holds {doi}, and no file Fynd can fetch: {answer.reason}")
         raise SystemExit(1)
 
-    # Every candidate, in the order the pipeline would try them. A repository
-    # ranks first and a journal second. See ADR 0012.
+    # Show repository-first order so the output matches the download pipeline.
     print(f"{len(answer.candidates)} candidates for {doi}, in the order Fynd tries them.")
     for number, copy in enumerate(answer.candidates, start=1):
         print(f"{number} url     {copy.url}")
@@ -142,6 +132,7 @@ def run_resolve_open_copy(doi: str) -> None:
 
 
 def run_fetch_open_copy(url: str) -> None:
+    """Downloads one candidate URL and prints its byte count or refusal."""
     answer = Fetcher().fetch(url)
     if isinstance(answer, Fetched):
         print(f"bytes        {len(answer.data)}")
@@ -154,8 +145,9 @@ def run_fetch_open_copy(url: str) -> None:
 
 
 def run_extract(path: str) -> None:
+    """Extracts a local PDF or HTML file and prints its text preview."""
     data = pathlib.Path(path).read_bytes()
-    # The bytes decide, and not the file name. A page saved as a .pdf is a page.
+    # Choose the reader from file bytes, not a possibly misleading filename extension.
     if looks_like_a_pdf("", data):
         answer = extract_pdf(data)
     else:
@@ -168,22 +160,19 @@ def run_extract(path: str) -> None:
     print(answer.text[:500])
 
 
-# The Seeded Topic, fixed here so the published table names one query. The
-# label and the query of a real stage 2 run come from a model, and a published
-# number cannot depend on a model call.
+# Keep generated reports under the repository’s measurement directory.
 MEASUREMENT_DIR = pathlib.Path("docs/measurements")
-# The Retrieval set sits with the other committed test data, because the
-# retrieval measurement replays it the way the pool file is replayed.
+# Save permitted graded metadata with the repository’s replay fixtures (ADR 0011).
 RETRIEVAL_SET_DIR = pathlib.Path("tests/files")
 GRADING_RULE = pathlib.Path("docs/retrieval-set-grading-rule.md")
 MEASUREMENT_README = MEASUREMENT_DIR / "README.md"
 
-# The size of the measured pool. The table names it, so a reader knows the
-# denominator even when a Paper drops out of the run.
+# Request 20 Papers for this separate Open copy measurement command.
 MEASURED_POOL_SIZE = 20
 
 
 def run_measure_open_copies() -> None:
+    """Runs the Seeded Topic file pipeline and saves its dated measurement report."""
     if not os.environ.get("SEMANTIC_SCHOLAR_API_KEY"):
         raise SystemExit(
             "Set SEMANTIC_SCHOLAR_API_KEY in your .env file. The measurement searches "
@@ -200,16 +189,13 @@ def run_measure_open_copies() -> None:
     results = []
     dropped: list = []
     for number, paper in enumerate(found.papers, start=1):
-        # One Paper at a time. The fetcher waits one second for each host, and
-        # a refused host never stops the run.
+        # Process sequentially; the fetcher handles host delays and retries.
         try:
             result = read_open_copy(
                 paper, resolver.resolve, fetcher.fetch, extract_pdf, reason_against_paper_text
             )
         except (WorkNotRead, FetchFailed) as error:
-            # A failure is not an answer, so nothing of it is cached. The Paper
-            # is counted as dropped, because a table that loses a Paper in
-            # silence under counts the pool and says nothing about it.
+            # Keep interrupted Papers in the denominator even though they have no retained result.
             print(f"{number:3} {paper.title[:50]:50} failed: {error}")
             dropped.append(paper)
             continue
@@ -245,6 +231,7 @@ def run_measure_open_copies() -> None:
 
 
 def run_build_retrieval_set(as_of: str) -> None:
+    """Builds and saves an ungraded Retrieval set for the supplied reference date."""
     if not os.environ.get("SEMANTIC_SCHOLAR_API_KEY"):
         raise SystemExit(
             "Set SEMANTIC_SCHOLAR_API_KEY in your .env file. The Retrieval set runs "
@@ -274,19 +261,19 @@ def run_build_retrieval_set(as_of: str) -> None:
 
     RETRIEVAL_SET_DIR.mkdir(parents=True, exist_ok=True)
     set_file = RETRIEVAL_SET_DIR / f"retrieval-set-{reference_date.isoformat()}.json"
-    # The abstracts are not written. The measurement reads them from the cache,
-    # because ADR 0011 refuses a committed abstract and this file enters git.
+    # Saved set metadata excludes abstracts; ranking reads them from the local search cache.
     set_file.write_text(built.model_dump_json(indent=2) + "\n", encoding="utf-8")
     print(f"Wrote {set_file}")
     print(f"Grade it against {GRADING_RULE}. Every grade is 0, 1 or 2.")
 
 
 def retrieval_set_path(as_of: str) -> pathlib.Path:
-    """Returns the set file for one reference date, the way the builder named it."""
+    """Returns the dated Retrieval set path under tests/files."""
     return RETRIEVAL_SET_DIR / f"retrieval-set-{as_of}.json"
 
 
 def run_grade_retrieval_set(as_of: str, show: bool) -> None:
+    """Shows saved grades or collects and saves new grades interactively."""
     set_file = retrieval_set_path(as_of)
     if not set_file.exists():
         raise SystemExit(
@@ -306,9 +293,7 @@ def run_grade_retrieval_set(as_of: str, show: bool) -> None:
         print(f"Every Paper is graded. Counts: {grade_counts(held)}")
         return
 
-    # The abstract is read from the disk cache and never written anywhere. The
-    # rule says to read the title and the abstract, and ADR 0011 keeps an
-    # abstract out of git, so the two live together here.
+    # Grading needs abstracts, but ADR 0011 keeps those cached texts out of git.
     abstracts = cached_abstracts()
     missing = [entry for entry in waiting if entry.paper_id not in abstracts]
 
@@ -340,7 +325,7 @@ def run_grade_retrieval_set(as_of: str, show: bool) -> None:
         except ValueError:
             print(f"  {answer!r} is not 0, 1 or 2. The Paper stays ungraded.")
             continue
-        # Written after every answer, so a stopped session loses nothing.
+        # Save each accepted grade so a later stop does not lose earlier answers.
         set_file.write_text(held.model_dump_json(indent=2) + "\n", encoding="utf-8")
 
     print(f"\nWrote {set_file}")
@@ -348,20 +333,18 @@ def run_grade_retrieval_set(as_of: str, show: bool) -> None:
 
 
 class PoolChanged(Exception):
-    """Raised when the searches no longer return the Papers that were graded."""
+    """Raised when returned Paper identifiers differ from the graded pool."""
 
 
 def run_measure_retrieval(as_of: str) -> None:
-    """Writes the retrieval table for the graded set of one reference date."""
+    """Measures saved human grades against ranking rows and writes the report."""
     if not os.environ.get("SEMANTIC_SCHOLAR_API_KEY"):
         raise SystemExit(
             "Set SEMANTIC_SCHOLAR_API_KEY in your .env file. The table rebuilds the "
             "order the four searches arrived in, and a cached reply still needs the key "
             "when one query is missing from the cache."
         )
-    # The prefix and not only the key, because the client refuses a key made at
-    # voyageai.com and this check runs before the four searches and both BM25
-    # rows. A key checked at the first embedding call fails a minute later.
+    # Validate the configured Atlas key before searches and ranking work begin.
     if not os.environ.get("VOYAGE_API_KEY", "").startswith(ATLAS_KEY_PREFIX):
         raise SystemExit(
             "Set VOYAGE_API_KEY in your .env file to a key made in MongoDB Atlas, which "
@@ -397,16 +380,12 @@ def run_measure_retrieval(as_of: str) -> None:
             "a half graded pool counts an ungraded Paper as a Paper nobody wants."
         )
 
-    # The set file holds the grades in a shuffled order and no rank, so the
-    # order the searches arrived in is rebuilt from the cache. Every reply is
-    # already on disk from the day the set was built.
+    # Recover search order from matching replies because saved set entries are shuffled.
     year_from = stage2.first_year_in_window(reference_date)
     client = SemanticScholar()
     results = []
     for query in held.queries:
-        # The limit of the set file and not the constant of today. The limit is
-        # part of the search cache key, so asking with another one misses the
-        # cache, refetches live, and returns a pool nobody graded.
+        # Use the saved limit so a changed default cannot select a different search cache entry.
         found = client.search(query.text, year_from=year_from, limit=held.search_limit)
         print(f"{query.name:9} {len(found.papers):3} Papers returned  {query.text}")
         results.append((query.name, found))
@@ -415,9 +394,7 @@ def run_measure_retrieval(as_of: str) -> None:
     rows = rows_from_searches(results, per_query=held.per_query, pool_size=len(held.entries))
     reached = {paper_id for row in rows for paper_id in row.ranking}
     if reached != set(graded):
-        # A search that answers with other Papers today means the cache was
-        # cleared and the pool moved. Every number would then be measured over
-        # a pool that nobody graded.
+        # Refuse different identifiers instead of measuring Papers nobody graded.
         raise PoolChanged(
             f"The searches reached {len(reached)} of the {len(graded)} graded Papers. "
             "The cached replies of the day the set was built are gone, so the table "
@@ -425,9 +402,7 @@ def run_measure_retrieval(as_of: str) -> None:
             "a new set."
         )
 
-    # The Papers with their abstracts, which only a text ranking needs. The set
-    # file holds no abstract, so the text comes from the search cache and is
-    # written nowhere. See ADR 0011.
+    # Reconstruct only the graded pool, including abstracts available in the search replies.
     pool = pool_papers(results, per_query=held.per_query, keep=set(graded))
     if not held.topic_query:
         raise SystemExit(
@@ -436,10 +411,7 @@ def run_measure_retrieval(as_of: str) -> None:
             "Add the subject words as `topic_query` to the file. See ADR 0015."
         )
 
-    # Two BM25 rows and not one. The label names the place and the query names
-    # the subject, and the gap between the two rows is the finding of day 12.
-    # Both are published, because a table that showed only the better one would
-    # be a configuration chosen after seeing the numbers. See ADR 0015.
+    # Publish label and subject-query rows so the comparison does not hide the worse result.
     for asked, what in ((held.topic, "label"), (held.topic_query, "query")):
         rows.append(
             Row(
@@ -451,9 +423,7 @@ def run_measure_retrieval(as_of: str) -> None:
             )
         )
 
-    # The meaning rows. The pool is embedded once per size and the two strings
-    # then read those vectors from the cache, so the second row of a size costs
-    # one small query embedding and nothing else.
+    # The Voyage cache reuses Paper vectors across label and subject-query rows at each size.
     voyage = Voyage()
     strings = [("label", held.topic), ("query", held.topic_query)]
     rows += dense_rows(strings, pool, lambda size: embed_with(voyage, size), EMBEDDING_MODEL)
@@ -472,9 +442,7 @@ def run_measure_retrieval(as_of: str) -> None:
         without_abstract=papers_without_abstract(pool),
     )
 
-    # The table is named after the graded set and not after today, because the
-    # set decides every number in it. A second run of the same set rewrites the
-    # same file, and a second set gets its own file instead of overwriting one.
+    # Name the report after its graded set; rebuilding that measurement replaces the same file.
     MEASUREMENT_DIR.mkdir(parents=True, exist_ok=True)
     measurement_file = MEASUREMENT_DIR / f"{RETRIEVAL_STEM}-{reference_date.isoformat()}.md"
     measurement_file.write_text(text, encoding="utf-8")
@@ -490,11 +458,13 @@ def run_measure_retrieval(as_of: str) -> None:
 
 
 def main() -> None:
-    # Only the command line reads the .env file. A library that reads it would
-    # change the environment under a test.
+    # Load .env only at the command boundary, not when library modules are imported.
+    """Loads environment settings, dispatches a command, and reports expected failures."""
     load_dotenv()
 
-    parser = argparse.ArgumentParser(description="Run one Stage of Fynd.")
+    parser = argparse.ArgumentParser(
+        description="Run Fynd's Stage, file-reading, and measurement commands."
+    )
     stages = parser.add_subparsers(dest="stage", required=True)
 
     first = stages.add_parser("stage1", help="pick a Domain")
@@ -548,7 +518,7 @@ def main() -> None:
     )
 
     fetch = stages.add_parser("fetch-open-copy", help="fetch one Open copy and keep the bytes")
-    fetch.add_argument("--url", required=True, help="the repository link OpenAlex resolved")
+    fetch.add_argument("--url", required=True, help="the candidate file URL to fetch")
 
     args = parser.parse_args()
 
@@ -586,13 +556,10 @@ def main() -> None:
         VoyageRateLimited,
         ReplyIncomplete,
         anthropic.AnthropicError,
-        # A refused status and a dead connection both arrive from httpx, and
-        # this command is the first one that can meet either from Voyage. A
-        # mistyped key answers 401 and the host answers 5xx, and neither is
-        # worth a traceback.
+        # Present HTTP status and transport failures through the same concise CLI error path.
         httpx.HTTPError,
     ) as error:
-        # A traceback teaches the reader nothing here. The message is the fix.
+        # Expected failures need an actionable message and nonzero exit status.
         print(error, file=sys.stderr)
         raise SystemExit(1) from None
 

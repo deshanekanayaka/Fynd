@@ -37,3 +37,7 @@ docs/backend-and-ml-concepts.md
 
 # A review kept out of the repository
 docs/architecture-review.md
+
+# Local dependencies and logs for documentation tooling.
+node_modules/
+npm-debug.log*

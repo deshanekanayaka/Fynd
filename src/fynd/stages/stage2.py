@@ -1,8 +1,9 @@
-"""Stage 2: the student picks a Topic.
+"""Offers AI-generated Topics and checks the student's Topic Pick.
 
-`offer_topics` asks a model for Topics. `accept_topic` searches for the picked
-one and decides whether Fynd keeps it. ADR 0006 keeps the saving in the runner.
-"""
+The CLI supplies model, search, and DOI-lookup functions. This Stage fills
+the Topic prompt, filters the returned entries, and requires three Papers
+with OpenAlex file candidates for a Pick. It returns decisions; the future
+runner will own Project persistence and Re-roll limits (ADR 0006)."""
 
 import datetime as dt
 from dataclasses import dataclass
@@ -12,34 +13,24 @@ from fynd import prompts
 from fynd.models import SearchResult, Topic
 from fynd.openalex import Resolve, WorkNotRead
 
-# Ask for 10 and show 5 to 8. The extra two cover the items the shape check
-# drops, and 5 to 8 is the PRD promise to the student.
+# Ask for 10 so filtering can still leave the 5–8 Topics promised to the student.
 TOPICS_TO_ASK_FOR: Final = 10
 MINIMUM_TOPICS_TO_SHOW: Final = 5
 MAXIMUM_TOPICS_TO_SHOW: Final = 8
 
-# The threshold moved from 5 to 3 on 2026-10-07. See ADR 0002.
+# Require 3 candidate-bearing Papers before keeping the Topic (ADR 0002).
 OPEN_PAPER_THRESHOLD: Final = 3
 
-# The Evidence window of ADR 0008, in years.
+# Count calendar years including the current one, as specified in ADR 0008.
 EVIDENCE_WINDOW_YEARS: Final = 5
 
-# The one Topic fixed in the repository, which every published number of the
-# retrieval work is measured on. It lives here so one string has one home, as
-# SEEDED_DOMAINS does in stage1.py. See CONTEXT.md.
-#
-# Two strings and not one. The label is what a student reads, and it names the
-# place, because the Problem belongs to a place and a Statistic proves it. The
-# query is what a search and a ranking read, and it names the subject alone,
-# because a method a student copies does not change at a border. The measured
-# table of 2026-10-22 is the evidence: ranking with the label found 12 of the
-# 39 relevant Papers and ranking with the query found 20. See ADR 0015.
+# Keep the display label separate from the subject-only search query (ADR 0015).
 SEEDED_TOPIC: Final = "United Kingdom household energy forecasting"
 SEEDED_TOPIC_QUERY: Final = "household energy forecasting"
 
 TOPIC_PROMPT_NAME: Final = "propose-topics-v1"
 
-# The cache key carries this version, so a changed shape misses the cache.
+# Bump this when the response schema changes so cached old shapes are not reused.
 TOPIC_LIST_SCHEMA_VERSION: Final = 1
 
 TOPIC_LIST_SCHEMA: Final[dict[str, Any]] = {
@@ -62,9 +53,7 @@ TOPIC_LIST_SCHEMA: Final[dict[str, Any]] = {
     "additionalProperties": False,
 }
 
-# What the retry adds to the prompt. The text differs from round 1, so the
-# input hash differs, so the retry misses the cache and reaches the model.
-# Without it the second ask reads the first unusable answer back from disk.
+# Change the second request text so it does not replay the first unusable list.
 RETRY_NOTE: Final = (
     "Your earlier answer held too few usable Topics. "
     "Every Topic needs a label and a query, and neither field is empty."
@@ -72,7 +61,7 @@ RETRY_NOTE: Final = (
 
 
 class AskModel(Protocol):
-    """The model call stage 2 needs, which the edge supplies."""
+    """A supplied model function accepting filled instructions and a response schema."""
 
     def __call__(
         self,
@@ -84,22 +73,18 @@ class AskModel(Protocol):
 
 
 class Search(Protocol):
-    """The search call stage 2 needs, which the edge supplies."""
+    """A supplied Paper search function accepting subject words and a first year."""
 
     def __call__(self, query: str, year_from: int) -> SearchResult: ...
 
 
 class TopicListUnusable(Exception):
-    """Raised when the model returns no usable Topic list twice in a row.
-
-    This is a broken Stage, so the runner writes a failed `stage_run` row. A
-    Topic under the threshold is a decision instead, and never arrives here.
-    """
+    """Raised when two returned lists both contain fewer than five usable Topics."""
 
 
 @dataclass(frozen=True)
 class TopicKept:
-    """An accepted Topic Pick, holding the Topic and its Open copy count."""
+    """An accepted Topic Pick with its qualifying Paper count."""
 
     topic: Topic
     open_paper_count: int
@@ -107,11 +92,7 @@ class TopicKept:
 
 @dataclass(frozen=True)
 class TopicBelowThreshold:
-    """A Topic Pick with too few Papers that have an Open copy.
-
-    Not a failure. The count shows next to the Topic, the rest of the list stays
-    pickable, and the Re-roll is not spent. See ADR 0002.
-    """
+    """A Topic Pick with fewer than three Papers offering file candidates."""
 
     topic: Topic
     open_paper_count: int
@@ -119,7 +100,7 @@ class TopicBelowThreshold:
 
 @dataclass(frozen=True)
 class TopicNotOffered:
-    """A refused Topic Pick, holding the slug that was refused."""
+    """A refused Pick whose slug was absent from the offered Topics."""
 
     pick: str
 
@@ -128,29 +109,27 @@ TopicDecision = TopicKept | TopicBelowThreshold | TopicNotOffered
 
 
 def first_year_in_window(today: dt.date) -> int:
-    """Returns the first year the Evidence window accepts."""
-    # The caller passes the date, so this file holds no clock. A 5 year window
-    # in 2026 starts in 2022, which is why the sum subtracts one less.
+    """Returns the first year of the five-calendar-year Evidence window."""
+    # Including the current year means 2026 accepts Papers from 2022 onward.
     return today.year - (EVIDENCE_WINDOW_YEARS - 1)
 
 
 def slugify(label: str) -> str:
-    """Turns a label into the slug a Pick names."""
+    """Converts a label to lowercase ASCII letters, digits, and single hyphens."""
     kept_characters = []
     for character in label.lower():
-        # isalnum alone is true for an accented letter and for CJK, and a slug
-        # travels in a link, so the test also asks for plain ASCII.
+        # Use a predictable ASCII slug even when the label contains other characters.
         if character.isascii() and character.isalnum():
             kept_characters.append(character)
         else:
-            # Any run of other characters becomes one hyphen.
+            # Collapse consecutive separators into one hyphen.
             if kept_characters and kept_characters[-1] != "-":
                 kept_characters.append("-")
     return "".join(kept_characters).strip("-")
 
 
 def topics_from_answer(answer: Any) -> list[Topic]:
-    """Turns a model answer into Topics, dropping every item Fynd cannot use."""
+    """Builds Topics from returned entries, dropping empty fields and duplicate slugs."""
     if not isinstance(answer, dict):
         return []
 
@@ -164,8 +143,7 @@ def topics_from_answer(answer: Any) -> list[Topic]:
         if not label or not query:
             continue
         slug = slugify(label)
-        # Two labels that make one slug are one Topic to a Pick, so the first
-        # one stays and the second is dropped.
+        # Duplicate slugs would make a Pick ambiguous, so retain only the first.
         if not slug or slug in seen_slugs:
             continue
         seen_slugs.add(slug)
@@ -174,11 +152,7 @@ def topics_from_answer(answer: Any) -> list[Topic]:
 
 
 def offer_topics(domain: str, ask_model: AskModel, avoid: list[str] | None = None) -> list[Topic]:
-    """Returns the Topics the student chooses from.
-
-    `avoid` holds the labels of a list the student already saw, which is a
-    Re-roll. An answer Fynd cannot use gets one retry, then the Stage breaks.
-    """
+    """Returns five to eight Topics, retrying once if too few usable entries survive."""
     prompt = prompts.load(TOPIC_PROMPT_NAME)
     avoid_list = "none" if not avoid else ", ".join(avoid)
 
@@ -189,8 +163,7 @@ def offer_topics(domain: str, ask_model: AskModel, avoid: list[str] | None = Non
                 "TOPIC_COUNT": str(TOPICS_TO_ASK_FOR),
                 "DOMAIN_NAME": domain,
                 "AVOID_LIST": avoid_list,
-                # Round 1 says nothing. Round 2 says why it is asking again,
-                # and that difference is what makes the retry a real ask.
+                # Change the input hash so the second attempt uses a different cache entry.
                 "RETRY_NOTE": "" if attempt == 1 else RETRY_NOTE,
             },
         )
@@ -212,17 +185,7 @@ def offer_topics(domain: str, ask_model: AskModel, avoid: list[str] | None = Non
 
 
 def count_papers_with_a_candidate(result: SearchResult, resolve: Resolve) -> int:
-    """Counts the Papers of one search that offer a file Fynd may fetch.
-
-    A Paper counts when OpenAlex names an open location with a PDF link on a
-    host that holds a file, which is the candidate list the stage 4 pipeline
-    fetches. It costs one cached lookup for each Paper and no download.
-
-    A Paper with no identifier is not looked up and does not count, although
-    the pipeline would still try its Semantic Scholar link as a last resort.
-    The gate counts low on purpose, because a promise the pipeline cannot keep
-    is the failure this gate exists to prevent. See ADR 0012 and issue 18.
-    """
+    """Counts Papers whose DOI lookup returns at least one file candidate."""
     count = 0
     for paper in result.papers:
         if not paper.doi:
@@ -230,10 +193,7 @@ def count_papers_with_a_candidate(result: SearchResult, resolve: Resolve) -> int
         try:
             answer = resolve(paper.doi)
         except WorkNotRead:
-            # One lookup that fails is not a broken Stage. ADR 0006 asks this
-            # function for a decision, and a Paper Fynd could not ask about is
-            # a Paper it cannot promise, so the count errs low as it does for
-            # a Paper with no identifier.
+            # A failed HTTP lookup cannot confirm a candidate; omit this Paper from the count.
             continue
         if answer.candidates:
             count += 1
@@ -247,14 +207,7 @@ def accept_topic(
     resolve: Resolve,
     today: dt.date,
 ) -> TopicDecision:
-    """Keeps the picked Topic when enough Papers offer a file Fynd may fetch.
-
-    `offered` is the list the runner saved for this Project, and never a list
-    the caller sent, because the secret link is the only access control.
-
-    `resolve` is the OpenAlex lookup, and it has no default value, because the
-    threshold rule belongs to the Stage and the edge wires the real one.
-    """
+    """Checks an offered Pick and keeps it when at least three Papers offer candidates."""
     picked = None
     for topic in offered:
         if topic.slug == pick:
@@ -263,12 +216,9 @@ def accept_topic(
     if picked is None:
         return TopicNotOffered(pick=pick)
 
-    # The search runs here, because the threshold rule belongs to the Stage.
+    # Keep the literature threshold inside the Stage rather than its caller.
     result = search(query=picked.query, year_from=first_year_in_window(today))
-    # Semantic Scholar names a link for a Paper whose only address is a doi.org
-    # lookup, and it claimed 14 of these 20 Papers while 10 hold a file. A
-    # student who passes on the claimed number meets the truth two Stages
-    # later, which is the failure this product exists to prevent.
+    # Count OpenAlex file candidates, not Semantic Scholar’s unverified open-link field.
     count = count_papers_with_a_candidate(result, resolve)
     if count >= OPEN_PAPER_THRESHOLD:
         return TopicKept(topic=picked, open_paper_count=count)
