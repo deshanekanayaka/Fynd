@@ -79,8 +79,7 @@ def test_a_paper_with_no_link_gets_its_own_row() -> None:
 
 
 def test_every_reason_is_counted_including_the_ones_at_zero() -> None:
-    # The count of a reason nobody hit is the number that says the pipeline
-    # never reached that step, which is the first thing a reader asks.
+    # Keep absent outcomes visible so reports retain the same reason rows across runs.
     counts = reason_counts([result(reasons.USABLE, "www.mdpi.com", characters=9000)])
 
     assert counts[reasons.USABLE] == 1

@@ -1,6 +1,6 @@
-"""One file for each Stage.
+"""Groups the Domain and Topic rules used by Fynd's command-line flow.
 
-A Stage file holds the rules of that Stage and nothing else. It knows nothing
-about HTTP, nothing about the command line, and nothing about Postgres. See
-ADR 0006.
+stage1 offers and accepts Domains; stage2 proposes and checks Topics.
+Callers supply external-service functions and own saving, so the rules can
+also be reused by the future runner (ADR 0006).
 """

@@ -1,7 +1,8 @@
-"""Search for Papers in the Semantic Scholar Academic Graph API.
+"""Finds Papers for Topic checks and retrieval measurements using Semantic Scholar.
 
-Semantic Scholar allows one request per second with a key, so the client waits
-between calls, and every reply is cached on disk.
+Stage 2 and the Retrieval set builder supply search words, a first year, and
+a result limit. This client reuses cached replies or requests Paper metadata,
+then returns Paper values inside a SearchResult. It does not download files.
 """
 
 import os
@@ -18,26 +19,23 @@ SEARCH_URL: Final = "https://api.semanticscholar.org/graph/v1/paper/search"
 # The fields Fynd needs. Asking for fewer fields keeps the reply small.
 FIELDS: Final = "paperId,title,abstract,year,externalIds,openAccessPdf"
 
-# The rate limit the PRD records: one request per second on search with a key.
+# Pace this client to the one-request-per-second limit recorded in the PRD.
 SECONDS_BETWEEN_REQUESTS: Final = 1.0
 
-# A 429 answer means the rate limit was hit. One retry after a wait is enough,
-# because the client already waits a second between its own requests.
-# ponytail: one fixed retry, add real backoff if a Stage starts failing on this.
+# Wait before the single retry; a rate limit is not a result to cache.
 RETRY_WAIT_SECONDS: Final = 3.0
 
-# The shape this file turns a reply into. The cache key carries it, so a change
-# to the fields above does not serve an answer parsed by the old rules.
+# Bump this when response interpretation changes to avoid reusing old entries.
 REPLY_SHAPE_VERSION: Final = 2
 
 
 class RateLimited(Exception):
-    """Raised when Semantic Scholar refuses the request twice in a row."""
+    """Raised when Semantic Scholar returns HTTP 429 twice."""
 
 
 def paper_from_api(item: dict[str, Any]) -> Paper:
-    """Turns one item from the API into a Paper."""
-    # The API leaves a field out or sets it to null, so every read has a default.
+    """Converts an API record into a Paper, allowing missing metadata."""
+    # Missing and null metadata should not prevent us from retaining a Paper.
     external_ids = item.get("externalIds") or {}
     open_access = item.get("openAccessPdf") or {}
     return Paper(
@@ -51,16 +49,17 @@ def paper_from_api(item: dict[str, Any]) -> Paper:
 
 
 class SemanticScholar:
-    """A search client for one run, holding the key and the last request time."""
+    """A Paper search client with an API key and request timing."""
 
     def __init__(self, client: httpx.Client | None = None) -> None:
         self.api_key = os.environ.get("SEMANTIC_SCHOLAR_API_KEY", "")
-        # A caller passes a client in a test. A real run makes its own.
+        # Tests supply a client that returns local replies without network access.
         self.client = client or httpx.Client(timeout=30.0)
         self.last_request_at = 0.0
 
     def wait_for_rate_limit(self) -> None:
-        """Waits until one second has passed since the last request."""
+        """Waits for this client's minimum gap after its last response."""
+        # Wait only the remaining part of the 1-second gap; the first request is immediate.
         if self.last_request_at == 0.0:
             return
         waited = time.monotonic() - self.last_request_at
@@ -69,11 +68,8 @@ class SemanticScholar:
             time.sleep(remaining)
 
     def search(self, query: str, year_from: int, limit: int = 20) -> SearchResult:
-        """Returns the Papers for one query, from the cache when possible.
-
-        `year_from` is the first year the search accepts. The Stage passes it
-        in, so this file holds no clock and no window rule of its own.
-        """
+        """Returns Papers for a query and year range, using cached replies when available."""
+        # The caller owns the Evidence window; the trailing dash leaves the end open.
         year_range = f"{year_from}-"
         parts = {
             "api": "semantic-scholar-search",
@@ -95,12 +91,12 @@ class SemanticScholar:
         return SearchResult(query=query, total=payload.get("total") or 0, papers=papers)
 
     def fetch_search(self, query: str, year_range: str, limit: int) -> dict[str, Any]:
-        """Calls the search endpoint. The only method here that uses the network."""
+        """Requests Paper metadata, retrying HTTP 429 once."""
         headers = {}
         if self.api_key:
             headers["x-api-key"] = self.api_key
 
-        # Two tries at most. Nothing is cached, so a failure costs one wait.
+        # Keep retries bounded; search writes to the cache only after this succeeds.
         for attempt in (1, 2):
             self.wait_for_rate_limit()
             response = self.client.get(
@@ -120,6 +116,7 @@ class SemanticScholar:
                 return response.json()
 
             if attempt == 1:
+                # After HTTP 429, wait 3 seconds before the single retry.
                 time.sleep(RETRY_WAIT_SECONDS)
 
         raise RateLimited(
@@ -130,15 +127,8 @@ class SemanticScholar:
 
 
 def cached_abstracts() -> dict[str, str]:
-    """Returns the abstract of every Paper any cached search reply holds.
-
-    Grading needs the abstract, and ADR 0011 keeps an abstract out of git. The
-    two live together here. The text is read from the cache on the machine
-    doing the grading, and nothing writes it anywhere else.
-
-    A reply with no abstract for a Paper leaves that Paper out, so a caller
-    shows the title alone and says the abstract is missing.
-    """
+    """Returns locally cached abstracts indexed by Paper identifier."""
+    # Grading reads abstracts locally because ADR 0011 keeps them out of git.
     found: dict[str, str] = {}
     for path in sorted(cache.cache_dir().glob("s2-search-*.json")):
         stored = cache.read_file(path)
@@ -150,6 +140,7 @@ def cached_abstracts() -> dict[str, str]:
         for item in reply.get("data", []):
             abstract = item.get("abstract")
             paper_id = item.get("paperId")
+            # Omit missing abstracts so the grading command can report their absence.
             if paper_id and abstract:
                 found[paper_id] = abstract
     return found

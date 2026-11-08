@@ -304,8 +304,7 @@ def test_every_answer_is_cached(tmp_path, monkeypatch) -> None:
 
 
 def test_the_request_carries_the_contact_email(tmp_path, monkeypatch) -> None:
-    # OpenAlex serves a request with an email from a faster queue, and a
-    # repository administrator must be able to find the operator.
+    # Identify Fynd and its operator in the request, as required by ADR 0007.
     monkeypatch.setenv("FYND_CACHE_DIR", str(tmp_path))
     monkeypatch.setenv("FYND_CONTACT_EMAIL", "deshan@example.org")
     calls: list = []

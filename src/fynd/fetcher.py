@@ -1,14 +1,9 @@
-"""Fetch one Open copy, under the rules in ADR 0007 and ADR 0012.
+"""Downloads candidate PDF files for the Open copy pipeline.
 
-This file receives a link OpenAlex marked open, and a doi.org link never
-reaches it, because that host holds no file.
-
-Every link passes the robots.txt of its host first, under RFC 9309. The check
-sits here, because every link reaches the network through this one method.
-
-A host that returns no file is an answer and not a crash, so the fetch returns
-`Fetched` or `Refused`. A rate limit and a timeout are a failure, they get one
-retry, and then the fetch raises.
+The pipeline supplies a URL. This client checks its host's robots.txt, reuses
+cached bytes or refusals, and otherwise downloads with size and retry limits.
+It returns Fetched or Refused; repeated temporary download failures raise
+FetchFailed. PDF parsing and Source text checks happen in other files.
 """
 
 import time
@@ -22,56 +17,46 @@ import httpx
 from fynd import cache, reasons
 from fynd.contact import user_agent
 
-# The rules of ADR 0007.
+# Bound redirects and response size so one candidate cannot consume unlimited work.
 MAX_REDIRECTS: Final = 3
 MAX_BYTES: Final = 20 * 1024 * 1024
+# Configure HTTPX's network timeout; this is not a total Stage deadline.
 TIMEOUT_SECONDS: Final = 30.0
 SECONDS_BETWEEN_REQUESTS: Final = 1.0
 RETRY_WAIT_SECONDS: Final = 3.0
 
-# The first bytes of a PDF. A login page that arrives with a PDF name fails
-# this check, and a PDF served as a stream of bytes passes it.
+# A signature accepts PDFs even when the host sends a generic content type.
 PDF_MAGIC: Final = b"%PDF"
 PDF_CONTENT_TYPE: Final = "application/pdf"
 
 RATE_LIMIT_STATUS: Final = 429
 
-# A refusal with no final status. A redirect chain that never ends answers
-# nothing, so there is no status to record.
+# Use 0 when no final HTTP status exists, such as a redirect-limit refusal.
 NO_STATUS: Final = 0
 
-# The shape of the stored answer. The cache key carries it.
+# Bump when stored fetch results change shape so old entries are not reused.
 FETCH_SHAPE_VERSION: Final = 1
 
-# The robots.txt rules of RFC 9309. A 404, and any other 4xx but a rate
-# limit, allows everything. A 5xx and a rate limit allow nothing on that host
-# for this run, and neither answer is cached, so one bad day at one university
-# does not wall that host off for ever.
 ROBOTS_PATH: Final = "/robots.txt"
 ROBOTS_SHAPE_VERSION: Final = 2
 
-# A stored robots answer is read again after a day. RFC 9309 asks a crawler
-# not to use a cached robots.txt for longer than 24 hours, and a repository
-# that adds a rule next week must win over a file Fynd read today.
+# Refresh disk-cached rules after 24 hours so host policy changes can take effect.
 ROBOTS_MAX_AGE_SECONDS: Final = 24 * 60 * 60
 
-# The cap on a robots.txt body. RFC 9309 asks a crawler to read at least
-# 500 kibibytes, and a host that sends more than that is not sending rules.
+# Read at most 500 KiB of robots rules instead of accepting an unbounded response.
 ROBOTS_MAX_BYTES: Final = 500 * 1024
 
-# A host may name a `Crawl-delay`. Fynd waits the larger of its own one second
-# and that delay. A delay above this cap costs 10 minutes over 20 Papers, so
-# the host is skipped instead.
+# Skip hosts asking for more than 10 seconds between requests to bound waiting.
 MAX_CRAWL_DELAY_SECONDS: Final = 10.0
 
 
 class FetchFailed(Exception):
-    """Raised when a host refuses twice with a rate limit or a timeout."""
+    """Raised after two download attempts end in rate limits or transport failures."""
 
 
 @dataclass(frozen=True)
 class Fetched:
-    """The bytes of one Open copy, with the content type the host sent."""
+    """Downloaded bytes accepted as a PDF, with their content type."""
 
     data: bytes
     content_type: str
@@ -79,7 +64,7 @@ class Fetched:
 
 @dataclass(frozen=True)
 class Refused:
-    """A host that returned no file, with the reason the measurement counts."""
+    """A rejected download with its status, content type, and reason."""
 
     status: int
     content_type: str
@@ -91,16 +76,15 @@ FetchAnswer = Fetched | Refused
 
 @dataclass(frozen=True)
 class Robots:
-    """What one host allows this run, and how long to wait between requests."""
+    """A host's robots rules, refusal flag, and request delay."""
 
-    # None with `refuse_all` false means every path is allowed, which is what
-    # a host with no robots.txt says.
+    # No parser plus refuse_all=False represents unrestricted access.
     rules: robotparser.RobotFileParser | None
     refuse_all: bool
     wait: float
 
     def allows(self, url: str, agent: str) -> bool:
-        """Says whether this host allows one link for one user agent."""
+        """Checks whether the rules allow this URL for Fynd's User-Agent."""
         if self.refuse_all:
             return False
         if self.rules is None:
@@ -109,17 +93,13 @@ class Robots:
 
 
 def robots_url_of(url: str) -> str:
-    """Returns the robots.txt address of the host one link sits on."""
+    """Builds the robots.txt URL for a download's scheme and host."""
     parts = urlparse(url)
     return urlunsplit((parts.scheme, parts.netloc, ROBOTS_PATH, "", ""))
 
 
 def is_fetchable(url: str) -> bool:
-    """Says whether this link names a host and a scheme Fynd fetches.
-
-    A link with no host shares one robots answer with every other such link,
-    and the rules of one host must never govern another.
-    """
+    """Checks for an HTTP or HTTPS URL with a host."""
     parts = urlparse(url)
     return parts.scheme in ("http", "https") and bool(parts.netloc)
 
@@ -127,23 +107,18 @@ def is_fetchable(url: str) -> bool:
 def robots_from(status: int, text: str, agent: str) -> Robots:
     """Turns one robots.txt answer into the rules Fynd obeys."""
     if status != 200:
-        # Every 4xx but a rate limit allows everything. A 5xx and a rate limit
-        # allow nothing, because neither says what this host permits.
+        # A 4xx except 429 permits access; other statuses leave permission unknown.
         allowed = 400 <= status < 500 and status != RATE_LIMIT_STATUS
         return Robots(rules=None, refuse_all=not allowed, wait=SECONDS_BETWEEN_REQUESTS)
 
     rules = robotparser.RobotFileParser()
     rules.parse(text.splitlines())
-    # One difference to know: `robotparser` reads a whole number delay and
-    # ignores a fractional one, so `Crawl-delay: 0.5` reads as no delay, and
-    # Fynd then waits its own one second, which is longer.
+    # The parser ignores fractional delays; the 1-second minimum still applies.
     named = rules.crawl_delay(agent)
     delay = float(named) if named is not None else 0.0
     if delay > MAX_CRAWL_DELAY_SECONDS:
         return Robots(rules=rules, refuse_all=True, wait=SECONDS_BETWEEN_REQUESTS)
-    return Robots(
-        rules=rules, refuse_all=False, wait=max(SECONDS_BETWEEN_REQUESTS, delay)
-    )
+    return Robots(rules=rules, refuse_all=False, wait=max(SECONDS_BETWEEN_REQUESTS, delay))
 
 
 def host_of(url: str) -> str:
@@ -152,18 +127,18 @@ def host_of(url: str) -> str:
 
 
 def looks_like_a_pdf(content_type: str, body: bytes) -> bool:
-    """Says whether this answer is a PDF, by its content type or its first bytes."""
+    """Checks for a PDF content type or %PDF signature."""
+    # This is an initial format check; extraction must still be able to parse it.
     if PDF_CONTENT_TYPE in content_type.lower():
         return True
     return body.startswith(PDF_MAGIC)
 
 
 class Fetcher:
-    """A fetch client for one run, holding the last request time for each host."""
+    """A PDF download client with per-host timing and cached robots rules."""
 
     def __init__(self, transport: httpx.BaseTransport | None = None) -> None:
-        # A test passes a transport, and the client stays Fynd's own, because
-        # the redirect limit and the timeout are rules this file owns.
+        # Tests replace the transport while retaining timeout and redirect settings.
         self.client = httpx.Client(
             transport=transport,
             timeout=TIMEOUT_SECONDS,
@@ -172,16 +147,17 @@ class Fetcher:
             headers={"User-Agent": user_agent()},
         )
         self.last_request_at: dict[str, float] = {}
-        # The robots.txt of each host, read once for a run.
+        # Reuse each host's rules for this client instance.
         self.robots: dict[str, Robots] = {}
 
     def wait_seconds_for(self, host: str) -> float:
-        """Returns the wait this host asks for, which is one second by default."""
+        """Returns the host's request delay, defaulting to 1 second."""
         known = self.robots.get(host)
         return known.wait if known is not None else SECONDS_BETWEEN_REQUESTS
 
     def wait_for_host(self, host: str) -> None:
-        """Waits until this host's wait has passed since the last request to it."""
+        """Waits out the remaining delay after this host's last response."""
+        # Use a 1-second minimum, or an accepted Crawl-delay up to 10 seconds.
         started = self.last_request_at.get(host)
         if started is None:
             return
@@ -190,13 +166,7 @@ class Fetcher:
             time.sleep(remaining)
 
     def robots_for(self, url: str) -> Robots:
-        """Returns the robots.txt rules of the host one link sits on.
-
-        The answer is read once for a host in a run. A 200 and a 4xx that is
-        not a rate limit are cached on disk for a day. A 5xx, a rate limit and
-        a timeout are never cached, so one bad day at one university does not
-        wall that host off for ever.
-        """
+        """Returns robots rules from memory, a fresh disk entry, or a request."""
         parts = urlparse(url)
         host = parts.netloc
         known = self.robots.get(host)
@@ -204,8 +174,7 @@ class Fetcher:
             return known
 
         agent = user_agent()
-        # The scheme is part of the key, because RFC 9309 scopes robots.txt to
-        # one scheme and one host.
+        # Disk entries distinguish HTTP from HTTPS because permissions can differ.
         stored_parts = {
             "api": "robots",
             "scheme": parts.scheme,
@@ -222,31 +191,24 @@ class Fetcher:
         status, text, answered = self.fetch_robots(url, host)
         answer = robots_from(status, text, agent)
         if answered:
-            cache.write(
-                key, stored_parts, {"status": status, "text": text, "read_at": time.time()}
-            )
+            cache.write(key, stored_parts, {"status": status, "text": text, "read_at": time.time()})
         self.robots[host] = answer
         return answer
 
     def robots_is_stale(self, stored: dict) -> bool:
-        """Says whether a stored robots answer is older than a day."""
+        """Checks whether disk-cached robots rules are older than 24 hours."""
         read_at = float(stored.get("read_at") or 0.0)
         return time.time() - read_at > ROBOTS_MAX_AGE_SECONDS
 
     def fetch_robots(self, url: str, host: str) -> tuple[int, str, bool]:
-        """Calls one host for its robots.txt. One of two methods that use the network.
-
-        The third value says whether the host answered at all. A host that did
-        not answer is asked again on the next run.
-        """
+        """Requests robots status and text, plus whether the reply may be cached."""
         self.wait_for_host(host)
         try:
             with self.client.stream("GET", robots_url_of(url)) as response:
                 status = response.status_code
                 text = ""
                 if status == 200:
-                    # The body is capped. A host that sends more than the cap
-                    # is not sending rules, and the read stops there.
+                    # Stop after 500 KiB of rules to bound memory use.
                     body = bytearray()
                     for chunk in response.iter_bytes():
                         body.extend(chunk)
@@ -254,38 +216,26 @@ class Fetcher:
                             break
                     text = bytes(body[:ROBOTS_MAX_BYTES]).decode("utf-8", "replace")
         except (httpx.TimeoutException, httpx.TooManyRedirects, httpx.TransportError):
-            # No answer is not a permission. This run asks this host for
-            # nothing, and nothing is cached. A redirect chain that never ends
-            # is one such answer, and RFC 9309 counts it as unreachable.
+            # Unknown permissions refuse access for this run without a disk entry.
             self.last_request_at[host] = time.monotonic()
             return 0, "", False
         self.last_request_at[host] = time.monotonic()
         if status == 200:
             return 200, text, True
-        # A rate limit says nothing about what this host permits, so it is
-        # never stored. RFC 9309 counts it with a 5xx.
+        # Do not persist 429 or server failures as a lasting access decision.
         answered = 400 <= status < 500 and status != RATE_LIMIT_STATUS
         return status, "", answered
 
     def fetch(self, url: str) -> FetchAnswer:
-        """Returns the bytes of one Open copy, or the reason a host gave none.
-
-        The answer comes from the cache when it is there. Raises FetchFailed
-        when the host answers with a rate limit or a timeout twice.
-
-        robots.txt is read before the cache, so a path a host disallows is
-        refused even when an earlier run already holds its bytes. A published
-        table must not count a file Fynd may no longer ask for.
-        """
+        """Checks access, then returns cached or downloaded PDF bytes or a refusal."""
         if not is_fetchable(url):
-            # A link with no host or an unknown scheme is not a fetch target,
-            # and it must never share one host's robots answer with another.
+            # Reject invalid targets before looking up permissions or using the cache.
             return Refused(status=NO_STATUS, content_type="", reason=reasons.FETCH_REFUSED)
 
+        # Stored file bytes must not override the applicable robots permission.
         robots = self.robots_for(url)
         if not robots.allows(url, user_agent()):
-            # Nothing is written to the fetch cache. The robots answer is
-            # cached on its own, and a rule the host changes must win.
+            # Keep policy refusals out of the file cache; robots rules have their own cache.
             return Refused(status=NO_STATUS, content_type="", reason=reasons.ROBOTS_REFUSED)
 
         parts = {
@@ -323,22 +273,18 @@ class Fetcher:
         return answer
 
     def fetch_body(self, url: str) -> FetchAnswer:
-        """Calls the host. The only method here that uses the network."""
+        """Attempts a download twice at most, retrying temporary failures."""
         host = host_of(url)
 
-        # Two tries at most. Nothing is cached on a failure, so a second ask
-        # costs one wait.
+        # One retry only; repeated failures raise without becoming cached refusals.
         for attempt in (1, 2):
             self.wait_for_host(host)
             try:
                 answer = self.read_one_response(url)
             except httpx.TooManyRedirects:
-                # A chain that never ends is a host behaviour, and the table
-                # counts it. There is no final status to record.
+                # More than 3 redirects is a recorded refusal, not another retry.
                 self.last_request_at[host] = time.monotonic()
-                return Refused(
-                    status=NO_STATUS, content_type="", reason=reasons.FETCH_REFUSED
-                )
+                return Refused(status=NO_STATUS, content_type="", reason=reasons.FETCH_REFUSED)
             except (httpx.TimeoutException, httpx.TransportError):
                 self.last_request_at[host] = time.monotonic()
                 if attempt == 2:
@@ -346,23 +292,25 @@ class Fetcher:
                         f"The host {host} did not answer twice in a row. Nothing is "
                         "cached, so the same link is tried again when you ask again."
                     ) from None
+                # Wait 3 seconds before retrying a timeout or connection failure.
                 time.sleep(RETRY_WAIT_SECONDS)
                 continue
 
             self.last_request_at[host] = time.monotonic()
             if answer is not None:
                 return answer
-            # A rate limit. The same two tries apply.
+            # None means HTTP 429; it shares the same single-retry budget.
             if attempt == 2:
                 raise FetchFailed(
                     f"The host {host} answered {RATE_LIMIT_STATUS} twice in a row. "
                     "Nothing is cached, so the same link is tried again later."
                 )
+            # Wait 3 seconds before retrying the rate-limited download.
             time.sleep(RETRY_WAIT_SECONDS)
         raise AssertionError("unreachable")
 
     def read_one_response(self, url: str) -> FetchAnswer | None:
-        """Returns one answer, or None when the host sent a rate limit."""
+        """Streams one response, returning None for HTTP 429."""
         with self.client.stream("GET", url) as response:
             content_type = response.headers.get("content-type", "")
             if response.status_code == RATE_LIMIT_STATUS:
@@ -378,9 +326,7 @@ class Fetcher:
             for chunk in response.iter_bytes():
                 body.extend(chunk)
                 if len(body) > MAX_BYTES:
-                    # A body over the cap is refused, and the bytes already read
-                    # are dropped. The per Paper list shows the status and the
-                    # content type, so a reader sees what happened.
+                    # Refuse downloads over 20 MiB instead of caching a partial file.
                     return Refused(
                         status=response.status_code,
                         content_type=content_type,

@@ -25,13 +25,7 @@ from fynd.voyage import (
 
 @pytest.fixture(autouse=True)
 def no_real_waiting(monkeypatch):
-    """Keeps the rate limit pacing out of the test run.
-
-    The client waits 21 seconds between requests, because the free tier allows
-    3 a minute. A test that sent two requests would really wait, so every test
-    here gets a sleep that returns at once, and a test that measures the wait
-    replaces this one.
-    """
+    """Replaces sleep so tests exercise pacing without waiting."""
     monkeypatch.setattr("fynd.voyage.time.sleep", lambda seconds: None)
 
 
@@ -71,8 +65,7 @@ def test_the_request_names_the_model_the_type_and_the_size(tmp_path, monkeypatch
 
     voyage.embed(["one"], input_type="query")
 
-    # The host is pinned, because an Atlas key is refused by the voyageai.com
-    # host and the other way round, and both answer the same two paths.
+    # Send embeddings to the configured Atlas endpoint with its expected request fields.
     assert str(calls[0].url) == f"{BASE_URL}/embeddings"
     sent = calls[0].read().decode("utf-8")
     assert EMBEDDING_MODEL in sent
@@ -129,8 +122,7 @@ def test_the_tokens_of_a_run_are_counted(tmp_path, monkeypatch) -> None:
 
     voyage.embed(["one"], input_type="document")
 
-    # The README states the measured token count for one Project, so a run has
-    # to be able to say what it spent. A cached text spends nothing.
+    # Cache hits must not increase this client's reported token usage.
     assert voyage.tokens_used == 24
     voyage.embed(["one"], input_type="document")
     assert voyage.tokens_used == 24
@@ -193,7 +185,6 @@ def test_a_reranked_list_is_cached(tmp_path, monkeypatch) -> None:
 def test_two_refusals_in_a_row_raise(tmp_path, monkeypatch) -> None:
     monkeypatch.setenv("FYND_CACHE_DIR", str(tmp_path))
     monkeypatch.setenv("VOYAGE_API_KEY", "al-test-key")
-    monkeypatch.setattr("fynd.voyage.time.sleep", lambda seconds: None)
     calls: list = []
     voyage = Voyage(client=client_that_returns([(429, {"detail": "slow down"})], calls))
 
@@ -205,7 +196,6 @@ def test_two_refusals_in_a_row_raise(tmp_path, monkeypatch) -> None:
 def test_a_refused_request_caches_nothing(tmp_path, monkeypatch) -> None:
     monkeypatch.setenv("FYND_CACHE_DIR", str(tmp_path))
     monkeypatch.setenv("VOYAGE_API_KEY", "al-test-key")
-    monkeypatch.setattr("fynd.voyage.time.sleep", lambda seconds: None)
     calls: list = []
     replies = [(429, {"detail": "slow down"})]
     voyage = Voyage(client=client_that_returns(replies, calls))
@@ -255,8 +245,7 @@ def test_a_missing_vector_is_said_without_the_text(tmp_path, monkeypatch) -> Non
 
 def test_a_key_from_the_wrong_place_is_said_in_a_sentence(tmp_path, monkeypatch) -> None:
     monkeypatch.setenv("FYND_CACHE_DIR", str(tmp_path))
-    # A key made at voyageai.com carries another prefix, and the Atlas host
-    # answers it with a 401 that explains nothing.
+    # Key validation should fail before sending a request to an incompatible endpoint.
     monkeypatch.setenv("VOYAGE_API_KEY", "pa-a-key-made-at-voyageai-com")
     voyage = Voyage(client=client_that_returns([], []))
 
@@ -282,9 +271,7 @@ def test_the_reranker_is_asked_at_the_same_host(tmp_path, monkeypatch) -> None:
 
 
 def test_a_long_pool_is_cut_into_slices_under_the_token_budget() -> None:
-    # An account with no payment method holds 10000 tokens a minute, and one
-    # request for 60 abstracts is about 18000, so the whole pool in one call is
-    # refused before it is sent.
+    # Check local batch grouping independently of any live service limits.
     budget = SLICE_TOKENS * CHARACTERS_PER_TOKEN
     texts = ["x" * budget, "y" * (budget // 2), "z" * 4]
 
@@ -314,7 +301,6 @@ def test_each_slice_is_one_request_and_the_client_paces_itself(tmp_path, monkeyp
 
     assert vectors == [[1.0], [1.0]]
     assert len(calls) == 2
-    # One wait before the second request, and none before the first. The free
-    # tier allows 3 requests a minute, so the client paces itself.
+    # The first request is immediate; the second waits out the configured 21-second gap.
     assert len(waits) == 1
     assert 0 < waits[0] <= MIN_SECONDS_BETWEEN_REQUESTS

@@ -1,7 +1,8 @@
-"""Load a prompt from disk and hash it.
+"""Loads saved AI instructions and fills their placeholders for Stage 2.
 
-ADR 0004 keeps every prompt in a file. A reader finds it by the version in the
-file name, and the cache key carries the hash of the content.
+Stage 2 reads prompts/propose-topics-v1.md, inserts the Domain and other values,
+and passes the filled text to the Claude client. The file hash identifies the
+original wording for caching and measurements (ADR 0004).
 """
 
 import hashlib
@@ -15,7 +16,7 @@ PROMPTS_DIR_VARIABLE: Final = "FYND_PROMPTS_DIR"
 
 @dataclass(frozen=True)
 class Prompt:
-    """One prompt file, with the hash the cache key needs."""
+    """One prompt's name, original text, and content hash."""
 
     name: str
     text: str
@@ -26,19 +27,17 @@ def prompts_dir() -> Path:
     """Returns the directory that holds the prompt files."""
     from_environment = os.environ.get(PROMPTS_DIR_VARIABLE)
     if from_environment:
-        # A test points this at its own directory, so no test depends on the
-        # wording of a shipped prompt.
+        # Tests use temporary files without changing the shipped prompts.
         return Path(from_environment)
-    # This file is src/fynd/prompts.py, so two levels up is the repository.
+    # Locate the repository from this file, regardless of the working directory.
     return Path(__file__).resolve().parents[2] / "prompts"
 
 
 def load(name: str) -> Prompt:
-    """Reads the prompt file called `name` and hashes its content."""
-    # The hash covers the whole file, so a typo fixed without a rename still
-    # misses the cache. No published number then belongs to a lost prompt.
+    """Reads <name>.md and hashes its original text."""
     path = prompts_dir() / f"{name}.md"
     text = path.read_text(encoding="utf-8")
+    # Hash the text so wording changes invalidate the cache without a file rename.
     return Prompt(name=name, text=text, sha256=hashlib.sha256(text.encode("utf-8")).hexdigest())
 
 
@@ -47,14 +46,12 @@ def fill(prompt: Prompt, values: dict[str, str]) -> str:
     filled = prompt.text
     for name, value in values.items():
         placeholder = "{{" + name + "}}"
-        # The braces matter. Without them the name DOMAIN would replace the
-        # first half of DOMAIN_NAME and leave the rest behind.
+        # Match the braces too, so DOMAIN cannot partially replace DOMAIN_NAME.
         if placeholder not in filled:
             raise KeyError(f"The prompt {prompt.name} holds no placeholder {placeholder}.")
         filled = filled.replace(placeholder, value)
 
-    # A placeholder left behind would travel to the model as braces, and the
-    # prompt hash would not show the mistake.
+    # Reject incomplete instructions before they reach the model.
     if "{{" in filled:
         raise KeyError(f"The prompt {prompt.name} still holds a placeholder after filling.")
     return filled

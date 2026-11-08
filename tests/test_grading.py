@@ -1,9 +1,4 @@
-"""Grading is the one hand step, so the file it writes has to be exact.
-
-A grade that lands on the wrong Paper is worse than a missing grade, because
-nothing downstream can see it. So the writer works from the identifier and
-never from the position in a list.
-"""
+"""Checks identifier-based grading, rejected changes, and grading summaries."""
 
 import datetime as dt
 
@@ -36,8 +31,10 @@ def a_set(*grades: int | None) -> RetrievalSet:
 
 
 def test_a_grade_lands_on_the_paper_its_identifier_names() -> None:
-    graded = apply_grades(a_set(None, None, None), {"p2": 2, "p1": 0, "p3": 1})
+    original = a_set(None, None, None)
+    graded = apply_grades(original, {"p2": 2, "p1": 0, "p3": 1})
     assert [entry.grade for entry in graded.entries] == [0, 2, 1]
+    assert [entry.grade for entry in original.entries] == [None, None, None]
 
 
 def test_a_grade_for_a_paper_the_set_does_not_hold_is_refused() -> None:

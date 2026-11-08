@@ -1,18 +1,7 @@
-"""Rank a pool of Papers, so the cut to 20 keeps the right ones.
+"""Ranks Papers by words, meaning, and combined rankings.
 
-The search asks for 50 Papers and a Project is built on 20, so this file
-decides which 20. It holds the four rankings the measured table will compare: the
-keyword ranking, the meaning ranking, the fusion of the two, and the fusion
-reordered by a hosted reranker. See ADR 0013.
-
-Nothing here reaches the network and nothing here reads a clock. The embedding
-function and the reranker arrive as plain function arguments, so the same code
-serves a Stage and a test. The measured number therefore comes from the code
-that runs for a student.
-
-Every constant below is the published default of the method it belongs to, and
-nothing is tuned. Tuning a constant against the 60 Papers the table reports
-would fit the set and publish a number that means nothing.
+ADR 0013 keeps ranking in Python and passes the top 20 Papers onward.
+The caller supplies embedding and reranking functions so tests need no network.
 """
 
 import math
@@ -22,93 +11,55 @@ from typing import Final, Protocol
 
 from fynd.models import Paper
 
-# The published defaults of BM25. k1 controls how much a repeated word still
-# counts, and b controls how much a long abstract is penalised.
+# Keep standard defaults so these settings are not fitted to the Retrieval set.
 BM25_K1: Final = 1.2
 BM25_B: Final = 0.75
 
-# The published default of reciprocal rank fusion. A large k flattens the gap
-# between rank 1 and rank 2, so one ranking cannot win on its own.
+# Reduces the advantage of top positions.
 RRF_K: Final = 60
 
-# How many Papers the ranking passes on. ADR 0013 fixes this at 20, because the
-# Open copy pipeline and stage 3 read every Paper that gets through.
+# Top 20 continue (ADR 0013).
 CUT: Final = 20
 
-# A word splits on anything that is not a letter or a digit. A digit stays,
-# because a year or a figure in a title is a word a query can match. The class
-# covers every alphabet and not only the English one, because a title holds an
-# author name and a place name, and "Müller" split on the letter u would leave
-# two fragments that match nothing and still count towards the length.
 WORD = re.compile(r"\w+")
 
-# The endings a word loses before it is matched. So "households" matches
-# "household" and "forecasting" matches "forecast", which is what a reader
-# means by the same word. The longest ending is tried first, or "forecasting"
-# would lose only its "g".
-# ponytail: a short rule and not a stemmer. It leaves "electricity" and
-# "electric" apart, it stems "modelling" to "modell" while "model" stays
-# "model", and it leaves "analysis" and "analyses" apart. Add a Porter stemmer
-# if the BM25 row of the table reads low.
+# Temporary rules pending a measured library replacement.
 ENDINGS: Final = ("ing", "es", "ed", "s")
 
-# What has to be left after an ending comes off. Without a floor, "gas" becomes
-# "ga" and "uses" becomes "us", which are not words and match the wrong Papers.
 MIN_STEM: Final = 4
 
-# A final "s" after one of these letters is part of the word and not a plural.
-# Without this, "process" becomes "proces" while "processing" becomes
-# "process", so the two stop matching, which is the opposite of the point.
 NOT_A_PLURAL_AFTER: Final = ("s", "i", "u")
 
 
 @dataclass(frozen=True)
 class Ranked:
-    """One Paper in a ranking, with the score and the reason that placed it there.
+    """One Paper with its ranking score and match reasons."""
 
-    The two reason fields are the facts the stage 4 card prints. A term match
-    names its stems. A meaning match says the meaning is close with no exact
-    term match. No model writes that line, and nothing here writes a sentence.
-    See ADR 0014.
-    """
-
-    paper_id: str
-    score: float
-    # The stems of the query this Paper holds, in the order the query wrote
-    # them. Empty means the Paper matched no word of the query, which the card
-    # says as plainly as a match.
+    paper_id: str  # Semantic Scholar’s identifier.
+    score: float  # Ranking value, not a probability.
     terms: tuple[str, ...] = ()
-    # Whether the meaning ranking placed this Paper inside the cut. A Paper
-    # with no terms and a close meaning is the one case a student has to be
-    # told about, because nothing on the card would otherwise explain it.
-    meaning_is_close: bool = False
+    meaning_is_close: bool = False  # In the dense ranking’s top cut.
 
 
 class Embed(Protocol):
-    """The embedding call this file needs, passed in as a function argument.
-
-    `input_type` is "query" or "document". Voyage embeds the two differently,
-    and sending a query as a document measures the wrong distance.
-    """
+    """An embedding function that returns one vector per input text."""
 
     def __call__(self, texts: list[str], input_type: str) -> list[list[float]]: ...
 
 
 class Rerank(Protocol):
-    """The reranker call this file needs. It answers with (index, score) pairs.
-
-    The index is a place in the documents list the caller sent, because a
-    hosted reranker returns its own order and not the order it was given.
-    """
+    """A reranking function that returns document positions and scores."""
 
     def __call__(self, query: str, documents: list[str]) -> list[tuple[int, float]]: ...
 
 
 def stem(word: str) -> str:
-    """Returns the word with one grammatical ending removed."""
+    """Removes one recognised word ending."""
     for ending in ENDINGS:
+        # A minimum length keeps short words such as "gas" intact.
         if not word.endswith(ending) or len(word) - len(ending) < MIN_STEM:
             continue
+        # The final "s" in words such as "process" is not a plural ending.
         if ending == "s" and word[-2] in NOT_A_PLURAL_AFTER:
             continue
         return word[: -len(ending)]
@@ -116,27 +67,17 @@ def stem(word: str) -> str:
 
 
 def tokens(text: str) -> list[str]:
-    """Returns the words of this text, lowercased and stemmed."""
+    """Lowercases, splits, and stems text."""
     return [stem(word) for word in WORD.findall(text.lower())]
 
 
 def document_text(paper: Paper) -> str:
-    """Returns the text a ranking reads for one Paper, which is title and abstract.
-
-    A Paper with no abstract is ranked on its title alone, and the measured
-    table counts how many of those a pool holds. Dropping them instead would
-    change the pool a recall number is measured over.
-    """
+    """Joins a Paper's title and abstract for ranking."""
     return f"{paper.title} {paper.abstract}".strip()
 
 
 def matched_terms(query: str, text: str) -> tuple[str, ...]:
-    """Returns the stems of the query that this text holds, in the query order.
-
-    The query order and not the alphabet, because the card prints these words
-    and a student reads them against the query they just saw. A stem appears
-    once however many times the text repeats it.
-    """
+    """Returns matching query stems once each, in query order."""
     held = set(tokens(text))
     found: list[str] = []
     for word in tokens(query):
@@ -150,15 +91,9 @@ def ordered(
     terms: dict[str, tuple[str, ...]] | None = None,
     close: set[str] | None = None,
 ) -> list[Ranked]:
-    """Returns the Papers from the best score down, and by identifier on a tie.
-
-    The identifier decides a tie on purpose. Two Papers with the same score
-    would otherwise sit in whatever order the pool arrived in, and a published
-    number has to repeat exactly on a second run.
-
-    `terms` and `close` carry the reason of each Paper. A ranking that knows
-    neither leaves both out, and the card then has nothing to print for it.
-    """
+    """Sorts Papers by descending score and identifier on ties."""
+    # Higher scores mean stronger matches, so the top cut keeps them first.
+    # Identifier ties make repeated measurements independent of input order.
     places = sorted(scores.items(), key=lambda item: (-item[1], item[0]))
     return [
         Ranked(
@@ -172,11 +107,8 @@ def ordered(
 
 
 def keep_reasons(ranked: list[Ranked], source: list[Ranked]) -> list[Ranked]:
-    """Returns the ranking with the reasons of another ranking written on it.
-
-    The reranker reorders Papers and knows nothing about stems, so the
-    reordered row would otherwise lose the reason the fusion already held.
-    """
+    """Copies match reasons from the original ranking to a new ranking."""
+    # Reranking changes scores but must preserve the facts used on Paper cards.
     reasons = {item.paper_id: item for item in source}
     carried = []
     for item in ranked:
@@ -189,13 +121,7 @@ def keep_reasons(ranked: list[Ranked], source: list[Ranked]) -> list[Ranked]:
 
 
 def bm25_ranking(query: str, papers: list[Paper]) -> list[Ranked]:
-    """Ranks the pool by keyword match, with BM25 at its published defaults.
-
-    Every Paper of the pool comes back, including the ones that match no word
-    at all. The cut takes the first 20, so a ranking that dropped the Papers
-    with no match would hide them from a recall number instead of ranking
-    them last.
-    """
+    """Ranks Papers by keyword relevance."""
     if not papers:
         return []
 
@@ -203,8 +129,6 @@ def bm25_ranking(query: str, papers: list[Paper]) -> list[Ranked]:
     lengths = [len(words) for words in documents.values()]
     average_length = sum(lengths) / len(lengths)
 
-    # How many documents hold each word. One pass, because the pool is tens of
-    # Papers and this runs once per query.
     holders: dict[str, int] = {}
     for words in documents.values():
         for word in set(words):
@@ -225,17 +149,14 @@ def bm25_ranking(query: str, papers: list[Paper]) -> list[Ranked]:
             if frequency == 0:
                 continue
             if word not in matched:
-                # The stems the card prints. They are collected here and not in
-                # a second pass, because this loop already knows which word of
-                # the query this Paper holds.
                 matched.append(word)
-            # The Lucene form of the inverse document frequency. The 1 inside
-            # the logarithm keeps it positive, so a word in every document
-            # adds nothing instead of subtracting.
+
+            # A word found in fewer Papers is more useful for distinguishing them.
             idf = math.log(1 + (total - held_by + 0.5) / (held_by + 0.5))
-            # A long document needs more matches to score the same, because a
-            # word in a 300 word abstract says less than one in a title.
+
+            # Adjust for length so longer abstracts do not win by having more words.
             weight = BM25_K1 * (1 - BM25_B + BM25_B * length / average_length)
+            # Repeated matches help, but each extra occurrence adds less credit.
             score += idf * frequency * (BM25_K1 + 1) / (frequency + weight)
         scores[paper_id] = score
         terms[paper_id] = tuple(matched)
@@ -243,14 +164,9 @@ def bm25_ranking(query: str, papers: list[Paper]) -> list[Ranked]:
 
 
 def cosine(left: list[float], right: list[float]) -> float:
-    """Returns the cosine similarity of two vectors, and 0.0 for a zero vector.
-
-    Raises ValueError when the two vectors are not the same size.
-    """
+    """Measures similarity between two vectors."""
     if len(left) != len(right):
-        # The table reports this model at 1024 and at 512, so one run can hold
-        # both sizes. Comparing across the two gives a number that looks like a
-        # similarity and is not one, which would quietly deflate a whole row.
+        # Mixing vector sizes would produce a misleading similarity score.
         raise ValueError(
             f"A vector of {len(left)} values cannot be compared with one of {len(right)}. "
             "Both the query and the documents must be embedded at the same size."
@@ -259,33 +175,22 @@ def cosine(left: list[float], right: list[float]) -> float:
         sum(value * value for value in right)
     )
     if size == 0:
-        # A vendor that answers with zeros would otherwise divide by zero and
-        # lose the whole ranking. Such a Paper ranks last instead.
+        # A zero vector has no direction; returning zero avoids division by zero.
         return 0.0
     return sum(a * b for a, b in zip(left, right)) / size
 
 
 def dense_ranking(query: str, papers: list[Paper], embed: Embed, cut: int = CUT) -> list[Ranked]:
-    """Ranks the pool by meaning, with one embedding call for the whole pool.
-
-    The query and the documents are two calls, because a vendor embeds a query
-    and a document differently.
-
-    The first `cut` Papers are marked as a close meaning, which is the fact the
-    card prints for a Paper that holds no word of the query. The cut and not a
-    score threshold, because a cosine similarity has no value that means close
-    across models, and the cut is the line that already decides a Project.
-    """
+    """Ranks Papers by embedding similarity."""
     if not papers:
         return []
 
+    # Queries and documents use different embedding modes.
     query_vector = embed([query], input_type="query")[0]
     documents = [document_text(paper) for paper in papers]
     vectors = embed(documents, input_type="document")
     if len(vectors) != len(documents):
-        # Zipping a short answer would drop the last Papers of the pool, and a
-        # recall number would then be measured over fewer Papers than were
-        # graded, with nothing on screen to say so.
+        # A short reply would silently drop Papers when paired with zip.
         raise ValueError(
             f"The embedding call returned {len(vectors)} vectors for {len(documents)} "
             "Papers, so the pool and the vectors do not describe the same Papers."
@@ -295,22 +200,15 @@ def dense_ranking(query: str, papers: list[Paper], embed: Embed, cut: int = CUT)
         paper.paper_id: cosine(query_vector, vector) for paper, vector in zip(papers, vectors)
     }
     by_meaning = ordered(scores)
+    # The flag marks the top cut; it is not a universal similarity threshold.
     return [replace(item, meaning_is_close=place < cut) for place, item in enumerate(by_meaning)]
 
 
 def fuse(rankings: list[list[Ranked]], k: int = RRF_K) -> list[Ranked]:
-    """Merges several rankings with reciprocal rank fusion.
-
-    Fusion reads the place of a Paper and never its score, which is why it can
-    merge a BM25 score and a cosine similarity at all. The two are numbers on
-    different scales, and adding them would let whichever runs larger decide
-    every order.
-    """
+    """Combines rankings by position."""
+    # Positions are comparable; BM25 and cosine scores use different scales.
     scores: dict[str, float] = {}
-    # The reason of a Paper is carried, because the fused row is the row that
-    # ships and a card under it has to say why the Paper is there. The terms
-    # come from the keyword ranking and the close meaning from the dense one,
-    # so a merge of the two loses neither.
+
     terms: dict[str, tuple[str, ...]] = {}
     close: set[str] = set()
     for ranking in rankings:
@@ -324,32 +222,22 @@ def fuse(rankings: list[list[Ranked]], k: int = RRF_K) -> list[Ranked]:
 
 
 def rerank_ranking(query: str, papers: list[Paper], rerank: Rerank) -> list[Ranked]:
-    """Reorders the Papers it is given with a hosted reranker.
-
-    The caller passes the pool in the order the fusion left it, and decides how
-    deep to go. A reranker reads the query and one document together, so it
-    costs one call over the whole list and it cannot run on a cut of one Paper.
-    """
+    """Orders Papers using scores from a supplied reranker."""
     if not papers:
         return []
 
     documents = [document_text(paper) for paper in papers]
     answer = rerank(query, documents)
 
-    # A reranker that answered about fewer Papers than it was sent leaves the
-    # rest at a score of 0.0, which ranks them last. Dropping them would
-    # shorten the pool a recall number is measured over.
+    # Preserve the measured pool when replies omit Papers.
     scores = {paper.paper_id: 0.0 for paper in papers}
     for index, score in answer:
-        # The index arrives from outside Fynd. A number past the end of the
-        # pool would raise in the middle of a run, and a negative one would
-        # count backwards from the end and score the wrong Paper in silence.
+        # A negative index would silently assign the score to the wrong Paper.
         if not 0 <= index < len(papers):
             raise ValueError(
                 f"The reranker scored document {index} of a list of {len(papers)}. "
                 "The reply does not describe the pool it was sent."
             )
         scores[papers[index].paper_id] = score
-    # Through `ordered`, so two equal scores break the tie by identifier. The
-    # vendor's own order is not repeatable, and a published number has to be.
+
     return ordered(scores)

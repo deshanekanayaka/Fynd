@@ -1,0 +1,119 @@
+<!-- Generated output goes to ../code-guide.html. Edit this shared layout, not the output. -->
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta
+      name="description"
+      content="A plain-language guide to Fynd's Python code, with small examples and connected file walkthroughs."
+    />
+    <title>Fynd code guide</title>
+    <link rel="stylesheet" href="code-guide/assets/styles.css" />
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">Skip to content</a>
+    <header>
+      <a class="brand" href="#overview" aria-label="Fynd code guide home"
+        ><span class="brand-mark" aria-hidden="true">f</span
+        ><strong>fynd</strong
+        ><span class="brand-divider" aria-hidden="true"></span
+        ><span class="brand-label">Code guide</span></a
+      >
+      <div class="header-links">
+        <a href="../PRD.md">Product</a><a href="../CONTEXT.md">Vocabulary</a
+        ><span class="private-label">INTERNAL</span>
+      </div>
+    </header>
+    <div class="layout">
+      <aside class="sidebar" aria-label="File navigation">
+        <label class="search-label" for="file-search"
+          >Find a file or function</label
+        >
+        <div class="search-wrap">
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.7"
+            aria-hidden="true"
+          >
+            <circle cx="10.5" cy="10.5" r="6.5" />
+            <path d="m16 16 4.5 4.5" />
+          </svg>
+          <input
+            class="search"
+            id="file-search"
+            type="search"
+            placeholder="Search the code guide…"
+            autocomplete="off"
+            spellcheck="false"
+            disabled
+          />
+        </div>
+        <p
+          class="search-count"
+          id="search-status"
+          role="status"
+          aria-live="polite"
+        ></p>
+        <details id="file-menu" open>
+          <summary>Browse files</summary>
+          <nav aria-label="Code files">
+            {{navigation}}
+            <p id="no-results" hidden>
+              No files match. Try “cache”, “Topic”, or “ranking”.
+            </p>
+          </nav>
+        </details>
+        <div class="sidebar-footer">
+          Written for learning as you build.<br />Examples explain the current
+          code.
+        </div>
+      </aside>
+      <main id="main-content" tabindex="-1">
+        <div class="breadcrumb">
+          <a href="#overview">Code guide</a><span aria-hidden="true">/</span
+          ><span id="breadcrumb-group">Start here</span
+          ><span aria-hidden="true">/</span
+          ><span id="breadcrumb-current">Overview</span>
+        </div>
+        {{articles}}
+        <footer class="page-footer">
+          <span>Fynd · Internal code guide · Updated {{updated}}</span
+          ><span
+            >Layout reference:
+            <a href="https://docs.stripe.com/" target="_blank" rel="noopener"
+              >Stripe documentation ↗</a
+            ></span
+          >
+        </footer>
+      </main>
+      <aside class="right-rail" aria-label="On this page">
+        <div class="right-title">On this page</div>
+        <nav class="toc" id="toc" aria-label="Page sections"></nav>
+        <div class="rail-note">
+          Reading the code?<br />Start with why, then follow the example.<a
+            href="#models"
+            >Understand the shared values →</a
+          ><a href="#tests">Explore the checks →</a>
+        </div>
+      </aside>
+    </div>
+    <div
+      class="sr-only"
+      id="interaction-status"
+      role="status"
+      aria-live="polite"
+    ></div>
+    <noscript
+      ><p class="noscript-message">
+        JavaScript is off. All walkthroughs remain available below; use your
+        browser’s Find command.
+      </p>
+    </noscript>
+    <script src="code-guide/assets/guide.js" defer></script>
+  </body>
+</html>

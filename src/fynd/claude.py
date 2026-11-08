@@ -1,7 +1,8 @@
-"""Ask Claude for one answer in a fixed shape.
+"""Sends Stage 2's Topic instructions to Claude and caches its JSON answer.
 
-An edge, not a rule. A Stage receives this function as an argument, so a test
-runs the Stage with no network and no spend. See ADR 0006.
+Stage 2 supplies the filled prompt and expected response fields. This client
+handles the API request and JSON parsing; Stage 2 checks whether the returned
+Topics are usable. Tests supply a fake model function instead (ADR 0006).
 """
 
 import hashlib
@@ -12,23 +13,15 @@ import anthropic
 
 from fynd import cache
 
-# The PRD gives the Topic proposal and the Claim extraction to Haiku 4.5.
+# Stage 2 uses Haiku 4.5 to propose Topics.
 HAIKU: Final = "claude-haiku-4-5"
 
-# ADR 0004 asked for temperature zero, and the Anthropic SDK removed the
-# parameter. `messages.create` in 1.12.1 does not accept it at all, and passing
-# it raises a TypeError before any request leaves the machine. So the request
-# sends no decoding parameter, and the replay promise of ADR 0004 now rests on
-# the cache alone. See the note of 2026-10-20 in that record.
+# Limit the reply length; this is not a total Project spending cap.
 MAX_TOKENS: Final = 4000
 
 
 class ModelRefused(Exception):
-    """Raised when the model returns nothing Fynd can read.
-
-    No text block, a reply that stopped early, or text that is not JSON. None
-    of the three is cached, so the next run asks again.
-    """
+    """Raised when Claude refuses, truncates, or returns unusable JSON text."""
 
 
 def ask_for_json(
@@ -38,19 +31,14 @@ def ask_for_json(
     schema_version: int,
     model: str = HAIKU,
 ) -> Any:
-    """Returns the model's answer to one prompt, in the shape the schema names.
-
-    The schema travels from the Stage, because the shape of an answer is a rule
-    of the Stage and not a detail of this client.
-    """
+    """Returns parsed JSON from the cache or a Claude request."""
     parts = {
         "model": model,
         "prompt_sha256": prompt_sha256,
         "input_sha256": hashlib.sha256(filled_prompt.encode("utf-8")).hexdigest(),
-        # No decoding parameter sits in the key, because none is sent. A key
-        # that names a value the request does not carry tells the next reader
-        # a number was fixed when it was not.
+        # No decoding settings are sent; repeatability comes from cached answers.
         "max_tokens": MAX_TOKENS,
+        # The caller must bump this version when the response schema changes.
         "schema_version": schema_version,
     }
     key = cache.cache_key("claude", parts)
@@ -59,6 +47,7 @@ def ask_for_json(
         return cached
 
     client = anthropic.Anthropic()
+    # Request the Stage's response shape; Stage rules still check its usefulness.
     response = client.messages.create(
         model=model,
         max_tokens=MAX_TOKENS,
@@ -66,8 +55,7 @@ def ask_for_json(
         output_config={"format": {"type": "json_schema", "schema": schema}},
     )
 
-    # A truncated reply still carries a text block, so the stop reason is the
-    # only honest check. Without it the broken JSON raises far from the cause.
+    # Truncated replies can still contain text, so check the stop reason first.
     if response.stop_reason in ("max_tokens", "refusal"):
         raise ModelRefused(
             f"The model {model} stopped with the reason {response.stop_reason}. "

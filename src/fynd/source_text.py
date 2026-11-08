@@ -1,38 +1,25 @@
-"""The checks that decide whether a Source text is Usable text.
+"""Checks extracted Source text before the Open copy pipeline accepts it as usable.
 
-Usable text is a Source text that passes the checks, so Fynd reads Claims from
-it. Every number here comes from the live run of 2026-10-09, which is in
-`docs/measurements/open-copy-hosts-2026-10-09.md`.
-
-A Paper and a web page get different checks. A Paper has sections, and a
-statistics page has none, so the section word check runs on a Paper only.
+PDF and HTML extraction can produce short error messages or garbled text.
+These checks return the first failure reason without changing the text.
+Papers also need a section-word match; web pages use only the shared checks.
+Passing does not establish truth, relevance, or correct reading order.
 """
 
 from typing import Final
 
 from fynd import reasons
 
-# The 5 Papers that gave Usable text on 2026-10-09 run from 60,363 to 91,205
-# characters. The two pages that gave nothing useful are 1,898 and 631
-# characters. 3,000 sits between the two groups, far below every real text, and
-# it leaves room for a short statistics page at stage 3.
+# Reject short extracts such as refusal pages; chosen from the 2026-10-09 measurement.
 MIN_CHARACTERS: Final = 3000
 
-# The share of characters that must be ordinary. A PDF that extracted badly
-# comes back full of control characters and private use glyphs.
-# Every real text of the live run scored between 0.9968 and 0.9991, so 0.95
-# refuses a text that is one twentieth rubbish and accepts every real one. The
-# earlier value of 0.80 was a guess, and it accepted a text one fifth rubbish.
-# No file of that run failed this check, so the number has a floor from the
-# real texts and no ceiling from a broken one.
+# Require at least 95% ordinary characters to limit unrecognised glyphs.
 MIN_ORDINARY_SHARE: Final = 0.95
 
-# What counts as ordinary beside a letter, a digit, and a space.
+# Accept common punctuation in addition to Unicode letters, digits, and whitespace.
 ORDINARY_PUNCTUATION: Final = ".,;:!?'\"()[]{}<>-–—/\\|%&@#£$€+=*^~`_"
 
-# One of these words appears in every Paper of the live run. The check asks for
-# one word and not for a section heading, because an extractor loses the
-# heading style and keeps the word.
+# Extracted text can lose heading styles, so match wording rather than layout.
 SECTION_WORDS: Final = (
     "abstract",
     "introduction",
@@ -45,18 +32,16 @@ SECTION_WORDS: Final = (
 
 
 def is_ordinary(character: str) -> bool:
-    """Says whether one character belongs in a readable text."""
+    """Checks whether a character is alphanumeric, whitespace, or accepted punctuation."""
     if character.isalnum() or character.isspace():
         return True
     return character in ORDINARY_PUNCTUATION
 
 
 def ordinary_share(text: str) -> float:
-    """Returns the share of characters that belong in a readable text."""
+    """Returns the fraction of characters accepted by the character check."""
     if not text:
         return 0.0
-    # A plain loop over the text. The longest Source text is a few hundred
-    # thousand characters, which costs a fraction of one extraction.
     ordinary = 0
     for character in text:
         if is_ordinary(character):
@@ -65,7 +50,7 @@ def ordinary_share(text: str) -> float:
 
 
 def has_a_section_word(text: str) -> bool:
-    """Says whether this text names one of the sections a Paper has."""
+    """Checks for a configured section-word substring, ignoring case."""
     low = text.lower()
     for word in SECTION_WORDS:
         if word in low:
@@ -74,11 +59,8 @@ def has_a_section_word(text: str) -> bool:
 
 
 def reason_against_text(text: str) -> str:
-    """Returns the reason this text is not usable, or an empty string.
-
-    These are the two checks that every Source text passes. An empty answer
-    means the text is Usable text so far.
-    """
+    """Returns the first shared text-check failure, or an empty string on success."""
+    # Check the 3,000-character minimum before calculating the 95% character share.
     if len(text) < MIN_CHARACTERS:
         return reasons.TEXT_TOO_SHORT
     if ordinary_share(text) < MIN_ORDINARY_SHARE:
@@ -87,12 +69,7 @@ def reason_against_text(text: str) -> str:
 
 
 def reason_against_paper_text(text: str) -> str:
-    """Returns the reason this Paper text is not usable, or an empty string.
-
-    A Paper carries the section word check as well. All 5 Papers of the live
-    run hold the words method, results and references, and a refusal page or a
-    repository landing page holds none of them.
-    """
+    """Checks Paper text for length, accepted characters, and a section word."""
     against = reason_against_text(text)
     if against:
         return against
@@ -102,11 +79,6 @@ def reason_against_paper_text(text: str) -> str:
 
 
 def reason_against_page_text(text: str) -> str:
-    """Returns the reason this web page text is not usable, or an empty string.
-
-    A web page carries no section word check. The Office for National
-    Statistics article of the live run holds the word method, and a gov.uk
-    release page holds no section word at all, and neither fact says whether
-    the text is usable.
-    """
+    """Checks web-page text for length and accepted characters."""
+    # Useful web pages need not use academic section names such as Methods.
     return reason_against_text(text)

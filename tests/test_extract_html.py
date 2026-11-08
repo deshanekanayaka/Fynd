@@ -24,7 +24,7 @@ def test_a_product_page_loses_its_navigation_and_cookie_banner() -> None:
 
 
 def test_a_table_keeps_its_numbers() -> None:
-    # A Statistic is a number, so a reader that drops a table drops the Claim.
+    # Dropping table values would lose potential Claims from a Statistic.
     answer = read_html(page("statistics-table"))
 
     assert "3900" in answer.text
@@ -55,8 +55,7 @@ def test_a_statistics_release_page_gives_almost_nothing() -> None:
 
 
 def test_a_page_with_no_article_gives_a_short_text() -> None:
-    # trafilatura returns the little text that is there and never raises, so
-    # the usable text checks are what refuses a page like this one.
+    # This page still yields navigation text; quality checks decide its usability.
     answer = read_html(b"<html><body><nav>Home</nav></body></html>")
     assert answer.text == "Home"
 

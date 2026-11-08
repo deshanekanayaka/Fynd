@@ -1,17 +1,9 @@
-"""Build the Retrieval set, which is the Papers a retrieval number is scored on.
+"""Builds the Paper pool used for human grading and ranking measurements.
 
-The set is 40 to 60 Papers of the Seeded Topic, each with a Relevance grade a
-person writes by hand. One query returns too few Papers to grade, so four
-queries build it, and the set records which ones returned each Paper.
-
-Two rules matter more than the rest. The file ships shuffled, because a grade
-read in rank order is not a grade, it is agreement with the ranking. And the
-file holds no abstract, because ADR 0011 refuses a committed abstract and this
-file enters git.
-
-Nothing here reads a clock. The caller passes the reference date, as stage 2
-does, so the Evidence window of a published number never moves on 1 January.
-"""
+The CLI supplies a search function and reference date. Four handwritten
+queries contribute Papers for the Seeded Topic; duplicates are merged and
+the 40–60 entries are shuffled for grading. Saved entries omit abstracts;
+the caller later supplies search replies containing that text (ADR 0011)."""
 
 import datetime as dt
 import random
@@ -22,82 +14,55 @@ from pydantic import BaseModel, Field
 from fynd.models import Paper, SearchResult
 from fynd.stages.stage2 import SEEDED_TOPIC, SEEDED_TOPIC_QUERY, first_year_in_window
 
-# What each query asks the search for. 50 is the limit the shipped flow uses,
-# so the cache this run fills is the cache a shipped run reads. See ADR 0013.
+# Request 50 per query to match the intended retrieval search size (ADR 0013).
 SEARCH_LIMIT: Final = 50
 
-# The most Papers one query may contribute. 15 is a measurement and not a
-# guess. The live run of 2026-10-20 showed that four queries for the same Topic
-# return almost no Papers in common. At 20 each they offered 79 Papers, of which
-# only 1 was a duplicate, so the cap below dropped 19 Papers that nobody chose
-# to drop. At 15 each the pool is the whole union and nothing is lost.
+# Taking 15 from each of 4 queries keeps their combined pool within the 60-Paper cap.
 PER_QUERY: Final = 15
 
-# The set is useless outside this band. Too few Papers and recall at 20 is
-# arithmetic on nothing. Too many and the grading never finishes.
+# Keep enough Papers to compare rankings without making hand grading too large.
 SET_MIN: Final = 40
 SET_MAX: Final = 60
 
-# A fixed seed, so a re-run writes the same order and a later re-grade reads
-# the same file. The date it was chosen on carries no meaning beyond that.
+# The same input order and seed reproduce the same shuffle.
 SHUFFLE_SEED: Final = 20261020
 
 
 class SetTooSmall(Exception):
-    """Raised when the four queries pooled too few Papers to grade.
-
-    There is no matching error for too many. The pool stops at SET_MAX while it
-    is built, so only the lower end can fail.
-    """
+    """Raised when the query pool contains fewer than 40 distinct Papers."""
 
 
 class SeedQuery(BaseModel):
-    """One of the four queries that build the set."""
+    """One search phrasing with its name, author type, and purpose."""
 
-    # The name is what an entry records, because a reader of the file should
-    # not have to match a long query string to know where a Paper came from.
+    # Entries record this short name so overlapping query results are easy to trace.
     name: str
     text: str
-    # Who wrote the text, which is `model` or `hand`. CONTEXT.md fixes the word
-    # Source for anything Fynd cites, so this field does not use it. The model
-    # one is the finding this set exists to measure, so it is named in the file.
+    # All four current queries are handwritten; this records their provenance.
     written_by: str
     note: str
 
 
 class SetEntry(BaseModel):
-    """One Paper of the Retrieval set, waiting for its grade."""
+    """One Retrieval set Paper with its query names and optional Relevance grade."""
 
     paper_id: str
     title: str
-    # No year. The grading rule says to read the title and the abstract and
-    # nothing else, and the Evidence window already keeps every Paper in the
-    # set inside the last 5 years, so a year on the line separates nothing and
-    # can push a grade down for a reason the rule does not allow.
-    # A Relevance grade is 0, 1 or 2, and None means nobody has graded it yet.
-    # The type refuses a fourth value, because a typo in a hand edited file
-    # would otherwise reach the recall arithmetic.
+    # None means ungraded; restrict saved values so a typo cannot corrupt the metrics.
     grade: Literal[0, 1, 2] | None = None
     queries: list[str] = Field(default_factory=list)
 
 
 class RetrievalSet(BaseModel):
-    """The whole set, as the file on disk holds it."""
+    """A saved Paper pool with its Topic, queries, date, and build settings."""
 
     topic: str
-    # The words a ranking asks the pool for, which are the subject and not the
-    # place. The `topic` above is the label a student reads. A row of the table
-    # has to say which of the two it ranked with, and the two give very
-    # different numbers. See ADR 0015. The default is empty, so a set file
-    # written before this field still loads, and the measurement refuses to
-    # rank with an empty one instead of guessing.
+    # Keep old files loadable; measurement refuses an empty subject query (ADR 0015).
     topic_query: str = ""
     reference_date: dt.date
     search_limit: int
     per_query: int
-    # How many Papers the four queries offered, before the cap. When this is
-    # larger than the number of entries, the cap left Papers out, and a reader
-    # of a recall number has to know that the pool was truncated.
+    # Count distinct eligible Papers before the overall cap to expose truncation.
     papers_offered: int
     shuffle_seed: int
     queries: list[SeedQuery]
@@ -105,23 +70,13 @@ class RetrievalSet(BaseModel):
 
 
 class Search(Protocol):
-    """The search this file needs, passed in as a plain function argument."""
+    """A supplied search function accepting query text, first year, and result limit."""
 
     def __call__(self, query: str, year_from: int, limit: int) -> SearchResult: ...
 
 
-# The four queries, all written by hand, and all for the Seeded Topic.
-#
-# A fifth query, the one the model writes, was in the first design. It is gone,
-# because the model does not write one for this Topic. Two live stage 2 runs on
-# 2026-10-20 proposed 16 Topics for the Energy Domain and not one of them was
-# the Seeded Topic. Every Topic the model wrote names a task and none names a
-# country. So this set measures how well a ranking orders Papers, and it does
-# not measure the words a model chooses. That second question is its own
-# measurement on a Topic the model really proposes.
-#
-# All four are for the one Topic on purpose. A Paper carries one Relevance
-# grade, and a grade only means something against one Topic.
+# Use one Topic so every Paper’s grade answers the same relevance question.
+# Handwritten queries measure ranking, not the quality of AI-generated queries.
 SEED_QUERIES: Final = (
     SeedQuery(
         name="hand",
@@ -155,21 +110,12 @@ def entries_from(
     per_query: int,
     cap: int = SET_MAX,
 ) -> list[SetEntry]:
-    """Pools the Papers of every query into one list of entries.
-
-    A Paper two queries both returned is one entry that names both, because the
-    set is a pool of Papers and not a pool of results.
-
-    The queries take turns, one rank at a time, and the pool stops at the cap.
-    Reading each query to the end instead would spend the whole budget on the
-    first query and leave the fourth unrepresented. Every query that returned a
-    Paper is still recorded on that Paper, whichever turn placed it.
-    """
+    """Pools eligible Papers by alternating queries and merging repeated identifiers."""
     by_identifier: dict[str, SetEntry] = {}
-    # Only the first Papers of a reply are eligible. The search asked for more
-    # so the shipped limit is exercised and the cache is filled.
+    # Only each query’s first per_query results may enter this evaluation pool.
     eligible = [(name, result.papers[:per_query]) for name, result in results]
 
+    # Alternate queries so a cap cannot favour only the first query.
     for rank in range(per_query):
         for name, papers in eligible:
             if rank >= len(papers):
@@ -181,11 +127,9 @@ def entries_from(
                     entry.queries.append(name)
                 continue
             if len(by_identifier) >= cap:
-                # The pool is full. The loop runs on, because a Paper already
-                # in the pool still has to record the query that found it.
+                # Keep scanning so later matches can still add query names to retained Papers.
                 continue
-            # The abstract is read from the cache at measurement time and is
-            # deliberately absent here. See ADR 0011.
+            # Public entries omit abstracts (ADR 0011) and years that grading must ignore.
             by_identifier[paper.paper_id] = SetEntry(
                 paper_id=paper.paper_id,
                 title=paper.title,
@@ -197,16 +141,8 @@ def entries_from(
 def pool_papers(
     results: list[tuple[str, SearchResult]], per_query: int, keep: set[str]
 ) -> list[Paper]:
-    """Returns the Papers of the graded pool, with the abstract the cache kept.
-
-    A ranking reads the title and the abstract, and the set file in git holds
-    no abstract, because ADR 0011 refuses one. So the text is read from the
-    cached search reply on the machine that runs the measurement, and it is
-    written nowhere.
-
-    `keep` is the graded pool. A Paper from rank 16 of a query was returned by
-    the search and never graded, so no ranking may score it.
-    """
+    """Returns retained Papers with abstracts from the supplied search replies."""
+    # Exclude ungraded results so ranking and evaluation describe the same pool.
     found: dict[str, Paper] = {}
     for _, result in results:
         for paper in result.papers[:per_query]:
@@ -216,12 +152,12 @@ def pool_papers(
 
 
 def papers_without_abstract(papers: list[Paper]) -> int:
-    """Counts the Papers of the pool that carry no abstract."""
+    """Counts Papers whose abstract is empty."""
     return sum(1 for paper in papers if not paper.abstract)
 
 
 def papers_offered(results: list[tuple[str, SearchResult]], per_query: int) -> int:
-    """Counts the Papers the queries offered, before the cap took its share."""
+    """Counts distinct eligible Papers before the overall pool cap."""
     identifiers = set()
     for _, result in results:
         for paper in result.papers[:per_query]:
@@ -230,21 +166,18 @@ def papers_offered(results: list[tuple[str, SearchResult]], per_query: int) -> i
 
 
 def shuffled(entries: list[SetEntry], seed: int) -> list[SetEntry]:
-    """Returns the entries in a fixed random order, leaving the input alone.
-
-    The rank order has to go. A person grading a list top to bottom agrees with
-    the ranking instead of judging the Paper, and this set exists to disagree
-    with the ranking when the ranking is wrong.
-    """
+    """Returns a reproducibly shuffled copy of the entry list."""
+    # Hide ranking-order cues without changing the original list order.
     mixed = list(entries)
     random.Random(seed).shuffle(mixed)
     return mixed
 
 
 def build_set(search: Search, reference_date: dt.date) -> RetrievalSet:
-    """Runs the four queries and returns the set, shuffled and ungraded."""
+    """Builds a shuffled, ungraded Retrieval set using a fixed reference date."""
     queries = list(SEED_QUERIES)
 
+    # The passed date keeps the Evidence window stable during replay.
     year_from = first_year_in_window(reference_date)
     results = []
     for query in queries:
@@ -255,7 +188,7 @@ def build_set(search: Search, reference_date: dt.date) -> RetrievalSet:
     if len(entries) < SET_MIN:
         raise SetTooSmall(
             f"The four queries pooled {len(entries)} Papers, and the set needs "
-            f"{SET_MIN} to {SET_MAX}. The queries overlap too much, so widen one of them."
+            f"{SET_MIN} to {SET_MAX}. Results may be sparse or overlapping; review the query texts."
         )
 
     return RetrievalSet(

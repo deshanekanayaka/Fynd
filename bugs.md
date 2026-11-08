@@ -6,6 +6,70 @@ A bug a code review found before anyone ran the code is still a bug. The mistake
 
 ---
 
+## An out-of-range numeric grade ends the interactive grading command
+
+**Found:** 2026-11-08, while reviewing `cli.py`. Reproduced with a temporary set file, fake input, and a local abstract lookup; no service calls were made.
+
+**What happened:** entering `7` for an ungraded Paper raised `GradeRefused` out of `run_grade_retrieval_set` after one input prompt. `main` handles that as a command failure and exits instead of letting the person enter another grade. The saved Paper remained ungraded.
+
+**Root cause:** the input loop catches `ValueError` from integer conversion, but `apply_grades` uses `GradeRefused` for numeric values outside 0–2. That exception is caught only at the outer command boundary.
+
+**Fix:** pending a separate behaviour change. Handle expected grade-validation failures inside the interactive loop while retaining existing saved grades and allowing another answer.
+
+**Verification:** a one-Paper ungraded set and input `7` produced one prompt, an escaping `GradeRefused`, and a saved grade of `None`. Existing accepted answers are saved individually and are not undone by this error.
+
+**Prevention:** exercise both non-numeric and out-of-range numeric input through the interactive command, checking that the person can continue or quit without losing accepted grades.
+
+---
+
+## Voyage results can enter the cache before their fields are validated
+
+**Found:** 2026-11-08, during the `voyage.py` review. Both cases were reproduced with `httpx.MockTransport`, temporary cache directories, and no live requests.
+
+**What happened:** an embedding response containing indexes 0 and -1 for two texts returned two vectors and wrote both entries. Python interpreted -1 as the last text. Separately, a non-empty reranker response missing `relevance_score` was saved before parsing raised `KeyError`; a second call failed from that saved entry without making another request.
+
+**Root cause:** `embed` uses response indexes directly to select input text. `rerank` checks only that `data` is non-empty before caching, then reads required fields afterward. The ranking helper's later index check cannot prevent a malformed service reply from entering this cache.
+
+**Fix:** pending a separate behaviour change. Validate response indexes and required vector/score fields before persisting the affected results. Preserve the intended handling of valid partial responses. This must be resolved before accepting issue #37's failed-reply caching promise.
+
+**Verification:** the negative-index reply produced vectors `[[1.0], [9.0]]` and two cache files. The malformed reranking reply produced `KeyError` twice, one mocked request, and one cache file.
+
+**Prevention:** exercise negative and out-of-range response indexes and missing required result fields, asserting both the error and that invalid results are not cached. A successful HTTP status or non-empty list alone is not a usable reply contract.
+
+---
+
+## A retained refusal can name a later host that timed out
+
+**Found:** 2026-11-08, during the `open_copy.py` review. Reproduced with supplied fake functions and no network requests.
+
+**What happened:** candidate A returned a 403 refusal and candidate B raised `FetchFailed`. The result kept A's `fetch_refused` reason but named B as its `open_copy`, so a host report can attach the refusal to the wrong host.
+
+**Root cause:** `last` changes before every attempt, while `last_reason` changes only after a refusal. A later temporary failure leaves these values describing different attempts.
+
+**Fix:** pending a separate behaviour change. Retain a refusal's candidate together with its reason, preserving the complete attempted-host list and the existing outcome priority.
+
+**Verification:** a fake refusal from `first.example.org` followed by a fake timeout from `second.example.org` returned `reason='fetch_refused'`, `open_copy.host='second.example.org'`, and two attempts. The earlier refusal should remain attached to `first.example.org`.
+
+**Prevention:** check both orderings of mixed refusals and temporary failures, asserting the retained reason and host together rather than only the attempt count.
+
+---
+
+## Robots rules are reused across schemes and skipped at redirect destinations
+
+**Found:** 2026-11-08, during the `fetcher.py` readability review and reproduced with `httpx.MockTransport`. No live requests were made.
+
+**What happened:** one Fetcher asked for `http://example.org/robots.txt`, then reused those rules for an HTTPS URL on the same host without requesting its HTTPS robots file. In a second reproduction, an allowed URL redirected to another host's disallowed path; the file was returned without requesting the destination's robots.txt.
+
+**Root cause:** the disk robots key includes scheme and host, but the in-memory `self.robots` key uses only the host. Download redirects are followed automatically by HTTPX, bypassing `Fetcher.fetch`'s permission and pacing checks for the new target.
+
+**Fix:** pending a separate behaviour change. Scope in-memory permissions to scheme and host, and check redirect targets before following them while preserving the redirect cap and cache rules.
+
+**Verification:** fake request traces showed only `http://example.org/robots.txt` for the two schemes. The redirect trace was the initial host's robots.txt, its PDF URL, then the second host's PDF URL; no second-host robots request occurred, and the result was `Fetched`.
+
+**Prevention:** add regression checks for different permissions on HTTP and HTTPS and for redirects to disallowed paths, including redirects within one host. A green direct-URL test does not establish permission checks across a redirect chain.
+
+---
+
 ## A ranking asked the pool for a place the grading rule throws away
 
 **Found:** 2026-10-22, by the first BM25 row of the retrieval table, on branch `retrieval-bm25-row`.

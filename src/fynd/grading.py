@@ -1,13 +1,8 @@
-"""Write the hand grades onto the Retrieval set, and say what is left.
+"""Applies human Relevance grades to copies of the Retrieval set.
 
-Grading is the one step of this measurement that a person does. So this file
-refuses anything it cannot be sure about. A grade names a Paper by identifier,
-never by its place in a list, because a grade on the wrong Paper is invisible
-to every number downstream.
-
-It also refuses to replace a grade that is already there. A second pass over
-the same Paper is a re-grade, and a re-grade that quietly overwrites the first
-answer hides a disagreement worth seeing.
+The CLI collects grades by Paper identifier, then uses these helpers to check
+them, list ungraded Papers, and show counts. Unknown Papers, unsupported grades,
+and conflicting overwrites are refused. The CLI handles saving the updated set.
 """
 
 from fynd.retrieval_set import RetrievalSet, SetEntry
@@ -16,19 +11,20 @@ LEGAL_GRADES = (0, 1, 2)
 
 
 class GradeRefused(Exception):
-    """Raised when a grade cannot be written without losing something."""
+    """Raised for an unknown Paper, unsupported grade, or conflicting overwrite."""
 
 
 def apply_grades(retrieval_set: RetrievalSet, grades: dict[str, int]) -> RetrievalSet:
-    """Returns the set with the grades written on, leaving the input alone."""
+    """Returns a copy with validated grades matched to Paper identifiers."""
     by_identifier = {entry.paper_id: entry for entry in retrieval_set.entries}
 
+    # Validate the whole batch before applying any grade, so refusal cannot partly update it.
     for paper_id, grade in grades.items():
         entry = by_identifier.get(paper_id)
         if entry is None:
             raise GradeRefused(
                 f"The set holds no Paper {paper_id}. A grade for a Paper that is not in "
-                "the set means the grades and the set came from different runs."
+                "the set cannot be applied. Check the identifier against this Retrieval set."
             )
         if grade not in LEGAL_GRADES:
             raise GradeRefused(
@@ -36,12 +32,14 @@ def apply_grades(retrieval_set: RetrievalSet, grades: dict[str, int]) -> Retriev
                 "docs/retrieval-set-grading-rule.md."
             )
         if entry.grade is not None and entry.grade != grade:
+            # A disagreement must be resolved deliberately, not silently overwritten.
             raise GradeRefused(
                 f"Paper {paper_id} already carries the grade {entry.grade}, and this pass "
                 f"says {grade}. Clear the first grade by hand if the second one is right, "
                 "so the change is a decision and not an accident."
             )
 
+    # Copy nested entries too, so changing a grade cannot mutate the caller's set.
     written = retrieval_set.model_copy(deep=True)
     for entry in written.entries:
         if entry.paper_id in grades:
@@ -50,16 +48,12 @@ def apply_grades(retrieval_set: RetrievalSet, grades: dict[str, int]) -> Retriev
 
 
 def ungraded(retrieval_set: RetrievalSet) -> list[SetEntry]:
-    """Returns the entries that still wait for a grade."""
+    """Returns entries whose Relevance grade is still None."""
     return [entry for entry in retrieval_set.entries if entry.grade is None]
 
 
 def grade_counts(retrieval_set: RetrievalSet) -> dict[int | None, int]:
-    """Counts each grade, and the Papers with none.
-
-    The table needs this. A recall number without the count of relevant Papers
-    gives a reader no denominator.
-    """
+    """Counts present Relevance grades, including None for ungraded Papers."""
     counts: dict[int | None, int] = {}
     for entry in retrieval_set.entries:
         counts[entry.grade] = counts.get(entry.grade, 0) + 1
@@ -67,12 +61,8 @@ def grade_counts(retrieval_set: RetrievalSet) -> dict[int | None, int]:
 
 
 def worksheet_rows(retrieval_set: RetrievalSet) -> list[str]:
-    """Returns one line for each Paper, in the order the set holds.
-
-    The order is the shuffled order of the file. Nothing here sorts or groups,
-    because a grouped list tells the grader which query found the Paper, and
-    the rule says to read the title alone.
-    """
+    """Formats identifiers, titles, and grades in the saved entry order."""
+    # Preserve the shuffled order instead of exposing query groups or ranking cues.
     rows = []
     for number, entry in enumerate(retrieval_set.entries, start=1):
         grade = "." if entry.grade is None else str(entry.grade)

@@ -4,7 +4,6 @@ import json
 
 import pytest
 
-from fynd import cache
 from fynd.claude import HAIKU, ModelRefused, ask_for_json
 
 SCHEMA = {"type": "object", "properties": {"topics": {"type": "array"}}}
@@ -56,10 +55,8 @@ def test_a_good_reply_is_parsed_and_cached(tmp_path, monkeypatch) -> None:
     assert len(calls) == 1
 
 
-def test_the_request_names_the_model_and_sends_no_decoding_parameter(
-    tmp_path, monkeypatch
-) -> None:
-    # ADR 0004 fixes decoding, so the same question returns the same answer.
+def test_the_request_names_the_model_and_sends_no_decoding_parameter(tmp_path, monkeypatch) -> None:
+    # Replay comes from the cache; the request sends no decoding settings.
     monkeypatch.setenv("FYND_CACHE_DIR", str(tmp_path))
     calls: list = []
     reply = Reply(json.dumps({"topics": []}))
@@ -68,8 +65,7 @@ def test_the_request_names_the_model_and_sends_no_decoding_parameter(
     ask_for_json("a prompt", "aaa", SCHEMA, 1)
 
     assert calls[0]["model"] == HAIKU
-    # The SDK removed every sampling parameter, and passing one raises a
-    # TypeError before a request leaves the machine. See bugs.md.
+    # Preserve the request shape established by the live-run regression.
     assert "temperature" not in calls[0]
     assert "top_p" not in calls[0]
     assert "top_k" not in calls[0]
@@ -131,4 +127,4 @@ def test_a_refused_reply_is_never_cached(tmp_path, monkeypatch) -> None:
             ask_for_json("a prompt", "aaa", SCHEMA, 1)
 
     assert len(calls) == 2
-    assert cache.read(cache.cache_key("claude", {})) is None
+    assert list(tmp_path.iterdir()) == []
