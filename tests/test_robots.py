@@ -3,7 +3,6 @@
 import time
 
 import httpx
-import pytest
 
 from fynd import reasons
 from fynd.fetcher import (
@@ -18,15 +17,6 @@ from fynd.fetcher import (
 
 PDF_BODY = b"%PDF-1.7 a short paper"
 PAPER_URL = "https://dro.dur.ac.uk/id/eprint/1/aaa.pdf"
-
-
-@pytest.fixture(autouse=True)
-def a_cache_and_an_address(tmp_path, monkeypatch):
-    """Gives every test its own cache directory and an operator address."""
-    monkeypatch.setenv("FYND_CACHE_DIR", str(tmp_path))
-    monkeypatch.setenv("FYND_CONTACT_EMAIL", "deshan@example.org")
-    monkeypatch.setattr("fynd.fetcher.time.sleep", lambda seconds: None)
-    return tmp_path
 
 
 def transport_with_robots(

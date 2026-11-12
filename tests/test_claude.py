@@ -40,8 +40,7 @@ def client_that_replies(reply: Reply, calls: list):
     return Client
 
 
-def test_a_good_reply_is_parsed_and_cached(tmp_path, monkeypatch) -> None:
-    monkeypatch.setenv("FYND_CACHE_DIR", str(tmp_path))
+def test_a_good_reply_is_parsed_and_cached(monkeypatch) -> None:
     calls: list = []
     reply = Reply(json.dumps({"topics": ["a"]}))
     monkeypatch.setattr("fynd.claude.anthropic.Anthropic", client_that_replies(reply, calls))
@@ -55,9 +54,8 @@ def test_a_good_reply_is_parsed_and_cached(tmp_path, monkeypatch) -> None:
     assert len(calls) == 1
 
 
-def test_the_request_names_the_model_and_sends_no_decoding_parameter(tmp_path, monkeypatch) -> None:
+def test_the_request_names_the_model_and_sends_no_decoding_parameter(monkeypatch) -> None:
     # Replay comes from the cache; the request sends no decoding settings.
-    monkeypatch.setenv("FYND_CACHE_DIR", str(tmp_path))
     calls: list = []
     reply = Reply(json.dumps({"topics": []}))
     monkeypatch.setattr("fynd.claude.anthropic.Anthropic", client_that_replies(reply, calls))
@@ -72,8 +70,7 @@ def test_the_request_names_the_model_and_sends_no_decoding_parameter(tmp_path, m
     assert calls[0]["output_config"]["format"]["schema"] == SCHEMA
 
 
-def test_a_changed_prompt_hash_is_a_different_cache_entry(tmp_path, monkeypatch) -> None:
-    monkeypatch.setenv("FYND_CACHE_DIR", str(tmp_path))
+def test_a_changed_prompt_hash_is_a_different_cache_entry(monkeypatch) -> None:
     calls: list = []
     reply = Reply(json.dumps({"topics": []}))
     monkeypatch.setattr("fynd.claude.anthropic.Anthropic", client_that_replies(reply, calls))
@@ -87,7 +84,6 @@ def test_a_changed_prompt_hash_is_a_different_cache_entry(tmp_path, monkeypatch)
 def test_a_reply_that_hit_the_token_ceiling_is_refused(tmp_path, monkeypatch) -> None:
     # A truncated reply still carries text, so the stop reason is the only
     # honest check. Without it the broken JSON raises far from the cause.
-    monkeypatch.setenv("FYND_CACHE_DIR", str(tmp_path))
     reply = Reply('{"topics": [{"label": "half a top', stop_reason="max_tokens")
     monkeypatch.setattr("fynd.claude.anthropic.Anthropic", client_that_replies(reply, []))
 
@@ -97,8 +93,7 @@ def test_a_reply_that_hit_the_token_ceiling_is_refused(tmp_path, monkeypatch) ->
     assert list(tmp_path.iterdir()) == []
 
 
-def test_text_that_is_not_json_is_refused(tmp_path, monkeypatch) -> None:
-    monkeypatch.setenv("FYND_CACHE_DIR", str(tmp_path))
+def test_text_that_is_not_json_is_refused(monkeypatch) -> None:
     reply = Reply("I cannot help with that.")
     monkeypatch.setattr("fynd.claude.anthropic.Anthropic", client_that_replies(reply, []))
 
@@ -106,8 +101,7 @@ def test_text_that_is_not_json_is_refused(tmp_path, monkeypatch) -> None:
         ask_for_json("a prompt", "aaa", SCHEMA, 1)
 
 
-def test_an_empty_reply_is_refused(tmp_path, monkeypatch) -> None:
-    monkeypatch.setenv("FYND_CACHE_DIR", str(tmp_path))
+def test_an_empty_reply_is_refused(monkeypatch) -> None:
     monkeypatch.setattr("fynd.claude.anthropic.Anthropic", client_that_replies(Reply(""), []))
 
     with pytest.raises(ModelRefused):
@@ -116,7 +110,6 @@ def test_an_empty_reply_is_refused(tmp_path, monkeypatch) -> None:
 
 def test_a_refused_reply_is_never_cached(tmp_path, monkeypatch) -> None:
     # ADR 0004: a failed reply is never cached, so the next run asks again.
-    monkeypatch.setenv("FYND_CACHE_DIR", str(tmp_path))
     calls: list = []
     monkeypatch.setattr(
         "fynd.claude.anthropic.Anthropic", client_that_replies(Reply("not json"), calls)

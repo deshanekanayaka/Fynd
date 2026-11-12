@@ -22,12 +22,6 @@ from fynd.voyage import (
 )
 
 
-@pytest.fixture(autouse=True)
-def no_real_waiting(monkeypatch):
-    """Replaces sleep so tests exercise pacing without waiting."""
-    monkeypatch.setattr("fynd.voyage.time.sleep", lambda seconds: None)
-
-
 def client_that_returns(replies: list, calls: list) -> httpx.Client:
     """Builds an httpx client that answers each request from the list in turn."""
 
@@ -44,8 +38,7 @@ def embedding_reply(vectors: list[list[float]], tokens: int = 7) -> tuple[int, d
     return 200, {"data": data, "model": EMBEDDING_MODEL, "usage": {"total_tokens": tokens}}
 
 
-def test_a_vector_comes_back_for_every_text(tmp_path, monkeypatch) -> None:
-    monkeypatch.setenv("FYND_CACHE_DIR", str(tmp_path))
+def test_a_vector_comes_back_for_every_text(monkeypatch) -> None:
     monkeypatch.setenv("VOYAGE_API_KEY", "al-test-key")
     calls: list = []
     voyage = Voyage(client=client_that_returns([embedding_reply([[1.0], [2.0]])], calls))
@@ -56,8 +49,7 @@ def test_a_vector_comes_back_for_every_text(tmp_path, monkeypatch) -> None:
     assert len(calls) == 1
 
 
-def test_the_request_names_the_model_the_type_and_the_size(tmp_path, monkeypatch) -> None:
-    monkeypatch.setenv("FYND_CACHE_DIR", str(tmp_path))
+def test_the_request_names_the_model_the_type_and_the_size(monkeypatch) -> None:
     monkeypatch.setenv("VOYAGE_API_KEY", "al-test-key")
     calls: list = []
     voyage = Voyage(client=client_that_returns([embedding_reply([[1.0]])], calls))
@@ -73,8 +65,7 @@ def test_the_request_names_the_model_the_type_and_the_size(tmp_path, monkeypatch
     assert calls[0].headers["authorization"] == "Bearer al-test-key"
 
 
-def test_a_second_run_asks_for_nothing(tmp_path, monkeypatch) -> None:
-    monkeypatch.setenv("FYND_CACHE_DIR", str(tmp_path))
+def test_a_second_run_asks_for_nothing(monkeypatch) -> None:
     monkeypatch.setenv("VOYAGE_API_KEY", "al-test-key")
     calls: list = []
     voyage = Voyage(client=client_that_returns([embedding_reply([[1.0]])], calls))
@@ -86,8 +77,7 @@ def test_a_second_run_asks_for_nothing(tmp_path, monkeypatch) -> None:
     assert len(calls) == 1
 
 
-def test_only_the_new_text_is_sent(tmp_path, monkeypatch) -> None:
-    monkeypatch.setenv("FYND_CACHE_DIR", str(tmp_path))
+def test_only_the_new_text_is_sent(monkeypatch) -> None:
     monkeypatch.setenv("VOYAGE_API_KEY", "al-test-key")
     calls: list = []
     replies = [embedding_reply([[1.0]]), embedding_reply([[2.0]])]
@@ -102,8 +92,7 @@ def test_only_the_new_text_is_sent(tmp_path, monkeypatch) -> None:
     assert b"one" not in calls[1].read()
 
 
-def test_a_query_and_a_document_are_cached_apart(tmp_path, monkeypatch) -> None:
-    monkeypatch.setenv("FYND_CACHE_DIR", str(tmp_path))
+def test_a_query_and_a_document_are_cached_apart(monkeypatch) -> None:
     monkeypatch.setenv("VOYAGE_API_KEY", "al-test-key")
     calls: list = []
     replies = [embedding_reply([[1.0]]), embedding_reply([[9.0]])]
@@ -113,8 +102,7 @@ def test_a_query_and_a_document_are_cached_apart(tmp_path, monkeypatch) -> None:
     assert voyage.embed(["one"], input_type="document") == [[9.0]]
 
 
-def test_the_tokens_of_a_run_are_counted(tmp_path, monkeypatch) -> None:
-    monkeypatch.setenv("FYND_CACHE_DIR", str(tmp_path))
+def test_the_tokens_of_a_run_are_counted(monkeypatch) -> None:
     monkeypatch.setenv("VOYAGE_API_KEY", "al-test-key")
     calls: list = []
     voyage = Voyage(client=client_that_returns([embedding_reply([[1.0]], tokens=24)], calls))
@@ -127,8 +115,7 @@ def test_the_tokens_of_a_run_are_counted(tmp_path, monkeypatch) -> None:
     assert voyage.tokens_used == 24
 
 
-def test_no_text_means_no_request(tmp_path, monkeypatch) -> None:
-    monkeypatch.setenv("FYND_CACHE_DIR", str(tmp_path))
+def test_no_text_means_no_request(monkeypatch) -> None:
     monkeypatch.setenv("VOYAGE_API_KEY", "al-test-key")
     calls: list = []
     voyage = Voyage(client=client_that_returns([], calls))
@@ -137,8 +124,7 @@ def test_no_text_means_no_request(tmp_path, monkeypatch) -> None:
     assert calls == []
 
 
-def test_a_missing_key_is_said_in_a_sentence(tmp_path, monkeypatch) -> None:
-    monkeypatch.setenv("FYND_CACHE_DIR", str(tmp_path))
+def test_a_missing_key_is_said_in_a_sentence(monkeypatch) -> None:
     monkeypatch.delenv("VOYAGE_API_KEY", raising=False)
     voyage = Voyage(client=client_that_returns([], []))
 
@@ -146,8 +132,7 @@ def test_a_missing_key_is_said_in_a_sentence(tmp_path, monkeypatch) -> None:
         voyage.embed(["one"], input_type="document")
 
 
-def test_two_refusals_in_a_row_raise(tmp_path, monkeypatch) -> None:
-    monkeypatch.setenv("FYND_CACHE_DIR", str(tmp_path))
+def test_two_refusals_in_a_row_raise(monkeypatch) -> None:
     monkeypatch.setenv("VOYAGE_API_KEY", "al-test-key")
     calls: list = []
     voyage = Voyage(client=client_that_returns([(429, {"detail": "slow down"})], calls))
@@ -157,8 +142,7 @@ def test_two_refusals_in_a_row_raise(tmp_path, monkeypatch) -> None:
     assert len(calls) == 2
 
 
-def test_a_refused_request_caches_nothing(tmp_path, monkeypatch) -> None:
-    monkeypatch.setenv("FYND_CACHE_DIR", str(tmp_path))
+def test_a_refused_request_caches_nothing(monkeypatch) -> None:
     monkeypatch.setenv("VOYAGE_API_KEY", "al-test-key")
     calls: list = []
     replies = [(429, {"detail": "slow down"})]
@@ -174,8 +158,7 @@ def test_a_refused_request_caches_nothing(tmp_path, monkeypatch) -> None:
     ) == [[3.0]]
 
 
-def test_a_missing_vector_is_said_without_the_text(tmp_path, monkeypatch) -> None:
-    monkeypatch.setenv("FYND_CACHE_DIR", str(tmp_path))
+def test_a_missing_vector_is_said_without_the_text(monkeypatch) -> None:
     monkeypatch.setenv("VOYAGE_API_KEY", "al-test-key")
     calls: list = []
     voyage = Voyage(client=client_that_returns([embedding_reply([[1.0]])], calls))
@@ -189,8 +172,7 @@ def test_a_missing_vector_is_said_without_the_text(tmp_path, monkeypatch) -> Non
     assert "1 of 2" in str(refused.value)
 
 
-def test_a_key_from_the_wrong_place_is_said_in_a_sentence(tmp_path, monkeypatch) -> None:
-    monkeypatch.setenv("FYND_CACHE_DIR", str(tmp_path))
+def test_a_key_from_the_wrong_place_is_said_in_a_sentence(monkeypatch) -> None:
     # Key validation should fail before sending a request to an incompatible endpoint.
     monkeypatch.setenv("VOYAGE_API_KEY", "pa-a-key-made-at-voyageai-com")
     voyage = Voyage(client=client_that_returns([], []))
@@ -216,8 +198,7 @@ def test_a_text_longer_than_the_budget_travels_alone() -> None:
     assert slices(["w" * 80_000]) == [["w" * 80_000]]
 
 
-def test_each_slice_is_one_request_and_the_client_paces_itself(tmp_path, monkeypatch) -> None:
-    monkeypatch.setenv("FYND_CACHE_DIR", str(tmp_path))
+def test_each_slice_is_one_request_and_the_client_paces_itself(monkeypatch) -> None:
     monkeypatch.setenv("VOYAGE_API_KEY", "al-test-key")
     waits: list[float] = []
     monkeypatch.setattr("fynd.voyage.time.sleep", waits.append)

@@ -10,15 +10,6 @@ from fynd.fetcher import MAX_BYTES, Fetched, Fetcher, FetchFailed, Refused
 PDF_BODY = b"%PDF-1.7 a short paper"
 
 
-@pytest.fixture(autouse=True)
-def a_cache_and_an_address(tmp_path, monkeypatch):
-    """Gives every test its own cache directory and an operator address."""
-    monkeypatch.setenv("FYND_CACHE_DIR", str(tmp_path))
-    monkeypatch.setenv("FYND_CONTACT_EMAIL", "deshan@example.org")
-    monkeypatch.setattr("fynd.fetcher.time.sleep", lambda seconds: None)
-    return tmp_path
-
-
 def transport_that_returns(
     responses: list,
     calls: list,

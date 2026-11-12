@@ -57,9 +57,7 @@ def client_that_returns(status: int, reply: dict | None, calls: list) -> httpx.C
     return httpx.Client(transport=httpx.MockTransport(handler))
 
 
-def test_a_repository_ranks_before_a_journal(tmp_path, monkeypatch) -> None:
-    monkeypatch.setenv("FYND_CACHE_DIR", str(tmp_path))
-    monkeypatch.setenv("FYND_CONTACT_EMAIL", "deshan@example.org")
+def test_a_repository_ranks_before_a_journal() -> None:
     calls: list = []
     resolver = OpenAlex(client=client_that_returns(200, RECORDED_WORK, calls))
 
@@ -75,11 +73,9 @@ def test_a_repository_ranks_before_a_journal(tmp_path, monkeypatch) -> None:
     assert answer.candidates[0].license == "cc-by"
 
 
-def test_one_location_is_not_offered_twice(tmp_path, monkeypatch) -> None:
+def test_one_location_is_not_offered_twice() -> None:
     # The journal location is both `best_oa_location` and the first entry of
     # `locations`. Two attempts at one link would spend the cap of 3 on it.
-    monkeypatch.setenv("FYND_CACHE_DIR", str(tmp_path))
-    monkeypatch.setenv("FYND_CONTACT_EMAIL", "deshan@example.org")
     resolver = OpenAlex(client=client_that_returns(200, RECORDED_WORK, []))
 
     answer = resolver.resolve("10.1000/aaa")
@@ -87,11 +83,9 @@ def test_one_location_is_not_offered_twice(tmp_path, monkeypatch) -> None:
     assert len(answer.candidates) == 2
 
 
-def test_a_journal_pdf_is_a_candidate(tmp_path, monkeypatch) -> None:
+def test_a_journal_pdf_is_a_candidate() -> None:
     # The rule this reverses refused 7 open PDF links at journals in the pool
     # of 2026-10-09, and OpenAlex states a cc-by licence for 5 of them.
-    monkeypatch.setenv("FYND_CACHE_DIR", str(tmp_path))
-    monkeypatch.setenv("FYND_CONTACT_EMAIL", "deshan@example.org")
     work = {
         "best_oa_location": None,
         "locations": [
@@ -112,12 +106,10 @@ def test_a_journal_pdf_is_a_candidate(tmp_path, monkeypatch) -> None:
     assert answer.candidates[0].license == "cc-by"
 
 
-def test_candidates_keep_the_openalex_order_inside_one_rank(tmp_path, monkeypatch) -> None:
+def test_candidates_keep_the_openalex_order_inside_one_rank() -> None:
     # No licence sort and no known good host sort. 4 of the 18 open PDF links
     # of the measured pool state no licence, and one of those gave 75,457
     # characters of Usable text.
-    monkeypatch.setenv("FYND_CACHE_DIR", str(tmp_path))
-    monkeypatch.setenv("FYND_CONTACT_EMAIL", "deshan@example.org")
     work = {
         "best_oa_location": None,
         "locations": [
@@ -145,9 +137,7 @@ def test_candidates_keep_the_openalex_order_inside_one_rank(tmp_path, monkeypatc
     ]
 
 
-def test_the_best_location_wins_when_it_is_a_repository(tmp_path, monkeypatch) -> None:
-    monkeypatch.setenv("FYND_CACHE_DIR", str(tmp_path))
-    monkeypatch.setenv("FYND_CONTACT_EMAIL", "deshan@example.org")
+def test_the_best_location_wins_when_it_is_a_repository() -> None:
     work = {
         "best_oa_location": {
             "is_oa": True,
@@ -166,11 +156,9 @@ def test_the_best_location_wins_when_it_is_a_repository(tmp_path, monkeypatch) -
     assert answer.candidates[0].host == "arxiv.org"
 
 
-def test_a_work_with_no_open_location_at_all(tmp_path, monkeypatch) -> None:
+def test_a_work_with_no_open_location_at_all() -> None:
     # A found record with no file is a fact about the Paper, and the reason
     # table counts it apart from a Paper OpenAlex never heard of.
-    monkeypatch.setenv("FYND_CACHE_DIR", str(tmp_path))
-    monkeypatch.setenv("FYND_CONTACT_EMAIL", "deshan@example.org")
     work = {
         "best_oa_location": None,
         "locations": [
@@ -192,9 +180,7 @@ def test_a_work_with_no_open_location_at_all(tmp_path, monkeypatch) -> None:
     assert answer.reason == reasons.NO_OPEN_LOCATION
 
 
-def test_an_unknown_identifier_is_not_found(tmp_path, monkeypatch) -> None:
-    monkeypatch.setenv("FYND_CACHE_DIR", str(tmp_path))
-    monkeypatch.setenv("FYND_CONTACT_EMAIL", "deshan@example.org")
+def test_an_unknown_identifier_is_not_found() -> None:
     resolver = OpenAlex(client=client_that_returns(404, None, []))
 
     answer = resolver.resolve("10.1000/nothing")
@@ -203,12 +189,10 @@ def test_an_unknown_identifier_is_not_found(tmp_path, monkeypatch) -> None:
     assert answer.candidates == ()
 
 
-def test_a_landing_page_is_not_a_candidate(tmp_path, monkeypatch) -> None:
+def test_a_landing_page_is_not_a_candidate() -> None:
     # Issue 16 is closed, so nothing follows a landing page to its file. The
     # reason counts the case, and the next measurement says whether the hop
     # is worth a day.
-    monkeypatch.setenv("FYND_CACHE_DIR", str(tmp_path))
-    monkeypatch.setenv("FYND_CONTACT_EMAIL", "deshan@example.org")
     work = {
         "best_oa_location": None,
         "locations": [
@@ -229,11 +213,9 @@ def test_a_landing_page_is_not_a_candidate(tmp_path, monkeypatch) -> None:
     assert answer.reason == reasons.NO_PDF_LINK
 
 
-def test_a_work_whose_only_pdf_links_hold_no_file(tmp_path, monkeypatch) -> None:
+def test_a_work_whose_only_pdf_links_hold_no_file() -> None:
     # One Paper of the measured pool names exactly one PDF link, and it is a
     # doi.org address. doi.org holds no file, so the Paper has no candidate.
-    monkeypatch.setenv("FYND_CACHE_DIR", str(tmp_path))
-    monkeypatch.setenv("FYND_CONTACT_EMAIL", "deshan@example.org")
     work = {
         "best_oa_location": None,
         "locations": [
@@ -259,9 +241,7 @@ def test_a_work_whose_only_pdf_links_hold_no_file(tmp_path, monkeypatch) -> None
     assert answer.reason == reasons.BLOCKLISTED_ONLY
 
 
-def test_a_blocklisted_link_is_dropped_and_the_rest_stay(tmp_path, monkeypatch) -> None:
-    monkeypatch.setenv("FYND_CACHE_DIR", str(tmp_path))
-    monkeypatch.setenv("FYND_CONTACT_EMAIL", "deshan@example.org")
+def test_a_blocklisted_link_is_dropped_and_the_rest_stay() -> None:
     work = {
         "best_oa_location": None,
         "locations": [
@@ -287,9 +267,7 @@ def test_a_blocklisted_link_is_dropped_and_the_rest_stay(tmp_path, monkeypatch) 
     assert answer.reason == ""
 
 
-def test_every_answer_is_cached(tmp_path, monkeypatch) -> None:
-    monkeypatch.setenv("FYND_CACHE_DIR", str(tmp_path))
-    monkeypatch.setenv("FYND_CONTACT_EMAIL", "deshan@example.org")
+def test_every_answer_is_cached() -> None:
     calls: list = []
     resolver = OpenAlex(client=client_that_returns(200, RECORDED_WORK, calls))
     resolver.resolve("10.1000/aaa")
@@ -303,10 +281,8 @@ def test_every_answer_is_cached(tmp_path, monkeypatch) -> None:
     assert len(missing) == 1
 
 
-def test_the_request_carries_the_contact_email(tmp_path, monkeypatch) -> None:
+def test_the_request_carries_the_contact_email() -> None:
     # Identify Fynd and its operator in the request, as required by ADR 0007.
-    monkeypatch.setenv("FYND_CACHE_DIR", str(tmp_path))
-    monkeypatch.setenv("FYND_CONTACT_EMAIL", "deshan@example.org")
     calls: list = []
     resolver = OpenAlex(client=client_that_returns(200, RECORDED_WORK, calls))
 
@@ -318,18 +294,14 @@ def test_the_request_carries_the_contact_email(tmp_path, monkeypatch) -> None:
     assert "Fynd" in request.headers["user-agent"]
 
 
-def test_a_broken_reply_stops_with_a_sentence(tmp_path, monkeypatch) -> None:
-    monkeypatch.setenv("FYND_CACHE_DIR", str(tmp_path))
-    monkeypatch.setenv("FYND_CONTACT_EMAIL", "deshan@example.org")
+def test_a_broken_reply_stops_with_a_sentence() -> None:
     resolver = OpenAlex(client=client_that_returns(500, None, []))
 
     with pytest.raises(WorkNotRead):
         resolver.resolve("10.1000/aaa")
 
 
-def test_a_broken_reply_is_not_cached(tmp_path, monkeypatch) -> None:
-    monkeypatch.setenv("FYND_CACHE_DIR", str(tmp_path))
-    monkeypatch.setenv("FYND_CONTACT_EMAIL", "deshan@example.org")
+def test_a_broken_reply_is_not_cached() -> None:
     broken: list = []
     resolver = OpenAlex(client=client_that_returns(500, None, broken))
     with pytest.raises(WorkNotRead):
@@ -343,8 +315,7 @@ def test_a_broken_reply_is_not_cached(tmp_path, monkeypatch) -> None:
     assert answer.found is True
 
 
-def test_a_missing_contact_email_stops_the_lookup(tmp_path, monkeypatch) -> None:
-    monkeypatch.setenv("FYND_CACHE_DIR", str(tmp_path))
+def test_a_missing_contact_email_stops_the_lookup(monkeypatch) -> None:
     monkeypatch.delenv("FYND_CONTACT_EMAIL", raising=False)
     calls: list = []
     resolver = OpenAlex(client=client_that_returns(200, RECORDED_WORK, calls))
@@ -354,11 +325,9 @@ def test_a_missing_contact_email_stops_the_lookup(tmp_path, monkeypatch) -> None
     assert calls == []
 
 
-def test_an_identifier_with_a_hash_is_escaped(tmp_path, monkeypatch) -> None:
+def test_an_identifier_with_a_hash_is_escaped() -> None:
     # A doi with a `#` or a `?` in it ends the URL path early. The request then
     # asks about a different work, whose file is measured as this one.
-    monkeypatch.setenv("FYND_CACHE_DIR", str(tmp_path))
-    monkeypatch.setenv("FYND_CONTACT_EMAIL", "deshan@example.org")
     calls: list = []
     resolver = OpenAlex(client=client_that_returns(200, RECORDED_WORK, calls))
 

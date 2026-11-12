@@ -49,8 +49,7 @@ def test_the_extractor_name_carries_its_version(pdf_bytes) -> None:
     assert answer.extractor != "pdfplumber "
 
 
-def test_a_second_extraction_reads_the_cache(pdf_bytes, tmp_path, monkeypatch) -> None:
-    monkeypatch.setenv("FYND_CACHE_DIR", str(tmp_path))
+def test_a_second_extraction_reads_the_cache(pdf_bytes, tmp_path) -> None:
     first = extract_pdf(pdf_bytes)
     second = extract_pdf(pdf_bytes)
 
@@ -58,10 +57,7 @@ def test_a_second_extraction_reads_the_cache(pdf_bytes, tmp_path, monkeypatch) -
     assert len(list(tmp_path.glob("extract-*.json"))) == 1
 
 
-def test_the_extraction_key_holds_the_bytes_and_the_extractor(
-    pdf_bytes, tmp_path, monkeypatch
-) -> None:
-    monkeypatch.setenv("FYND_CACHE_DIR", str(tmp_path))
+def test_the_extraction_key_holds_the_bytes_and_the_extractor(pdf_bytes, tmp_path) -> None:
     extract_pdf(pdf_bytes)
     stored = list(tmp_path.glob("extract-*.json"))[0]
     parts = cache.read_parts(stored.name)

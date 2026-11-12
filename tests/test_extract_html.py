@@ -60,8 +60,7 @@ def test_a_page_with_no_article_gives_a_short_text() -> None:
     assert answer.text == "Home"
 
 
-def test_a_second_extraction_reads_the_cache(tmp_path, monkeypatch) -> None:
-    monkeypatch.setenv("FYND_CACHE_DIR", str(tmp_path))
+def test_a_second_extraction_reads_the_cache(tmp_path) -> None:
     data = page("product-page")
     first = extract_html(data)
     second = extract_html(data)
@@ -70,10 +69,9 @@ def test_a_second_extraction_reads_the_cache(tmp_path, monkeypatch) -> None:
     assert len(list(tmp_path.glob("extract-*.json"))) == 1
 
 
-def test_the_two_extractors_do_not_share_a_cache_entry(tmp_path, monkeypatch) -> None:
+def test_the_two_extractors_do_not_share_a_cache_entry(tmp_path) -> None:
     # The key holds the step and the extractor, so the same bytes read by two
     # libraries are two answers and never one.
-    monkeypatch.setenv("FYND_CACHE_DIR", str(tmp_path))
     from fynd.extract import extract_pdf
 
     pdf = (FILES / "two-column-paper.pdf").read_bytes()
