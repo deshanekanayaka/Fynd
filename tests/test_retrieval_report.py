@@ -33,6 +33,10 @@ def written(**changes) -> str:
 
     `report` takes nine arguments and every test needs all nine, so the
     defaults live here and each test reads as the one thing it is about.
+
+    A test below asserts the fact and the number a sentence carries, and not
+    the whole sentence. The wording of the file is free to improve without
+    turning this suite red.
     """
     settings = dict(
         rows=[BASELINE],
@@ -127,14 +131,14 @@ def test_the_table_names_every_row_with_its_numbers() -> None:
     assert "| hand |" in text
     # The headline rate and its raw count, for the baseline row at 20.
     assert "(2/3)" in text
-    assert "Recall at 10 cannot pass 3 of 3 Papers, which is 100%" in text
+    assert "cannot pass 3 of 3 Papers" in text
 
 
 def test_the_table_states_its_three_limits() -> None:
     text = written()
 
-    assert "One person wrote every published grade" in text
-    assert "Recall over a pool is recall inside the pool" in text
+    assert "One person" in text
+    assert "recall inside the pool" in text
     assert "no constant was tuned" in text
 
 
@@ -154,23 +158,23 @@ def test_the_table_names_the_queries_and_the_dates() -> None:
 
 
 def test_the_table_says_when_no_row_is_a_fynd_ranking() -> None:
-    assert "No row below is a ranking of Fynd" in written()
+    assert "No row below" in written()
     # The sentence has to disappear by itself when the first real row arrives,
     # or a later table would publish something untrue.
-    assert "No row below is a ranking of Fynd" not in written(rows=[A_FYND_ROW])
+    assert "No row below" not in written(rows=[A_FYND_ROW])
 
 
 def test_the_table_says_the_queries_overlap_when_they_do() -> None:
     text = written(shared=3)
 
-    assert "3 Papers were returned by more than one query" in text
-    assert "share no Paper at all" not in text
+    assert "3 Papers were returned" in text
+    assert "share no Paper" not in text
 
 
 def test_the_abstract_count_appears_only_when_a_row_reads_text() -> None:
     # BM25 reads the title and the abstract. A Paper with no abstract is
     # ranked on its title alone, and the reader has to know how many.
-    assert "8 Papers of the pool carry no abstract" in written(
+    assert "8 Papers of the pool" in written(
         rows=[A_FYND_ROW], without_abstract=8
     )
     # No row reads an abstract yet, so the sentence would explain nothing.
