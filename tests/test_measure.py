@@ -40,6 +40,16 @@ def result(
     )
 
 
+A_USABLE_PAPER = result(reasons.USABLE, "www.mdpi.com", characters=9000)
+
+
+def written(results: list | None = None, **changes) -> str:
+    """Writes the measurement file, and changes only what a test names."""
+    settings = dict(query="a query", year_from=2022, limit=20, today=TODAY)
+    settings.update(changes)
+    return report([A_USABLE_PAPER] if results is None else results, **settings)
+
+
 def test_every_host_a_paper_tried_counts_a_link() -> None:
     # One Paper tries up to 3 links since ADR 0012. A table that counted one
     # link for each Paper would hide the 403 that sent it to the second host,
@@ -80,7 +90,7 @@ def test_a_paper_with_no_link_gets_its_own_row() -> None:
 
 def test_every_reason_is_counted_including_the_ones_at_zero() -> None:
     # Keep absent outcomes visible so reports retain the same reason rows across runs.
-    counts = reason_counts([result(reasons.USABLE, "www.mdpi.com", characters=9000)])
+    counts = reason_counts([A_USABLE_PAPER])
 
     assert counts[reasons.USABLE] == 1
     assert counts[reasons.NOT_A_PDF] == 0
@@ -94,13 +104,7 @@ def test_the_report_holds_the_three_tables_and_the_query() -> None:
         result(reasons.NO_DOI),
     ]
 
-    text = report(
-        results,
-        query="United Kingdom household energy forecasting",
-        year_from=2022,
-        limit=20,
-        today=TODAY,
-    )
+    text = written(results, query="United Kingdom household energy forecasting")
 
     assert "United Kingdom household energy forecasting" in text
     assert "from 2022 onward" in text
@@ -121,45 +125,31 @@ def test_the_report_holds_the_three_tables_and_the_query() -> None:
 
 
 def test_the_report_says_the_files_are_not_in_git() -> None:
-    text = report(
-        [result(reasons.USABLE, "www.mdpi.com", characters=9000)],
-        query="a query",
-        year_from=2022,
-        limit=20,
-        today=TODAY,
-    )
-    assert "not in git" in text
+    assert "not in git" in written()
 
 
 def test_a_title_with_a_pipe_does_not_break_the_table() -> None:
-    one = result(reasons.USABLE, "www.mdpi.com", characters=9000)
     broken = OpenCopyResult(
         paper=Paper(paper_id="bbb", title="Energy | demand", year=2023),
-        reason=one.reason,
-        open_copy=one.open_copy,
-        extracted=one.extracted,
+        reason=A_USABLE_PAPER.reason,
+        open_copy=A_USABLE_PAPER.open_copy,
+        extracted=A_USABLE_PAPER.extracted,
     )
 
-    text = report([broken], query="a query", year_from=2022, limit=20, today=TODAY)
+    text = written([broken])
 
     assert "Energy   demand" in text
     assert "Energy | demand" not in text
 
 
 def test_an_empty_pool_still_writes_a_file() -> None:
-    text = report([], query="a query", year_from=2022, limit=20, today=TODAY)
+    text = written([])
     assert "0 of 0 Papers reached Usable text, which is -" in text
 
 
 def test_the_by_paper_table_names_the_attempts() -> None:
     tried_two = ("doaj.org", "www.mdpi.com")
-    text = report(
-        [result(reasons.USABLE, "www.mdpi.com", characters=9000, tried=tried_two)],
-        query="a query",
-        year_from=2022,
-        limit=20,
-        today=TODAY,
-    )
+    text = written([result(reasons.USABLE, "www.mdpi.com", characters=9000, tried=tried_two)])
 
     header = text[text.index("## By Paper") :]
     assert "| Attempts |" in header
@@ -167,15 +157,7 @@ def test_the_by_paper_table_names_the_attempts() -> None:
 
 
 def test_the_comparison_line_names_the_previous_the_prediction_and_the_new_count() -> None:
-    text = report(
-        [result(reasons.USABLE, "www.mdpi.com", characters=9000)],
-        query="a query",
-        year_from=2022,
-        limit=20,
-        today=TODAY,
-        previous=5,
-        predicted=10,
-    )
+    text = written(previous=5, predicted=10)
 
     assert "The previous run reached 5 of 20 Papers." in text
     assert "The rule fix predicted 10." in text
@@ -183,15 +165,7 @@ def test_the_comparison_line_names_the_previous_the_prediction_and_the_new_count
 
 
 def test_the_comparison_line_is_absent_with_nothing_to_compare() -> None:
-    text = report(
-        [result(reasons.USABLE, "www.mdpi.com", characters=9000)],
-        query="a query",
-        year_from=2022,
-        limit=20,
-        today=TODAY,
-    )
-
-    assert "previous run" not in text
+    assert "previous run" not in written()
 
 
 def test_readme_with_writes_a_header_for_an_empty_file() -> None:
@@ -218,14 +192,7 @@ def test_readme_with_does_not_add_the_same_date_twice() -> None:
 def test_a_dropped_paper_stays_in_the_denominator() -> None:
     # A run that broke with a rate limit has no reason row, so the file says
     # how many Papers are missing instead of shrinking the pool in silence.
-    text = report(
-        [result(reasons.USABLE, "www.mdpi.com", characters=9000)],
-        query="a query",
-        year_from=2022,
-        limit=20,
-        today=TODAY,
-        dropped=2,
-    )
+    text = written(dropped=2)
 
     assert "1 of 3 Papers reached Usable text, which is 33%" in text
     assert "2 Papers are missing from the tables below" in text
