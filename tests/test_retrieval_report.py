@@ -24,6 +24,31 @@ TODAY = dt.date(2026, 10, 21)
 SET_FILE = pathlib.PurePosixPath("tests/files/retrieval-set-2026-10-20.json")
 
 
+BASELINE = Row(name="Baseline", note="", ranking=["two"])
+A_FYND_ROW = Row(name="BM25", note="", ranking=["two"], is_fynd_ranking=True, reads_text=True)
+
+
+def written(**changes) -> str:
+    """Writes the table, and changes only the setting a test names.
+
+    `report` takes nine arguments and every test needs all nine, so the
+    defaults live here and each test reads as the one thing it is about.
+    """
+    settings = dict(
+        rows=[BASELINE],
+        grades=GRADES,
+        queries=[("hand", "united kingdom household energy forecasting")],
+        reference_date=dt.date(2026, 10, 20),
+        today=TODAY,
+        set_file=SET_FILE,
+        per_query=15,
+        shared=0,
+        without_abstract=0,
+    )
+    settings.update(changes)
+    return report(**settings)
+
+
 def test_a_grade_of_one_or_two_counts_as_relevant() -> None:
     # The grading rule makes 1 a Paper that covers one part of the Topic. A
     # student would still read it, so recall counts it.
@@ -87,21 +112,15 @@ def test_a_rate_prints_its_raw_count() -> None:
 
 
 def test_the_table_names_every_row_with_its_numbers() -> None:
-    rows = [
-        Row(name="Baseline", note="The order the four searches arrived in", ranking=["two", "one"]),
-        Row(name="hand", note="One query alone", ranking=["zero", "two"]),
-    ]
-
-    text = report(
-        rows=rows,
-        grades=GRADES,
-        queries=[("hand", "united kingdom household energy forecasting")],
-        reference_date=dt.date(2026, 10, 20),
-        today=TODAY,
-        set_file=SET_FILE,
-        per_query=15,
-        shared=0,
-        without_abstract=0,
+    text = written(
+        rows=[
+            Row(
+                name="Baseline",
+                note="The order the four searches arrived in",
+                ranking=["two", "one"],
+            ),
+            Row(name="hand", note="One query alone", ranking=["zero", "two"]),
+        ]
     )
 
     assert "| Baseline |" in text
@@ -112,17 +131,7 @@ def test_the_table_names_every_row_with_its_numbers() -> None:
 
 
 def test_the_table_states_its_three_limits() -> None:
-    text = report(
-        rows=[Row(name="Baseline", note="", ranking=["two"])],
-        grades=GRADES,
-        queries=[("hand", "united kingdom household energy forecasting")],
-        reference_date=dt.date(2026, 10, 20),
-        today=TODAY,
-        set_file=SET_FILE,
-        per_query=15,
-        shared=0,
-        without_abstract=0,
-    )
+    text = written()
 
     assert "One person wrote every published grade" in text
     assert "Recall over a pool is recall inside the pool" in text
@@ -130,19 +139,11 @@ def test_the_table_states_its_three_limits() -> None:
 
 
 def test_the_table_names_the_queries_and_the_dates() -> None:
-    text = report(
-        rows=[Row(name="Baseline", note="", ranking=["two"])],
-        grades=GRADES,
+    text = written(
         queries=[
             ("hand", "united kingdom household energy forecasting"),
             ("wider", "household energy demand forecasting"),
-        ],
-        reference_date=dt.date(2026, 10, 20),
-        today=TODAY,
-        set_file=SET_FILE,
-        per_query=15,
-        shared=0,
-        without_abstract=0,
+        ]
     )
 
     assert "household energy demand forecasting" in text
@@ -150,6 +151,30 @@ def test_the_table_names_the_queries_and_the_dates() -> None:
     # the file carries both, because the Evidence window moves on 1 January.
     assert "2026-10-20" in text
     assert "2026-10-21" in text
+
+
+def test_the_table_says_when_no_row_is_a_fynd_ranking() -> None:
+    assert "No row below is a ranking of Fynd" in written()
+    # The sentence has to disappear by itself when the first real row arrives,
+    # or a later table would publish something untrue.
+    assert "No row below is a ranking of Fynd" not in written(rows=[A_FYND_ROW])
+
+
+def test_the_table_says_the_queries_overlap_when_they_do() -> None:
+    text = written(shared=3)
+
+    assert "3 Papers were returned by more than one query" in text
+    assert "share no Paper at all" not in text
+
+
+def test_the_abstract_count_appears_only_when_a_row_reads_text() -> None:
+    # BM25 reads the title and the abstract. A Paper with no abstract is
+    # ranked on its title alone, and the reader has to know how many.
+    assert "8 Papers of the pool carry no abstract" in written(
+        rows=[A_FYND_ROW], without_abstract=8
+    )
+    # No row reads an abstract yet, so the sentence would explain nothing.
+    assert "no abstract" not in written(without_abstract=8)
 
 
 def search(name: str, paper_ids: list[str]) -> tuple[str, SearchResult]:
@@ -193,87 +218,6 @@ def test_the_shared_papers_of_the_queries_are_counted() -> None:
     both = [search("hand", ["a1", "shared"]), search("wider", ["shared", "b2"])]
     assert shared_papers(both, per_query=2) == 1
     assert shared_papers([search("hand", ["a1"])], per_query=2) == 0
-
-
-def test_the_table_says_when_no_row_is_a_fynd_ranking() -> None:
-    arrival = report(
-        rows=[Row(name="Baseline", note="", ranking=["two"])],
-        grades=GRADES,
-        queries=[("hand", "a query")],
-        reference_date=dt.date(2026, 10, 20),
-        today=TODAY,
-        set_file=SET_FILE,
-        per_query=15,
-        shared=0,
-        without_abstract=0,
-    )
-    assert "No row below is a ranking of Fynd" in arrival
-
-    # The sentence has to disappear by itself when the first real row arrives,
-    # or a later table would publish something untrue.
-    with_ranking = report(
-        rows=[Row(name="BM25", note="", ranking=["two"], is_fynd_ranking=True, reads_text=True)],
-        grades=GRADES,
-        queries=[("hand", "a query")],
-        reference_date=dt.date(2026, 10, 20),
-        today=TODAY,
-        set_file=SET_FILE,
-        per_query=15,
-        shared=0,
-        without_abstract=0,
-    )
-    assert "No row below is a ranking of Fynd" not in with_ranking
-
-
-def test_the_table_says_the_queries_overlap_when_they_do() -> None:
-    text = report(
-        rows=[Row(name="Baseline", note="", ranking=["two"])],
-        grades=GRADES,
-        queries=[("hand", "a query")],
-        reference_date=dt.date(2026, 10, 20),
-        today=TODAY,
-        set_file=SET_FILE,
-        per_query=15,
-        shared=3,
-        without_abstract=0,
-    )
-    assert "3 Papers were returned by more than one query" in text
-    assert "share no Paper at all" not in text
-
-
-def test_the_table_counts_the_papers_with_no_abstract() -> None:
-    # BM25 reads the title and the abstract. A Paper with no abstract is
-    # ranked on its title alone, and the reader has to know how many.
-    text = report(
-        rows=[Row(name="BM25", note="", ranking=["two"], is_fynd_ranking=True, reads_text=True)],
-        grades=GRADES,
-        queries=[("hand", "a query")],
-        reference_date=dt.date(2026, 10, 20),
-        today=TODAY,
-        set_file=SET_FILE,
-        per_query=15,
-        shared=0,
-        without_abstract=8,
-    )
-
-    assert "8 Papers of the pool carry no abstract" in text
-
-
-def test_the_abstract_count_is_left_out_while_no_row_reads_text() -> None:
-    text = report(
-        rows=[Row(name="Baseline", note="", ranking=["two"])],
-        grades=GRADES,
-        queries=[("hand", "a query")],
-        reference_date=dt.date(2026, 10, 20),
-        today=TODAY,
-        set_file=SET_FILE,
-        per_query=15,
-        shared=0,
-        without_abstract=8,
-    )
-
-    # No row reads an abstract yet, so the sentence would explain nothing.
-    assert "no abstract" not in text
 
 
 def embed_at_size(vectors: dict[int, dict[str, list[float]]], calls: list):
