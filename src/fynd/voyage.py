@@ -1,9 +1,8 @@
-"""Gets embeddings and reranking scores from Voyage for retrieval measurements.
+"""Gets embeddings from Voyage for retrieval measurements.
 
 The CLI supplies query and Paper text. This client reads cached results or
-calls the configured MongoDB Atlas endpoints. Embeddings are cached per text;
-reranking caches the full query and ordered document list. Request pacing and
-reported token totals are tracked per client instance."""
+calls the configured MongoDB Atlas endpoint. Each embedding is cached per text.
+Request pacing and reported token totals are tracked per client instance."""
 
 import os
 import time
@@ -13,10 +12,9 @@ import httpx
 
 from fynd import cache
 
-# Use the configured Atlas host for both embedding and reranking requests.
+# Use the configured Atlas host for every embedding request.
 BASE_URL: Final = "https://ai.mongodb.com/v1"
 EMBEDDING_URL: Final = f"{BASE_URL}/embeddings"
-RERANK_URL: Final = f"{BASE_URL}/rerank"
 
 # Reject keys without the prefix expected by this client before making a request.
 ATLAS_KEY_PREFIX: Final = "al-"
@@ -26,9 +24,6 @@ EMBEDDING_MODEL: Final = "voyage-3.5-lite"
 
 # Default to 1024 dimensions; measurement also requests 512 for comparison.
 DIMENSIONS: Final = 1024
-
-# Use the hosted reranker configured for the comparison in issue 37.
-RERANK_MODEL: Final = "rerank-3-lite"
 
 # These pacing and batch settings come from earlier runs, not live account-limit discovery.
 MIN_SECONDS_BETWEEN_REQUESTS: Final = 21.0
@@ -53,7 +48,7 @@ class RateLimited(Exception):
 
 
 class ReplyIncomplete(Exception):
-    """Raised for missing embeddings or an empty reranking result."""
+    """Raised when a reply carries no vector for a text that was sent."""
 
 
 def estimated_tokens(text: str) -> int:
@@ -132,40 +127,6 @@ class Voyage:
             )
 
         return [found[text] for text in texts]
-
-    def rerank(self, query: str, documents: list[str]) -> list[tuple[int, float]]:
-        """Returns document-index and score pairs from a cached or live reranking reply."""
-        if not documents:
-            return []
-
-        parts = {
-            "api": "voyage-rerank",
-            "model": RERANK_MODEL,
-            "query": query,
-            "documents": documents,
-            "shape": REQUEST_SHAPE_VERSION,
-        }
-        key = cache.cache_key("voyage-rerank", parts)
-        payload = cache.read(key)
-        if payload is None:
-            payload = self.ask(
-                RERANK_URL,
-                {"query": query, "documents": documents, "model": RERANK_MODEL},
-            )
-            if not payload.get("data"):
-                # Do not cache an empty ranking that every later call would replay.
-                raise ReplyIncomplete(
-                    f"Voyage scored none of the {len(documents)} documents it was sent. "
-                    "Nothing was cached, so running the command again asks again."
-                )
-            cache.write(key, parts, payload)
-            # Cache hits add no reported usage; count only this live reranking response.
-            self.count_tokens(payload)
-
-        places = []
-        for item in payload.get("data") or []:
-            places.append((item["index"], item["relevance_score"]))
-        return places
 
     def embedding_parts(self, text: str, input_type: str, dimensions: int) -> dict[str, Any]:
         """Builds the request details identifying one text embedding."""

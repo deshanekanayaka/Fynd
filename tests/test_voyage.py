@@ -13,7 +13,6 @@ from fynd.voyage import (
     DIMENSIONS,
     EMBEDDING_MODEL,
     MIN_SECONDS_BETWEEN_REQUESTS,
-    RERANK_MODEL,
     SLICE_TOKENS,
     KeyMissing,
     RateLimited,
@@ -147,41 +146,6 @@ def test_a_missing_key_is_said_in_a_sentence(tmp_path, monkeypatch) -> None:
         voyage.embed(["one"], input_type="document")
 
 
-def test_the_reranker_returns_places_and_scores(tmp_path, monkeypatch) -> None:
-    monkeypatch.setenv("FYND_CACHE_DIR", str(tmp_path))
-    monkeypatch.setenv("VOYAGE_API_KEY", "al-test-key")
-    calls: list = []
-    reply = (
-        200,
-        {
-            "data": [
-                {"index": 1, "relevance_score": 0.9},
-                {"index": 0, "relevance_score": 0.2},
-            ],
-            "usage": {"total_tokens": 11},
-        },
-    )
-    voyage = Voyage(client=client_that_returns([reply], calls))
-
-    answer = voyage.rerank("household energy", ["far", "near"])
-
-    assert answer == [(1, 0.9), (0, 0.2)]
-    assert RERANK_MODEL in calls[0].read().decode("utf-8")
-    assert voyage.tokens_used == 11
-
-
-def test_a_reranked_list_is_cached(tmp_path, monkeypatch) -> None:
-    monkeypatch.setenv("FYND_CACHE_DIR", str(tmp_path))
-    monkeypatch.setenv("VOYAGE_API_KEY", "al-test-key")
-    calls: list = []
-    reply = (200, {"data": [{"index": 0, "relevance_score": 0.5}], "usage": {}})
-    voyage = Voyage(client=client_that_returns([reply], calls))
-
-    voyage.rerank("household energy", ["one"])
-    assert voyage.rerank("household energy", ["one"]) == [(0, 0.5)]
-    assert len(calls) == 1
-
-
 def test_two_refusals_in_a_row_raise(tmp_path, monkeypatch) -> None:
     monkeypatch.setenv("FYND_CACHE_DIR", str(tmp_path))
     monkeypatch.setenv("VOYAGE_API_KEY", "al-test-key")
@@ -210,24 +174,6 @@ def test_a_refused_request_caches_nothing(tmp_path, monkeypatch) -> None:
     ) == [[3.0]]
 
 
-def test_an_empty_reranked_list_is_not_cached(tmp_path, monkeypatch) -> None:
-    monkeypatch.setenv("FYND_CACHE_DIR", str(tmp_path))
-    monkeypatch.setenv("VOYAGE_API_KEY", "al-test-key")
-    calls: list = []
-    replies = [(200, {"data": [], "usage": {}})]
-    voyage = Voyage(client=client_that_returns(replies, calls))
-
-    with pytest.raises(ReplyIncomplete, match="scored none"):
-        voyage.rerank("household energy", ["one"])
-
-    # Cached, an empty answer would serve an empty ranking to every later run,
-    # and a second run could not fix it.
-    replies.append((200, {"data": [{"index": 0, "relevance_score": 0.5}], "usage": {}}))
-    assert Voyage(client=client_that_returns(replies[1:], [])).rerank(
-        "household energy", ["one"]
-    ) == [(0, 0.5)]
-
-
 def test_a_missing_vector_is_said_without_the_text(tmp_path, monkeypatch) -> None:
     monkeypatch.setenv("FYND_CACHE_DIR", str(tmp_path))
     monkeypatch.setenv("VOYAGE_API_KEY", "al-test-key")
@@ -251,23 +197,6 @@ def test_a_key_from_the_wrong_place_is_said_in_a_sentence(tmp_path, monkeypatch)
 
     with pytest.raises(KeyMissing, match="not made in MongoDB Atlas"):
         voyage.embed(["one"], input_type="document")
-
-
-def test_the_reranker_is_asked_at_the_same_host(tmp_path, monkeypatch) -> None:
-    monkeypatch.setenv("FYND_CACHE_DIR", str(tmp_path))
-    monkeypatch.setenv("VOYAGE_API_KEY", "al-test-key")
-    calls: list = []
-    reply = (200, {"data": [{"index": 0, "relevance_score": 0.5}], "usage": {}})
-    voyage = Voyage(client=client_that_returns([reply], calls))
-
-    voyage.rerank("household energy", ["one"])
-
-    assert str(calls[0].url) == f"{BASE_URL}/rerank"
-    sent = calls[0].read().decode("utf-8")
-    # The three fields the endpoint reads, which are not the fields of the
-    # embeddings endpoint.
-    assert '"query":"household energy"' in sent
-    assert '"documents":["one"]' in sent
 
 
 def test_a_long_pool_is_cut_into_slices_under_the_token_budget() -> None:

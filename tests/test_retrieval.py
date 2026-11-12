@@ -1,24 +1,19 @@
 """The ranking has to order a pool, keep every Paper in it, and never tie by luck.
 
 Recall at 20 reads the order of the whole pool, so a Paper that matches no
-query term still has to appear. These tests pass the embedding function and the
-reranker in, so nothing here reaches the network.
+query term still has to appear. These tests pass the embedding function in, so
+nothing here reaches the network.
 """
 
 import pytest
 
 from fynd.models import Paper
 from fynd.retrieval import (
-    RRF_K,
-    Ranked,
     bm25_ranking,
     cosine,
     dense_ranking,
     document_text,
-    fuse,
-    keep_reasons,
     matched_terms,
-    rerank_ranking,
     stem,
     tokens,
 )
@@ -32,31 +27,75 @@ def ids(ranked) -> list[str]:
     return [item.paper_id for item in ranked]
 
 
-def test_a_word_loses_a_plural_and_a_verb_ending() -> None:
-    assert stem("households") == "household"
-    assert stem("forecasting") == "forecast"
-    assert stem("forecasts") == "forecast"
-    assert stem("forecasted") == "forecast"
+def fake_embed(vectors: dict[str, list[float]], calls: list):
+    """Returns an embedding function that answers from a table of vectors."""
+
+    def embed(texts: list[str], input_type: str) -> list[list[float]]:
+        calls.append((texts, input_type))
+        return [vectors[text] for text in texts]
+
+    return embed
 
 
-def test_a_short_word_keeps_its_ending() -> None:
-    # Stripping the s from gas leaves two letters and a word that means nothing.
-    assert stem("gas") == "gas"
-    assert stem("uses") == "uses"
+# The word rules
 
 
-def test_tokens_lowercase_and_drop_punctuation() -> None:
-    assert tokens("UK Households: energy (demand), 2024!") == [
-        "uk",
-        "household",
-        "energy",
-        "demand",
-        "2024",
-    ]
+@pytest.mark.parametrize(
+    ("word", "expected"),
+    [
+        # An ending comes off, so two forms of a word match each other.
+        ("households", "household"),
+        ("forecasting", "forecast"),
+        ("forecasts", "forecast"),
+        ("forecasted", "forecast"),
+        # Stripping the s from gas leaves two letters and a word that means nothing.
+        ("gas", "gas"),
+        ("uses", "uses"),
+        # Taking the s off "process" would leave "proces" while "processing"
+        # leaves "process", so the two forms would stop matching.
+        ("process", "process"),
+        ("processing", "process"),
+        ("processes", "process"),
+        ("business", "business"),
+        ("businesses", "business"),
+        ("analysis", "analysis"),
+    ],
+)
+def test_a_word_keeps_an_ending_only_when_removing_it_leaves_a_real_word(
+    word: str, expected: str
+) -> None:
+    assert stem(word) == expected
+
+
+@pytest.mark.parametrize(
+    ("text", "expected"),
+    [
+        ("UK Households: energy (demand), 2024!", ["uk", "household", "energy", "demand", "2024"]),
+        # A title holds an author name and a place name. Split on the letter u,
+        # "Müller" would leave two fragments that match nothing and still count
+        # towards the length of the document.
+        ("Müller studied São Paulo", ["müller", "studi", "são", "paulo"]),
+    ],
+)
+def test_tokens_lowercase_drop_punctuation_and_keep_accented_words_whole(
+    text: str, expected: list[str]
+) -> None:
+    assert tokens(text) == expected
 
 
 def test_the_document_is_the_title_and_the_abstract() -> None:
     assert document_text(paper("a", "A title", "An abstract.")) == "A title An abstract."
+
+
+def test_matched_terms_reads_the_query_order() -> None:
+    assert matched_terms("energy household", "A household and its energy") == (
+        "energy",
+        "household",
+    )
+    assert matched_terms("household energy", "Ultra-processed food") == ()
+
+
+# The keyword ranking
 
 
 def test_bm25_puts_the_matching_paper_first() -> None:
@@ -98,182 +137,6 @@ def test_bm25_over_an_empty_pool_is_empty() -> None:
     assert bm25_ranking("household energy", []) == []
 
 
-def fake_embed(vectors: dict[str, list[float]], calls: list):
-    """Returns an embedding function that answers from a table of vectors."""
-
-    def embed(texts: list[str], input_type: str) -> list[list[float]]:
-        calls.append((texts, input_type))
-        return [vectors[text] for text in texts]
-
-    return embed
-
-
-def test_dense_ranking_puts_the_closest_vector_first() -> None:
-    near = paper("near", "Household energy")
-    far = paper("far", "Ultra-processed food")
-    vectors = {
-        "household energy forecasting": [1.0, 0.0],
-        document_text(near): [0.9, 0.1],
-        document_text(far): [0.0, 1.0],
-    }
-    calls: list = []
-
-    ranked = dense_ranking("household energy forecasting", [far, near], fake_embed(vectors, calls))
-
-    assert ids(ranked) == ["near", "far"]
-
-
-def test_dense_ranking_asks_for_a_query_and_for_documents() -> None:
-    # Voyage scores a query against a document, and the two input types are not
-    # the same vector. Sending both as documents measures the wrong thing.
-    one = paper("one", "Household energy")
-    vectors = {"household energy": [1.0, 0.0], document_text(one): [1.0, 0.0]}
-    calls: list = []
-
-    dense_ranking("household energy", [one], fake_embed(vectors, calls))
-
-    assert [input_type for _, input_type in calls] == ["query", "document"]
-    assert calls[0][0] == ["household energy"]
-    assert calls[1][0] == [document_text(one)]
-
-
-def test_dense_ranking_over_an_empty_pool_asks_for_nothing() -> None:
-    calls: list = []
-    assert dense_ranking("household energy", [], fake_embed({}, calls)) == []
-    assert calls == []
-
-
-def ranking(*paper_ids: str) -> list[Ranked]:
-    """Builds a ranking in the given order. Fusion reads the order and not the score."""
-    return [Ranked(paper_id=paper_id, score=1.0) for paper_id in paper_ids]
-
-
-def test_fusion_adds_one_over_k_plus_the_rank() -> None:
-    fused = fuse([ranking("a"), ranking("a")])
-    # Rank 1 in both rankings, so the score is twice 1 over k plus 1.
-    assert fused[0].paper_id == "a"
-    assert fused[0].score == 2 * (1 / (RRF_K + 1))
-
-
-def test_fusion_prefers_the_paper_both_rankings_like() -> None:
-    fused = fuse([ranking("both", "one"), ranking("both", "two")])
-    assert fused[0].paper_id == "both"
-
-
-def test_fusion_keeps_a_paper_only_one_ranking_holds() -> None:
-    fused = fuse([ranking("a"), ranking("b")])
-    assert sorted(ids(fused)) == ["a", "b"]
-
-
-def test_fusion_breaks_a_tie_by_identifier() -> None:
-    fused = fuse([ranking("bbb"), ranking("aaa")])
-    assert ids(fused) == ["aaa", "bbb"]
-
-
-def fake_rerank(order: list[tuple[int, float]], calls: list):
-    """Returns a reranker that answers with a fixed order of indexes."""
-
-    def rerank(query: str, documents: list[str]) -> list[tuple[int, float]]:
-        calls.append((query, documents))
-        return order
-
-    return rerank
-
-
-def test_the_reranker_reorders_the_papers_it_was_given() -> None:
-    first = paper("first", "Household energy")
-    second = paper("second", "Ultra-processed food")
-    calls: list = []
-
-    # The reranker says the second document is the better one.
-    ranked = rerank_ranking(
-        "household energy", [first, second], fake_rerank([(1, 0.9), (0, 0.2)], calls)
-    )
-
-    assert ids(ranked) == ["second", "first"]
-    assert calls[0][0] == "household energy"
-    assert calls[0][1] == [document_text(first), document_text(second)]
-
-
-def test_the_reranker_is_not_called_for_an_empty_pool() -> None:
-    calls: list = []
-    assert rerank_ranking("household energy", [], fake_rerank([], calls)) == []
-    assert calls == []
-
-
-def test_an_s_that_is_part_of_the_word_stays() -> None:
-    # The whole point of the rule is that two forms of a word match. Taking the
-    # s off "process" would leave "proces" while "processing" leaves "process",
-    # so the two would stop matching.
-    assert stem("process") == stem("processing") == stem("processes") == "process"
-    assert stem("business") == stem("businesses") == "business"
-    assert stem("analysis") == "analysis"
-
-
-def test_an_accented_word_stays_one_word() -> None:
-    # A title holds an author name and a place name. Split on the letter u,
-    # "Müller" would leave two fragments that match nothing and still count
-    # towards the length of the document.
-    assert tokens("Müller studied São Paulo") == ["müller", "studi", "são", "paulo"]
-
-
-def test_two_vector_sizes_cannot_be_compared() -> None:
-    # The table reports this model at 1024 and at 512, so one run holds both.
-    with pytest.raises(ValueError, match="same size"):
-        cosine([1.0, 0.0, 0.0, 0.0], [1.0, 0.0])
-
-
-def test_a_short_embedding_answer_stops_the_ranking() -> None:
-    # Zipping a short answer would drop the last Papers, and a recall number
-    # would then be measured over fewer Papers than were graded.
-    one = paper("one", "Household energy")
-    two = paper("two", "Household demand")
-
-    def short_embed(texts: list[str], input_type: str) -> list[list[float]]:
-        return [[1.0]] if input_type == "query" else [[1.0]]
-
-    with pytest.raises(ValueError, match="do not describe the same Papers"):
-        dense_ranking("household energy", [one, two], short_embed)
-
-
-def test_the_reranker_breaks_a_tie_by_identifier() -> None:
-    # The vendor's own order for two equal scores is not repeatable, and a
-    # published number has to be.
-    first = paper("bbb", "Household energy")
-    second = paper("aaa", "Household demand")
-    calls: list = []
-
-    ranked = rerank_ranking(
-        "household energy", [first, second], fake_rerank([(0, 0.5), (1, 0.5)], calls)
-    )
-
-    assert ids(ranked) == ["aaa", "bbb"]
-
-
-def test_a_paper_the_reranker_skipped_ranks_last() -> None:
-    kept = paper("kept", "Household energy")
-    skipped = paper("skipped", "Ultra-processed food")
-    calls: list = []
-
-    ranked = rerank_ranking("household energy", [kept, skipped], fake_rerank([(0, 0.4)], calls))
-
-    assert ids(ranked) == ["kept", "skipped"]
-    assert ranked[-1].score == 0.0
-
-
-def test_a_place_outside_the_pool_stops_the_ranking() -> None:
-    # The index arrives from outside Fynd. A negative one would count backwards
-    # from the end of the pool and score the wrong Paper in silence.
-    one = paper("one", "Household energy")
-    calls: list = []
-
-    with pytest.raises(ValueError, match="does not describe the pool"):
-        rerank_ranking("household energy", [one], fake_rerank([(-1, 0.9)], calls))
-
-    with pytest.raises(ValueError, match="does not describe the pool"):
-        rerank_ranking("household energy", [one], fake_rerank([(7, 0.9)], calls))
-
-
 def test_a_paper_carries_the_stems_it_matched() -> None:
     # The card prints these words, so they come back in the order the query
     # wrote them and not in the order the abstract did.
@@ -300,6 +163,43 @@ def test_the_keyword_ranking_claims_nothing_about_meaning() -> None:
     assert bm25_ranking("household energy", pool)[0].meaning_is_close is False
 
 
+# The meaning ranking
+
+
+def test_dense_ranking_puts_the_closest_vector_first() -> None:
+    near = paper("near", "Household energy")
+    far = paper("far", "Ultra-processed food")
+    vectors = {
+        "household energy forecasting": [1.0, 0.0],
+        document_text(near): [0.9, 0.1],
+        document_text(far): [0.0, 1.0],
+    }
+
+    ranked = dense_ranking("household energy forecasting", [far, near], fake_embed(vectors, []))
+
+    assert ids(ranked) == ["near", "far"]
+
+
+def test_dense_ranking_asks_for_a_query_and_for_documents() -> None:
+    # Voyage scores a query against a document, and the two input types are not
+    # the same vector. Sending both as documents measures the wrong thing.
+    one = paper("one", "Household energy")
+    vectors = {"household energy": [1.0, 0.0], document_text(one): [1.0, 0.0]}
+    calls: list = []
+
+    dense_ranking("household energy", [one], fake_embed(vectors, calls))
+
+    assert [input_type for _, input_type in calls] == ["query", "document"]
+    assert calls[0][0] == ["household energy"]
+    assert calls[1][0] == [document_text(one)]
+
+
+def test_dense_ranking_over_an_empty_pool_asks_for_nothing() -> None:
+    calls: list = []
+    assert dense_ranking("household energy", [], fake_embed({}, calls)) == []
+    assert calls == []
+
+
 def test_the_meaning_ranking_marks_the_papers_inside_the_cut() -> None:
     near = paper("near", "Domestic electricity use")
     far = paper("far", "Ultra-processed food")
@@ -308,9 +208,8 @@ def test_the_meaning_ranking_marks_the_papers_inside_the_cut() -> None:
         document_text(near): [0.9, 0.1],
         document_text(far): [0.0, 1.0],
     }
-    calls: list = []
 
-    ranked = dense_ranking("household energy", [near, far], fake_embed(vectors, calls), cut=1)
+    ranked = dense_ranking("household energy", [near, far], fake_embed(vectors, []), cut=1)
 
     assert ranked[0].meaning_is_close is True
     assert ranked[1].meaning_is_close is False
@@ -318,56 +217,20 @@ def test_the_meaning_ranking_marks_the_papers_inside_the_cut() -> None:
     assert ranked[0].terms == ()
 
 
-def test_the_fusion_keeps_the_stems_and_the_close_meaning() -> None:
-    # The fused row is the row that ships, so a card under it has to say why
-    # the Paper is there. One half of the reason comes from each ranking.
-    by_word = [Ranked(paper_id="a", score=1.0, terms=("household",))]
-    by_meaning = [Ranked(paper_id="a", score=1.0, meaning_is_close=True)]
-
-    fused = fuse([by_word, by_meaning])
-
-    assert fused[0].terms == ("household",)
-    assert fused[0].meaning_is_close is True
+def test_two_vector_sizes_cannot_be_compared() -> None:
+    # The table reports this model at 1024 and at 512, so one run holds both.
+    with pytest.raises(ValueError, match="same size"):
+        cosine([1.0, 0.0, 0.0, 0.0], [1.0, 0.0])
 
 
-def test_a_paper_that_rose_on_meaning_alone_names_no_stem() -> None:
-    by_word = [Ranked(paper_id="a", score=0.0)]
-    by_meaning = [Ranked(paper_id="a", score=1.0, meaning_is_close=True)]
+def test_a_short_embedding_answer_stops_the_ranking() -> None:
+    # Zipping a short answer would drop the last Papers, and a recall number
+    # would then be measured over fewer Papers than were graded.
+    one = paper("one", "Household energy")
+    two = paper("two", "Household demand")
 
-    fused = fuse([by_word, by_meaning])
+    def short_embed(texts: list[str], input_type: str) -> list[list[float]]:
+        return [[1.0]]
 
-    # This is the one case the card has to explain, because nothing else on it
-    # would tell a student why the Paper is on screen.
-    assert fused[0].terms == ()
-    assert fused[0].meaning_is_close is True
-
-
-def test_the_reranked_row_keeps_the_reason_of_the_fusion() -> None:
-    first = paper("first", "Household energy")
-    second = paper("second", "Domestic electricity")
-    fused = [
-        Ranked(paper_id="first", score=1.0, terms=("household",)),
-        Ranked(paper_id="second", score=0.5, meaning_is_close=True),
-    ]
-    calls: list = []
-
-    reordered = keep_reasons(
-        rerank_ranking(
-            "household energy", [first, second], fake_rerank([(1, 0.9), (0, 0.2)], calls)
-        ),
-        fused,
-    )
-
-    assert ids(reordered) == ["second", "first"]
-    assert reordered[0].meaning_is_close is True
-    assert reordered[1].terms == ("household",)
-    # The score is the reranker's own, and only the reason is carried over.
-    assert reordered[0].score == 0.9
-
-
-def test_matched_terms_reads_the_query_order() -> None:
-    assert matched_terms("energy household", "A household and its energy") == (
-        "energy",
-        "household",
-    )
-    assert matched_terms("household energy", "Ultra-processed food") == ()
+    with pytest.raises(ValueError, match="do not describe the same Papers"):
+        dense_ranking("household energy", [one, two], short_embed)

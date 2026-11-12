@@ -1,7 +1,7 @@
-"""Ranks Papers by words, meaning, and combined rankings.
+"""Ranks Papers by words and by meaning.
 
 ADR 0013 keeps ranking in Python and passes the top 20 Papers onward.
-The caller supplies embedding and reranking functions so tests need no network.
+The caller supplies the embedding function so tests need no network.
 """
 
 import math
@@ -14,9 +14,6 @@ from fynd.models import Paper
 # Keep standard defaults so these settings are not fitted to the Retrieval set.
 BM25_K1: Final = 1.2
 BM25_B: Final = 0.75
-
-# Reduces the advantage of top positions.
-RRF_K: Final = 60
 
 # Top 20 continue (ADR 0013).
 CUT: Final = 20
@@ -45,12 +42,6 @@ class Embed(Protocol):
     """An embedding function that returns one vector per input text."""
 
     def __call__(self, texts: list[str], input_type: str) -> list[list[float]]: ...
-
-
-class Rerank(Protocol):
-    """A reranking function that returns document positions and scores."""
-
-    def __call__(self, query: str, documents: list[str]) -> list[tuple[int, float]]: ...
 
 
 def stem(word: str) -> str:
@@ -89,7 +80,6 @@ def matched_terms(query: str, text: str) -> tuple[str, ...]:
 def ordered(
     scores: dict[str, float],
     terms: dict[str, tuple[str, ...]] | None = None,
-    close: set[str] | None = None,
 ) -> list[Ranked]:
     """Sorts Papers by descending score and identifier on ties."""
     # Higher scores mean stronger matches, so the top cut keeps them first.
@@ -100,24 +90,9 @@ def ordered(
             paper_id=paper_id,
             score=score,
             terms=(terms or {}).get(paper_id, ()),
-            meaning_is_close=paper_id in (close or set()),
         )
         for paper_id, score in places
     ]
-
-
-def keep_reasons(ranked: list[Ranked], source: list[Ranked]) -> list[Ranked]:
-    """Copies match reasons from the original ranking to a new ranking."""
-    # Reranking changes scores but must preserve the facts used on Paper cards.
-    reasons = {item.paper_id: item for item in source}
-    carried = []
-    for item in ranked:
-        reason = reasons.get(item.paper_id)
-        if reason is None:
-            carried.append(item)
-            continue
-        carried.append(replace(item, terms=reason.terms, meaning_is_close=reason.meaning_is_close))
-    return carried
 
 
 def bm25_ranking(query: str, papers: list[Paper]) -> list[Ranked]:
@@ -202,42 +177,3 @@ def dense_ranking(query: str, papers: list[Paper], embed: Embed, cut: int = CUT)
     by_meaning = ordered(scores)
     # The flag marks the top cut; it is not a universal similarity threshold.
     return [replace(item, meaning_is_close=place < cut) for place, item in enumerate(by_meaning)]
-
-
-def fuse(rankings: list[list[Ranked]], k: int = RRF_K) -> list[Ranked]:
-    """Combines rankings by position."""
-    # Positions are comparable; BM25 and cosine scores use different scales.
-    scores: dict[str, float] = {}
-
-    terms: dict[str, tuple[str, ...]] = {}
-    close: set[str] = set()
-    for ranking in rankings:
-        for place, item in enumerate(ranking, start=1):
-            scores[item.paper_id] = scores.get(item.paper_id, 0.0) + 1 / (k + place)
-            if item.terms:
-                terms[item.paper_id] = item.terms
-            if item.meaning_is_close:
-                close.add(item.paper_id)
-    return ordered(scores, terms=terms, close=close)
-
-
-def rerank_ranking(query: str, papers: list[Paper], rerank: Rerank) -> list[Ranked]:
-    """Orders Papers using scores from a supplied reranker."""
-    if not papers:
-        return []
-
-    documents = [document_text(paper) for paper in papers]
-    answer = rerank(query, documents)
-
-    # Preserve the measured pool when replies omit Papers.
-    scores = {paper.paper_id: 0.0 for paper in papers}
-    for index, score in answer:
-        # A negative index would silently assign the score to the wrong Paper.
-        if not 0 <= index < len(papers):
-            raise ValueError(
-                f"The reranker scored document {index} of a list of {len(papers)}. "
-                "The reply does not describe the pool it was sent."
-            )
-        scores[papers[index].paper_id] = score
-
-    return ordered(scores)
