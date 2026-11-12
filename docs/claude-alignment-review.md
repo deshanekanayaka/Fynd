@@ -2,7 +2,7 @@
 
 Review closed: 2026-11-07. Deshan supplied Claude's final response and asked for the discussion to end and the documents to be updated. This file replaces the earlier copy-ready review prompt. No further Claude review is required to record these decisions.
 
-This is a review record, not the source of product scope or permission to implement. Read [PRD.md](../PRD.md), [CONTEXT.md](../CONTEXT.md) and the final review at the top of [NEXT-STEPS.md](../NEXT-STEPS.md) for the current direction. Historical build entries retain their dates.
+This is a review record, not the source of product scope or permission to implement. Read [PRD.md](../PRD.md), [CONTEXT.md](../CONTEXT.md) and the final review at the top of [NEXT-STEPS.md](./history/next-steps-2026-10.md) for the current direction. Historical build entries retain their dates.
 
 ## Incorporated conclusions
 

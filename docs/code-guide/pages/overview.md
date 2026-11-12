@@ -56,7 +56,7 @@ Every Python source file under `src/fynd/` has a walkthrough, including the pack
 
 - [CONTEXT.md · vocabulary](../CONTEXT.md)
 - [PRD.md · product](../PRD.md)
-- [NEXT-STEPS.md · current work](../NEXT-STEPS.md)
+- [NEXT-STEPS.md · current work](../../history/next-steps-2026-10.md)
 - [ADR 0004 · replay](adr/0004-replayable-runs-and-versioned-prompts.md)
 
 ## Maintaining the guide

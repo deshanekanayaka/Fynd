@@ -87,7 +87,7 @@ The export is a conversation starter for the first supervisor meeting, not a spe
 ## Non-goals for version 1
 
 - No accounts, no passwords, no supervisor accounts. A signed Invite code grants access, and a secret link reaches a Project.
-- No free text Topic entry. Fynd proposes Topics inside the 2 seeded Domains. A free text search bar is designed for release 2, and the design is in the day 8 entry of [NEXT-STEPS.md](./NEXT-STEPS.md). The Domain list also grows in release 2, with 10 as the target.
+- No free text Topic entry. Fynd proposes Topics inside the 2 seeded Domains. A free text search bar is designed for release 2, and the design is in the day 8 entry of [NEXT-STEPS.md](./docs/history/next-steps-2026-10.md). The Domain list also grows in release 2, with 10 as the target.
 - No paywalled papers. Open abstracts and open full text only.
 - No requirements documents and no ERD drafting. That is release 2.
 - No revising a Project after export.
@@ -200,7 +200,7 @@ Structure comes from research tools, with Elicit as the reference for showing Cl
 
 ## Three week plan
 
-The dated plan below is historical. The current baseline-first build order and the next section-by-section design task are recorded at the top of [NEXT-STEPS.md](./NEXT-STEPS.md). No replacement baseline date or experiment time box has been selected.
+The dated plan below is historical. The current baseline-first build order and the next section-by-section design task are recorded at the top of [NEXT-STEPS.md](./docs/history/next-steps-2026-10.md). No replacement baseline date or experiment time box has been selected.
 
 Revised on 2026-10-07. The first version of this plan put one number on one component. This version puts a number on six, and pays for it with the cuts below.
 

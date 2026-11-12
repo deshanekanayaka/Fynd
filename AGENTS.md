@@ -4,10 +4,12 @@ Fynd helps a final year project student start from a real problem with evidence,
 
 ## Read these first, every session
 
-1. [CONTEXT.md](./CONTEXT.md) is the glossary. It is the source of truth for every domain word.
-2. [PRD.md](./PRD.md) is the product. Scope, success metrics, non-goals, the stack, and the three week plan.
-3. [NEXT-STEPS.md](./NEXT-STEPS.md) is the current state and the immediate task.
+1. [ROADMAP.md](./ROADMAP.md) is the current state, the order of the work, and the immediate task. Read the Status board and the newest Session log entry.
+2. [CONTEXT.md](./CONTEXT.md) is the glossary. It is the source of truth for every domain word.
+3. [PRD.md](./PRD.md) is the product. Scope, success metrics, non-goals, the stack, and the three week plan.
 4. [docs/adr/](./docs/adr/) holds the decisions and the reasons behind them.
+
+[docs/history/next-steps-2026-10.md](./docs/history/next-steps-2026-10.md) is the old plan. It is history, and `ROADMAP.md` replaces it.
 
 Read all four before you propose work. Do not infer the design from the code, because the code is behind the documents.
 
@@ -40,4 +42,6 @@ A pull request opens with a one or two line statement of what it is. Write that 
 
 ## Update discipline
 
-When a decision changes, change the document in the same session. A new term goes in `CONTEXT.md`. A changed scope goes in `PRD.md`. A finished task goes in `NEXT-STEPS.md`. A decision that is hard to reverse gets an ADR in `docs/adr/`.
+After every merged pull request, update the Status board, tick the task, and add a Session log entry in `ROADMAP.md`.
+
+When a decision changes, change the document in the same session. A new term goes in `CONTEXT.md`. A changed scope goes in `PRD.md`. A finished task goes in `ROADMAP.md`. A decision that is hard to reverse gets an ADR in `docs/adr/`.
