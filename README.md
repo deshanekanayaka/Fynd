@@ -1,7 +1,5 @@
 # Fynd
 
-[![CI](https://github.com/deshanekanayaka/Fynd/actions/workflows/ci.yml/badge.svg)](https://github.com/deshanekanayaka/Fynd/actions/workflows/ci.yml)
-
 Final year students often end up building a CRUD application, because they ask
 "what can I build?" instead of "which problem should I solve?".
 
