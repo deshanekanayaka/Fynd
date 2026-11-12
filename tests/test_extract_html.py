@@ -4,7 +4,7 @@ import pathlib
 
 import pytest
 
-from fynd.extract import extract_html, read_html
+from fynd.extract import extract_html, extract_pdf, read_html
 
 FILES = pathlib.Path(__file__).parent / "files"
 
@@ -72,8 +72,6 @@ def test_a_second_extraction_reads_the_cache(tmp_path) -> None:
 def test_the_two_extractors_do_not_share_a_cache_entry(tmp_path) -> None:
     # The key holds the step and the extractor, so the same bytes read by two
     # libraries are two answers and never one.
-    from fynd.extract import extract_pdf
-
     pdf = (FILES / "two-column-paper.pdf").read_bytes()
     extract_html(page("product-page"))
     extract_pdf(pdf)

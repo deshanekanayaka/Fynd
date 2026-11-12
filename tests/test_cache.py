@@ -6,6 +6,17 @@ import pytest
 
 from fynd import cache
 
+A_PDF = b"%PDF-1.7 hello"
+A_PDF_URL = "https://example.org/paper.pdf"
+
+
+def stored_pdf(data: bytes = A_PDF) -> tuple[str, dict]:
+    """Writes one PDF into the cache, and hands back its key and its parts."""
+    parts = {"url": A_PDF_URL}
+    key = cache.cache_key("fetch", parts)
+    cache.write_bytes(key, parts, data, "application/pdf")
+    return key, parts
+
 
 def test_the_same_parts_give_the_same_key() -> None:
     parts = {"model": "claude-haiku-4-5", "input_sha256": "abc"}
@@ -58,23 +69,19 @@ def test_a_file_in_an_older_shape_reads_as_a_miss(tmp_path) -> None:
 def test_written_bytes_read_back() -> None:
     # A fetched PDF reaches 20 megabytes, which is no JSON value. The bytes go
     # in a sidecar file, and the parts stay in the JSON file beside it.
-    parts = {"url": "https://example.org/paper.pdf"}
-    key = cache.cache_key("fetch", parts)
-    cache.write_bytes(key, parts, b"%PDF-1.7 hello", "application/pdf")
+    key, _ = stored_pdf()
     answer = cache.read_bytes(key)
     assert answer is not None
-    assert answer.data == b"%PDF-1.7 hello"
+    assert answer.data == A_PDF
     assert answer.content_type == "application/pdf"
 
 
 def test_the_bytes_file_sits_beside_the_parts(tmp_path) -> None:
-    parts = {"url": "https://example.org/paper.pdf"}
-    key = cache.cache_key("fetch", parts)
-    cache.write_bytes(key, parts, b"%PDF-1.7 hello", "application/pdf")
+    key, parts = stored_pdf()
     stored = json.loads((tmp_path / key).read_text(encoding="utf-8"))
     assert stored["parts"] == parts
-    assert stored["value"]["byte_count"] == len(b"%PDF-1.7 hello")
-    assert (tmp_path / stored["value"]["file"]).read_bytes() == b"%PDF-1.7 hello"
+    assert stored["value"]["byte_count"] == len(A_PDF)
+    assert (tmp_path / stored["value"]["file"]).read_bytes() == A_PDF
 
 
 def test_reading_missing_bytes_returns_none() -> None:
@@ -83,9 +90,7 @@ def test_reading_missing_bytes_returns_none() -> None:
 
 def test_bytes_with_no_sidecar_read_as_a_miss(tmp_path) -> None:
     # A run that died between the two writes. A miss costs one fetch.
-    parts = {"url": "https://example.org/paper.pdf"}
-    key = cache.cache_key("fetch", parts)
-    cache.write_bytes(key, parts, b"%PDF-1.7 hello", "application/pdf")
+    key, _ = stored_pdf()
     stored = json.loads((tmp_path / key).read_text(encoding="utf-8"))
     (tmp_path / stored["value"]["file"]).unlink()
     assert cache.read_bytes(key) is None
@@ -106,8 +111,7 @@ def test_a_refusal_reads_back_as_a_refusal() -> None:
 
 
 def test_bytes_are_not_a_refusal() -> None:
-    key = cache.cache_key("fetch", {"url": "https://example.org/paper.pdf"})
-    cache.write_bytes(key, {"url": "x"}, b"%PDF-1.7", "application/pdf")
+    key, _ = stored_pdf()
     assert not cache.is_refusal(cache.read(key))
 
 
@@ -133,9 +137,7 @@ def test_a_truncated_file_reads_as_a_miss(tmp_path) -> None:
 
 
 def test_truncated_bytes_read_as_a_miss(tmp_path) -> None:
-    parts = {"url": "https://example.org/paper.pdf"}
-    key = cache.cache_key("fetch", parts)
-    cache.write_bytes(key, parts, b"%PDF-1.7 a whole file", "application/pdf")
+    key, _ = stored_pdf(b"%PDF-1.7 a whole file")
     stored = json.loads((tmp_path / key).read_text(encoding="utf-8"))
     (tmp_path / stored["value"]["file"]).write_bytes(b"%PDF-1.7 half")
 

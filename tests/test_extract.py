@@ -2,6 +2,7 @@
 
 import pathlib
 
+import pdfplumber
 import pytest
 
 from fynd import cache, extract
@@ -82,10 +83,19 @@ class FakePage:
         return self.words
 
 
-def test_one_column_of_text_has_no_gutter() -> None:
-    # A page whose lines run the whole width must never be cut in half, because
-    # a cut mid sentence is worse than an interleaved two column page.
-    words = [{"x0": 50.0, "x1": 550.0}, {"x0": 50.0, "x1": 540.0}]
+@pytest.mark.parametrize(
+    "words",
+    [
+        # Lines that run the whole width must never be cut in half, because a
+        # cut mid sentence is worse than an interleaved two column page.
+        [{"x0": 50.0, "x1": 550.0}, {"x0": 50.0, "x1": 540.0}],
+        # This gap is 8 points, which is one word space and not a column break.
+        [{"x0": 50.0, "x1": 296.0}, {"x0": 304.0, "x1": 550.0}],
+        [],
+    ],
+    ids=["one column", "a narrow word space", "no words at all"],
+)
+def test_a_page_with_no_column_break_has_no_gutter(words: list[dict]) -> None:
     assert extract.gutter_of(FakePage(words)) is None
 
 
@@ -94,16 +104,6 @@ def test_a_wide_gap_in_the_middle_is_a_gutter() -> None:
     gutter = extract.gutter_of(FakePage(words))
     assert gutter is not None
     assert 280.0 < gutter < 320.0
-
-
-def test_a_narrow_word_space_is_not_a_gutter() -> None:
-    # The gap here is 8 points, which is one word space and not a column break.
-    words = [{"x0": 50.0, "x1": 296.0}, {"x0": 304.0, "x1": 550.0}]
-    assert extract.gutter_of(FakePage(words)) is None
-
-
-def test_a_page_with_no_words_has_no_gutter() -> None:
-    assert extract.gutter_of(FakePage([])) is None
 
 
 def test_a_page_whose_origin_is_not_zero_reads_the_same() -> None:
@@ -117,8 +117,6 @@ def test_a_page_whose_origin_is_not_zero_reads_the_same() -> None:
 
 
 def test_a_two_column_page_with_an_offset_origin_finds_its_gutter() -> None:
-    import pdfplumber
-
     with pdfplumber.open(OFFSET_ORIGIN_PDF) as pdf:
         page = pdf.pages[0]
         gutter = extract.gutter_of(page)
