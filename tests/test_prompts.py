@@ -5,12 +5,18 @@ import pytest
 from fynd import prompts
 
 
+@pytest.fixture(autouse=True)
+def a_prompts_folder(tmp_path, monkeypatch):
+    """Points the loader at a folder this test owns."""
+    monkeypatch.setenv("FYND_PROMPTS_DIR", str(tmp_path))
+    return tmp_path
+
+
 def write_prompt(directory, name: str, text: str) -> None:
     (directory / f"{name}.md").write_text(text, encoding="utf-8")
 
 
-def test_load_returns_the_text_and_a_hash(tmp_path, monkeypatch) -> None:
-    monkeypatch.setenv("FYND_PROMPTS_DIR", str(tmp_path))
+def test_load_returns_the_text_and_a_hash(tmp_path) -> None:
     write_prompt(tmp_path, "test-v1", "Propose Topics for {{DOMAIN_NAME}}.")
     prompt = prompts.load("test-v1")
     assert prompt.name == "test-v1"
@@ -29,8 +35,7 @@ def test_a_typo_fixed_without_a_rename_changes_the_hash(tmp_path, monkeypatch) -
     assert before != after
 
 
-def test_fill_replaces_every_placeholder(tmp_path, monkeypatch) -> None:
-    monkeypatch.setenv("FYND_PROMPTS_DIR", str(tmp_path))
+def test_fill_replaces_every_placeholder(tmp_path) -> None:
     write_prompt(tmp_path, "test-v1", "Domain: {{DOMAIN_NAME}}. Avoid: {{AVOID_LIST}}.")
     prompt = prompts.load("test-v1")
     filled = prompts.fill(prompt, {"DOMAIN_NAME": "energy", "AVOID_LIST": "none"})
@@ -58,8 +63,10 @@ def test_fill_refuses_to_leave_a_placeholder_behind(tmp_path, monkeypatch) -> No
         prompts.fill(prompt, {"DOMAIN_NAME": "energy"})
 
 
-def test_the_real_topic_prompt_holds_every_placeholder() -> None:
-    # The shipped prompt and the Stage that fills it must agree.
+def test_the_real_topic_prompt_holds_every_placeholder(monkeypatch) -> None:
+    # The shipped prompt and the Stage that fills it must agree. This test
+    # reads the real folder, so it undoes the fixture above.
+    monkeypatch.delenv("FYND_PROMPTS_DIR", raising=False)
     prompt = prompts.load("propose-topics-v1")
     for placeholder in ("{{TOPIC_COUNT}}", "{{DOMAIN_NAME}}", "{{AVOID_LIST}}", "{{RETRY_NOTE}}"):
         assert placeholder in prompt.text

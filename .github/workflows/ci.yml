@@ -1,0 +1,26 @@
+name: CI
+
+# Two triggers on purpose. The pull request run gates a merge, and the push run
+# keeps the README badge telling the truth about main.
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: astral-sh/setup-uv@v10.3.3
+        with:
+          python-version: "3.12"
+          enable-cache: true
+
+      - run: uv sync --extra dev
+
+      # Two steps, not one, so a red cross says whether the lint or the tests broke.
+      - run: uv run ruff check .
+
+      - run: uv run pytest

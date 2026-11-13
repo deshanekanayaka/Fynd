@@ -1,9 +1,11 @@
 """The search client has to parse the API, ask for the Evidence window, and cache."""
 
+import json
+
 import httpx
 import pytest
 
-from fynd.semantic_scholar import RateLimited, SemanticScholar
+from fynd.semantic_scholar import RateLimited, SemanticScholar, cached_abstracts
 
 # One recorded reply, trimmed to the fields Fynd asks for.
 RECORDED_REPLY = {
@@ -39,10 +41,14 @@ def client_that_returns(reply: dict, calls: list) -> httpx.Client:
     return httpx.Client(transport=httpx.MockTransport(handler))
 
 
-def test_a_paper_keeps_the_fields_fynd_uses(tmp_path, monkeypatch) -> None:
-    monkeypatch.setenv("FYND_CACHE_DIR", str(tmp_path))
+def searching(calls: list | None = None, reply: dict = RECORDED_REPLY) -> SemanticScholar:
+    """Builds a search client that answers every request from memory."""
+    return SemanticScholar(client=client_that_returns(reply, calls if calls is not None else []))
+
+
+def test_a_paper_keeps_the_fields_fynd_uses() -> None:
     calls: list = []
-    search = SemanticScholar(client=client_that_returns(RECORDED_REPLY, calls))
+    search = searching(calls)
 
     result = search.search("uk household energy forecasting", year_from=2022)
 
@@ -55,10 +61,9 @@ def test_a_paper_keeps_the_fields_fynd_uses(tmp_path, monkeypatch) -> None:
     assert first.has_open_copy is True
 
 
-def test_a_missing_field_becomes_a_default(tmp_path, monkeypatch) -> None:
+def test_a_missing_field_becomes_a_default() -> None:
     # The API leaves a field out or sets it to null, and neither must raise.
-    monkeypatch.setenv("FYND_CACHE_DIR", str(tmp_path))
-    search = SemanticScholar(client=client_that_returns(RECORDED_REPLY, []))
+    search = searching()
 
     second = search.search("anything", year_from=2022).papers[1]
 
@@ -68,31 +73,28 @@ def test_a_missing_field_becomes_a_default(tmp_path, monkeypatch) -> None:
     assert second.has_open_copy is False
 
 
-def test_the_open_copy_count_counts_the_papers_with_a_link(tmp_path, monkeypatch) -> None:
+def test_the_open_copy_count_counts_the_papers_with_a_link() -> None:
     # No gate reads this number. The stage 2 gate counts the Papers OpenAlex
     # gives a candidate, and this field is what it stopped reading.
-    monkeypatch.setenv("FYND_CACHE_DIR", str(tmp_path))
-    search = SemanticScholar(client=client_that_returns(RECORDED_REPLY, []))
+    search = searching()
 
     assert search.search("anything", year_from=2022).open_copy_count == 1
 
 
-def test_the_request_asks_for_the_evidence_window(tmp_path, monkeypatch) -> None:
+def test_the_request_asks_for_the_evidence_window() -> None:
     # ADR 0008 puts the year range in the search, so the recent pool is as large
     # as the API makes it.
-    monkeypatch.setenv("FYND_CACHE_DIR", str(tmp_path))
     calls: list = []
-    search = SemanticScholar(client=client_that_returns(RECORDED_REPLY, calls))
+    search = searching(calls)
 
     search.search("anything", year_from=2022)
 
     assert calls[0].url.params["year"] == "2022-"
 
 
-def test_a_second_run_of_the_same_search_makes_no_request(tmp_path, monkeypatch) -> None:
-    monkeypatch.setenv("FYND_CACHE_DIR", str(tmp_path))
+def test_a_second_run_of_the_same_search_makes_no_request() -> None:
     calls: list = []
-    search = SemanticScholar(client=client_that_returns(RECORDED_REPLY, calls))
+    search = searching(calls)
 
     search.search("anything", year_from=2022)
     search.search("anything", year_from=2022)
@@ -100,11 +102,10 @@ def test_a_second_run_of_the_same_search_makes_no_request(tmp_path, monkeypatch)
     assert len(calls) == 1
 
 
-def test_a_different_year_range_is_a_different_cache_entry(tmp_path, monkeypatch) -> None:
+def test_a_different_year_range_is_a_different_cache_entry() -> None:
     # The window is an input, so a run in a new calendar year asks again.
-    monkeypatch.setenv("FYND_CACHE_DIR", str(tmp_path))
     calls: list = []
-    search = SemanticScholar(client=client_that_returns(RECORDED_REPLY, calls))
+    search = searching(calls)
 
     search.search("anything", year_from=2022)
     search.search("anything", year_from=2023)
@@ -112,8 +113,7 @@ def test_a_different_year_range_is_a_different_cache_entry(tmp_path, monkeypatch
     assert len(calls) == 2
 
 
-def test_two_rate_limit_answers_stop_with_a_sentence(tmp_path, monkeypatch) -> None:
-    monkeypatch.setenv("FYND_CACHE_DIR", str(tmp_path))
+def test_two_rate_limit_answers_stop_with_a_sentence(monkeypatch) -> None:
     monkeypatch.setattr("fynd.semantic_scholar.RETRY_WAIT_SECONDS", 0)
     calls: list = []
 
@@ -132,7 +132,6 @@ def test_two_rate_limit_answers_stop_with_a_sentence(tmp_path, monkeypatch) -> N
 
 def test_a_failed_search_is_never_cached(tmp_path, monkeypatch) -> None:
     # ADR 0004: a failed reply is never cached, so the next run asks again.
-    monkeypatch.setenv("FYND_CACHE_DIR", str(tmp_path))
     monkeypatch.setattr("fynd.semantic_scholar.RETRY_WAIT_SECONDS", 0)
 
     def handler(request: httpx.Request) -> httpx.Response:
@@ -145,12 +144,7 @@ def test_a_failed_search_is_never_cached(tmp_path, monkeypatch) -> None:
     assert list(tmp_path.iterdir()) == []
 
 
-def test_the_cached_abstracts_are_read_by_paper_identifier(tmp_path, monkeypatch) -> None:
-    import json
-
-    from fynd.semantic_scholar import cached_abstracts
-
-    monkeypatch.setenv("FYND_CACHE_DIR", str(tmp_path))
+def test_the_cached_abstracts_are_read_by_paper_identifier(tmp_path) -> None:
     (tmp_path / "s2-search-abc.json").write_text(
         json.dumps(
             {

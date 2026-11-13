@@ -3,7 +3,7 @@
 Updated: 2026-11-07 after the final review. Postgres on Supabase, with pgvector for stage 5. The schema remains a design, not an applied migration.
 Read [CONTEXT.md](../CONTEXT.md) for the words and [PRD.md](../PRD.md) for the scope.
 
-This document covers stage 1 to stage 3, which is the immediate next task in [NEXT-STEPS.md](../NEXT-STEPS.md). It holds seven tables. Stage 4 to stage 7 add tables later, and this document names them at the end without defining them.
+This document covers stage 1 to stage 3, which is the immediate next task in [NEXT-STEPS.md](./history/next-steps-2026-10.md). It holds seven tables. Stage 4 to stage 7 add tables later, and this document names them at the end without defining them.
 
 ## The rule for a table against a JSON value
 
@@ -38,7 +38,7 @@ create table project (
 );
 ```
 
-The `domain` column holds no check constraint, and the decision is dated 2026-10-19. An earlier draft named the two seeded Domains inside the table. The Domain list grows in release 2, and a check constraint turns each new Domain into a migration against live rows. `accept_domain` in `src/fynd/stages/stage1.py` already refuses a Domain that stage 1 never offered. So the table rule adds no safety that the Stage does not give. A `text` column is the right shape for a list that grows. See the day 8 entry in [NEXT-STEPS.md](../NEXT-STEPS.md).
+The `domain` column holds no check constraint, and the decision is dated 2026-10-19. An earlier draft named the two seeded Domains inside the table. The Domain list grows in release 2, and a check constraint turns each new Domain into a migration against live rows. `accept_domain` in `src/fynd/stages/stage1.py` already refuses a Domain that stage 1 never offered. So the table rule adds no safety that the Stage does not give. A `text` column is the right shape for a list that grows. See the day 8 entry in [NEXT-STEPS.md](./history/next-steps-2026-10.md).
 
 The `secret_link_id` is the value in the secret link. The `id` is what every other table points at. Two columns, not one, for two reasons. A leaked log line that holds a foreign key does not hand over a Project. You can also issue a new `secret_link_id` without moving a single row.
 
